@@ -1,5 +1,5 @@
-import prismaClient from "../../../prisma-client"
 import { Credentials } from "@prisma/client"
+import prismaClient from "../../../prisma-client"
 
 export default async function retrieveUserFromContact(
 	contact: string, contactType: EmailOrPhoneOrUsername
