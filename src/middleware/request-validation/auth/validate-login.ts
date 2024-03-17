@@ -3,7 +3,7 @@ import Joi from "joi"
 import { Request, Response, NextFunction } from "express"
 
 const loginInformationSchema = Joi.object({
-	loginInformationObject: Joi.object({
+	loginInformation: Joi.object({
 		contact: Joi.string().required(),
 		password: Joi.string().min(6).required(),
 	}).required()
@@ -15,8 +15,8 @@ export default function validateLogin (req: Request, res: Response, next: NextFu
 
 		if (!_.isUndefined(error)) return res.status(400).json({ validationError: error.details[0].message })
 
-		const trimmedContact = req.body.loginInformationObject.contact.trimEnd()
-		req.body.loginInformationObject.contact = trimmedContact
+		const trimmedContact = req.body.loginInformation.contact.trimEnd()
+		req.body.loginInformation.contact = trimmedContact
 
 		next()
 	} catch (error) {
