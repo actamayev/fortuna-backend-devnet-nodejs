@@ -1,0 +1,14 @@
+import express from "express"
+
+import validateLogin from "../middleware/request-validation/auth/validate-login"
+import validateRegister from "../middleware/request-validation/auth/validate-register"
+
+import login from "../controllers/auth/login"
+import register from "../controllers/auth/register"
+
+const authRoutes = express.Router()
+
+authRoutes.post("/login", validateLogin, login)
+authRoutes.post("/register", validateRegister, register)
+
+export default authRoutes

@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Credentials {
+  user_id      Int      @id @default(autoincrement())
+  username     String
+  password     String
+  is_active    Boolean  @default(true)
+  email        String?
+  phone_number String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now()) @updatedAt
+  LoginHistory LoginHistory[]
+}
+
+model LoginHistory {
+  login_history_id Int       @id @default(autoincrement())
+  user_id          Int
+  login_time       DateTime  @default(now())
+  user             Credentials @relation(fields: [user_id], references: [user_id])
+
+  @@index([user_id], name: "user_id_idx")
+}
