@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "postgresql"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -22,4 +22,14 @@ model Credentials {
   phone_number String?
   created_at   DateTime @default(now())
   updated_at   DateTime @default(now()) @updatedAt
+  LoginHistory LoginHistory[]
+}
+
+model LoginHistory {
+  login_history_id Int       @id @default(autoincrement())
+  user_id          Int
+  login_time       DateTime  @default(now())
+  user             Credentials @relation(fields: [user_id], references: [user_id])
+
+  @@index([user_id], name: "user_id_idx")
 }
