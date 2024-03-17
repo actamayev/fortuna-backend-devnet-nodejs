@@ -1,0 +1,3 @@
+When making changes to tables (or creating new tables), edit the schema.prisma file.
+Then, run the `npx prisma migrate dev --name [name_of_operation (ie add_login_history)]`
+Then, run `npx prisma generate`
