@@ -11,5 +11,4 @@ export default async function findUser(userId: number): Promise<Credentials | nu
 		console.error("Error finding user:", error)
 		return null
 	}
-
 }

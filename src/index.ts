@@ -3,6 +3,8 @@ import dotenv from "dotenv"
 import express from "express"
 import cookieParser from "cookie-parser"
 
+import jwtVerify from "./middleware/jwt/jwt-verify"
+
 import authRoutes from "./routes/auth-routes"
 import solanaRoutes from "./routes/solana-routes"
 
@@ -31,7 +33,7 @@ app.use(cookieParser())
 app.use(express.json())
 
 app.use("/auth", authRoutes)
-app.use("/solana", solanaRoutes)
+app.use("/solana", jwtVerify, solanaRoutes)
 
 app.use("/health", checkHealth)
 

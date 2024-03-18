@@ -9,5 +9,7 @@ declare namespace NodeJS {
 
 		// JWT:
 		JWT_KEY: string
+
+		SOLANA_DEVNET_API: string
 	}
 }
