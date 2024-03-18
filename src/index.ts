@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser"
 import jwtVerify from "./middleware/jwt/jwt-verify"
 
 import authRoutes from "./routes/auth-routes"
-import solanaRoutes from "./routes/solana-routes"
+import solanaRoutes from "./routes/solana/solana-routes"
 
 import checkHealth from "./controllers/health-checks/check-health"
 

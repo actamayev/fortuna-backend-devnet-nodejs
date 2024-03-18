@@ -1,12 +1,12 @@
 import _ from "lodash"
 import { Request, Response } from "express"
-import { Connection, PublicKey } from "@solana/web3.js"
-import findSolanaWallet from "../../utils/find/find-solana-wallet"
+import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
+import findSolanaWallet from "../../../utils/find/find-solana-wallet"
 
-export default async function getWalletBalance(req: Request, res: Response): Promise<Response> {
+export default async function getDevnetSolanaWalletBalance(req: Request, res: Response): Promise<Response> {
 	try {
 		const user = req.user
-		const connection = new Connection(process.env.SOLANA_DEVNET_API, "confirmed")
+		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 
 		const solanaWallet = await findSolanaWallet(user.user_id)
 		if (_.isNull(solanaWallet)) return res.status(400).json({ message: "Cannot find Solana Wallet" })
