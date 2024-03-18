@@ -17,6 +17,7 @@ model Credentials {
   created_at   DateTime @default(now())
   updated_at   DateTime @default(now()) @updatedAt
   LoginHistory LoginHistory[]
+  SolanaWallet  SolanaWallet? // This indicates a one-to-one relationship
 }
 
 model LoginHistory {
@@ -26,4 +27,16 @@ model LoginHistory {
   user             Credentials @relation(fields: [user_id], references: [user_id])
 
   @@index([user_id], name: "user_id_idx")
+}
+
+model SolanaWallet {
+  id          Int          @id @default(autoincrement())
+  publicKey   String       @db.VarChar(255)
+  secretKey   String       @db.VarChar(255) // Consider storing encrypted!
+  userId      Int          @unique
+  user        Credentials  @relation(fields: [userId], references: [user_id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now()) @updatedAt
+
+  @@index([userId], name: "userId_idx")
 }
