@@ -8,8 +8,8 @@ export default async function requestDevnetSolanaAirdrop(req: Request, res: Resp
 		const user = req.user
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 
-		const solanaWallet = await findSolanaWallet(user.user_id)
-		if (_.isNull(solanaWallet)) return res.status(400).json({ message: "Cannot find Solana Wallet" })
+		const solanaWallet = await findSolanaWallet(user.user_id, "DEVNET")
+		if (_.isNull(solanaWallet)) return res.status(400).json({ message: "Cannot find Devnet Solana Wallet" })
 
 		const publicKey = new PublicKey(solanaWallet.publicKey)
 
@@ -27,6 +27,6 @@ export default async function requestDevnetSolanaAirdrop(req: Request, res: Resp
 		return res.status(200).json({ balance })
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Retrieve Solana Wallet Balance" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to Request Devnet Solana Airdrop" })
 	}
 }

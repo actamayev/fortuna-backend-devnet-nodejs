@@ -17,7 +17,7 @@ model Credentials {
   created_at   DateTime @default(now())
   updated_at   DateTime @default(now()) @updatedAt
   LoginHistory LoginHistory[]
-  SolanaWallet  SolanaWallet? // This indicates a one-to-one relationship
+  SolanaWallet  SolanaWallet[]
 }
 
 model LoginHistory {
@@ -29,14 +29,22 @@ model LoginHistory {
   @@index([user_id], name: "user_id_idx")
 }
 
+enum NetworkType {
+  MAINNET
+  DEVNET
+  TESTNET
+}
+
 model SolanaWallet {
   id          Int          @id @default(autoincrement())
   publicKey   String       @db.VarChar(255)
   secretKey   String       @db.VarChar(255) // Consider storing encrypted!
-  userId      Int          @unique
+  userId      Int
   user        Credentials  @relation(fields: [userId], references: [user_id])
+  networkType NetworkType
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @default(now()) @updatedAt
 
   @@index([userId], name: "userId_idx")
+  @@unique([userId, networkType])
 }

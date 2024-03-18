@@ -14,7 +14,8 @@ export default async function createDevnetSolanaWallet (req: Request, res: Respo
 			data: {
 				publicKey,
 				secretKey,
-				userId: user.user_id
+				userId: user.user_id,
+				networkType: "DEVNET"
 			}
 		})
 
@@ -24,6 +25,6 @@ export default async function createDevnetSolanaWallet (req: Request, res: Respo
 		return res.status(200).json({ publicKey, balance })
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Create Solana Wallet" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to Create Devnet Solana Wallet" })
 	}
 }

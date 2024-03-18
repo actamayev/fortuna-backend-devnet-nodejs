@@ -6,4 +6,3 @@ export default async function doesUserHaveSolanaWallet(userId: number): Promise<
 	})
 	return solanaWalletRecord !== null
 }
-

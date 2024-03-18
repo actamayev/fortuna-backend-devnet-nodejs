@@ -1,10 +1,13 @@
-import { SolanaWallet } from "@prisma/client"
+import { SolanaWallet, NetworkType } from "@prisma/client"
 import prismaClient from "../../prisma-client"
 
-export default async function findSolanaWallet(userId: number): Promise<SolanaWallet | null> {
+export default async function findSolanaWallet(userId: number, networkType: NetworkType): Promise<SolanaWallet | null> {
 	try {
-		const solanaWallet = await prismaClient.solanaWallet.findUnique({
-			where: { userId },
+		const solanaWallet = await prismaClient.solanaWallet.findFirst({
+			where: {
+				userId,
+				networkType
+			},
 		})
 		return solanaWallet
 	} catch (error) {
