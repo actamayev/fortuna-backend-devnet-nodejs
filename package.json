@@ -56,6 +56,7 @@
     "jsonwebtoken": "^9.0.2",
     "libphonenumber-js": "^1.10.58",
     "lodash": "^4.17.21",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
+    "nft.storage": "^3.3.0"
   }
 }
