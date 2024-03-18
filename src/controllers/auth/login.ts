@@ -22,10 +22,7 @@ export default async function login (req: Request, res: Response): Promise<Respo
 
 		await addLoginRecord(credentialsResult.user_id)
 
-		return res.status(200).json({
-			userId: credentialsResult.user_id,
-			accessToken,
-		})
+		return res.status(200).json({ accessToken })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Login" })

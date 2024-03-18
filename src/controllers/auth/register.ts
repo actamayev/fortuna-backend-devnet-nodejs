@@ -31,7 +31,7 @@ export default async function register (req: Request, res: Response): Promise<Re
 
 		await addLoginRecord(userId)
 
-		return res.status(200).json({ userId, accessToken })
+		return res.status(200).json({ accessToken })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Register New User" })
