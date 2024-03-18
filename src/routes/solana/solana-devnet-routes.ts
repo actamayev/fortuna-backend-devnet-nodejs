@@ -4,11 +4,11 @@ import createDevnetSolanaWallet from "../../controllers/solana/devnet/create-dev
 import requestDevnetSolanaAirdrop from "../../controllers/solana/devnet/request-devnet-solana-airdrop"
 import getDevnetSolanaWalletBalance from "../../controllers/solana/devnet/get-devnet-solana-wallet-balance"
 
-import confirmUserDoesNotHaveSolanaWallet from "../../middleware/solana/confirm-user-does-not-have-solana-wallet"
+import confirmUserDoesNotHaveDevnetSolanaWallet from "../../middleware/solana/confirm-user-does-not-have-devnet-solana-wallet"
 
 const solanaDevnetRoutes = express.Router()
 
-solanaDevnetRoutes.post("/create-wallet", confirmUserDoesNotHaveSolanaWallet, createDevnetSolanaWallet)
+solanaDevnetRoutes.post("/create-wallet", confirmUserDoesNotHaveDevnetSolanaWallet, createDevnetSolanaWallet)
 
 solanaDevnetRoutes.get("/get-wallet-balance", getDevnetSolanaWalletBalance)
 

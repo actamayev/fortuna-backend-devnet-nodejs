@@ -9,7 +9,7 @@ export default async function getDevnetSolanaWalletBalance(req: Request, res: Re
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 
 		const solanaWallet = await findSolanaWallet(user.user_id, "DEVNET")
-		if (_.isNull(solanaWallet)) return res.status(400).json({ message: "Cannot find Devnet Solana Wallet" })
+		if (_.isNil(solanaWallet)) return res.status(400).json({ message: "Cannot find Devnet Solana Wallet" })
 
 		const publicKey = new PublicKey(solanaWallet.publicKey)
 
