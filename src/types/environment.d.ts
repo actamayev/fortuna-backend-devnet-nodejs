@@ -9,5 +9,7 @@ declare namespace NodeJS {
 
 		// JWT:
 		JWT_KEY: string
+
+		NFT_STORAGE_API_KEY: string
 	}
 }
