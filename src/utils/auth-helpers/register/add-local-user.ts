@@ -15,7 +15,7 @@ export async function addLocalUser(
 		if (contactType === "Email") {
 			userFields.email = registerInformation.contact
 		} else {
-			userFields.phoneNumber = registerInformation.contact
+			userFields.phone_number = registerInformation.contact
 		}
 
 		const user = await prismaClient.credentials.create({

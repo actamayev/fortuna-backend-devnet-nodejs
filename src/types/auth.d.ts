@@ -15,7 +15,7 @@ declare global {
 		password: string
 		is_active: boolean
 		email?: string
-		phoneNumber?: string
+		phone_number?: string
 	}
 }
 
