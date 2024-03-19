@@ -109,6 +109,7 @@
 	"include": [
 	  "src/**/*",
 	  "./.eslintrc.json",
+	  "./ecosystem.config.js"
 	],
 	"exclude": [
 	  "node_modules"
