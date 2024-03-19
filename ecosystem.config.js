@@ -1,7 +1,7 @@
 module.exports = {
 	apps : [{
 		name: "fiftyone-backend-nodejs",
-		script: "./dist/src/index.js", // Your main application file
+		script: "./index.js", // Your main application file
 		instances: "max", // Number of instances to run
 		autorestart: true, // Automatically restart the app if it crashes
 		watch: false, // Watch for file changes and reload the app (useful in development)
