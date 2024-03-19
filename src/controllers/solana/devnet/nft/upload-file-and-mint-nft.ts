@@ -3,8 +3,8 @@ import bs58 from "bs58"
 import { Request, Response } from "express"
 import mintNFT from "../../../../utils/mint-nft"
 import prismaClient from "../../../../prisma-client"
+import AwsStorageService from "../../../../classes/aws-storage-service"
 import findSolanaWallet from "../../../../utils/find/find-solana-wallet"
-import uploadToNFTStorage from "../../../../utils/upload-to-nft-storage"
 
 export default async function uploadFileAndMintNFT (req: Request, res: Response): Promise<Response> {
 	try {
@@ -15,7 +15,7 @@ export default async function uploadFileAndMintNFT (req: Request, res: Response)
 		const fileBuffer = req.file.buffer
 		const fileName = req.file.originalname
 
-		const metaDataUrl = await uploadToNFTStorage(fileBuffer, fileName)
+		const metaDataUrl = await AwsStorageService.getInstance().uploadFile(fileBuffer, fileName)
 
 		if (_.isUndefined(metaDataUrl)) return res.status(400).json({ message: "Unable to Save Image"})
 
@@ -25,7 +25,7 @@ export default async function uploadFileAndMintNFT (req: Request, res: Response)
 
 		const secretKeyUint8Array = bs58.decode(wallet.secretKey)
 
-		const nft = await mintNFT(metaDataUrl.toString(), secretKeyUint8Array)
+		const nft = await mintNFT(metaDataUrl, secretKeyUint8Array)
 
 		await prismaClient.nFT.create({
 			data: {
