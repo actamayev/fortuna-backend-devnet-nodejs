@@ -41,7 +41,7 @@
     "nodemon": "^3.0.1",
     "prisma": "^5.11.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "typescript": "5.2.2"
   },
   "dependencies": {
     "@metaplex-foundation/js": "^0.20.1",
@@ -58,7 +58,7 @@
     "libphonenumber-js": "^1.10.58",
     "lodash": "^4.17.21",
     "multer": "^1.4.5-lts.1",
-    "nft.storage": "^3.3.0",
+    "nft.storage": "3.4.0",
     "validator": "^13.11.0"
   }
 }
