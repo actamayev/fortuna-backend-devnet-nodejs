@@ -10,7 +10,7 @@ import solanaRoutes from "./routes/solana/solana-routes"
 
 import checkHealth from "./controllers/health-checks/check-health"
 
-dotenv.config()
+dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.local" })
 
 const port = parseInt(process.env.PORT, 10) || 8000
 
