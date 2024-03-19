@@ -58,7 +58,8 @@ model NFT {
   fileName     String    // Original name of the file used for the NFT
   nftName      String    // Name of the NFT
   description  String?   // Description of the NFT
-  mintAddress  String    // Address at which the NFT was minted
+  chainAddress  String    // Address at which the NFT was minted
+  metaDataAddress String
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @default(now()) @updatedAt
 

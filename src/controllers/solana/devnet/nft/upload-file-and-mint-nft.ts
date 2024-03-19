@@ -27,6 +27,8 @@ export default async function uploadFileAndMintNFT (req: Request, res: Response)
 
 		const nft = await mintNFT(metaDataUrl, secretKeyUint8Array)
 
+		if (_.isUndefined(nft)) return res.status(400).json({ message: "Unable to create NFT"})
+
 		await prismaClient.nFT.create({
 			data: {
 				userId: user.user_id,
@@ -34,11 +36,12 @@ export default async function uploadFileAndMintNFT (req: Request, res: Response)
 				metaDataUrl,
 				fileName,
 				nftName: nft.name,
-				mintAddress: nft.mint.toString(),
+				chainAddress: nft.mint.address.toString(),
+				metaDataAddress: nft.metadataAddress.toString(),
 				description: "Test Description"
 			}
 		})
-		return res.status(200).json({ success: "Uploaded and minted", nft })
+		return res.status(200).json({ nft })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Upload File and Mint NFT" })
