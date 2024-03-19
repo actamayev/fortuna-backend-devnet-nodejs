@@ -25,7 +25,7 @@ export default async function uploadFileAndMintNFT (req: Request, res: Response)
 
 		const secretKeyUint8Array = bs58.decode(wallet.secretKey)
 
-		const nft = await mintNFT(metaDataUrl, secretKeyUint8Array)
+		const nft = await mintNFT(metaDataUrl, secretKeyUint8Array, fileName)
 
 		if (_.isUndefined(nft)) return res.status(400).json({ message: "Unable to create NFT"})
 

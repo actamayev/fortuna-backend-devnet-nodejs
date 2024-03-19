@@ -1,5 +1,5 @@
-import express from "express"
 import multer from "multer"
+import express from "express"
 
 import uploadFileAndMintNFT from "../../controllers/solana/devnet/nft/upload-file-and-mint-nft"
 import createDevnetSolanaWallet from "../../controllers/solana/devnet/create-devnet-solana-wallet"

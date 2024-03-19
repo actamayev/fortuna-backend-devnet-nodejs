@@ -1,7 +1,11 @@
 import { Connection, clusterApiUrl, Keypair } from "@solana/web3.js"
 import { Metaplex, Nft, keypairIdentity } from "@metaplex-foundation/js"
 
-export default async function mintNFT (metadataUrl: string, secretKey: Uint8Array): Promise<Nft | undefined> {
+export default async function mintNFT (
+	metadataUrl: string,
+	secretKey: Uint8Array,
+	fileName: string
+): Promise<Nft | undefined> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"))
 		const wallet = Keypair.fromSecretKey(secretKey)
@@ -11,7 +15,7 @@ export default async function mintNFT (metadataUrl: string, secretKey: Uint8Arra
 
 		const { nft } = await metaplex.nfts().create({
 			uri: metadataUrl,
-			name: "Tiger 1",
+			name: fileName,
 			sellerFeeBasisPoints: 0
 		})
 
