@@ -14,9 +14,9 @@ export default async function uploadToNFTStorage (
 			name: "Tiger 1",
 			description: "A Tiger",
 			image: blob,
-			// properties: {
-			// 	originalFileName: fileName
-			// }
+			properties: {
+				originalFileName: fileName
+			}
 		})
 
 		return metadata.url
