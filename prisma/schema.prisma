@@ -18,6 +18,7 @@ model Credentials {
   updated_at   DateTime @default(now()) @updatedAt
   LoginHistory LoginHistory[]
   SolanaWallet  SolanaWallet[]
+  NFTs          NFT[]         // Back-relation field for NFTs owned by the user
 }
 
 model LoginHistory {
@@ -44,7 +45,26 @@ model SolanaWallet {
   networkType NetworkType
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @default(now()) @updatedAt
-
+  NFTs          NFT[]         // Back-relation field for NFTs associated with this wallet
   @@index([userId], name: "userId_idx")
   @@unique([userId, networkType])
+}
+
+model NFT {
+  id           Int       @id @default(autoincrement())
+  userId       Int
+  walletId     Int
+  metaDataUrl  String
+  fileName     String    // Original name of the file used for the NFT
+  nftName      String    // Name of the NFT
+  description  String?   // Description of the NFT
+  mintAddress  String    // Address at which the NFT was minted
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt
+
+  user         Credentials @relation(fields: [userId], references: [user_id])
+  wallet       SolanaWallet @relation(fields: [walletId], references: [id])
+
+  @@index([userId], name: "nft_userId_idx")
+  @@index([walletId], name: "nft_walletId_idx")
 }

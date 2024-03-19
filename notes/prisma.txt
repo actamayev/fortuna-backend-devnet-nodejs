@@ -1,3 +1,4 @@
 When making changes to tables (or creating new tables), edit the schema.prisma file.
 Then, run the `npx prisma migrate dev --name [name_of_operation (ie add_login_history)]`
 Then, run `npx prisma generate`
+Might have to restart TS server for the changes to take effect in VS code (ie. autocomplete new table names)
