@@ -15,5 +15,8 @@ declare namespace NodeJS {
 		AWS_REGION: string
 
 		AWS_S3_BUCKET_NAME: string
+
+		FIFTYONE_CRYPTO_WALLET_SECRET_KEY: string
+		FIFTYONE_CRYPTO_ESCROW_WALLET_PUBLIC_KEY: string
 	}
 }

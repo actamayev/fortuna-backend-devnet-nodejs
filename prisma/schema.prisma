@@ -37,35 +37,43 @@ enum NetworkType {
 }
 
 model SolanaWallet {
-  id          Int          @id @default(autoincrement())
-  publicKey   String       @db.VarChar(255)
-  secretKey   String       @db.VarChar(255) // Consider storing encrypted!
-  userId      Int
-  user        Credentials  @relation(fields: [userId], references: [user_id])
-  networkType NetworkType
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @default(now()) @updatedAt
+  solana_wallet_id          Int          @id @default(autoincrement())
+  public_key   String       @db.VarChar(255)
+  secret_key   String       @db.VarChar(255) // Consider storing encrypted!
+  user_id      Int
+  user        Credentials  @relation(fields: [user_id], references: [user_id])
+  network_type NetworkType
+  created_at   DateTime     @default(now())
+  updated_at   DateTime     @default(now()) @updatedAt
   NFTs          NFT[]         // Back-relation field for NFTs associated with this wallet
-  @@index([userId], name: "userId_idx")
-  @@unique([userId, networkType])
+  @@index([user_id], name: "userId_idx")
+  @@unique([user_id, network_type])
+}
+
+enum NFTListingStatus {
+  PRELISTING
+  LISTED
+  SOLDOUT
+  REMOVED
 }
 
 model NFT {
-  id           Int       @id @default(autoincrement())
-  userId       Int
-  walletId     Int
-  metaDataUrl  String
-  fileName     String    // Original name of the file used for the NFT
-  nftName      String    // Name of the NFT
+  nft_id           Int       @id @default(autoincrement())
+  user_id       Int
+  wallet_id     Int
+  meta_data_url  String
+  file_name     String    // Original name of the file used for the NFT
+  nft_name      String    // Name of the NFT
   description  String?   // Description of the NFT
-  chainAddress  String    // Address at which the NFT was minted
-  metaDataAddress String  // On-chain Address of the NFT metaData
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @default(now()) @updatedAt
+  chain_address  String    // Address at which the NFT was minted
+  meta_data_address String  // On-chain Address of the NFT metaData
+  nft_listing_status NFTListingStatus
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @default(now()) @updatedAt
 
-  user         Credentials @relation(fields: [userId], references: [user_id])
-  wallet       SolanaWallet @relation(fields: [walletId], references: [id])
+  user         Credentials @relation(fields: [user_id], references: [user_id])
+  wallet       SolanaWallet @relation(fields: [wallet_id], references: [solana_wallet_id])
 
-  @@index([userId], name: "nft_userId_idx")
-  @@index([walletId], name: "nft_walletId_idx")
+  @@index([user_id], name: "nft_userId_idx")
+  @@index([wallet_id], name: "nft_walletId_idx")
 }

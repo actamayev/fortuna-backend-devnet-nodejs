@@ -23,7 +23,7 @@ export default async function uploadFileAndMintNFT (req: Request, res: Response)
 
 		if (_.isNil(wallet)) return res.status(400).json({ message: "Unable to find Devnet Solana Wallet"})
 
-		const secretKeyUint8Array = bs58.decode(wallet.secretKey)
+		const secretKeyUint8Array = bs58.decode(wallet.secret_key)
 
 		const nft = await mintNFT(metaDataUrl, secretKeyUint8Array, fileName)
 
@@ -31,14 +31,17 @@ export default async function uploadFileAndMintNFT (req: Request, res: Response)
 
 		await prismaClient.nFT.create({
 			data: {
-				userId: user.user_id,
-				walletId: wallet.id,
-				metaDataUrl,
-				fileName,
-				nftName: nft.name,
-				chainAddress: nft.mint.address.toString(),
-				metaDataAddress: nft.metadataAddress.toString(),
-				description: "Test Description"
+				user_id: user.user_id,
+				wallet_id: wallet.solana_wallet_id,
+				meta_data_url: metaDataUrl,
+				file_name: fileName,
+				nft_name: nft.name,
+				chain_address: nft.mint.address.toString(),
+				meta_data_address: nft.metadataAddress.toString(),
+				// TODO: Create a separate endpoint that allows for future Listing
+				// ie. if a creator wants to mint before-hand, and release at the same time as the video drops. This would be "PRELISTING"
+				nft_listing_status: "LISTED"
+				// description: "Test Description"
 			}
 		})
 		return res.status(200).json({ nft })
