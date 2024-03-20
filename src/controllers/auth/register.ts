@@ -1,4 +1,3 @@
-import _ from "lodash"
 import { Response, Request } from "express"
 import Hash from "../../classes/hash"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
@@ -24,10 +23,10 @@ export default async function register (req: Request, res: Response): Promise<Re
 		const hashedPassword = await Hash.hashCredentials(password)
 
 		const userId = await addLocalUser(req.body.registerInformation, hashedPassword, contactType)
-		if (_.isUndefined(userId)) return res.status(500).json({ error: "Internal Server Error: Unable to Create User" })
+		if (userId === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Create User" })
 
 		const accessToken = signJWT({ userId, newUser: true})
-		if (_.isUndefined(accessToken)) return res.status(500).json({ error: "Internal Server Error: Unable to Sign JWT" })
+		if (accessToken === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Sign JWT" })
 
 		await addLoginRecord(userId)
 

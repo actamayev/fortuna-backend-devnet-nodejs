@@ -11,7 +11,7 @@ export default async function requestDevnetSolanaAirdrop(req: Request, res: Resp
 		const solanaWallet = await findSolanaWallet(user.user_id, "DEVNET")
 		if (_.isNil(solanaWallet)) return res.status(400).json({ message: "Cannot find Devnet Solana Wallet" })
 
-		const publicKey = new PublicKey(solanaWallet.publicKey)
+		const publicKey = new PublicKey(solanaWallet.public_key)
 
 		const latestBlockHash = await connection.getLatestBlockhash()
 

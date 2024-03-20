@@ -18,7 +18,7 @@ export default async function jwtVerify(req: Request, res: Response, next: NextF
 
 		const userId = getDecodedId(accessToken)
 
-		if (_.isUndefined(userId)) return handleUnauthorized()
+		if (userId === undefined) return handleUnauthorized()
 
 		const user = await findUser(userId)
 

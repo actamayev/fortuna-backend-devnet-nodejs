@@ -12,10 +12,10 @@ export default async function createDevnetSolanaWallet (req: Request, res: Respo
 
 		await prismaClient.solanaWallet.create({
 			data: {
-				publicKey,
-				secretKey,
-				userId: user.user_id,
-				networkType: "DEVNET"
+				public_key: publicKey,
+				secret_key: secretKey,
+				user_id: user.user_id,
+				network_type: "DEVNET"
 			}
 		})
 

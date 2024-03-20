@@ -18,7 +18,7 @@ export default async function login (req: Request, res: Response): Promise<Respo
 		if (doPasswordsMatch === false) return res.status(400).json({ message: "Wrong Username or Password!" })
 
 		const accessToken = signJWT({ userId: credentialsResult.user_id, newUser: false })
-		if (_.isUndefined(accessToken)) return res.status(500).json({ error: "Internal Server Error: Unable to Sign JWT" })
+		if (accessToken === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Sign JWT" })
 
 		await addLoginRecord(credentialsResult.user_id)
 
