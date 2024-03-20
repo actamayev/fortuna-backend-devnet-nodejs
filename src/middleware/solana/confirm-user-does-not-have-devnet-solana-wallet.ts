@@ -11,7 +11,7 @@ export default async function confirmUserDoesNotHaveDevnetSolanaWallet(
 		const user = req.user
 		const solanaWallet = await findSolanaWallet(user.user_id, "DEVNET")
 
-		if (_.isUndefined(solanaWallet)) throw Error("Error finding Devnet Solana Wallet")
+		if (solanaWallet === undefined) throw Error("Error finding Devnet Solana Wallet")
 
 		if (!_.isNull(solanaWallet)) return res.status(400).json({ message: "User already has a Devnet Solana wallet"})
 
