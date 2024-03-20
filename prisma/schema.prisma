@@ -1,79 +1,148 @@
 generator client {
-  provider = "prisma-client-js"
+	provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+	provider = "postgresql"
+	url      = env("DATABASE_URL")
 }
 
 model Credentials {
-  user_id      Int      @id @default(autoincrement())
-  username     String
-  password     String
-  is_active    Boolean  @default(true)
-  email        String?
-  phone_number String?
-  created_at   DateTime @default(now())
-  updated_at   DateTime @default(now()) @updatedAt
-  LoginHistory LoginHistory[]
-  SolanaWallet  SolanaWallet[]
-  NFTs          NFT[]
+	user_id     			Int      @id @default(autoincrement())
+	username     			String
+	password     			String
+	is_active    			Boolean  @default(true)
+	email        			String?
+	phone_number 			String?
+
+	created_at   			DateTime @default(now())
+	updated_at   			DateTime @default(now()) @updatedAt
+
+	LoginHistory 			LoginHistory[]
+	SolanaWallet  			SolanaWallet[]
+	NFT          			NFT[]
+	TokenAccount 			TokenAccount[]
 }
 
 model LoginHistory {
-  login_history_id Int       @id @default(autoincrement())
-  user_id          Int
-  login_time       DateTime  @default(now())
-  user             Credentials @relation(fields: [user_id], references: [user_id])
+	login_history_id 		Int       @id @default(autoincrement())
+	user_id          		Int
+	login_time       		DateTime  @default(now())
 
-  @@index([user_id], name: "user_id_idx")
+	user             		Credentials @relation(fields: [user_id], references: [user_id])
+
+	@@index([user_id], name: "login_history__user_id_idx")
 }
 
 enum NetworkType {
-  MAINNET
-  DEVNET
-  TESTNET
+	MAINNET
+	DEVNET
+	TESTNET
 }
 
 model SolanaWallet {
-  solana_wallet_id          Int          @id @default(autoincrement())
-  public_key   String       @db.VarChar(255)
-  secret_key   String       @db.VarChar(255) // Consider storing encrypted!
-  user_id      Int
-  user        Credentials  @relation(fields: [user_id], references: [user_id])
-  network_type NetworkType
-  created_at   DateTime     @default(now())
-  updated_at   DateTime     @default(now()) @updatedAt
-  NFTs          NFT[]         // Back-relation field for NFTs associated with this wallet
-  @@index([user_id], name: "userId_idx")
-  @@unique([user_id, network_type])
+	solana_wallet_id		Int          @id @default(autoincrement())
+	public_key   			String       @db.VarChar(255)
+	secret_key   			String       @db.VarChar(255) // Consider storing encrypted!
+	user_id      			Int
+	network_type 			NetworkType
+
+	created_at   			DateTime     @default(now())
+	updated_at   			DateTime     @default(now()) @updatedAt
+
+	user        			Credentials @relation(fields: [user_id], references: [user_id])
+
+	NFTs          			NFT[]
+	TokenAccount 			TokenAccount[]
+
+	@@index([user_id], name: "solana_wallet__user_id_idx")
+	@@unique([user_id, network_type])
 }
 
 enum NFTListingStatus {
-  PRELISTING
-  LISTED
-  SOLDOUT
-  REMOVED
+	PRELISTING
+	LISTED
+	SOLDOUT
+	REMOVED
 }
 
 model NFT {
-  nft_id           Int       @id @default(autoincrement())
-  user_id       Int
-  wallet_id     Int
-  meta_data_url  String
-  file_name     String    // Original name of the file used for the NFT
-  nft_name      String    // Name of the NFT
-  description  String?   // Description of the NFT
-  chain_address  String    // Address at which the NFT was minted
-  meta_data_address String  // On-chain Address of the NFT metaData
-  nft_listing_status NFTListingStatus
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @default(now()) @updatedAt
+	nft_id           		Int       @id @default(autoincrement())
+	user_id       			Int
+	solana_wallet_id     	Int
+	meta_data_url  			String
+	file_name     			String    // Original name of the file used for the NFT
+	nft_name      			String    // Name of the NFT
+	description  			String?   // Description of the NFT
+	chain_address  			String    // Address at which the NFT was minted
+	meta_data_address 		String  // On-chain Address of the NFT metaData
+	nft_listing_status 		NFTListingStatus
 
-  user         Credentials @relation(fields: [user_id], references: [user_id])
-  wallet       SolanaWallet @relation(fields: [wallet_id], references: [solana_wallet_id])
+	created_at    			DateTime  @default(now())
+	updated_at    			DateTime  @default(now()) @updatedAt
 
-  @@index([user_id], name: "nft_userId_idx")
-  @@index([wallet_id], name: "nft_walletId_idx")
+	user         			Credentials @relation(fields: [user_id], references: [user_id])
+	solanaWallet       		SolanaWallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
+
+	NFTOwnership 			NFTOwnership[]
+	SPLTransfer 			SPLTransfer[]
+
+	@@index([user_id], name: "nft__user_id_idx")
+	@@index([solana_wallet_id], name: "nft__solana_wallet_id_idx")
+}
+
+model TokenAccount {
+	token_account_id 		Int  @id @default(autoincrement())
+	user_id       			Int
+	solana_wallet_id    	Int
+
+	created_at    			DateTime  @default(now())
+	updated_at    			DateTime  @default(now()) @updatedAt
+
+	user         			Credentials @relation(fields: [user_id], references: [user_id])
+	solanaWallet       		SolanaWallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
+
+	NFTOwnership 			NFTOwnership[]
+	toSPLTransfers      	SPLTransfer[] @relation("TransferToTokenAccount")
+  	fromSPLTransfers    	SPLTransfer[] @relation("TransferFromTokenAccount")
+
+	@@index([user_id], name: "token_account__user_id_idx")
+	@@index([solana_wallet_id], name: "token_account__solana_wallet_id_idx")
+}
+
+model NFTOwnership {
+	nft_ownership_id		Int @id @default(autoincrement())
+	nft_id 					Int
+  	token_account_id    	Int
+	number_of_shares 		Int
+
+	created_at    			DateTime  @default(now())
+	updated_at    			DateTime  @default(now()) @updatedAt
+
+  	tokenAccount       		TokenAccount @relation(fields: [token_account_id], references: [token_account_id])
+	nft         			NFT @relation(fields: [nft_id], references: [nft_id])
+
+  	@@index([token_account_id], name: "nft_ownership__token_account_id_idx")
+  	@@index([nft_id], name: "nft_ownership__nft_id_idx")
+	@@unique([nft_id, token_account_id])
+}
+
+model SPLTransfer {
+	spl_transfer_id 		Int @id @default(autoincrement())
+	nft_id 					Int
+	to_token_account_id		Int
+	from_token_account_id 	Int
+	number_of_shares 		Int
+	transaction_cost 		Int
+
+	created_at    			DateTime  @default(now())
+	updated_at    			DateTime  @default(now()) @updatedAt
+
+  	toTokenAccount   		TokenAccount @relation(name: "TransferToTokenAccount", fields: [to_token_account_id], references: [token_account_id])
+	fromTokenAccount 		TokenAccount @relation(name: "TransferFromTokenAccount", fields: [from_token_account_id], references: [token_account_id])
+	nft         			NFT @relation(fields: [nft_id], references: [nft_id])
+
+  	@@index([nft_id], name: "spl_transfer__nft_id_idx")
+  	@@index([to_token_account_id], name: "spl_transfer__to_token_account_id_idx")
+  	@@index([from_token_account_id], name: "spl_transfer__from_token_account_id_idx")
 }
