@@ -6,6 +6,7 @@ import createDevnetSolanaWallet from "../../controllers/solana/devnet/create-dev
 import requestDevnetSolanaAirdrop from "../../controllers/solana/devnet/request-devnet-solana-airdrop"
 import getDevnetSolanaWalletBalance from "../../controllers/solana/devnet/get-devnet-solana-wallet-balance"
 
+import validateUploadFileAndMintNFT from "../../middleware/request-validation/solana/validate-upload-file-and-mint-nft"
 import confirmUserDoesNotHaveDevnetSolanaWallet from "../../middleware/solana/confirm-user-does-not-have-devnet-solana-wallet"
 
 const solanaDevnetRoutes = express.Router()
@@ -17,6 +18,11 @@ solanaDevnetRoutes.get("/get-wallet-balance", getDevnetSolanaWalletBalance)
 
 solanaDevnetRoutes.post("/request-airdrop", requestDevnetSolanaAirdrop)
 
-solanaDevnetRoutes.post("/upload-file-mint-nft", upload.single("file"), uploadFileAndMintNFT)
+solanaDevnetRoutes.post(
+	"/upload-file-mint-nft",
+	validateUploadFileAndMintNFT,
+	upload.single("file"),
+	uploadFileAndMintNFT
+)
 
 export default solanaDevnetRoutes
