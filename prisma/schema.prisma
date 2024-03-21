@@ -150,6 +150,7 @@ model NFTTransfer {
 model SPL {
 	spl_id           		Int       @id @default(autoincrement())
 	nft_id					Int
+	public_key_address		String
 
 	created_at    			DateTime  @default(now())
 	updated_at    			DateTime  @default(now()) @updatedAt
