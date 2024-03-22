@@ -50,16 +50,10 @@ model solana_wallet {
 
 	user        				credentials @relation(fields: [user_id], references: [user_id])
 
-	nft_recipient_wallet     	nft_transfer[] @relation("nft_recipient_wallet")
-  	nft_sender_wallet    		nft_transfer[] @relation("nft_sender_wallet")
-  	nft_transfer_payer_wallet 	nft_transfer[] @relation("nft_transfer_payer_wallet")
-	nft_owner_wallet     		nft[] @relation("nft_owner_wallet")
-	nft_payer_wallet    		nft[] @relation("nft_payer_wallet")
 	spl_payer_wallet			spl[] @relation("spl_payer_wallet")
 	spl_transfer_payer_wallet	spl_transfer[] @relation("spl_transfer_payer_wallet")
 	spl_mint_payer_wallet		spl_mint[] @relation("spl_mint_payer_wallet")
 
-	nft_ownership 				nft_ownership[]
 	token_account 				token_account[]
 
 	@@index([user_id], name: "solana_wallet__user_id_idx")
@@ -87,92 +81,32 @@ model token_account {
 	@@unique([spl_id, solana_wallet_id])
 }
 
-enum NFTListingStatus {
+enum SPLListingStatus {
 	PRELISTING
 	LISTED
 	SOLDOUT
 	REMOVED
 }
 
-model nft {
-	nft_id           			Int       @id @default(autoincrement())
-	solana_wallet_id       		Int
+model spl {
+	spl_id           			Int       @id @default(autoincrement())
 	meta_data_url  				String
-	file_name     				String    // Original name of the file used for the NFT
-	nft_name      				String    // Name of the NFT
-	chain_address  				String    // Address at which the NFT was minted
-	meta_data_address 			String  // On-chain Address of the NFT metaData
+	file_name     				String    // Original name of the file used for the SPL
+	spl_name      				String    // Name of the SPL
+	chain_address  				String    // Address at which the SPL was minted
+	meta_data_address 			String  // On-chain Address of the SPL metaData
+	public_key_address			String // Might be redundant with chain_address
 	listing_price				Int
 	blockchain_mint_fee			Int // Blockchain fee (in dollars)
 	payer_solana_wallet_id		Int
+	total_number_of_shares		Int
 
-	description  				String?   // Description of the NFT
-	nft_listing_status 			NFTListingStatus
-
-	created_at    				DateTime  @default(now())
-	updated_at    				DateTime  @default(now()) @updatedAt
-
-	nftOwnerWallet				solana_wallet @relation(name: "nft_owner_wallet", fields: [solana_wallet_id], references: [solana_wallet_id])
-	nftPayerWallet				solana_wallet @relation(name: "nft_payer_wallet", fields: [payer_solana_wallet_id], references: [solana_wallet_id])
-
-	nft_ownership 				nft_ownership[]
-	SPL 						spl[]
-	nft_transfer				nft_transfer[]
-
-	@@index([solana_wallet_id], name: "nft__solana_wallet_id_idx")
-	@@index([payer_solana_wallet_id], name: "nft_payer_solana_wallet_id_idx")
-}
-
-model nft_ownership {
-	nft_ownership_id			Int @id @default(autoincrement())
-	nft_id 						Int
-  	solana_wallet_id    		Int
-	// We don't need number_of_shares here since NFT Ownership is singular (only 1 account owns the actual NFT)
+	description  				String?   // Description of the SPL
+	spl_listing_status 			SPLListingStatus
 
 	created_at    				DateTime  @default(now())
 	updated_at    				DateTime  @default(now()) @updatedAt
 
-	nft         				nft @relation(fields: [nft_id], references: [nft_id])
-	solanaWallet       			solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
-
-  	@@index([nft_id], name: "nft_ownership__nft_id_idx")
-  	@@index([solana_wallet_id], name: "nft_ownership__solana_wallet_id_idx")
-	@@unique([nft_id, solana_wallet_id])
-}
-
-model nft_transfer {
-	nft_transfer_id 			Int @id @default(autoincrement())
-	nft_id						Int
-	to_solana_wallet_id			Int
-	from_solana_wallet_id 		Int
-	blockchain_transfer_fee		Int
-	payer_solana_wallet_id		Int
-
-	created_at    				DateTime  @default(now())
-	updated_at    				DateTime  @default(now()) @updatedAt
-
-	nft         				nft @relation(fields: [nft_id], references: [nft_id])
-  	nft_recipient_wallet   		solana_wallet @relation(name: "nft_recipient_wallet", fields: [to_solana_wallet_id], references: [solana_wallet_id])
-	nft_sender_wallet 			solana_wallet @relation(name: "nft_sender_wallet", fields: [from_solana_wallet_id], references: [solana_wallet_id])
-	nft_transfer_payer_wallet	solana_wallet @relation(name: "nft_transfer_payer_wallet", fields: [payer_solana_wallet_id], references: [solana_wallet_id])
-
-  	@@index([nft_id], name: "nft_transfer__nft_id_idx")
-  	@@index([to_solana_wallet_id], name: "nft_transfer__to_solana_wallet_id_idx")
-  	@@index([from_solana_wallet_id], name: "nft_transfer__from_solana_wallet_id_idx")
-  	@@index([payer_solana_wallet_id], name: "nft_transfer__payer_solana_wallet_id_idx")
-}
-
-model spl {
-	spl_id           			Int       @id @default(autoincrement())
-	nft_id						Int
-	public_key_address			String
-	blockchain_mint_fee			Int // Blockchain fee (in dollars)
-	payer_solana_wallet_id		Int
-
-	created_at    				DateTime  @default(now())
-	updated_at    				DateTime  @default(now()) @updatedAt
-
-	nft         				nft @relation(fields: [nft_id], references: [nft_id])
 	spl_payer_wallet			solana_wallet @relation(name: "spl_payer_wallet", fields: [payer_solana_wallet_id], references: [solana_wallet_id])
 
 	spl_ownership 				spl_ownership[]
@@ -180,8 +114,25 @@ model spl {
 	token_account				token_account[]
 	spl_mint					spl_mint[]
 
-	@@index([nft_id], name: "spl__nft_id_idx")
 	@@index([payer_solana_wallet_id], name: "spl__payer_solana_wallet_id_idx")
+}
+
+model spl_mint {
+	splt_mint_id				Int @id @default(autoincrement())
+	spl_id						Int
+  	token_account_id    		Int
+	number_of_shares			Int
+	blockchain_mint_fee 		Int
+	payer_solana_wallet_id		Int
+	transaction_signature		String
+
+	spl         				spl @relation(fields: [spl_id], references: [spl_id])
+	token_account       		token_account @relation(fields: [token_account_id], references: [token_account_id])
+	spl_mint_payer_wallet		solana_wallet @relation(name: "spl_mint_payer_wallet", fields: [payer_solana_wallet_id], references: [solana_wallet_id])
+
+  	@@index([spl_id], name: "spl_mint__spl_id_idx")
+  	@@index([token_account_id], name: "spl_mint__token_account_id_idx")
+  	@@index([payer_solana_wallet_id], name: "spl_mint__payer_solana_wallet_id_idx")
 }
 
 model spl_ownership {
@@ -222,22 +173,4 @@ model spl_transfer {
   	@@index([recipient_token_account_id], name: "spl_transfer__recipient_token_account_id_idx")
   	@@index([sender_token_account_id], name: "spl_transfer__sender_token_account_id_idx")
   	@@index([payer_solana_wallet_id], name: "spl_transfer__payer_solana_wallet_id_idx")
-}
-
-model spl_mint {
-	splt_mint_id				Int @id @default(autoincrement())
-	spl_id						Int
-  	token_account_id    		Int
-	number_of_shares			Int
-	blockchain_mint_fee 		Int
-	payer_solana_wallet_id		Int
-	transaction_signature		String
-
-	spl         				spl @relation(fields: [spl_id], references: [spl_id])
-	token_account       		token_account @relation(fields: [token_account_id], references: [token_account_id])
-	spl_mint_payer_wallet		solana_wallet @relation(name: "spl_mint_payer_wallet", fields: [payer_solana_wallet_id], references: [solana_wallet_id])
-
-  	@@index([spl_id], name: "spl_mint__spl_id_idx")
-  	@@index([token_account_id], name: "spl_mint__token_account_id_idx")
-  	@@index([payer_solana_wallet_id], name: "spl_mint__payer_solana_wallet_id_idx")
 }
