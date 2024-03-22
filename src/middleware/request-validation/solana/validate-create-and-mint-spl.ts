@@ -11,6 +11,7 @@ const createAndMintSPLSchema = Joi.object({
 		imageUrl: Joi.string().required(),
 		fileName: Joi.string().required(),
 		uuid: Joi.string().required(),
+		uploadedImageId: Joi.number().strict().required(),
 		description: Joi.string().optional()
 	}).required()
 }).required()

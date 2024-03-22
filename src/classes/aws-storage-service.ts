@@ -23,7 +23,7 @@ export default class AwsStorageService {
 		return AwsStorageService.instance
 	}
 
-	public async uploadJSON(jsonData: NewSPLData, key: string): Promise<string | void> {
+	public async uploadJSON(jsonData: SLPDataSavedToS3, key: string): Promise<string | void> {
 		const jsonBuffer = Buffer.from(JSON.stringify(jsonData))
 
 		const command = new PutObjectCommand({

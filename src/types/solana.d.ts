@@ -1,13 +1,17 @@
 declare global {
-	interface NewSPLData {
+	interface SLPDataSavedToS3 {
 		splName: string
 		numberOfShares: number
 		creatorOwnershipPercentage: number
 		offeringSharePrice: number
 		imageUrl: string
 		fileName: string
-		uuid: string
 		description?: string
+	}
+
+	interface NewSPLData extends SLPDataSavedToS3 {
+		uuid: string
+		uploadedImageId: number
 	}
 }
 

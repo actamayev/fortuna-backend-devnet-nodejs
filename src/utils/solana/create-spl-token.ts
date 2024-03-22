@@ -10,7 +10,7 @@ import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-k
 // TODO: Need to extract the transaction fee. Transition to using SPLs
 export default async function createSPLToken (
 	metadataJSONUrl: string,
-	uploadSplData: NewSPLData,
+	splName: string,
 ): Promise<PublicKey | void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
@@ -24,7 +24,7 @@ export default async function createSPLToken (
 			0
 		)
 
-		const transactionSignature = await createTokenMetadata(mint, metadataJSONUrl, uploadSplData)
+		const transactionSignature = await createTokenMetadata(mint, metadataJSONUrl, splName)
 
 		if (transactionSignature === undefined) return
 
@@ -39,7 +39,7 @@ export default async function createSPLToken (
 async function createTokenMetadata(
 	mint: PublicKey,
 	metadataJSONUrl: string,
-	uploadSplData: NewSPLData
+	splName: string
 ): Promise<[string, number] | void> {
 	try {
 		const endpoint = clusterApiUrl("devnet")
@@ -58,7 +58,7 @@ async function createTokenMetadata(
 			payer: signer,
 			updateAuthority: fromWeb3JsKeypair(fiftyoneWallet).publicKey,
 			data: {
-				name: uploadSplData.splName,
+				name: splName,
 				symbol: "",
 				uri: metadataJSONUrl,
 				sellerFeeBasisPoints: 0,

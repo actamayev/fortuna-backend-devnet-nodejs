@@ -65,6 +65,7 @@ model token_account {
 	token_account_id 			Int  @id @default(autoincrement())
 	spl_id						Int
 	solana_wallet_id    		Int
+	public_key					String
 
 	created_at    				DateTime  @default(now())
 	updated_at    				DateTime  @default(now()) @updatedAt
@@ -102,9 +103,10 @@ model spl {
 	payer_solana_wallet_id		Int
 	total_number_of_shares		Int
 	creator_wallet_id			Int
+	uploaded_image_id			Int
 
-	description  				String?   // Description of the SPL
 	spl_listing_status 			SPLListingStatus
+	description  				String?   // Description of the SPL
 
 	created_at    				DateTime  @default(now())
 	updated_at    				DateTime  @default(now()) @updatedAt
@@ -112,6 +114,7 @@ model spl {
 	spl_payer_wallet			solana_wallet @relation(name: "spl_payer_wallet", fields: [payer_solana_wallet_id], references: [solana_wallet_id])
 	spl_creator_wallet			solana_wallet @relation(name: "spl_creator_wallet", fields: [creator_wallet_id], references: [solana_wallet_id])
 
+	uploaded_image				uploaded_image[]
 	spl_ownership 				spl_ownership[]
 	spl_transfer 				spl_transfer[]
 	token_account				token_account[]
@@ -177,4 +180,16 @@ model spl_transfer {
   	@@index([recipient_token_account_id], name: "spl_transfer__recipient_token_account_id_idx")
   	@@index([sender_token_account_id], name: "spl_transfer__sender_token_account_id_idx")
   	@@index([payer_solana_wallet_id], name: "spl_transfer__payer_solana_wallet_id_idx")
+}
+
+model uploaded_image {
+	uploaded_image_id 			Int @id @default(autoincrement())
+	image_url					String
+	file_name					String
+	uuid						String
+
+	created_at    				DateTime  @default(now())
+	updated_at    				DateTime  @default(now()) @updatedAt
+
+	spl spl[]
 }

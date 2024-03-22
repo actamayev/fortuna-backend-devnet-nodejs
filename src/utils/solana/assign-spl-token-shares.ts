@@ -12,7 +12,8 @@ export default async function assignSPLTokenShares (
 	creatorPublicKey: PublicKey,
 	uploadSplData: NewSPLData,
 	splId: number,
-	creatorWalletId: number
+	creatorWalletId: number,
+	fiftyoneCryptoWalletId: number
 ): Promise<"success" | void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
@@ -26,9 +27,7 @@ export default async function assignSPLTokenShares (
 			fiftyoneWallet.publicKey
 		)
 
-		const fiftyoneWalletDB = await findSolanaWalletByPublicKey(fiftyoneWallet.publicKey, "DEVNET")
-		if (_.isNull(fiftyoneWalletDB) || fiftyoneWalletDB === undefined) return
-		const fiftyoneTokenAccountDB = await addTokenAccountRecord(splId, fiftyoneWalletDB.solana_wallet_id)
+		const fiftyoneTokenAccountDB = await addTokenAccountRecord(splId, fiftyoneCryptoWalletId, fiftyoneTokenAccount.address)
 		if (_.isNull(fiftyoneTokenAccountDB) || fiftyoneTokenAccountDB === undefined) return
 
 		const creatorTokenAccount = await getOrCreateAssociatedTokenAccount(
@@ -37,7 +36,7 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			creatorPublicKey
 		)
-		const creatorTokenAccountDB = await addTokenAccountRecord(splId, creatorWalletId)
+		const creatorTokenAccountDB = await addTokenAccountRecord(splId, creatorWalletId, creatorTokenAccount.address)
 		if (_.isNull(creatorTokenAccountDB) || creatorTokenAccountDB === undefined) return
 
 		const fiftyoneCryptoEscrowPublicKey = new PublicKey(process.env.FIFTYONE_CRYPTO_ESCROW_WALLET_PUBLIC_KEY)
@@ -49,7 +48,11 @@ export default async function assignSPLTokenShares (
 		)
 		const fiftyoneEscrowWalletDB = await findSolanaWalletByPublicKey(fiftyoneCryptoEscrowPublicKey, "DEVNET")
 		if (fiftyoneEscrowWalletDB === undefined || _.isNull(fiftyoneEscrowWalletDB)) return
-		const fiftyoneEscrowTokenAccountDB = await addTokenAccountRecord(splId, fiftyoneEscrowWalletDB.solana_wallet_id)
+		const fiftyoneEscrowTokenAccountDB = await addTokenAccountRecord(
+			splId,
+			fiftyoneEscrowWalletDB.solana_wallet_id,
+			fiftyoneEscrowTokenAccount.address
+		)
 		if (_.isNull(fiftyoneEscrowTokenAccountDB) || fiftyoneEscrowTokenAccountDB === undefined) return
 
 		await mintSPLHelper(
@@ -61,7 +64,7 @@ export default async function assignSPLTokenShares (
 			fiftyoneTokenAccount.address,
 			uploadSplData.numberOfShares * (1 / 100),
 			fiftyoneTokenAccountDB.token_account_id,
-			fiftyoneWalletDB.solana_wallet_id
+			fiftyoneCryptoWalletId
 		)
 
 		await mintSPLHelper(
@@ -73,7 +76,7 @@ export default async function assignSPLTokenShares (
 			creatorTokenAccount.address,
 			uploadSplData.numberOfShares * (uploadSplData.creatorOwnershipPercentage / 100),
 			creatorTokenAccountDB.token_account_id,
-			creatorWalletId
+			fiftyoneCryptoWalletId
 		)
 
 		await mintSPLHelper(
@@ -85,7 +88,7 @@ export default async function assignSPLTokenShares (
 			fiftyoneEscrowTokenAccount.address,
 			uploadSplData.numberOfShares * ((99 - uploadSplData.creatorOwnershipPercentage) / 100),
 			fiftyoneEscrowTokenAccountDB.token_account_id,
-			fiftyoneEscrowWalletDB.solana_wallet_id
+			fiftyoneCryptoWalletId
 		)
 
 		return "success"

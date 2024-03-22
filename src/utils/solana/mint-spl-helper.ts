@@ -14,7 +14,7 @@ export default async function mintSPLHelper(
 	destinationAddress: PublicKey,
 	sharesToMint: number,
 	tokenAccountId: number,
-	destinationSolanaWalletId: number
+	payerSolanaWalletId: number
 ): Promise<void> {
 	try {
 		const mintToFiftyoneWalletTransactionSignature = await mintTo(
@@ -33,7 +33,7 @@ export default async function mintSPLHelper(
 			tokenAccountId,
 			sharesToMint,
 			0, // TODO: Fix this to account for the blockchain mint fee
-			destinationSolanaWalletId,
+			payerSolanaWalletId,
 			mintToFiftyoneWalletTransactionSignature
 		)
 
