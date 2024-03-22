@@ -8,7 +8,7 @@ declare global {
 		newUser: boolean
 	}
 
-	type S3FolderNames = "uploaded-images" | "nft-metadata"
+	type S3FolderNames = "uploaded-images" | "spl-metadata"
 }
 
 export {}

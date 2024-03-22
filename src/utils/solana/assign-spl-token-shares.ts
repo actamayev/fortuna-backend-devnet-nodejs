@@ -7,7 +7,7 @@ import addTokenAccountRecord from "../db-operations/add-token-account-record"
 export default async function assignSPLTokenShares (
 	splTokenPublicKey: PublicKey,
 	creatorPublicKey: PublicKey,
-	nftData: UploadNFT,
+	uploadSplData: NewSPLData,
 	splId: number
 ): Promise<{
 	fiftyoneTokenAccount: Account,
@@ -53,7 +53,9 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			fiftyoneTokenAccount.address,
 			fiftyoneWallet.publicKey,
-			nftData.numberOfShares * (10 ** 9)
+			uploadSplData.numberOfShares * (1 / 100)
+			// TODO: Figure out what happens if the share count is non-divisiable by 100
+			// If the share count is 140, then 51's ownership is 1.4, which won't work b/c the decimal is 0 (shares are indivisible)
 		)
 
 		const mintToCreatorTransactionSignature = await mintTo(
@@ -62,7 +64,7 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			creatorTokenAccount.address,
 			fiftyoneWallet.publicKey,
-			nftData.numberOfShares * (10 ** 9) * (nftData.creatorOwnershipPercentage / 100)
+			uploadSplData.numberOfShares * (uploadSplData.creatorOwnershipPercentage / 100)
 		)
 
 		const mintToEscrowTransactionSignature = await mintTo(
@@ -71,7 +73,7 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			fiftyoneEscrowTokenAccount.address,
 			fiftyoneWallet.publicKey,
-			nftData.numberOfShares * (10 ** 9) * ((99 - nftData.creatorOwnershipPercentage) / 100)
+			uploadSplData.numberOfShares * ((99 - uploadSplData.creatorOwnershipPercentage) / 100)
 		)
 
 		return {

@@ -1,14 +1,13 @@
 declare global {
-	interface UploadNFT {
-		nftName: string
+	interface NewSPLData {
+		splName: string
 		numberOfShares: number
 		creatorOwnershipPercentage: number
 		offeringSharePrice: number
-		description?: string
-	}
-
-	interface NFTMetadataJSON extends UploadNFT {
 		imageUrl: string
+		fileName: string
+		uuid: string
+		description?: string
 	}
 }
 
