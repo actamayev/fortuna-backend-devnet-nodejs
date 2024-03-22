@@ -3,8 +3,12 @@ declare global {
 		nftName: string
 		numberOfShares: number
 		creatorOwnershipPercentage: number
-		sharePrice: number
+		offeringSharePrice: number
 		description?: string
+	}
+
+	interface NFTMetadataJSON extends UploadNFT {
+		imageUrl: string
 	}
 }
 

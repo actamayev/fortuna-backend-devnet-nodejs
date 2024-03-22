@@ -7,12 +7,12 @@ const uploadFileAndMintNFTSchema = Joi.object({
 		nftName: Joi.string().required(),
 		numberOfShares: Joi.number().min(10).max(1000).required(),
 		creatorOwnershipPercentage: Joi.number().min(50).max(90).required(),
-		sharePrice: Joi.number().required(),
+		offeringSharePrice: Joi.number().required(),
 		description: Joi.string().optional()
 	}).required()
 }).required()
 
-export default function validateUploadFileAndMintNFT (req: Request, res: Response, next: NextFunction): void | Response {
+export default function validateUploadImageAndMintNFT (req: Request, res: Response, next: NextFunction): void | Response {
 	try {
 		const { error } = uploadFileAndMintNFTSchema.validate(req.body)
 

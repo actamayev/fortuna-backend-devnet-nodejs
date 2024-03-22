@@ -1,7 +1,7 @@
 import { Response, Request } from "express"
 import Hash from "../../classes/hash"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
-import addLoginRecord from "../../utils/auth-helpers/add-login-record"
+import addLoginRecord from "../../utils/db-operations/auth/add-login-record"
 import { addLocalUser } from "../../utils/auth-helpers/register/add-local-user"
 import doesContactExist from "../../utils/auth-helpers/does-x-exist/does-contact-exist"
 import determineContactType from "../../utils/auth-helpers/login/determine-contact-type"

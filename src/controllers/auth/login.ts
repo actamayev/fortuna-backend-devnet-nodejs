@@ -2,7 +2,7 @@ import _ from "lodash"
 import { Response, Request } from "express"
 import Hash from "../../classes/hash"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
-import addLoginRecord from "../../utils/auth-helpers/add-login-record"
+import addLoginRecord from "../../utils/db-operations/auth/add-login-record"
 import determineContactType from "../../utils/auth-helpers/login/determine-contact-type"
 import retrieveUserFromContact from "../../utils/auth-helpers/login/retrieve-user-from-contact"
 

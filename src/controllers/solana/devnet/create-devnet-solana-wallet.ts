@@ -10,7 +10,7 @@ export default async function createDevnetSolanaWallet (req: Request, res: Respo
 		const publicKey = wallet.publicKey.toBase58()
 		const secretKey = bs58.encode(Buffer.from(wallet.secretKey))
 
-		await prismaClient.solanaWallet.create({
+		await prismaClient.solana_wallet.create({
 			data: {
 				public_key: publicKey,
 				secret_key: secretKey,
