@@ -1,15 +1,14 @@
-import { spl } from "@prisma/client"
 import prismaClient from "../../../prisma-client"
 
 export default async function addSPLOwnershipRecord (
-	newSpl: spl,
+	newSplId: number,
 	tokenAccountId: number,
 	numberOfShares: number
 ): Promise<void> {
 	try {
 		await prismaClient.spl_ownership.create({
 			data: {
-				spl_id: newSpl.spl_id,
+				spl_id: newSplId,
 				token_account_id: tokenAccountId,
 				number_of_shares: numberOfShares
 			}

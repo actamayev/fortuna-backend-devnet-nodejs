@@ -1,14 +1,14 @@
 import _ from "lodash"
 import { Request, Response } from "express"
 import { Connection, PublicKey, LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js"
-import findSolanaWallet from "../../../utils/find/find-solana-wallet"
+import { findSolanaWalletByUserId } from "../../../utils/find/find-solana-wallet"
 
 export default async function requestDevnetSolanaAirdrop(req: Request, res: Response): Promise<Response> {
 	try {
 		const user = req.user
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 
-		const solanaWallet = await findSolanaWallet(user.user_id, "DEVNET")
+		const solanaWallet = await findSolanaWalletByUserId(user.user_id, "DEVNET")
 		if (_.isNull(solanaWallet) || solanaWallet === undefined) {
 			return res.status(400).json({ message: "Cannot find Devnet Solana Wallet" })
 		}
