@@ -1,10 +1,10 @@
 import _ from "lodash"
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js"
 import { getOrCreateAssociatedTokenAccount } from "@solana/spl-token"
+import mintSPLHelper from "./mint-spl-helper"
 import { findSolanaWalletByPublicKey } from "../find/find-solana-wallet"
 import addTokenAccountRecord from "../db-operations/add-token-account-record"
 import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-key"
-import mintSPLHelper from "./mint-spl-helper"
 
 // eslint-disable-next-line max-lines-per-function, max-params, complexity
 export default async function assignSPLTokenShares (

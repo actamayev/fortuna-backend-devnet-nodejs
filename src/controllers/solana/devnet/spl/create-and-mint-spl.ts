@@ -4,9 +4,9 @@ import { PublicKey } from "@solana/web3.js"
 import { createS3Key } from "../../../../utils/s3/create-s3-key"
 import createSPLToken from "../../../../utils/solana/create-spl-token"
 import AwsStorageService from "../../../../classes/aws-storage-service"
-import { findSolanaWalletByUserId } from "../../../../utils/find/find-solana-wallet"
 import addSPLRecord from "../../../../utils/db-operations/spl/add-spl-record"
 import assignSPLTokenShares from "../../../../utils/solana/assign-spl-token-shares"
+import { findSolanaWalletByUserId } from "../../../../utils/find/find-solana-wallet"
 
 export default async function createAndMintSPL (req: Request, res: Response): Promise<Response> {
 	try {
