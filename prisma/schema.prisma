@@ -51,6 +51,7 @@ model solana_wallet {
 	user        				credentials @relation(fields: [user_id], references: [user_id])
 
 	spl_payer_wallet			spl[] @relation("spl_payer_wallet")
+	spl_creator_wallet			spl[] @relation("spl_creator_wallet")
 	spl_transfer_payer_wallet	spl_transfer[] @relation("spl_transfer_payer_wallet")
 	spl_mint_payer_wallet		spl_mint[] @relation("spl_mint_payer_wallet")
 
@@ -68,7 +69,7 @@ model token_account {
 	created_at    				DateTime  @default(now())
 	updated_at    				DateTime  @default(now()) @updatedAt
 
-	SPL       					spl @relation(fields: [spl_id], references: [spl_id])
+	spl       					spl @relation(fields: [spl_id], references: [spl_id])
 	solanaWallet       			solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
 
 	spl_ownership				spl_ownership[]
@@ -100,6 +101,7 @@ model spl {
 	blockchain_mint_fee			Int // Blockchain fee (in dollars)
 	payer_solana_wallet_id		Int
 	total_number_of_shares		Int
+	creator_wallet_id			Int
 
 	description  				String?   // Description of the SPL
 	spl_listing_status 			SPLListingStatus
@@ -108,6 +110,7 @@ model spl {
 	updated_at    				DateTime  @default(now()) @updatedAt
 
 	spl_payer_wallet			solana_wallet @relation(name: "spl_payer_wallet", fields: [payer_solana_wallet_id], references: [solana_wallet_id])
+	spl_creator_wallet			solana_wallet @relation(name: "spl_creator_wallet", fields: [creator_wallet_id], references: [solana_wallet_id])
 
 	spl_ownership 				spl_ownership[]
 	spl_transfer 				spl_transfer[]
@@ -115,6 +118,7 @@ model spl {
 	spl_mint					spl_mint[]
 
 	@@index([payer_solana_wallet_id], name: "spl__payer_solana_wallet_id_idx")
+	@@index([payer_solana_wallet_id], name: "spl__creator_token_account_id_idx")
 }
 
 model spl_mint {
