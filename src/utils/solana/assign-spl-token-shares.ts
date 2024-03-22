@@ -1,10 +1,10 @@
 import _ from "lodash"
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js"
-import { getOrCreateAssociatedTokenAccount, mintTo } from "@solana/spl-token"
+import { getOrCreateAssociatedTokenAccount } from "@solana/spl-token"
 import { findSolanaWalletByPublicKey } from "../find/find-solana-wallet"
 import addTokenAccountRecord from "../db-operations/add-token-account-record"
 import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-key"
-import addSPLMintRecord from "../db-operations/spl/add-spl-mint-record"
+import mintSPLHelper from "./mint-spl-helper"
 
 // eslint-disable-next-line max-lines-per-function, max-params, complexity
 export default async function assignSPLTokenShares (
@@ -13,15 +13,12 @@ export default async function assignSPLTokenShares (
 	uploadSplData: NewSPLData,
 	splId: number,
 	creatorWalletId: number
-): Promise<{
-	fiftyoneTokenAccountId: number,
-	creatorTokenAccountId: number,
-	fiftyoneEscrowTokenAccountId: number
-} | void> {
+): Promise<"success" | void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"))
 		const fiftyoneWallet = get51SolanaWalletFromSecretKey()
 
+		// Get or Create Token Accounts:
 		const fiftyoneTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
 			fiftyoneWallet,
@@ -55,67 +52,43 @@ export default async function assignSPLTokenShares (
 		const fiftyoneEscrowTokenAccountDB = await addTokenAccountRecord(splId, fiftyoneEscrowWalletDB.solana_wallet_id)
 		if (_.isNull(fiftyoneEscrowTokenAccountDB) || fiftyoneEscrowTokenAccountDB === undefined) return
 
-		const mintToFiftyoneWalletTransactionSignature = await mintTo(
+		await mintSPLHelper(
 			connection,
 			fiftyoneWallet,
 			splTokenPublicKey,
+			splId,
+			fiftyoneWallet.publicKey,
 			fiftyoneTokenAccount.address,
-			fiftyoneWallet.publicKey,
-			uploadSplData.numberOfShares * (1 / 100)
-			// TODO: Figure out what happens if the share count is non-divisiable by 100
-			// If the share count is 140, then 51's ownership is 1.4, which won't work b/c the decimal is 0 (shares are indivisible)
-		)
-
-		await addSPLMintRecord(
-			splId,
-			fiftyoneTokenAccountDB.token_account_id,
 			uploadSplData.numberOfShares * (1 / 100),
-			0, // TODO: Fix this to account for the blockchain mint fee
-			fiftyoneWalletDB.solana_wallet_id,
-			mintToFiftyoneWalletTransactionSignature
+			fiftyoneTokenAccountDB.token_account_id,
+			fiftyoneWalletDB.solana_wallet_id
 		)
 
-		const mintToCreatorTransactionSignature = await mintTo(
+		await mintSPLHelper(
 			connection,
 			fiftyoneWallet,
 			splTokenPublicKey,
+			splId,
+			fiftyoneWallet.publicKey,
 			creatorTokenAccount.address,
-			fiftyoneWallet.publicKey,
-			uploadSplData.numberOfShares * (uploadSplData.creatorOwnershipPercentage / 100)
-		)
-
-		await addSPLMintRecord(
-			splId,
-			creatorTokenAccountDB.token_account_id,
 			uploadSplData.numberOfShares * (uploadSplData.creatorOwnershipPercentage / 100),
-			0,
-			fiftyoneWalletDB.solana_wallet_id,
-			mintToCreatorTransactionSignature
+			creatorTokenAccountDB.token_account_id,
+			creatorWalletId
 		)
 
-		const mintToEscrowTransactionSignature = await mintTo(
+		await mintSPLHelper(
 			connection,
 			fiftyoneWallet,
 			splTokenPublicKey,
-			fiftyoneEscrowTokenAccount.address,
-			fiftyoneWallet.publicKey,
-			uploadSplData.numberOfShares * ((99 - uploadSplData.creatorOwnershipPercentage) / 100)
-		)
-
-		await addSPLMintRecord(
 			splId,
-			fiftyoneEscrowTokenAccountDB.token_account_id,
+			fiftyoneWallet.publicKey,
+			fiftyoneEscrowTokenAccount.address,
 			uploadSplData.numberOfShares * ((99 - uploadSplData.creatorOwnershipPercentage) / 100),
-			0,
-			fiftyoneWalletDB.solana_wallet_id,
-			mintToEscrowTransactionSignature
+			fiftyoneEscrowTokenAccountDB.token_account_id,
+			fiftyoneEscrowWalletDB.solana_wallet_id
 		)
 
-		return {
-			fiftyoneTokenAccountId: fiftyoneTokenAccountDB.token_account_id,
-			creatorTokenAccountId: creatorTokenAccountDB.token_account_id,
-			fiftyoneEscrowTokenAccountId: fiftyoneEscrowTokenAccountDB.token_account_id
-		}
+		return "success"
 	} catch (error) {
 		console.error(error)
 	}
