@@ -28,11 +28,12 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		const addSPLResponse = await addSPLRecord(metadataJSONUrl, newSPLData, splTokenPublicKey, creatorWallet.solana_wallet_id)
 		if (addSPLResponse === undefined) return res.status(400).json({ message: "Unable to save SPL to DB" })
 
-		await AwsStorageService.getInstance().updateJSONInS3(uploadJSONS3Key, splTokenPublicKey.toString())
+		await AwsStorageService.getInstance().updateJSONInS3(uploadJSONS3Key, {SPLData: splTokenPublicKey.toString()})
 
+		const creatorPublicKey = new PublicKey(creatorWallet.public_key)
 		const assignSPLTokenSharesResponse = await assignSPLTokenShares(
 			splTokenPublicKey,
-			creatorWallet.public_key as unknown as PublicKey,
+			creatorPublicKey,
 			newSPLData,
 			addSPLResponse.spl_id,
 			creatorWallet.solana_wallet_id

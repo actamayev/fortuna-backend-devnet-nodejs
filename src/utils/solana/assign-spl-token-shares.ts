@@ -15,7 +15,7 @@ export default async function assignSPLTokenShares (
 	creatorWalletId: number
 ): Promise<"success" | void> {
 	try {
-		const connection = new Connection(clusterApiUrl("devnet"))
+		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fiftyoneWallet = get51SolanaWalletFromSecretKey()
 
 		// Get or Create Token Accounts:

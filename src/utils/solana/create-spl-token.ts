@@ -13,7 +13,7 @@ export default async function createSPLToken (
 	uploadSplData: NewSPLData,
 ): Promise<PublicKey | void> {
 	try {
-		const connection = new Connection(clusterApiUrl("devnet"))
+		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fiftyoneWallet = get51SolanaWalletFromSecretKey()
 
 		const mint = await createMint(
@@ -26,6 +26,8 @@ export default async function createSPLToken (
 
 		const transactionSignature = await createTokenMetadata(mint, metadataJSONUrl, uploadSplData)
 
+		if (transactionSignature === undefined) return
+
 		// TODO: Simulate transaction via the connection.simulateTransaction. Convert to feeinLamports, and then fee in Sol.
 		return mint
 	} catch (error) {
@@ -33,49 +35,54 @@ export default async function createSPLToken (
 	}
 }
 
+// eslint-disable-next-line max-lines-per-function
 async function createTokenMetadata(
 	mint: PublicKey,
 	metadataJSONUrl: string,
 	uploadSplData: NewSPLData
-): Promise<[string, number]> {
-	const endpoint = clusterApiUrl("devnet")
-	const fiftyoneWallet = get51SolanaWalletFromSecretKey()
+): Promise<[string, number] | void> {
+	try {
+		const endpoint = clusterApiUrl("devnet")
+		const fiftyoneWallet = get51SolanaWalletFromSecretKey()
 
-	const umi = createUmi(endpoint)
+		const umi = createUmi(endpoint, "confirmed")
 
-	const keypair = fromWeb3JsKeypair(fiftyoneWallet)
-	const signer = createSignerFromKeypair(umi, keypair)
-	umi.identity = signer
-	umi.payer = signer
+		const keypair = fromWeb3JsKeypair(fiftyoneWallet)
+		const signer = createSignerFromKeypair(umi, keypair)
+		umi.identity = signer
+		umi.payer = signer
 
-	const createMetadataAccountV3Args = {
-		mint: fromWeb3JsPublicKey(mint),
-		mintAuthority: signer,
-		payer: signer,
-		updateAuthority: fromWeb3JsKeypair(fiftyoneWallet).publicKey,
-		data: {
-			name: uploadSplData.splName,
-			symbol: "",
-			uri: metadataJSONUrl,
-			sellerFeeBasisPoints: 0,
-			creators: null,
-			collection: null,
-			uses: null
-		},
-		isMutable: false,
-		collectionDetails: null,
+		const createMetadataAccountV3Args = {
+			mint: fromWeb3JsPublicKey(mint),
+			mintAuthority: signer,
+			payer: signer,
+			updateAuthority: fromWeb3JsKeypair(fiftyoneWallet).publicKey,
+			data: {
+				name: uploadSplData.splName,
+				symbol: "",
+				uri: metadataJSONUrl,
+				sellerFeeBasisPoints: 0,
+				creators: null,
+				collection: null,
+				uses: null
+			},
+			isMutable: false,
+			collectionDetails: null,
+		}
+
+		const instruction = createMetadataAccountV3(
+			umi,
+			createMetadataAccountV3Args
+		)
+
+		const transaction = await instruction.buildAndSign(umi)
+		// TODO: Extract the blockhash, convert to sol, and then dollars. Save the transactino fee to DB
+
+		const transactionSignature = await umi.rpc.sendTransaction(transaction)
+		const signature = base58.deserialize(transactionSignature)
+
+		return signature
+	} catch (error) {
+		console.error(error)
 	}
-
-	const instruction = createMetadataAccountV3(
-		umi,
-		createMetadataAccountV3Args
-	)
-
-	const transaction = await instruction.buildAndSign(umi)
-	// TODO: Extract the blockhash, convert to sol, and then dollars. Save the transactino fee to DB
-
-	const transactionSignature = await umi.rpc.sendTransaction(transaction)
-	const signature = base58.deserialize(transactionSignature)
-
-	return signature
 }

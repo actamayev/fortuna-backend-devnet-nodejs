@@ -5,9 +5,9 @@ import { Request, Response, NextFunction } from "express"
 const createAndMintSPLSchema = Joi.object({
 	newSPLData: Joi.object({
 		splName: Joi.string().required(),
-		numberOfShares: Joi.number().min(10).max(1000).required(),
-		creatorOwnershipPercentage: Joi.number().min(50).max(90).required(),
-		offeringSharePrice: Joi.number().required(),
+		numberOfShares: Joi.number().strict().min(10).max(1000).required(),
+		creatorOwnershipPercentage: Joi.number().strict().min(50).max(90).required(),
+		offeringSharePrice: Joi.number().strict().required(),
 		imageUrl: Joi.string().required(),
 		fileName: Joi.string().required(),
 		uuid: Joi.string().required(),

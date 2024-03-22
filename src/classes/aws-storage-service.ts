@@ -1,6 +1,5 @@
 import _ from "lodash"
 import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
-import extractJSONDataFromS3 from "../utils/s3/extract-json-data-from-s3"
 
 export default class AwsStorageService {
 	private static instance: AwsStorageService | null = null
@@ -24,7 +23,7 @@ export default class AwsStorageService {
 		return AwsStorageService.instance
 	}
 
-	public async uploadJSON(jsonData: object, key: string): Promise<string | void> {
+	public async uploadJSON(jsonData: NewSPLData, key: string): Promise<string | void> {
 		const jsonBuffer = Buffer.from(JSON.stringify(jsonData))
 
 		const command = new PutObjectCommand({
@@ -44,37 +43,37 @@ export default class AwsStorageService {
 		}
 	}
 
-	public async updateJSONInS3(key: string, splPublicKeyName: string): Promise<string | void> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public async getJSONFromS3(key: string): Promise<any> {
+		const command = new GetObjectCommand({
+			Bucket: process.env.AWS_S3_BUCKET_NAME,
+			Key: key,
+		})
+
 		try {
-			const getObjectCommand = new GetObjectCommand({
-				Bucket: process.env.AWS_S3_BUCKET_NAME,
-				Key: key,
-			})
 			// eslint-disable-next-line @typescript-eslint/naming-convention
-			const { Body } = await this.s3.send(getObjectCommand)
+			const { Body } = await this.s3.send(command)
+			const bodyText = await new Response(Body as ReadableStream).text()
+			return JSON.parse(bodyText)
+		} catch (error) {
+			console.error("Error getting JSON from S3:", error)
+			throw error
+		}
+	}
 
-			if (_.isUndefined(Body)) return
+	public async updateJSONInS3(key: string, updates: Record<string, string>): Promise<void> {
+		try {
+			const currentData = await this.getJSONFromS3(key)
+			const updatedData = { ...currentData, ...updates }
 
-			const jsonData = await extractJSONDataFromS3(Body)
-
-			if (jsonData === undefined) return
-
-			const jsonParsed = JSON.parse(jsonData)
-			jsonParsed.SPLData = splPublicKeyName
-
-			const updatedJsonString = JSON.stringify(jsonParsed)
-
-			const jsonBuffer = Buffer.from(updatedJsonString)
-			const putObjectCommand = new PutObjectCommand({
+			const command = new PutObjectCommand({
 				Bucket: process.env.AWS_S3_BUCKET_NAME,
 				Key: key,
-				Body: jsonBuffer,
+				Body: JSON.stringify(updatedData),
 				ContentType: "application/json",
 			})
-			await this.s3.send(putObjectCommand)
 
-			const url = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
-			return url
+			await this.s3.send(command)
 		} catch (error) {
 			console.error("Error updating JSON in S3:", error)
 			throw error
