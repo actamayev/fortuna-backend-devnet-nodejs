@@ -99,7 +99,6 @@ model spl {
 	meta_data_address 			String  // On-chain Address of the SPL metaData
 	public_key_address			String // Might be redundant with chain_address
 	listing_price				Int
-	blockchain_mint_fee			Int // Blockchain fee (in dollars)
 	payer_solana_wallet_id		Int
 	total_number_of_shares		Int
 	creator_wallet_id			Int
@@ -129,7 +128,8 @@ model spl_mint {
 	spl_id						Int
   	token_account_id    		Int
 	number_of_shares			Int
-	blockchain_mint_fee 		Int
+	spl_mint_fee_sol			Int
+	spl_mint_fee_dollars		Int
 	payer_solana_wallet_id		Int
 	transaction_signature		String
 
@@ -165,7 +165,8 @@ model spl_transfer {
 	recipient_token_account_id	Int
 	sender_token_account_id 	Int
 	number_of_shares 			Int
-	blockchain_mint_fee 		Int
+	spl_mint_fee_sol			Int
+	spl_mint_fee_dollars		Int
 	payer_solana_wallet_id		Int
 
 	created_at    				DateTime  @default(now())
