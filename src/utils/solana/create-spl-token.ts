@@ -6,6 +6,8 @@ import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import { createMetadataAccountV3 } from "@metaplex-foundation/mpl-token-metadata"
 import { fromWeb3JsKeypair, fromWeb3JsPublicKey } from "@metaplex-foundation/umi-web3js-adapters"
 import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-key"
+import determineTransactionFee from "./determine-transaction-fee"
+import printWalletBalance from "./print-wallet-balance"
 
 // TODO: Need to extract the transaction fee. Transition to using SPLs
 export default async function createSPLToken (
@@ -23,12 +25,13 @@ export default async function createSPLToken (
 			null,
 			0
 		)
+		await printWalletBalance("After creating mint")
 
 		const transactionSignature = await createTokenMetadata(mint, metadataJSONUrl, splName)
+		await printWalletBalance("After creating Token MetaData")
 
 		if (transactionSignature === undefined) return
 
-		// TODO: Simulate transaction via the connection.simulateTransaction. Convert to feeinLamports, and then fee in Sol.
 		return mint
 	} catch (error) {
 		console.error(error)
@@ -40,7 +43,7 @@ async function createTokenMetadata(
 	mint: PublicKey,
 	metadataJSONUrl: string,
 	splName: string
-): Promise<[string, number] | void> {
+): Promise<string | void> {
 	try {
 		const endpoint = clusterApiUrl("devnet")
 		const fiftyoneWallet = get51SolanaWalletFromSecretKey()
@@ -56,7 +59,7 @@ async function createTokenMetadata(
 			mint: fromWeb3JsPublicKey(mint),
 			mintAuthority: signer,
 			payer: signer,
-			updateAuthority: fromWeb3JsKeypair(fiftyoneWallet).publicKey,
+			updateAuthority: keypair.publicKey,
 			data: {
 				name: splName,
 				symbol: "",
@@ -76,11 +79,14 @@ async function createTokenMetadata(
 		)
 
 		const transaction = await instruction.buildAndSign(umi)
-		// TODO: Extract the blockhash, convert to sol, and then dollars. Save the transactino fee to DB
 		const transactionSignature = await umi.rpc.sendTransaction(transaction)
 		const signature = base58.deserialize(transactionSignature)
+		console.log(signature)
+		const transactionFee = await determineTransactionFee(signature[0], "devnet")
+		console.log("transactionFee",transactionFee)
+		// TODO: Calculate transaction fee (figure out why it's undefined here, but when querying via the endpoint, it's not)
 
-		return signature
+		return signature[0]
 	} catch (error) {
 		console.error(error)
 	}

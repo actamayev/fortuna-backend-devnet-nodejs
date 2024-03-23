@@ -8,12 +8,14 @@ import addSPLRecord from "../../../../utils/db-operations/spl/add-spl-record"
 import assignSPLTokenShares from "../../../../utils/solana/assign-spl-token-shares"
 import { findSolanaWalletByPublicKey } from "../../../../utils/find/find-solana-wallet"
 import get51SolanaWalletFromSecretKey from "../../../../utils/solana/get-51-solana-wallet-from-secret-key"
+import printWalletBalance from "../../../../utils/solana/print-wallet-balance"
 
 // eslint-disable-next-line complexity, max-lines-per-function
 export default async function createAndMintSPL (req: Request, res: Response): Promise<Response> {
 	try {
 		const solanaWallet = req.solanaWallet
 		const newSPLData = req.body.newSPLData as NewSPLData
+		await printWalletBalance("At the Beginning")
 
 		const uploadJSONS3Key = createS3Key("spl-metadata", newSPLData.fileName, newSPLData.uuid)
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -50,6 +52,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 			solanaWallet.solana_wallet_id,
 			fiftyoneWalletDB.solana_wallet_id
 		)
+		await printWalletBalance("After Assigning SPL Token Shares")
 
 		if (!_.isEqual(assignSPLTokenSharesResponse, "success")) {
 			return res.status(400).json({ message: "Unable to assign SPL Shares" })

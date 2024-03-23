@@ -31,10 +31,8 @@ solanaDevnetRoutes.post(
 	createAndMintSPL
 )
 
-// Mainly for testing (not meant to be used by client - but can be)
 solanaDevnetRoutes.post("/get-transaction-fee", validateTransactionFee, getTransactionFee)
 
-// Mainly for testing (not meant to be used by client - but can be)
 solanaDevnetRoutes.post(
 	"/transfer-sol",
 	validateTransferSol,
