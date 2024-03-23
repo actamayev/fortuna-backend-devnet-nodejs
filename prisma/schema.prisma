@@ -98,7 +98,7 @@ model spl {
 	chain_address  				String    // Address at which the SPL was minted
 	meta_data_address 			String  // On-chain Address of the SPL metaData
 	public_key_address			String // Might be redundant with chain_address
-	listing_price				Int
+	listing_price				Float
 	payer_solana_wallet_id		Int
 	total_number_of_shares		Int
 	creator_wallet_id			Int
@@ -112,8 +112,8 @@ model spl {
 
 	spl_payer_wallet			solana_wallet @relation(name: "spl_payer_wallet", fields: [payer_solana_wallet_id], references: [solana_wallet_id])
 	spl_creator_wallet			solana_wallet @relation(name: "spl_creator_wallet", fields: [creator_wallet_id], references: [solana_wallet_id])
+	uploaded_image				uploaded_image @relation(fields: [uploaded_image_id], references: [uploaded_image_id])
 
-	uploaded_image				uploaded_image[]
 	spl_ownership 				spl_ownership[]
 	spl_transfer 				spl_transfer[]
 	token_account				token_account[]
@@ -121,6 +121,7 @@ model spl {
 
 	@@index([payer_solana_wallet_id], name: "spl__payer_solana_wallet_id_idx")
 	@@index([payer_solana_wallet_id], name: "spl__creator_token_account_id_idx")
+	@@index([uploaded_image_id], name: "spl__uploaded_image_id_idx")
 }
 
 model spl_mint {
@@ -128,8 +129,8 @@ model spl_mint {
 	spl_id						Int
   	token_account_id    		Int
 	number_of_shares			Int
-	spl_mint_fee_sol			Int
-	spl_mint_fee_dollars		Int
+	spl_mint_fee_sol			Float
+	spl_mint_fee_dollars		Float
 	payer_solana_wallet_id		Int
 	transaction_signature		String
 
@@ -165,8 +166,8 @@ model spl_transfer {
 	recipient_token_account_id	Int
 	sender_token_account_id 	Int
 	number_of_shares 			Int
-	spl_mint_fee_sol			Int
-	spl_mint_fee_dollars		Int
+	spl_mint_fee_sol			Float
+	spl_mint_fee_dollars		Float
 	payer_solana_wallet_id		Int
 
 	created_at    				DateTime  @default(now())
