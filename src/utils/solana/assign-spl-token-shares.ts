@@ -99,6 +99,9 @@ export default async function assignSPLTokenShares (
 			solPriceInUSD
 		)
 
+		// TODO: See if there's a way to prevent more shares from being minted after assigning the shares.
+		// FUTURE TODO: Also, then transfer the ownership of the SPL to the creator
+
 		return "success"
 	} catch (error) {
 		console.error(error)
