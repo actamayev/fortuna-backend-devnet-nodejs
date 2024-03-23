@@ -21,7 +21,6 @@ export default async function addSPLRecord (
 				meta_data_address: "",
 				public_key_address: splTokenPublicKey.toString(),
 				listing_price: newSPLData.offeringSharePrice,
-				blockchain_mint_fee: 0,
 				payer_solana_wallet_id: fiftyoneCryptoWalletId,
 				total_number_of_shares: newSPLData.numberOfShares,
 				spl_listing_status: "LISTED",

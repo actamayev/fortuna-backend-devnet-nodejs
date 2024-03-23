@@ -1,10 +1,11 @@
 import { mintTo } from "@solana/spl-token"
 import { Connection, Keypair, PublicKey } from "@solana/web3.js"
+import calculateTransactionFee from "./calculate-transaction-fee"
 import addSPLMintRecord from "../db-operations/spl/add-spl-mint-record"
 import addSPLOwnershipRecord from "../db-operations/spl/add-spl-ownership-record"
 
 // This function is responsible for minting to an account, adding a mint record to DB, and adding a mint ownership record to DB
-// eslint-disable-next-line max-params
+// eslint-disable-next-line max-params, max-lines-per-function
 export default async function mintSPLHelper(
 	connection: Connection,
 	payerWallet: Keypair,
@@ -14,10 +15,11 @@ export default async function mintSPLHelper(
 	destinationAddress: PublicKey,
 	sharesToMint: number,
 	tokenAccountId: number,
-	payerSolanaWalletId: number
+	payerSolanaWalletId: number,
+	solPriceInUSD: number
 ): Promise<void> {
 	try {
-		const mintToFiftyoneWalletTransactionSignature = await mintTo(
+		const mintTransactionSignature = await mintTo(
 			connection,
 			payerWallet,
 			splTokenPublicKey,
@@ -28,13 +30,18 @@ export default async function mintSPLHelper(
 			// If the share count is 140, then 51's ownership is 1.4, which won't work b/c the decimal is 0 (shares are indivisible)
 		)
 
+		const feeInSol = await calculateTransactionFee(mintTransactionSignature)
+
+		if (feeInSol === undefined) return
+
 		await addSPLMintRecord(
 			splId,
 			tokenAccountId,
 			sharesToMint,
-			0, // TODO: Fix this to account for the blockchain mint fee
+			feeInSol,
+			solPriceInUSD,
 			payerSolanaWalletId,
-			mintToFiftyoneWalletTransactionSignature
+			mintTransactionSignature
 		)
 
 		await addSPLOwnershipRecord(

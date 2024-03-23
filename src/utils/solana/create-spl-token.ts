@@ -77,7 +77,6 @@ async function createTokenMetadata(
 
 		const transaction = await instruction.buildAndSign(umi)
 		// TODO: Extract the blockhash, convert to sol, and then dollars. Save the transactino fee to DB
-
 		const transactionSignature = await umi.rpc.sendTransaction(transaction)
 		const signature = base58.deserialize(transactionSignature)
 

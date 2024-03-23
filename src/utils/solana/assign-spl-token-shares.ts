@@ -5,6 +5,7 @@ import mintSPLHelper from "./mint-spl-helper"
 import { findSolanaWalletByPublicKey } from "../find/find-solana-wallet"
 import addTokenAccountRecord from "../db-operations/add-token-account-record"
 import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-key"
+import getSolPriceInUSD from "./get-sol-price-in-usd"
 
 // eslint-disable-next-line max-lines-per-function, max-params, complexity
 export default async function assignSPLTokenShares (
@@ -55,6 +56,10 @@ export default async function assignSPLTokenShares (
 		)
 		if (_.isNull(fiftyoneEscrowTokenAccountDB) || fiftyoneEscrowTokenAccountDB === undefined) return
 
+		const solPriceInUSD = await getSolPriceInUSD()
+
+		if (_.isNull(solPriceInUSD)) return
+
 		await mintSPLHelper(
 			connection,
 			fiftyoneWallet,
@@ -64,7 +69,8 @@ export default async function assignSPLTokenShares (
 			fiftyoneTokenAccount.address,
 			uploadSplData.numberOfShares * (1 / 100),
 			fiftyoneTokenAccountDB.token_account_id,
-			fiftyoneCryptoWalletId
+			fiftyoneCryptoWalletId,
+			solPriceInUSD
 		)
 
 		await mintSPLHelper(
@@ -76,7 +82,8 @@ export default async function assignSPLTokenShares (
 			creatorTokenAccount.address,
 			uploadSplData.numberOfShares * (uploadSplData.creatorOwnershipPercentage / 100),
 			creatorTokenAccountDB.token_account_id,
-			fiftyoneCryptoWalletId
+			fiftyoneCryptoWalletId,
+			solPriceInUSD
 		)
 
 		await mintSPLHelper(
@@ -88,7 +95,8 @@ export default async function assignSPLTokenShares (
 			fiftyoneEscrowTokenAccount.address,
 			uploadSplData.numberOfShares * ((99 - uploadSplData.creatorOwnershipPercentage) / 100),
 			fiftyoneEscrowTokenAccountDB.token_account_id,
-			fiftyoneCryptoWalletId
+			fiftyoneCryptoWalletId,
+			solPriceInUSD
 		)
 
 		return "success"
