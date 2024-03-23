@@ -108,12 +108,14 @@ model spl {
 	total_number_of_shares						Int
 	creator_wallet_id							Int
 	uploaded_image_id							Int
+
 	spl_creation_fee_sol						Float
 	spl_creation_fee_usd						Float
 	create_spl_payer_solana_wallet_id			Int
-	create_spl_metadata_payer_solana_wallet_id	Int
-	spl_metadata_creation_fee_sol				Float
-	spl_metadata_creation_fee_usd				Float
+
+	spl_metadata_creation_fee_sol				Float?
+	spl_metadata_creation_fee_usd				Float?
+	create_spl_metadata_payer_solana_wallet_id	Int?
 
 	spl_listing_status 							SPLListingStatus
 	description  								String?   // Description of the SPL
@@ -122,7 +124,7 @@ model spl {
 	updated_at    								DateTime  @default(now()) @updatedAt
 
 	create_spl_payer_wallet						solana_wallet @relation(name: "create_spl_payer_wallet", fields: [create_spl_payer_solana_wallet_id], references: [solana_wallet_id])
-	create_spl_metadata_payer_wallet			solana_wallet @relation(name: "create_spl_metadata_payer_wallet", fields: [create_spl_metadata_payer_solana_wallet_id], references: [solana_wallet_id])
+	create_spl_metadata_payer_wallet			solana_wallet? @relation(name: "create_spl_metadata_payer_wallet", fields: [create_spl_metadata_payer_solana_wallet_id], references: [solana_wallet_id])
 	spl_creator_wallet							solana_wallet @relation(name: "spl_creator_wallet", fields: [creator_wallet_id], references: [solana_wallet_id])
 	uploaded_image								uploaded_image @relation(fields: [uploaded_image_id], references: [uploaded_image_id])
 
