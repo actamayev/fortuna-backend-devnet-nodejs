@@ -1,5 +1,8 @@
+import _ from "lodash"
 import { Request, Response } from "express"
 import { Connection, PublicKey, LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js"
+import getSolPriceInUSD from "../../../utils/solana/get-sol-price-in-usd"
+import getWalletBalance from "../../../utils/solana/get-wallet-balance"
 
 export default async function requestDevnetSolanaAirdrop(req: Request, res: Response): Promise<Response> {
 	try {
@@ -17,9 +20,15 @@ export default async function requestDevnetSolanaAirdrop(req: Request, res: Resp
 			lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
 			signature
 		})
+		const solPriceInUSD = await getSolPriceInUSD()
+		if (_.isNull(solPriceInUSD)) return res.status(400).json({ message: "Unable to get Sol price" })
+		const walletBalance = await getWalletBalance("devnet", solanaWallet.public_key, solPriceInUSD)
+		if (walletBalance === undefined) return res.status(400).json({ message: "Unable to get Wallet Balance" })
 
-		const balance = await connection.getBalance(publicKey)
-		return res.status(200).json({ balance })
+		return res.status(200).json({
+			balanceInSol: walletBalance.balanceInSol,
+			balanceInUsd: walletBalance.balanceInUsd
+		})
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Request Devnet Solana Airdrop" })

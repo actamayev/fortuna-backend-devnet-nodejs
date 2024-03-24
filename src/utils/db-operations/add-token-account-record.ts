@@ -12,7 +12,10 @@ export default async function addTokenAccountRecord (
 			data: {
 				spl_id: splId,
 				solana_wallet_id: solanaWalletId,
-				public_key: publicKey.toString()
+				public_key: publicKey.toString(),
+				token_account_creation_fee_sol: "",
+				token_account_creation_fee_usd: "",
+				payer_solana_wallet_id
 			}
 		})
 

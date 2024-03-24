@@ -1,12 +1,12 @@
 import _ from "lodash"
-import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js"
 import { getOrCreateAssociatedTokenAccount } from "@solana/spl-token"
+import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js"
 import mintSPLHelper from "./mint-spl-helper"
+import getSolPriceInUSD from "./get-sol-price-in-usd"
+import printWalletBalance from "./print-wallet-balance"
 import { findSolanaWalletByPublicKey } from "../find/find-solana-wallet"
 import addTokenAccountRecord from "../db-operations/add-token-account-record"
 import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-key"
-import getSolPriceInUSD from "./get-sol-price-in-usd"
-import printWalletBalance from "./print-wallet-balance"
 
 // eslint-disable-next-line max-lines-per-function, max-params, complexity
 export default async function assignSPLTokenShares (
@@ -21,7 +21,10 @@ export default async function assignSPLTokenShares (
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fiftyoneWallet = get51SolanaWalletFromSecretKey()
 
+		const solPriceInUSD = await getSolPriceInUSD()
 		// Get or Create Token Accounts:
+		if (_.isNull(solPriceInUSD)) return
+
 		const fiftyoneTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
 			fiftyoneWallet,
@@ -56,10 +59,6 @@ export default async function assignSPLTokenShares (
 			fiftyoneEscrowTokenAccount.address
 		)
 		if (_.isNull(fiftyoneEscrowTokenAccountDB) || fiftyoneEscrowTokenAccountDB === undefined) return
-
-		const solPriceInUSD = await getSolPriceInUSD()
-
-		if (_.isNull(solPriceInUSD)) return
 
 		await printWalletBalance("After the 3 getOrCreates")
 
