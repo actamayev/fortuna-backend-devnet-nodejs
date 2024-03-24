@@ -7,6 +7,8 @@ declare global {
 		userId: number
 		newUser: boolean
 	}
+
+	type S3FolderNames = "uploaded-images" | "spl-metadata"
 }
 
 export {}

@@ -1,22 +1,49 @@
-import multer from "multer"
 import express from "express"
 
-import uploadFileAndMintNFT from "../../controllers/solana/devnet/nft/upload-file-and-mint-nft"
+import transferSol from "../../controllers/solana/devnet/transfer-sol"
+import getTransactionFees from "../../controllers/solana/devnet/get-transaction-fees"
+import createAndMintSPL from "../../controllers/solana/devnet/spl/create-and-mint-spl"
+import getTransactionDetails from "../../controllers/solana/devnet/get-transaction-details"
 import createDevnetSolanaWallet from "../../controllers/solana/devnet/create-devnet-solana-wallet"
 import requestDevnetSolanaAirdrop from "../../controllers/solana/devnet/request-devnet-solana-airdrop"
 import getDevnetSolanaWalletBalance from "../../controllers/solana/devnet/get-devnet-solana-wallet-balance"
 
+import confirmPublicKeyExists from "../../middleware/solana/confirm-public-key-exists"
+import confirmNotSendingSolToSelf from "../../middleware/solana/confirm-not-sending-sol-to-self"
+import validateTransferSol from "../../middleware/request-validation/solana/validate-transfer-sol"
+import attachDevnetSolanaWalletByUserId from "../../middleware/attach/attach-devnet-solana-wallet-by-user-id"
+import validateCreateAndMintSPL from "../../middleware/request-validation/solana/validate-create-and-mint-spl"
+import validateTransactionSignatures from "../../middleware/request-validation/solana/validate-transaction-signatures"
+import confirmUserHasEnoughDevnetSolToTransfer from "../../middleware/solana/confirm-user-has-enough-devnet-sol-to-transfer"
 import confirmUserDoesNotHaveDevnetSolanaWallet from "../../middleware/solana/confirm-user-does-not-have-devnet-solana-wallet"
 
 const solanaDevnetRoutes = express.Router()
-const upload = multer()
 
 solanaDevnetRoutes.post("/create-wallet", confirmUserDoesNotHaveDevnetSolanaWallet, createDevnetSolanaWallet)
 
-solanaDevnetRoutes.get("/get-wallet-balance", getDevnetSolanaWalletBalance)
+solanaDevnetRoutes.get("/get-wallet-balance", attachDevnetSolanaWalletByUserId, getDevnetSolanaWalletBalance)
 
-solanaDevnetRoutes.post("/request-airdrop", requestDevnetSolanaAirdrop)
+solanaDevnetRoutes.post("/request-airdrop", attachDevnetSolanaWalletByUserId, requestDevnetSolanaAirdrop)
 
-solanaDevnetRoutes.post("/upload-file-mint-nft", upload.single("file"), uploadFileAndMintNFT)
+solanaDevnetRoutes.post(
+	"/create-and-mint-spl",
+	validateCreateAndMintSPL,
+	attachDevnetSolanaWalletByUserId,
+	createAndMintSPL
+)
+
+solanaDevnetRoutes.post("/get-transaction-fees", validateTransactionSignatures, getTransactionFees)
+
+solanaDevnetRoutes.post("/get-transaction-details", validateTransactionSignatures, getTransactionDetails)
+
+solanaDevnetRoutes.post(
+	"/transfer-sol",
+	validateTransferSol,
+	attachDevnetSolanaWalletByUserId,
+	confirmNotSendingSolToSelf,
+	confirmPublicKeyExists,
+	confirmUserHasEnoughDevnetSolToTransfer,
+	transferSol
+)
 
 export default solanaDevnetRoutes

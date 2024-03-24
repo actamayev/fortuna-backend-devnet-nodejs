@@ -1,8 +1,7 @@
-import _ from "lodash"
 import { Response, Request } from "express"
 import Hash from "../../classes/hash"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
-import addLoginRecord from "../../utils/auth-helpers/add-login-record"
+import addLoginHistoryRecord from "../../utils/db-operations/auth/add-login-history-record"
 import { addLocalUser } from "../../utils/auth-helpers/register/add-local-user"
 import doesContactExist from "../../utils/auth-helpers/does-x-exist/does-contact-exist"
 import determineContactType from "../../utils/auth-helpers/login/determine-contact-type"
@@ -24,12 +23,12 @@ export default async function register (req: Request, res: Response): Promise<Re
 		const hashedPassword = await Hash.hashCredentials(password)
 
 		const userId = await addLocalUser(req.body.registerInformation, hashedPassword, contactType)
-		if (_.isUndefined(userId)) return res.status(500).json({ error: "Internal Server Error: Unable to Create User" })
+		if (userId === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Create User" })
 
-		const accessToken = signJWT({ userId, newUser: true})
-		if (_.isUndefined(accessToken)) return res.status(500).json({ error: "Internal Server Error: Unable to Sign JWT" })
+		const accessToken = signJWT({ userId, newUser: true })
+		if (accessToken === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Sign JWT" })
 
-		await addLoginRecord(userId)
+		await addLoginHistoryRecord(userId)
 
 		return res.status(200).json({ accessToken })
 	} catch (error) {

@@ -4,7 +4,7 @@ export async function addLocalUser(
 	registerInformation: RegisterInformation,
 	hashedPassword: string,
 	contactType: EmailOrPhone
-): Promise<number | undefined> {
+): Promise<number | void> {
 	try {
 		const userFields: NewLocalUserFields = {
 			username: registerInformation.username,

@@ -1,7 +1,7 @@
-import { Credentials } from "@prisma/client"
+import { credentials } from "@prisma/client"
 import prismaClient from "../../prisma-client"
 
-export default async function findUser(userId: number): Promise<Credentials | null> {
+export default async function findUser(userId: number): Promise<credentials | null> {
 	try {
 		const user = await prismaClient.credentials.findUnique({
 			where: { user_id: userId },

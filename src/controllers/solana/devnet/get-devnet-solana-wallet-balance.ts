@@ -1,20 +1,22 @@
 import _ from "lodash"
 import { Request, Response } from "express"
-import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
-import findSolanaWallet from "../../../utils/find/find-solana-wallet"
+import getWalletBalance from "../../../utils/solana/get-wallet-balance"
+import getSolPriceInUSD from "../../../utils/solana/get-sol-price-in-usd"
 
 export default async function getDevnetSolanaWalletBalance(req: Request, res: Response): Promise<Response> {
 	try {
-		const user = req.user
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
+		const solanaWallet = req.solanaWallet
+		const solPriceInUSD = await getSolPriceInUSD()
+		if (_.isNull(solPriceInUSD)) return res.status(400).json({ message: "Cannot retrieve Sol-USD conversion" })
 
-		const solanaWallet = await findSolanaWallet(user.user_id, "DEVNET")
-		if (_.isNil(solanaWallet)) return res.status(400).json({ message: "Cannot find Devnet Solana Wallet" })
+		const walletBalanceInfo = await getWalletBalance("devnet", solanaWallet.public_key, solPriceInUSD)
+		if (walletBalanceInfo === undefined) return res.status(400).json({ message: "Cannot retrieve wallet balance info" })
 
-		const publicKey = new PublicKey(solanaWallet.publicKey)
-
-		const balance = await connection.getBalance(publicKey)
-		return res.status(200).json({ balance })
+		return res.status(200).json({
+			balanceInSol: walletBalanceInfo.balanceInSol,
+			balanceInUsd: walletBalanceInfo.balanceInUsd,
+			solPriceInUSD
+		})
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Retrieve Devnet Solana Wallet Balance" })
