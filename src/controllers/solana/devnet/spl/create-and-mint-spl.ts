@@ -6,11 +6,8 @@ import createSPLToken from "../../../../utils/solana/create-spl-token"
 import AwsStorageService from "../../../../classes/aws-storage-service"
 import getSolPriceInUSD from "../../../../utils/solana/get-sol-price-in-usd"
 import addSPLRecord from "../../../../utils/db-operations/spl/add-spl-record"
-import printWalletBalance from "../../../../utils/solana/print-wallet-balance"
 import assignSPLTokenShares from "../../../../utils/solana/assign-spl-token-shares"
 import { findSolanaWalletByPublicKey } from "../../../../utils/find/find-solana-wallet"
-import calculateTransactionFee from "../../../../utils/solana/calculate-transaction-fee"
-import updateSPLRecordWithMetadata from "../../../../utils/db-operations/spl/update-spl-record-with-metadata"
 
 // eslint-disable-next-line complexity, max-lines-per-function
 export default async function createAndMintSPL (req: Request, res: Response): Promise<Response> {
@@ -18,7 +15,6 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		const solanaWallet = req.solanaWallet
 		const newSPLData = req.body.newSPLData as NewSPLData
 
-		await printWalletBalance("At the Beginning")
 		const solPriceInUSD = await getSolPriceInUSD()
 		if (_.isNull(solPriceInUSD)) return res.status(400).json({ message: "Unable to retrieve Sol Price" })
 
@@ -62,16 +58,6 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		if (!_.isEqual(assignSPLTokenSharesResponse, "success")) {
 			return res.status(400).json({ message: "Unable to assign SPL Shares" })
 		}
-
-		const feeInSol = await calculateTransactionFee(createSPLResponse.metadataTransactionSignature)
-		if (feeInSol === undefined) return res.status(400).json({ message: "Unable to determine transaction fee for metadata" })
-		await updateSPLRecordWithMetadata(
-			newSPLId,
-			fiftyoneWalletDB.solana_wallet_id,
-			feeInSol,
-			solPriceInUSD
-		)
-		await printWalletBalance("At the end")
 
 		return res.status(200).json({ mintAddress: createSPLResponse.mint })
 	} catch (error) {

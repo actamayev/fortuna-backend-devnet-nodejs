@@ -26,6 +26,14 @@ export default async function addSPLRecord (
 				spl_creation_fee_usd: createSPLResponse.feeInSol * solPriceInUSD,
 				create_spl_payer_solana_wallet_id: fiftyoneCryptoWalletId,
 
+				// These fees are 0. When the meta data is set, a transaction signature is returned. See createTokenMetaData.
+				// When the fee for this signature is determined (by using the logic in calculate-tranaction-fee, it returns 5*10^-6 sol).
+				// However, the wallet balance doesn't change (when comparing the before and after balance of the wallet)!
+				// For the database to be consistent with the wallet, the spl_metadata creation fee is set to 0 here.
+				spl_metadata_creation_fee_sol: 0,
+				spl_metadata_creation_fee_usd: 0,
+				create_spl_metadata_payer_solana_wallet_id: fiftyoneCryptoWalletId,
+
 				spl_listing_status: "LISTED",
 				description: newSPLData.description,
 			}
