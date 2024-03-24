@@ -15,7 +15,7 @@ export default async function createDevnetSolanaWallet (req: Request, res: Respo
 				public_key: publicKey,
 				secret_key: secretKey,
 				user_id: user.user_id,
-				network_type: "DEVNET"
+				network_type: "devnet"
 			}
 		})
 

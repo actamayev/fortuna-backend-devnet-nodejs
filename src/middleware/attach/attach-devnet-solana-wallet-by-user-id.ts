@@ -5,7 +5,7 @@ import { findSolanaWalletByUserId } from "../../utils/find/find-solana-wallet"
 export default async function attachDevnetSolanaWalletByUserId(req: Request, res: Response, next: NextFunction) : Promise<void | Response> {
 	try {
 		const user = req.user
-		const solanaWallet = await findSolanaWalletByUserId(user.user_id, "DEVNET")
+		const solanaWallet = await findSolanaWalletByUserId(user.user_id, "devnet")
 		if (_.isNull(solanaWallet) || solanaWallet === undefined) {
 			return res.status(400).json({ message: "Cannot find Devnet Solana Wallet" })
 		}
@@ -14,6 +14,6 @@ export default async function attachDevnetSolanaWalletByUserId(req: Request, res
 		next()
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Attach Event to Request" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to Attach Devnet Solana Wallet" })
 	}
 }

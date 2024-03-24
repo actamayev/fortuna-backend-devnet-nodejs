@@ -10,7 +10,8 @@ const upload = multer()
 
 uploadRoutes.post(
 	"/upload-image-to-s3",
-	attachDevnetSolanaWalletByUserId, // The solanaWallet isn't used in the upload, but is here to make sure the user has a wallet
+	// The solanaWallet isn't used in the upload. This check here to make sure the user has a wallet before uploading anything
+	attachDevnetSolanaWalletByUserId,
 	upload.single("file"),
 	uploadImageToS3
 )

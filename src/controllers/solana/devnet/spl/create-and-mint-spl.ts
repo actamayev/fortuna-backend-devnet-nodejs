@@ -27,7 +27,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		const createSPLResponse = await createSPLToken(metadataJSONUrl, newSPLData.splName, solPriceInUSD)
 		if (createSPLResponse === undefined) return res.status(400).json({ message: "Unable to create NFT" })
 
-		const fiftyoneWalletDB = await findSolanaWalletByPublicKey(process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, "DEVNET")
+		const fiftyoneWalletDB = await findSolanaWalletByPublicKey(process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, "devnet")
 		if (_.isNull(fiftyoneWalletDB) || fiftyoneWalletDB === undefined) {
 			return res.status(400).json({ message: "Unable to find 51Crypto's Solana Wallet" })
 		}

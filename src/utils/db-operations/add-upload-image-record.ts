@@ -1,11 +1,10 @@
-import { uploaded_image } from "@prisma/client"
 import prismaClient from "../../prisma-client"
 
 export default async function addUploadImageRecord (
 	imageUploadUrl: string,
 	fileName: string,
 	uuid: string
-): Promise<uploaded_image | void> {
+): Promise<number | void> {
 	try {
 		const uploadImageResponse = await prismaClient.uploaded_image.create({
 			data: {
@@ -15,7 +14,7 @@ export default async function addUploadImageRecord (
 			}
 		})
 
-		return uploadImageResponse
+		return uploadImageResponse.uploaded_image_id
 	} catch (error) {
 		console.error(error)
 	}

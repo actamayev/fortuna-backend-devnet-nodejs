@@ -1,8 +1,8 @@
 import _ from "lodash"
 import { Request, Response } from "express"
 import { Connection, PublicKey, LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js"
-import getSolPriceInUSD from "../../../utils/solana/get-sol-price-in-usd"
 import getWalletBalance from "../../../utils/solana/get-wallet-balance"
+import getSolPriceInUSD from "../../../utils/solana/get-sol-price-in-usd"
 
 export default async function requestDevnetSolanaAirdrop(req: Request, res: Response): Promise<Response> {
 	try {

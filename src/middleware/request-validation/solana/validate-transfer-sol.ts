@@ -1,8 +1,8 @@
 import Joi from "joi"
 import _ from "lodash"
+import { PublicKey } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
 import publicKeyValidator from "../../joi/public-key-validator"
-import { PublicKey } from "@solana/web3.js"
 
 const transferSolSchema = Joi.object({
 	transferData: Joi.object({

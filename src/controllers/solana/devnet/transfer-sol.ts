@@ -10,12 +10,10 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const transaction = new Transaction()
 
-		const fromPublicKey = new PublicKey(solanaWallet.public_key)
-		const recipientPublicKey = new PublicKey(transferData.recipientPublicKey)
 		transaction.add(
 			SystemProgram.transfer({
-				fromPubkey: fromPublicKey,
-				toPubkey: recipientPublicKey,
+				fromPubkey: new PublicKey(solanaWallet.public_key),
+				toPubkey: new PublicKey(transferData.recipientPublicKey),
 				lamports: transferData.transferAmountSol * LAMPORTS_PER_SOL
 			})
 		)
@@ -23,7 +21,6 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const fiftyoneCryptoSecretKey = bs58.decode(solanaWallet.secret_key)
 		const keypair = Keypair.fromSecretKey(fiftyoneCryptoSecretKey)
 
-		// Send the serialized transaction
 		await sendAndConfirmTransaction(connection, transaction, [ keypair ])
 
 		return res.status(200).json({ success: "" })

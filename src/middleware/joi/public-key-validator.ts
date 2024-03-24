@@ -1,5 +1,5 @@
-import bs58 from "bs58"
 import Joi from "joi"
+import bs58 from "bs58"
 
 const publicKeyValidator = Joi.string().custom((value, helpers) => {
 	try {

@@ -3,7 +3,7 @@ declare global {
 		splName: string
 		numberOfShares: number
 		creatorOwnershipPercentage: number
-		offeringSharePrice: number
+		offeringSharePriceSol: number
 		imageUrl: string
 		fileName: string
 		description?: string

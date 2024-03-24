@@ -44,7 +44,7 @@ export default class AwsStorageService {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	public async getJSONFromS3(key: string): Promise<any> {
+	private async getJSONFromS3(key: string): Promise<any> {
 		const command = new GetObjectCommand({
 			Bucket: process.env.AWS_S3_BUCKET_NAME,
 			Key: key,

@@ -14,15 +14,15 @@ export default async function uploadImageToS3 (req: Request, res: Response): Pro
 		const uploadImageToS3KeyAndUUID = createS3KeyGenerateUUID("uploaded-images", fileName)
 		const imageUploadUrl = await AwsStorageService.getInstance().uploadImage(fileBuffer, uploadImageToS3KeyAndUUID.key)
 		if (imageUploadUrl === undefined) return res.status(400).json({ message: "Unable to Save Image" })
-		const uploadedImageResponse = await addUploadImageRecord(imageUploadUrl, fileName, uploadImageToS3KeyAndUUID.uuid)
 
-		if (uploadedImageResponse === undefined) return res.status(400).json({ message: "Unable to Save Details to DB" })
+		const uploadedImageId = await addUploadImageRecord(imageUploadUrl, fileName, uploadImageToS3KeyAndUUID.uuid)
+		if (uploadedImageId === undefined) return res.status(400).json({ message: "Unable to Save Details to DB" })
 
 		return res.status(200).json({
 			imageUploadUrl,
 			fileName,
 			uuid: uploadImageToS3KeyAndUUID.uuid,
-			uploadedImageId: uploadedImageResponse.uploaded_image_id
+			uploadedImageId
 		})
 	} catch (error) {
 		console.error(error)

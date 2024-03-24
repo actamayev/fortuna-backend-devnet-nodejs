@@ -33,7 +33,7 @@ export default async function assignSPLTokenShares (
 		const secondWalletBalance = await getWalletBalance("devnet", process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, solPriceInUSD)
 		if (initialWalletBalance === undefined || secondWalletBalance === undefined) return
 
-		const fiftyoneTokenAccountDB = await addTokenAccountRecord(
+		const fiftyoneTokenAccountId = await addTokenAccountRecord(
 			splId,
 			fiftyoneCryptoWalletId,
 			fiftyoneTokenAccount.address,
@@ -41,7 +41,7 @@ export default async function assignSPLTokenShares (
 			initialWalletBalance.balanceInUsd - secondWalletBalance.balanceInUsd,
 			fiftyoneCryptoWalletId
 		)
-		if (_.isNull(fiftyoneTokenAccountDB) || fiftyoneTokenAccountDB === undefined) return
+		if (_.isNull(fiftyoneTokenAccountId) || fiftyoneTokenAccountId === undefined) return
 
 		const creatorTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
@@ -52,7 +52,7 @@ export default async function assignSPLTokenShares (
 		const thirdWalletBalance = await getWalletBalance("devnet", process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, solPriceInUSD)
 
 		if (thirdWalletBalance === undefined) return
-		const creatorTokenAccountDB = await addTokenAccountRecord(
+		const creatorTokenAccountId = await addTokenAccountRecord(
 			splId,
 			creatorWalletId,
 			creatorTokenAccount.address,
@@ -60,7 +60,7 @@ export default async function assignSPLTokenShares (
 			secondWalletBalance.balanceInUsd - thirdWalletBalance.balanceInUsd,
 			fiftyoneCryptoWalletId
 		)
-		if (_.isNull(creatorTokenAccountDB) || creatorTokenAccountDB === undefined) return
+		if (_.isNull(creatorTokenAccountId) || creatorTokenAccountId === undefined) return
 
 		const fiftyoneCryptoEscrowPublicKey = new PublicKey(process.env.FIFTYONE_CRYPTO_ESCROW_WALLET_PUBLIC_KEY)
 		const fiftyoneEscrowTokenAccount = await getOrCreateAssociatedTokenAccount(
@@ -71,9 +71,9 @@ export default async function assignSPLTokenShares (
 		)
 		const fourthWalletBalance = await getWalletBalance("devnet", process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, solPriceInUSD)
 		if (fourthWalletBalance === undefined) return
-		const fiftyoneEscrowWalletDB = await findSolanaWalletByPublicKey(process.env.FIFTYONE_CRYPTO_ESCROW_WALLET_PUBLIC_KEY, "DEVNET")
+		const fiftyoneEscrowWalletDB = await findSolanaWalletByPublicKey(process.env.FIFTYONE_CRYPTO_ESCROW_WALLET_PUBLIC_KEY, "devnet")
 		if (fiftyoneEscrowWalletDB === undefined || _.isNull(fiftyoneEscrowWalletDB)) return
-		const fiftyoneEscrowTokenAccountDB = await addTokenAccountRecord(
+		const fiftyoneEscrowTokenAccountId = await addTokenAccountRecord(
 			splId,
 			fiftyoneEscrowWalletDB.solana_wallet_id,
 			fiftyoneEscrowTokenAccount.address,
@@ -81,8 +81,9 @@ export default async function assignSPLTokenShares (
 			thirdWalletBalance.balanceInUsd - fourthWalletBalance.balanceInUsd,
 			fiftyoneCryptoWalletId
 		)
-		if (_.isNull(fiftyoneEscrowTokenAccountDB) || fiftyoneEscrowTokenAccountDB === undefined) return
+		if (_.isNull(fiftyoneEscrowTokenAccountId) || fiftyoneEscrowTokenAccountId === undefined) return
 
+		// Mint SPLs:
 		await mintSPLHelper(
 			connection,
 			fiftyoneWallet,
@@ -91,7 +92,7 @@ export default async function assignSPLTokenShares (
 			fiftyoneWallet.publicKey,
 			fiftyoneTokenAccount.address,
 			uploadSplData.numberOfShares * (1 / 100),
-			fiftyoneTokenAccountDB.token_account_id,
+			fiftyoneTokenAccountId,
 			fiftyoneCryptoWalletId,
 			solPriceInUSD
 		)
@@ -104,7 +105,7 @@ export default async function assignSPLTokenShares (
 			fiftyoneWallet.publicKey,
 			creatorTokenAccount.address,
 			uploadSplData.numberOfShares * (uploadSplData.creatorOwnershipPercentage / 100),
-			creatorTokenAccountDB.token_account_id,
+			creatorTokenAccountId,
 			fiftyoneCryptoWalletId,
 			solPriceInUSD
 		)
@@ -117,7 +118,7 @@ export default async function assignSPLTokenShares (
 			fiftyoneWallet.publicKey,
 			fiftyoneEscrowTokenAccount.address,
 			uploadSplData.numberOfShares * ((99 - uploadSplData.creatorOwnershipPercentage) / 100),
-			fiftyoneEscrowTokenAccountDB.token_account_id,
+			fiftyoneEscrowTokenAccountId,
 			fiftyoneCryptoWalletId,
 			solPriceInUSD
 		)

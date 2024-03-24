@@ -1,5 +1,5 @@
-import { credentials, solana_wallet } from "@prisma/client"
 import { PublicKey } from "@solana/web3.js"
+import { credentials, solana_wallet } from "@prisma/client"
 
 declare global {
 	namespace Express {

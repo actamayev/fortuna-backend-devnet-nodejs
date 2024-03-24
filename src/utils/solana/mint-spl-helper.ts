@@ -30,7 +30,7 @@ export default async function mintSPLHelper(
 			// If the share count is 140, then 51's ownership is 1.4, which won't work b/c the decimal is 0 (shares are indivisible)
 		)
 
-		const feeInSol = await calculateTransactionFee(mintTransactionSignature)
+		const feeInSol = await calculateTransactionFee(mintTransactionSignature, "devnet")
 
 		if (feeInSol === undefined) return
 

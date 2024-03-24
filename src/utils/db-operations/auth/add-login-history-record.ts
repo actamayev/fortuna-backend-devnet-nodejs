@@ -1,6 +1,6 @@
 import prismaClient from "../../../prisma-client"
 
-export default async function addLoginRecord(userId: number): Promise<void> {
+export default async function addLoginHistoryRecord(userId: number): Promise<void> {
 	try {
 		await prismaClient.login_history.create({
 			data: {

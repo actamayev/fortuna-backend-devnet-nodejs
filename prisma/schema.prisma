@@ -33,9 +33,9 @@ model login_history {
 }
 
 enum network_type {
-	MAINNET
-	DEVNET
-	TESTNET
+	mainnet_beta
+	devnet
+	testnet
 }
 
 model solana_wallet {

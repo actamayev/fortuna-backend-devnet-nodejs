@@ -9,7 +9,7 @@ export default async function confirmUserDoesNotHaveDevnetSolanaWallet(
 ): Promise<void | Response> {
 	try {
 		const user = req.user
-		const solanaWallet = await findSolanaWalletByUserId(user.user_id, "DEVNET")
+		const solanaWallet = await findSolanaWalletByUserId(user.user_id, "devnet")
 
 		if (solanaWallet === undefined) throw Error("Error finding Devnet Solana Wallet")
 
