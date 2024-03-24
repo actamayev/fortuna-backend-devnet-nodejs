@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { Connection, LAMPORTS_PER_SOL, PublicKey, clusterApiUrl } from "@solana/web3.js"
 
-// TODO: Delete this file, it is for testing purposes, while I try to figure out why minting an NFT costs $1
+// This file is for testing purposes
 export default async function printWalletBalance(initialLogMessage: string): Promise<void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
@@ -14,10 +14,10 @@ export default async function printWalletBalance(initialLogMessage: string): Pro
 
 		if (_.isNull(solPriceInUSD)) return
 
-		console.log(initialLogMessage)
-		console.log("balanceInSol:",balanceInSol)
-		console.log("balance in USD:", balanceInSol * solPriceInUSD)
-		console.log("------------------------------------------------")
+		console.info(initialLogMessage)
+		console.info("balanceInSol:",balanceInSol)
+		console.info("balance in USD:", balanceInSol * solPriceInUSD)
+		console.info("------------------------------------------------")
 	} catch (error) {
 		console.error(error)
 	}

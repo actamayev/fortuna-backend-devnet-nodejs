@@ -36,16 +36,15 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 			return res.status(400).json({ message: "Unable to find 51Crypto's Solana Wallet" })
 		}
 
-		const addSPLResponse = await addSPLRecord(
+		const newSPLId = await addSPLRecord(
 			metadataJSONUrl,
 			newSPLData,
 			createSPLResponse,
 			solanaWallet.solana_wallet_id,
 			fiftyoneWalletDB.solana_wallet_id,
-			createSPLResponse.feeInSol,
 			solPriceInUSD
 		)
-		if (addSPLResponse === undefined) return res.status(400).json({ message: "Unable to save SPL to DB" })
+		if (newSPLId === undefined) return res.status(400).json({ message: "Unable to save SPL to DB" })
 
 		await AwsStorageService.getInstance().updateJSONInS3(uploadJSONS3Key, { splTokenPublicKey: createSPLResponse.mint.toString()})
 
@@ -54,7 +53,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 			createSPLResponse.mint,
 			creatorPublicKey,
 			newSPLData,
-			addSPLResponse.spl_id,
+			newSPLId,
 			solanaWallet.solana_wallet_id,
 			fiftyoneWalletDB.solana_wallet_id,
 			solPriceInUSD
@@ -65,10 +64,9 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		}
 
 		const feeInSol = await calculateTransactionFee(createSPLResponse.metadataTransactionSignature)
-
 		if (feeInSol === undefined) return res.status(400).json({ message: "Unable to determine transaction fee for metadata" })
 		await updateSPLRecordWithMetadata(
-			addSPLResponse.spl_id,
+			newSPLId,
 			fiftyoneWalletDB.solana_wallet_id,
 			feeInSol,
 			solPriceInUSD

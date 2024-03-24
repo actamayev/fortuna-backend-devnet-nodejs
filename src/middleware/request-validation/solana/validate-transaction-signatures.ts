@@ -2,13 +2,9 @@ import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 
-const transactionFeeSchema = Joi.object({
-	transactionData: Joi.object({
-		signature: Joi.string().required(),
-	}).required()
-}).required()
+const transactionFeeSchema = Joi.array().items(Joi.string().required()).required()
 
-export default function validateTransactionFee (req: Request, res: Response, next: NextFunction): void | Response {
+export default function validateTransactionSignatures (req: Request, res: Response, next: NextFunction): void | Response {
 	try {
 		const { error } = transactionFeeSchema.validate(req.body)
 

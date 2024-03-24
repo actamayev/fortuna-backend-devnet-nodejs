@@ -5,9 +5,8 @@ import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import { createMetadataAccountV3 } from "@metaplex-foundation/mpl-token-metadata"
 import { fromWeb3JsKeypair, fromWeb3JsPublicKey } from "@metaplex-foundation/umi-web3js-adapters"
-import printWalletBalance from "./print-wallet-balance"
-import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-key"
 import getWalletBalance from "./get-wallet-balance"
+import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-key"
 
 export default async function createSPLToken (
 	metadataJSONUrl: string,
@@ -31,10 +30,8 @@ export default async function createSPLToken (
 		if (initialWalletBalance === undefined || secondWalletBalance === undefined) return
 
 		const feeInSol = initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol
-		// await printWalletBalance("After creating mint")
 
 		const metadataTransactionSignature = await createTokenMetadata(mint, metadataJSONUrl, splName)
-		// await printWalletBalance("After creating Token MetaData")
 
 		if (metadataTransactionSignature === undefined) return
 

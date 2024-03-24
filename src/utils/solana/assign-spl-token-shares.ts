@@ -3,12 +3,11 @@ import { getOrCreateAssociatedTokenAccount } from "@solana/spl-token"
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js"
 import mintSPLHelper from "./mint-spl-helper"
 import getWalletBalance from "./get-wallet-balance"
-import printWalletBalance from "./print-wallet-balance"
 import { findSolanaWalletByPublicKey } from "../find/find-solana-wallet"
 import addTokenAccountRecord from "../db-operations/add-token-account-record"
 import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-key"
 
-// eslint-disable-next-line max-lines-per-function, complexity, max-params
+// eslint-disable-next-line max-params, max-lines-per-function, complexity
 export default async function assignSPLTokenShares (
 	splTokenPublicKey: PublicKey,
 	creatorPublicKey: PublicKey,
@@ -84,8 +83,6 @@ export default async function assignSPLTokenShares (
 		)
 		if (_.isNull(fiftyoneEscrowTokenAccountDB) || fiftyoneEscrowTokenAccountDB === undefined) return
 
-		await printWalletBalance("After the 3 getOrCreates")
-
 		await mintSPLHelper(
 			connection,
 			fiftyoneWallet,
@@ -124,7 +121,6 @@ export default async function assignSPLTokenShares (
 			fiftyoneCryptoWalletId,
 			solPriceInUSD
 		)
-		await printWalletBalance("After the 3 mint SPL Helpers")
 
 		// FUTURE TODO: See if there's a way to prevent more shares from being minted after assigning the shares.
 		// FUTURE TODO: Also, then transfer the ownership of the SPL to the creator
