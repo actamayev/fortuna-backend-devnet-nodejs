@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
-import findSolanaWallet from "../../utils/find/find-solana-wallet"
+import { findSolanaWalletByUserId } from "../../utils/find/find-solana-wallet"
 
 export default async function confirmUserDoesNotHaveDevnetSolanaWallet(
 	req: Request,
@@ -9,9 +9,9 @@ export default async function confirmUserDoesNotHaveDevnetSolanaWallet(
 ): Promise<void | Response> {
 	try {
 		const user = req.user
-		const solanaWallet = await findSolanaWallet(user.user_id, "DEVNET")
+		const solanaWallet = await findSolanaWalletByUserId(user.user_id, "devnet")
 
-		if (_.isUndefined(solanaWallet)) throw Error("Error finding Devnet Solana Wallet")
+		if (solanaWallet === undefined) throw Error("Error finding Devnet Solana Wallet")
 
 		if (!_.isNull(solanaWallet)) return res.status(400).json({ message: "User already has a Devnet Solana wallet"})
 

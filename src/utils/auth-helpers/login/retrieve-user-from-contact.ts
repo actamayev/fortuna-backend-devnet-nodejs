@@ -1,9 +1,9 @@
-import { Credentials } from "@prisma/client"
+import { credentials } from "@prisma/client"
 import prismaClient from "../../../prisma-client"
 
 export default async function retrieveUserFromContact(
 	contact: string, contactType: EmailOrPhoneOrUsername
-): Promise<Credentials | null> {
+): Promise<credentials | null> {
 	let whereCondition
 
 	if (contactType === "Username") {
