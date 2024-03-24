@@ -6,26 +6,30 @@ import prismaClient from "../../../prisma-client"
 export default async function addSPLRecord (
 	metadataJSONUrl: string,
 	newSPLData: NewSPLData,
-	splTokenPublicKey: PublicKey,
+	createSPLResponse: { mint: PublicKey, metadataTransactionSignature: string },
 	creatorWalletId: number,
-	fiftyoneCryptoWalletId: number
+	fiftyoneCryptoWalletId: number,
+	feeInSol: number,
+	solPriceInUSD: number
 ): Promise<spl | void> {
 	try {
-		// TODO: Fix the blank fields
 		const addSPLResponse = await prismaClient.spl.create({
 			data: {
 				meta_data_url: metadataJSONUrl,
 				file_name: newSPLData.fileName,
 				spl_name: newSPLData.splName,
-				chain_address: "",
-				meta_data_address: "",
-				public_key_address: splTokenPublicKey.toString(),
-				listing_price: newSPLData.offeringSharePrice,
-				payer_solana_wallet_id: fiftyoneCryptoWalletId,
+				meta_data_address: createSPLResponse.metadataTransactionSignature,
+				public_key_address: createSPLResponse.mint.toString(),
+				listing_price_per_share_sol: newSPLData.offeringSharePrice,
 				total_number_of_shares: newSPLData.numberOfShares,
-				spl_listing_status: "LISTED",
 				creator_wallet_id: creatorWalletId,
 				uploaded_image_id: newSPLData.uploadedImageId,
+
+				spl_creation_fee_sol: feeInSol,
+				spl_creation_fee_usd: feeInSol * solPriceInUSD,
+				create_spl_payer_solana_wallet_id: fiftyoneCryptoWalletId,
+
+				spl_listing_status: "LISTED",
 				description: newSPLData.description,
 			}
 		})

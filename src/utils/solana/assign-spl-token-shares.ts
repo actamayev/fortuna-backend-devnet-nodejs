@@ -2,29 +2,28 @@ import _ from "lodash"
 import { getOrCreateAssociatedTokenAccount } from "@solana/spl-token"
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js"
 import mintSPLHelper from "./mint-spl-helper"
-import getSolPriceInUSD from "./get-sol-price-in-usd"
+import getWalletBalance from "./get-wallet-balance"
 import printWalletBalance from "./print-wallet-balance"
 import { findSolanaWalletByPublicKey } from "../find/find-solana-wallet"
 import addTokenAccountRecord from "../db-operations/add-token-account-record"
 import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-key"
 
-// eslint-disable-next-line max-lines-per-function, max-params, complexity
+// eslint-disable-next-line max-lines-per-function, complexity, max-params
 export default async function assignSPLTokenShares (
 	splTokenPublicKey: PublicKey,
 	creatorPublicKey: PublicKey,
 	uploadSplData: NewSPLData,
 	splId: number,
 	creatorWalletId: number,
-	fiftyoneCryptoWalletId: number
+	fiftyoneCryptoWalletId: number,
+	solPriceInUSD: number
 ): Promise<"success" | void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fiftyoneWallet = get51SolanaWalletFromSecretKey()
 
-		const solPriceInUSD = await getSolPriceInUSD()
+		const initialWalletBalance = await getWalletBalance("devnet", process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, solPriceInUSD)
 		// Get or Create Token Accounts:
-		if (_.isNull(solPriceInUSD)) return
-
 		const fiftyoneTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
 			fiftyoneWallet,
@@ -32,7 +31,17 @@ export default async function assignSPLTokenShares (
 			fiftyoneWallet.publicKey
 		)
 
-		const fiftyoneTokenAccountDB = await addTokenAccountRecord(splId, fiftyoneCryptoWalletId, fiftyoneTokenAccount.address)
+		const secondWalletBalance = await getWalletBalance("devnet", process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, solPriceInUSD)
+		if (initialWalletBalance === undefined || secondWalletBalance === undefined) return
+
+		const fiftyoneTokenAccountDB = await addTokenAccountRecord(
+			splId,
+			fiftyoneCryptoWalletId,
+			fiftyoneTokenAccount.address,
+			initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol,
+			initialWalletBalance.balanceInUsd - secondWalletBalance.balanceInUsd,
+			fiftyoneCryptoWalletId
+		)
 		if (_.isNull(fiftyoneTokenAccountDB) || fiftyoneTokenAccountDB === undefined) return
 
 		const creatorTokenAccount = await getOrCreateAssociatedTokenAccount(
@@ -41,7 +50,17 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			creatorPublicKey
 		)
-		const creatorTokenAccountDB = await addTokenAccountRecord(splId, creatorWalletId, creatorTokenAccount.address)
+		const thirdWalletBalance = await getWalletBalance("devnet", process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, solPriceInUSD)
+
+		if (thirdWalletBalance === undefined) return
+		const creatorTokenAccountDB = await addTokenAccountRecord(
+			splId,
+			creatorWalletId,
+			creatorTokenAccount.address,
+			secondWalletBalance.balanceInSol - thirdWalletBalance.balanceInSol,
+			secondWalletBalance.balanceInUsd - thirdWalletBalance.balanceInUsd,
+			fiftyoneCryptoWalletId
+		)
 		if (_.isNull(creatorTokenAccountDB) || creatorTokenAccountDB === undefined) return
 
 		const fiftyoneCryptoEscrowPublicKey = new PublicKey(process.env.FIFTYONE_CRYPTO_ESCROW_WALLET_PUBLIC_KEY)
@@ -51,12 +70,17 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			fiftyoneCryptoEscrowPublicKey
 		)
-		const fiftyoneEscrowWalletDB = await findSolanaWalletByPublicKey(fiftyoneCryptoEscrowPublicKey, "DEVNET")
+		const fourthWalletBalance = await getWalletBalance("devnet", process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, solPriceInUSD)
+		if (fourthWalletBalance === undefined) return
+		const fiftyoneEscrowWalletDB = await findSolanaWalletByPublicKey(process.env.FIFTYONE_CRYPTO_ESCROW_WALLET_PUBLIC_KEY, "DEVNET")
 		if (fiftyoneEscrowWalletDB === undefined || _.isNull(fiftyoneEscrowWalletDB)) return
 		const fiftyoneEscrowTokenAccountDB = await addTokenAccountRecord(
 			splId,
 			fiftyoneEscrowWalletDB.solana_wallet_id,
-			fiftyoneEscrowTokenAccount.address
+			fiftyoneEscrowTokenAccount.address,
+			thirdWalletBalance.balanceInSol - fourthWalletBalance.balanceInSol,
+			thirdWalletBalance.balanceInUsd - fourthWalletBalance.balanceInUsd,
+			fiftyoneCryptoWalletId
 		)
 		if (_.isNull(fiftyoneEscrowTokenAccountDB) || fiftyoneEscrowTokenAccountDB === undefined) return
 
@@ -102,7 +126,7 @@ export default async function assignSPLTokenShares (
 		)
 		await printWalletBalance("After the 3 mint SPL Helpers")
 
-		// TODO: See if there's a way to prevent more shares from being minted after assigning the shares.
+		// FUTURE TODO: See if there's a way to prevent more shares from being minted after assigning the shares.
 		// FUTURE TODO: Also, then transfer the ownership of the SPL to the creator
 
 		return "success"

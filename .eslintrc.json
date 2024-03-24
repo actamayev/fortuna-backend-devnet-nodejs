@@ -63,7 +63,7 @@
 		"@typescript-eslint/no-shadow": "error",
 		"filenames/match-regex": ["error", "^[a-z\\d-]+$", true],
 		"@typescript-eslint/no-non-null-assertion": "error",
-        "max-params": ["warn", 4],
+        "max-params": ["warn", 6],
         "@typescript-eslint/no-floating-promises": "warn",
         "max-lines-per-function": ["warn", {"max": 40, "skipBlankLines": true, "skipComments": true}],
 		"@typescript-eslint/naming-convention": [

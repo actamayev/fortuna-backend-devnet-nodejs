@@ -5,7 +5,10 @@ import prismaClient from "../../prisma-client"
 export default async function addTokenAccountRecord (
 	splId: number,
 	solanaWalletId: number,
-	publicKey: PublicKey
+	publicKey: PublicKey,
+	creationFeeSol: number,
+	creationFeeUsd: number,
+	payerWalletId: number
 ): Promise<token_account | void> {
 	try {
 		const tokenAccountResponse = await prismaClient.token_account.create({
@@ -13,9 +16,9 @@ export default async function addTokenAccountRecord (
 				spl_id: splId,
 				solana_wallet_id: solanaWalletId,
 				public_key: publicKey.toString(),
-				token_account_creation_fee_sol: "",
-				token_account_creation_fee_usd: "",
-				payer_solana_wallet_id
+				token_account_creation_fee_sol: creationFeeSol,
+				token_account_creation_fee_usd: creationFeeUsd,
+				payer_solana_wallet_id: payerWalletId
 			}
 		})
 

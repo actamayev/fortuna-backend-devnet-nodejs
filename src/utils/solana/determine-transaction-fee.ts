@@ -1,8 +1,11 @@
 import _ from "lodash"
 import { Cluster, Connection, LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js"
-import getSolPriceInUSD from "./get-sol-price-in-usd"
 
-export default async function determineTransactionFee(signature: string, clusterType: Cluster): Promise<
+export default async function determineTransactionFee(
+	signature: string,
+	clusterType: Cluster,
+	solPriceInUSD: number
+): Promise<
 	void | { feeInSol: number, usdPrice: number, solPriceInUSD: number }
 > {
 	try {
@@ -17,8 +20,6 @@ export default async function determineTransactionFee(signature: string, cluster
 		if (_.isUndefined(fee)) return
 		const feeInSol = fee / LAMPORTS_PER_SOL
 
-		const solPriceInUSD = await getSolPriceInUSD()
-		if (_.isNull(solPriceInUSD)) return
 		const usdPrice = feeInSol * solPriceInUSD
 
 		return {

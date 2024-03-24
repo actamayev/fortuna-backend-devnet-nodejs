@@ -1,4 +1,3 @@
-import { PublicKey } from "@solana/web3.js"
 import { solana_wallet, network_type } from "@prisma/client"
 import prismaClient from "../../prisma-client"
 
@@ -20,13 +19,13 @@ export async function findSolanaWalletByUserId(
 }
 
 export async function findSolanaWalletByPublicKey(
-	publicKey: PublicKey,
+	publicKey: string,
 	networkType: network_type
 ): Promise<solana_wallet | null | void> {
 	try {
 		const solanaWallet = await prismaClient.solana_wallet.findFirst({
 			where: {
-				public_key: publicKey.toString(),
+				public_key: publicKey,
 				network_type: networkType
 			},
 		})

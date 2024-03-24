@@ -5,18 +5,20 @@ import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import { createMetadataAccountV3 } from "@metaplex-foundation/mpl-token-metadata"
 import { fromWeb3JsKeypair, fromWeb3JsPublicKey } from "@metaplex-foundation/umi-web3js-adapters"
-import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-key"
-import determineTransactionFee from "./determine-transaction-fee"
 import printWalletBalance from "./print-wallet-balance"
+import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-key"
+import getWalletBalance from "./get-wallet-balance"
 
-// TODO: Need to extract the transaction fee. Transition to using SPLs
 export default async function createSPLToken (
 	metadataJSONUrl: string,
 	splName: string,
-): Promise<PublicKey | void> {
+	solPriceInUSD: number
+): Promise<{ mint: PublicKey, metadataTransactionSignature: string, feeInSol: number } | void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fiftyoneWallet = get51SolanaWalletFromSecretKey()
+
+		const initialWalletBalance = await getWalletBalance("devnet", process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, solPriceInUSD)
 
 		const mint = await createMint(
 			connection,
@@ -25,14 +27,18 @@ export default async function createSPLToken (
 			null,
 			0
 		)
-		await printWalletBalance("After creating mint")
+		const secondWalletBalance = await getWalletBalance("devnet", process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, solPriceInUSD)
+		if (initialWalletBalance === undefined || secondWalletBalance === undefined) return
 
-		const transactionSignature = await createTokenMetadata(mint, metadataJSONUrl, splName)
-		await printWalletBalance("After creating Token MetaData")
+		const feeInSol = initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol
+		// await printWalletBalance("After creating mint")
 
-		if (transactionSignature === undefined) return
+		const metadataTransactionSignature = await createTokenMetadata(mint, metadataJSONUrl, splName)
+		// await printWalletBalance("After creating Token MetaData")
 
-		return mint
+		if (metadataTransactionSignature === undefined) return
+
+		return { mint, metadataTransactionSignature, feeInSol }
 	} catch (error) {
 		console.error(error)
 	}
@@ -81,10 +87,6 @@ async function createTokenMetadata(
 		const transaction = await instruction.buildAndSign(umi)
 		const transactionSignature = await umi.rpc.sendTransaction(transaction)
 		const signature = base58.deserialize(transactionSignature)
-		console.log(signature)
-		const transactionFee = await determineTransactionFee(signature[0], "devnet")
-		console.log("transactionFee",transactionFee)
-		// TODO: Calculate transaction fee (figure out why it's undefined here, but when querying via the endpoint, it's not)
 
 		return signature[0]
 	} catch (error) {

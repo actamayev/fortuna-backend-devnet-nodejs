@@ -4,18 +4,23 @@ import { PublicKey } from "@solana/web3.js"
 import { createS3Key } from "../../../../utils/s3/create-s3-key"
 import createSPLToken from "../../../../utils/solana/create-spl-token"
 import AwsStorageService from "../../../../classes/aws-storage-service"
+import getSolPriceInUSD from "../../../../utils/solana/get-sol-price-in-usd"
 import addSPLRecord from "../../../../utils/db-operations/spl/add-spl-record"
+import printWalletBalance from "../../../../utils/solana/print-wallet-balance"
 import assignSPLTokenShares from "../../../../utils/solana/assign-spl-token-shares"
 import { findSolanaWalletByPublicKey } from "../../../../utils/find/find-solana-wallet"
-import get51SolanaWalletFromSecretKey from "../../../../utils/solana/get-51-solana-wallet-from-secret-key"
-import printWalletBalance from "../../../../utils/solana/print-wallet-balance"
+import calculateTransactionFee from "../../../../utils/solana/calculate-transaction-fee"
+import updateSPLRecordWithMetadata from "../../../../utils/db-operations/spl/update-spl-record-with-metadata"
 
 // eslint-disable-next-line complexity, max-lines-per-function
 export default async function createAndMintSPL (req: Request, res: Response): Promise<Response> {
 	try {
 		const solanaWallet = req.solanaWallet
 		const newSPLData = req.body.newSPLData as NewSPLData
+
 		await printWalletBalance("At the Beginning")
+		const solPriceInUSD = await getSolPriceInUSD()
+		if (_.isNull(solPriceInUSD)) return res.status(400).json({ message: "Unable to retrieve Sol Price" })
 
 		const uploadJSONS3Key = createS3Key("spl-metadata", newSPLData.fileName, newSPLData.uuid)
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -23,11 +28,10 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		const metadataJSONUrl = await AwsStorageService.getInstance().uploadJSON(restOfNewSPLData, uploadJSONS3Key)
 		if (metadataJSONUrl === undefined) return res.status(400).json({ message: "Unable to upload JSON" })
 
-		const splTokenPublicKey = await createSPLToken(metadataJSONUrl, newSPLData.splName)
-		if (splTokenPublicKey === undefined) return res.status(400).json({ message: "Unable to create NFT" })
+		const createSPLResponse = await createSPLToken(metadataJSONUrl, newSPLData.splName, solPriceInUSD)
+		if (createSPLResponse === undefined) return res.status(400).json({ message: "Unable to create NFT" })
 
-		const fiftyoneWallet = get51SolanaWalletFromSecretKey()
-		const fiftyoneWalletDB = await findSolanaWalletByPublicKey(fiftyoneWallet.publicKey, "DEVNET")
+		const fiftyoneWalletDB = await findSolanaWalletByPublicKey(process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, "DEVNET")
 		if (_.isNull(fiftyoneWalletDB) || fiftyoneWalletDB === undefined) {
 			return res.status(400).json({ message: "Unable to find 51Crypto's Solana Wallet" })
 		}
@@ -35,30 +39,43 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		const addSPLResponse = await addSPLRecord(
 			metadataJSONUrl,
 			newSPLData,
-			splTokenPublicKey,
+			createSPLResponse,
 			solanaWallet.solana_wallet_id,
-			fiftyoneWalletDB.solana_wallet_id
+			fiftyoneWalletDB.solana_wallet_id,
+			createSPLResponse.feeInSol,
+			solPriceInUSD
 		)
 		if (addSPLResponse === undefined) return res.status(400).json({ message: "Unable to save SPL to DB" })
 
-		await AwsStorageService.getInstance().updateJSONInS3(uploadJSONS3Key, { splTokenPublicKey: splTokenPublicKey.toString()})
+		await AwsStorageService.getInstance().updateJSONInS3(uploadJSONS3Key, { splTokenPublicKey: createSPLResponse.mint.toString()})
 
 		const creatorPublicKey = new PublicKey(solanaWallet.public_key)
 		const assignSPLTokenSharesResponse = await assignSPLTokenShares(
-			splTokenPublicKey,
+			createSPLResponse.mint,
 			creatorPublicKey,
 			newSPLData,
 			addSPLResponse.spl_id,
 			solanaWallet.solana_wallet_id,
-			fiftyoneWalletDB.solana_wallet_id
+			fiftyoneWalletDB.solana_wallet_id,
+			solPriceInUSD
 		)
-		await printWalletBalance("After Assigning SPL Token Shares")
 
 		if (!_.isEqual(assignSPLTokenSharesResponse, "success")) {
 			return res.status(400).json({ message: "Unable to assign SPL Shares" })
 		}
 
-		return res.status(200).json({ splTokenPublicKey })
+		const feeInSol = await calculateTransactionFee(createSPLResponse.metadataTransactionSignature)
+
+		if (feeInSol === undefined) return res.status(400).json({ message: "Unable to determine transaction fee for metadata" })
+		await updateSPLRecordWithMetadata(
+			addSPLResponse.spl_id,
+			fiftyoneWalletDB.solana_wallet_id,
+			feeInSol,
+			solPriceInUSD
+		)
+		await printWalletBalance("At the end")
+
+		return res.status(200).json({ mintAddress: createSPLResponse.mint })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Create and Mint NFT" })
