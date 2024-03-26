@@ -17,7 +17,7 @@ declare global {
 		is_active: boolean
 		email?: string
 		phone_number?: string
-		user_type: UserTypes
+		default_user_type: UserTypes
 	}
 }
 
