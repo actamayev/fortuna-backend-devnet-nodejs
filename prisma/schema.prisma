@@ -7,6 +7,11 @@ datasource db {
 	url      = env("DATABASE_URL")
 }
 
+enum default_user_type {
+	creator
+	supporter
+}
+
 model credentials {
 	user_id     								Int      @id @default(autoincrement())
 	username     								String
@@ -14,6 +19,8 @@ model credentials {
 	is_active    								Boolean  @default(true)
 	email        								String?
 	phone_number 								String?
+
+	default_user_type							default_user_type
 
 	created_at   								DateTime @default(now())
 	updated_at   								DateTime @default(now()) @updatedAt

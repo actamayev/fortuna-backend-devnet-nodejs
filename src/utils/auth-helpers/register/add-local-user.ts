@@ -10,6 +10,7 @@ export async function addLocalUser(
 			username: registerInformation.username,
 			password: hashedPassword,
 			is_active: true,
+			default_user_type: registerInformation.defaultUserType
 		}
 
 		if (contactType === "Email") {
