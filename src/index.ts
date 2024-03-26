@@ -3,8 +3,9 @@ import dotenv from "dotenv"
 import express from "express"
 import cookieParser from "cookie-parser"
 
-import checkHealth from "./controllers/health-checks/check-health"
 import devnetRoutes from "./routes/devnet/devnet-routes"
+
+import checkHealth from "./controllers/health-checks/check-health"
 
 dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.local" })
 
