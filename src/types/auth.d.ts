@@ -8,6 +8,7 @@ declare global {
 		contact: string
 		username: string
 		password: string
+		userType: UserTypes
 	}
 
 	interface NewLocalUserFields {
@@ -16,6 +17,7 @@ declare global {
 		is_active: boolean
 		email?: string
 		phone_number?: string
+		user_type: UserTypes
 	}
 }
 

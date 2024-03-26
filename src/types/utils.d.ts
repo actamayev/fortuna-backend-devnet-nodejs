@@ -9,6 +9,8 @@ declare global {
 	}
 
 	type S3FolderNames = "uploaded-images" | "spl-metadata"
+
+	type UserTypes = "creator" | "supporter"
 }
 
 export {}
