@@ -4,7 +4,6 @@ import transferSol from "../../controllers/solana/devnet/transfer-sol"
 import getTransactionFees from "../../controllers/solana/devnet/get-transaction-fees"
 import createAndMintSPL from "../../controllers/solana/devnet/spl/create-and-mint-spl"
 import getTransactionDetails from "../../controllers/solana/devnet/get-transaction-details"
-import createDevnetSolanaWallet from "../../controllers/solana/devnet/create-devnet-solana-wallet"
 import requestDevnetSolanaAirdrop from "../../controllers/solana/devnet/request-devnet-solana-airdrop"
 import getDevnetSolanaWalletBalance from "../../controllers/solana/devnet/get-devnet-solana-wallet-balance"
 
@@ -15,11 +14,8 @@ import attachDevnetSolanaWalletByUserId from "../../middleware/attach/attach-dev
 import validateCreateAndMintSPL from "../../middleware/request-validation/solana/validate-create-and-mint-spl"
 import validateTransactionSignatures from "../../middleware/request-validation/solana/validate-transaction-signatures"
 import confirmUserHasEnoughDevnetSolToTransfer from "../../middleware/solana/confirm-user-has-enough-devnet-sol-to-transfer"
-import confirmUserDoesNotHaveDevnetSolanaWallet from "../../middleware/solana/confirm-user-does-not-have-devnet-solana-wallet"
 
 const solanaDevnetRoutes = express.Router()
-
-solanaDevnetRoutes.post("/create-wallet", confirmUserDoesNotHaveDevnetSolanaWallet, createDevnetSolanaWallet)
 
 solanaDevnetRoutes.get("/get-wallet-balance", attachDevnetSolanaWalletByUserId, getDevnetSolanaWalletBalance)
 
