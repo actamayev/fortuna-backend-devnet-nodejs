@@ -8,7 +8,7 @@ declare global {
 		contact: string
 		username: string
 		password: string
-		userType: UserTypes
+		defaultUserType: UserTypes
 	}
 
 	interface NewLocalUserFields {
