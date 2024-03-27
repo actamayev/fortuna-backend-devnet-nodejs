@@ -14,42 +14,42 @@ export default async function assignSPLTokenShares (
 	uploadSplData: NewSPLData,
 	splId: number,
 	creatorWalletId: number,
-	fiftyoneCryptoWalletId: number,
+	fortunaWalletId: number,
 	solPriceInUSD: number
 ): Promise<"success" | void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const fiftyoneWallet = get51SolanaWalletFromSecretKey()
+		const fortunaWallet = get51SolanaWalletFromSecretKey()
 
-		const initialWalletBalance = await getWalletBalance("devnet", process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, solPriceInUSD)
+		const initialWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
 		// Get or Create Token Accounts:
-		const fiftyoneTokenAccount = await getOrCreateAssociatedTokenAccount(
+		const fortunaTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
-			fiftyoneWallet,
+			fortunaWallet,
 			splTokenPublicKey,
-			fiftyoneWallet.publicKey
+			fortunaWallet.publicKey
 		)
 
-		const secondWalletBalance = await getWalletBalance("devnet", process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, solPriceInUSD)
+		const secondWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
 		if (initialWalletBalance === undefined || secondWalletBalance === undefined) return
 
-		const fiftyoneTokenAccountId = await addTokenAccountRecord(
+		const fortunaTokenAccountId = await addTokenAccountRecord(
 			splId,
-			fiftyoneCryptoWalletId,
-			fiftyoneTokenAccount.address,
+			fortunaWalletId,
+			fortunaTokenAccount.address,
 			initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol,
 			initialWalletBalance.balanceInUsd - secondWalletBalance.balanceInUsd,
-			fiftyoneCryptoWalletId
+			fortunaWalletId
 		)
-		if (_.isNull(fiftyoneTokenAccountId) || fiftyoneTokenAccountId === undefined) return
+		if (_.isNull(fortunaTokenAccountId) || fortunaTokenAccountId === undefined) return
 
 		const creatorTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
-			fiftyoneWallet,
+			fortunaWallet,
 			splTokenPublicKey,
 			creatorPublicKey
 		)
-		const thirdWalletBalance = await getWalletBalance("devnet", process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, solPriceInUSD)
+		const thirdWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
 
 		if (thirdWalletBalance === undefined) return
 		const creatorTokenAccountId = await addTokenAccountRecord(
@@ -58,68 +58,68 @@ export default async function assignSPLTokenShares (
 			creatorTokenAccount.address,
 			secondWalletBalance.balanceInSol - thirdWalletBalance.balanceInSol,
 			secondWalletBalance.balanceInUsd - thirdWalletBalance.balanceInUsd,
-			fiftyoneCryptoWalletId
+			fortunaWalletId
 		)
 		if (_.isNull(creatorTokenAccountId) || creatorTokenAccountId === undefined) return
 
-		const fiftyoneCryptoEscrowPublicKey = new PublicKey(process.env.FIFTYONE_CRYPTO_ESCROW_WALLET_PUBLIC_KEY)
-		const fiftyoneEscrowTokenAccount = await getOrCreateAssociatedTokenAccount(
+		const fortunaCryptoEscrowPublicKey = new PublicKey(process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY)
+		const fortunaEscrowTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
-			fiftyoneWallet,
+			fortunaWallet,
 			splTokenPublicKey,
-			fiftyoneCryptoEscrowPublicKey
+			fortunaCryptoEscrowPublicKey
 		)
-		const fourthWalletBalance = await getWalletBalance("devnet", process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, solPriceInUSD)
+		const fourthWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
 		if (fourthWalletBalance === undefined) return
-		const fiftyoneEscrowWalletDB = await findSolanaWalletByPublicKey(process.env.FIFTYONE_CRYPTO_ESCROW_WALLET_PUBLIC_KEY, "devnet")
-		if (fiftyoneEscrowWalletDB === undefined || _.isNull(fiftyoneEscrowWalletDB)) return
-		const fiftyoneEscrowTokenAccountId = await addTokenAccountRecord(
+		const fortunaEscrowWalletDB = await findSolanaWalletByPublicKey(process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY, "devnet")
+		if (fortunaEscrowWalletDB === undefined || _.isNull(fortunaEscrowWalletDB)) return
+		const fortunaEscrowTokenAccountId = await addTokenAccountRecord(
 			splId,
-			fiftyoneEscrowWalletDB.solana_wallet_id,
-			fiftyoneEscrowTokenAccount.address,
+			fortunaEscrowWalletDB.solana_wallet_id,
+			fortunaEscrowTokenAccount.address,
 			thirdWalletBalance.balanceInSol - fourthWalletBalance.balanceInSol,
 			thirdWalletBalance.balanceInUsd - fourthWalletBalance.balanceInUsd,
-			fiftyoneCryptoWalletId
+			fortunaWalletId
 		)
-		if (_.isNull(fiftyoneEscrowTokenAccountId) || fiftyoneEscrowTokenAccountId === undefined) return
+		if (_.isNull(fortunaEscrowTokenAccountId) || fortunaEscrowTokenAccountId === undefined) return
 
 		// Mint SPLs:
 		await mintSPLHelper(
 			connection,
-			fiftyoneWallet,
+			fortunaWallet,
 			splTokenPublicKey,
 			splId,
-			fiftyoneWallet.publicKey,
-			fiftyoneTokenAccount.address,
+			fortunaWallet.publicKey,
+			fortunaTokenAccount.address,
 			uploadSplData.numberOfShares * (1 / 100),
-			fiftyoneTokenAccountId,
-			fiftyoneCryptoWalletId,
+			fortunaTokenAccountId,
+			fortunaWalletId,
 			solPriceInUSD
 		)
 
 		await mintSPLHelper(
 			connection,
-			fiftyoneWallet,
+			fortunaWallet,
 			splTokenPublicKey,
 			splId,
-			fiftyoneWallet.publicKey,
+			fortunaWallet.publicKey,
 			creatorTokenAccount.address,
 			uploadSplData.numberOfShares * (uploadSplData.creatorOwnershipPercentage / 100),
 			creatorTokenAccountId,
-			fiftyoneCryptoWalletId,
+			fortunaWalletId,
 			solPriceInUSD
 		)
 
 		await mintSPLHelper(
 			connection,
-			fiftyoneWallet,
+			fortunaWallet,
 			splTokenPublicKey,
 			splId,
-			fiftyoneWallet.publicKey,
-			fiftyoneEscrowTokenAccount.address,
+			fortunaWallet.publicKey,
+			fortunaEscrowTokenAccount.address,
 			uploadSplData.numberOfShares * ((99 - uploadSplData.creatorOwnershipPercentage) / 100),
-			fiftyoneEscrowTokenAccountId,
-			fiftyoneCryptoWalletId,
+			fortunaEscrowTokenAccountId,
+			fortunaWalletId,
 			solPriceInUSD
 		)
 
