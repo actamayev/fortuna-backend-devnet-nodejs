@@ -1,14 +1,14 @@
 To copy important files to AWS, run the following commands from the fiftyone-backend-nodejs root directory.
 Locally, run `npm run build`
-scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem -r ./dist ubuntu@34.238.255.61:/home/ubuntu/fiftyone-crypto
-scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem -r ./prisma ubuntu@34.238.255.61:/home/ubuntu/fiftyone-crypto/dist/src
-scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./package.json ubuntu@34.238.255.61:/home/ubuntu/fiftyone-crypto
-scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./package-lock.json ubuntu@34.238.255.61:/home/ubuntu/fiftyone-crypto
-scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./.env.production ubuntu@34.238.255.61:/home/ubuntu/fiftyone-crypto/dist/src/.env
-scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./ecosystem.config.js ubuntu@34.238.255.61:/home/ubuntu/fiftyone-crypto/dist/src
+scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem -r ./dist ubuntu@34.238.255.61:/home/ubuntu/fortuna
+scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem -r ./prisma ubuntu@34.238.255.61:/home/ubuntu/fortuna/dist/src
+scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./package.json ubuntu@34.238.255.61:/home/ubuntu/fortuna
+scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./package-lock.json ubuntu@34.238.255.61:/home/ubuntu/fortuna
+scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./.env.production ubuntu@34.238.255.61:/home/ubuntu/fortuna/dist/src/.env
+scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./ecosystem.config.js ubuntu@34.238.255.61:/home/ubuntu/fortuna/dist/src
 
 In AWS:
-`cd fiftyone-crypto`
+`cd fortuna`
 `npm install --production`
 `pm2 restart <app_name or app_id>`
 
