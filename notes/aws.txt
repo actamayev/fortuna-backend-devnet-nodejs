@@ -7,16 +7,16 @@ scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./package-lock.json ubunt
 scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./.env.production ubuntu@34.238.255.61:/home/ubuntu/fortuna/dist/src/.env
 scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./ecosystem.config.js ubuntu@34.238.255.61:/home/ubuntu/fortuna/dist/src
 
+To SSH into AWS:
+ssh -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ubuntu@34.238.255.61
+
 In AWS:
 `cd fortuna`
 `npm install --production`
 `pm2 restart <app_name or app_id>`
 
-For Database migrations, run:
-npx prisma migrate deploy
-
-To SSH into AWS:
-ssh -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ubuntu@34.238.255.61
+For Database migrations, navigate to dist/src, and run::
+`npx prisma migrate deploy`
 
 I am using the package pm2 to run the server on the instance (even after I close my connection)
 Important pm2 commands:
