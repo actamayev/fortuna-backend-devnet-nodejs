@@ -22,7 +22,7 @@ export default async function login (req: Request, res: Response): Promise<Respo
 
 		await addLoginHistoryRecord(credentialsResult.user_id)
 
-		return res.status(200).json({ accessToken, defaultUserType: credentialsResult.default_user_type })
+		return res.status(200).json({ accessToken })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Login" })
