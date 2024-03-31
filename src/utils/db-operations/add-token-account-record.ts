@@ -10,15 +10,16 @@ export default async function addTokenAccountRecord (
 	payerWalletId: number
 ): Promise<number | void> {
 	try {
+		const data = {
+			spl_id: splId,
+			parent_solana_wallet_id: solanaWalletId,
+			public_key: publicKey.toString(),
+			token_account_creation_fee_sol: creationFeeSol,
+			token_account_creation_fee_usd: creationFeeUsd,
+			payer_solana_wallet_id: payerWalletId
+		}
 		const tokenAccountResponse = await prismaClient.token_account.create({
-			data: {
-				spl_id: splId,
-				parent_solana_wallet_id: solanaWalletId,
-				public_key: publicKey.toString(),
-				token_account_creation_fee_sol: creationFeeSol,
-				token_account_creation_fee_usd: creationFeeUsd,
-				payer_solana_wallet_id: payerWalletId
-			}
+			data
 		})
 
 		return tokenAccountResponse.token_account_id

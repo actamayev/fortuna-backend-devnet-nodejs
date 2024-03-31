@@ -14,3 +14,7 @@
 -- delete from token_account;
 -- delete from spl;
 
+-- delete from login_history;
+-- delete from solana_wallet;
+-- delete from credentials;
+-- delete from uploaded_image;

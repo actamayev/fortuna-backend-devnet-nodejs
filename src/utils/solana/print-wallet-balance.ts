@@ -6,7 +6,7 @@ export default async function printWalletBalance(initialLogMessage: string): Pro
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 
-		const publicKey = new PublicKey("HgE67Sn8bQhSD21m6XYb6eJNUsrnV1TQ4kTWG17LAdxC")
+		const publicKey = new PublicKey(process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
 		const balanceInLamports = await connection.getBalance(publicKey)
 		const balanceInSol = balanceInLamports / LAMPORTS_PER_SOL
