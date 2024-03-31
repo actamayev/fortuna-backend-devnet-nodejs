@@ -5,7 +5,7 @@
 -- select * from spl_mint;
 -- Select solana_wallet.user_id, public_key, secret_key, username, email from credentials join solana_wallet on credentials.user_id = solana_wallet.user_id;
 -- select * from spl_ownership;
--- select * from token_account;
+select * from token_account;
 -- select * from uploaded_image;
 
 -- To delete an spl:
@@ -14,3 +14,7 @@
 -- delete from token_account;
 -- delete from spl;
 
+-- delete from login_history;
+-- delete from solana_wallet;
+-- delete from credentials;
+-- delete from uploaded_image;

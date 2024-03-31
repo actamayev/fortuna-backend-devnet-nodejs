@@ -1,22 +1,22 @@
-To copy important files to AWS, run the following commands from the fiftyone-backend-nodejs root directory.
+To copy important files to AWS, run the following commands from the fortuna-backend-nodejs root directory.
 Locally, run `npm run build`
-scp -i C:\Users\actam\Downloads\fiftyone-key-pair-1.pem -r ./dist ubuntu@34.238.255.61:/home/ubuntu/fiftyone-crypto
-scp -i C:\Users\actam\Downloads\fiftyone-key-pair-1.pem -r ./prisma ubuntu@34.238.255.61:/home/ubuntu/fiftyone-crypto/dist/src
-scp -i C:\Users\actam\Downloads\fiftyone-key-pair-1.pem ./package.json ubuntu@34.238.255.61:/home/ubuntu/fiftyone-crypto
-scp -i C:\Users\actam\Downloads\fiftyone-key-pair-1.pem ./package-lock.json ubuntu@34.238.255.61:/home/ubuntu/fiftyone-crypto
-scp -i C:\Users\actam\Downloads\fiftyone-key-pair-1.pem ./.env.production ubuntu@34.238.255.61:/home/ubuntu/fiftyone-crypto/dist/src/.env
-scp -i C:\Users\actam\Downloads\fiftyone-key-pair-1.pem ./ecosystem.config.js ubuntu@34.238.255.61:/home/ubuntu/fiftyone-crypto/dist/src
+scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem -r ./dist ubuntu@34.238.255.61:/home/ubuntu/fortuna
+scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem -r ./prisma ubuntu@34.238.255.61:/home/ubuntu/fortuna/dist/src
+scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./package.json ubuntu@34.238.255.61:/home/ubuntu/fortuna
+scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./package-lock.json ubuntu@34.238.255.61:/home/ubuntu/fortuna
+scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./.env.production ubuntu@34.238.255.61:/home/ubuntu/fortuna/dist/src/.env
+scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ./ecosystem.config.js ubuntu@34.238.255.61:/home/ubuntu/fortuna/dist/src
+
+To SSH into AWS:
+ssh -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem ubuntu@34.238.255.61
 
 In AWS:
-`cd fiftyone-crypto`
+`cd fortuna`
 `npm install --production`
 `pm2 restart <app_name or app_id>`
 
-For Database migrations, run:
-npx prisma migrate deploy
-
-To SSH into AWS:
-ssh -i C:\Users\actam\Downloads\fiftyone-key-pair-1.pem ubuntu@34.238.255.61
+For Database migrations, navigate to dist/src, and run::
+`npx prisma migrate deploy`
 
 I am using the package pm2 to run the server on the instance (even after I close my connection)
 Important pm2 commands:
@@ -25,3 +25,7 @@ Important pm2 commands:
 3. pm2 delete app_name_or_id (deletes a stopped pm2 process)
 4. pm2 start ecosystem.config.js --env production (must be done where the index.js file is)
 5. pm2 logs app_name_or_id (shows logs for a process)
+
+Other:
+- If getting this error:  `Error: @prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.`, run:
+	`npx prisma generate` in the src directory

@@ -27,9 +27,9 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		const createSPLResponse = await createSPLToken(metadataJSONUrl, newSPLData.splName, solPriceInUSD)
 		if (createSPLResponse === undefined) return res.status(400).json({ message: "Unable to create NFT" })
 
-		const fiftyoneWalletDB = await findSolanaWalletByPublicKey(process.env.FIFTYONE_CRYPTO_WALLET_PUBLIC_KEY, "devnet")
-		if (_.isNull(fiftyoneWalletDB) || fiftyoneWalletDB === undefined) {
-			return res.status(400).json({ message: "Unable to find 51Crypto's Solana Wallet" })
+		const fortunaWalletDB = await findSolanaWalletByPublicKey(process.env.FORTUNA_WALLET_PUBLIC_KEY, "devnet")
+		if (_.isNull(fortunaWalletDB) || fortunaWalletDB === undefined) {
+			return res.status(400).json({ message: "Unable to find Fortuna's Solana Wallet" })
 		}
 
 		const newSPLId = await addSPLRecord(
@@ -37,7 +37,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 			newSPLData,
 			createSPLResponse,
 			solanaWallet.solana_wallet_id,
-			fiftyoneWalletDB.solana_wallet_id,
+			fortunaWalletDB.solana_wallet_id,
 			solPriceInUSD
 		)
 		if (newSPLId === undefined) return res.status(400).json({ message: "Unable to save SPL to DB" })
@@ -51,7 +51,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 			newSPLData,
 			newSPLId,
 			solanaWallet.solana_wallet_id,
-			fiftyoneWalletDB.solana_wallet_id,
+			fortunaWalletDB.solana_wallet_id,
 			solPriceInUSD
 		)
 
