@@ -5,7 +5,7 @@ import mintSPLHelper from "./mint-spl-helper"
 import getWalletBalance from "./get-wallet-balance"
 import { findSolanaWalletByPublicKey } from "../find/find-solana-wallet"
 import addTokenAccountRecord from "../db-operations/add-token-account-record"
-import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-key"
+import getFortunaSolanaWalletFromSecretKey from "./get-fortuna-solana-wallet-from-secret-key"
 
 // eslint-disable-next-line max-params, max-lines-per-function, complexity
 export default async function assignSPLTokenShares (
@@ -19,7 +19,7 @@ export default async function assignSPLTokenShares (
 ): Promise<"success" | void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const fortunaWallet = get51SolanaWalletFromSecretKey()
+		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
 
 		const initialWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
 		// Get or Create Token Accounts:

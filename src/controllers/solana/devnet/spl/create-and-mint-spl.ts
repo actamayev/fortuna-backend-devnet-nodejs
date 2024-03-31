@@ -29,7 +29,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 
 		const fortunaWalletDB = await findSolanaWalletByPublicKey(process.env.FORTUNA_WALLET_PUBLIC_KEY, "devnet")
 		if (_.isNull(fortunaWalletDB) || fortunaWalletDB === undefined) {
-			return res.status(400).json({ message: "Unable to find 51Crypto's Solana Wallet" })
+			return res.status(400).json({ message: "Unable to find Fortuna's Solana Wallet" })
 		}
 
 		const newSPLId = await addSPLRecord(

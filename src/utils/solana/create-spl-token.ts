@@ -6,7 +6,7 @@ import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import { createMetadataAccountV3 } from "@metaplex-foundation/mpl-token-metadata"
 import { fromWeb3JsKeypair, fromWeb3JsPublicKey } from "@metaplex-foundation/umi-web3js-adapters"
 import getWalletBalance from "./get-wallet-balance"
-import get51SolanaWalletFromSecretKey from "./get-51-solana-wallet-from-secret-key"
+import getFortunaSolanaWalletFromSecretKey from "./get-fortuna-solana-wallet-from-secret-key"
 
 export default async function createSPLToken (
 	metadataJSONUrl: string,
@@ -15,7 +15,7 @@ export default async function createSPLToken (
 ): Promise<{ mint: PublicKey, metadataTransactionSignature: string, feeInSol: number } | void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const fortunaWallet = get51SolanaWalletFromSecretKey()
+		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
 
 		const initialWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
 
@@ -49,7 +49,7 @@ async function createTokenMetadata(
 ): Promise<string | void> {
 	try {
 		const endpoint = clusterApiUrl("devnet")
-		const fortunaWallet = get51SolanaWalletFromSecretKey()
+		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
 
 		const umi = createUmi(endpoint, "confirmed")
 
