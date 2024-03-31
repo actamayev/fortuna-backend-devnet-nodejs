@@ -62,12 +62,12 @@ export default async function assignSPLTokenShares (
 		)
 		if (_.isNull(creatorTokenAccountId) || creatorTokenAccountId === undefined) return
 
-		const fortunaCryptoEscrowPublicKey = new PublicKey(process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY)
+		const fortunaEscrowPublicKey = new PublicKey(process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY)
 		const fortunaEscrowTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
 			fortunaWallet,
 			splTokenPublicKey,
-			fortunaCryptoEscrowPublicKey
+			fortunaEscrowPublicKey
 		)
 		const fourthWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
 		if (fourthWalletBalance === undefined) return
