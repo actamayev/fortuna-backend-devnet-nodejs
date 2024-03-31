@@ -18,8 +18,8 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			})
 		)
 
-		const fiftyoneCryptoSecretKey = bs58.decode(solanaWallet.secret_key)
-		const keypair = Keypair.fromSecretKey(fiftyoneCryptoSecretKey)
+		const fortunaSecretKey = bs58.decode(solanaWallet.secret_key)
+		const keypair = Keypair.fromSecretKey(fortunaSecretKey)
 
 		await sendAndConfirmTransaction(connection, transaction, [ keypair ])
 
