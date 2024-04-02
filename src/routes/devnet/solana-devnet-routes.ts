@@ -4,6 +4,7 @@ import transferSol from "../../controllers/solana/devnet/transfer-sol"
 import getTransactionFees from "../../controllers/solana/devnet/get-transaction-fees"
 import createAndMintSPL from "../../controllers/solana/devnet/spl/create-and-mint-spl"
 import getTransactionDetails from "../../controllers/solana/devnet/get-transaction-details"
+import getCreatorContentList from "../../controllers/solana/devnet/get-creator-content-list"
 import requestDevnetSolanaAirdrop from "../../controllers/solana/devnet/request-devnet-solana-airdrop"
 import getDevnetSolanaWalletBalance from "../../controllers/solana/devnet/get-devnet-solana-wallet-balance"
 
@@ -40,6 +41,12 @@ solanaDevnetRoutes.post(
 	confirmPublicKeyExists,
 	confirmUserHasEnoughDevnetSolToTransfer,
 	transferSol
+)
+
+solanaDevnetRoutes.get(
+	"/get-creator-content-list",
+	attachDevnetSolanaWalletByUserId,
+	getCreatorContentList
 )
 
 export default solanaDevnetRoutes
