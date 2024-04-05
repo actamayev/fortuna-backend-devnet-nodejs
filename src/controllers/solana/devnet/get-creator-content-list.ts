@@ -22,6 +22,11 @@ export default async function getCreatorContentList(req: Request, res: Response)
 						image_url: true
 					}
 				},
+				uploaded_video: {
+					select: {
+						video_url: true
+					}
+				},
 				public_key_address: true
 			}
 		})
