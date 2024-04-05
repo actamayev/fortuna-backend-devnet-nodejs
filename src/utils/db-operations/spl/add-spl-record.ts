@@ -3,7 +3,7 @@ import prismaClient from "../../../prisma-client"
 
 export default async function addSPLRecord (
 	metadataJSONUrl: string,
-	newSPLData: NewSPLData,
+	newSPLData: IncomingNewSPLData,
 	createSPLResponse: { mint: PublicKey, metadataTransactionSignature: string, feeInSol: number },
 	creatorWalletId: number,
 	fortunaWalletId: number,
@@ -13,7 +13,6 @@ export default async function addSPLRecord (
 		const addSPLResponse = await prismaClient.spl.create({
 			data: {
 				meta_data_url: metadataJSONUrl,
-				file_name: newSPLData.fileName,
 				spl_name: newSPLData.splName,
 				meta_data_address: createSPLResponse.metadataTransactionSignature,
 				public_key_address: createSPLResponse.mint.toString(),
@@ -23,6 +22,7 @@ export default async function addSPLRecord (
 				total_number_of_shares: newSPLData.numberOfShares,
 				creator_wallet_id: creatorWalletId,
 				uploaded_image_id: newSPLData.uploadedImageId,
+				uploaded_video_id: newSPLData.uploadedVideoId,
 
 				spl_creation_fee_sol: createSPLResponse.feeInSol,
 				spl_creation_fee_usd: createSPLResponse.feeInSol * solPriceInUSD,

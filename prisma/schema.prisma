@@ -99,7 +99,6 @@ enum SPLListingStatus {
 model spl {
 	spl_id           							Int       @id @default(autoincrement())
 	meta_data_url  								String
-	file_name     								String  // Original name of the file used for the SPL
 	spl_name      								String  // Name of the SPL
 	meta_data_address 							String  // On-chain Address of the SPL metadata
 	public_key_address							String 	// The SPL's public key address
@@ -108,6 +107,7 @@ model spl {
 	total_number_of_shares						Int
 	creator_wallet_id							Int
 	uploaded_image_id							Int
+	uploaded_video_id							Int
 
 	spl_creation_fee_sol						Float
 	spl_creation_fee_usd						Float
@@ -127,6 +127,7 @@ model spl {
 	create_spl_metadata_payer_wallet			solana_wallet? @relation(name: "create_spl_metadata_payer_wallet", fields: [create_spl_metadata_payer_solana_wallet_id], references: [solana_wallet_id])
 	spl_creator_wallet							solana_wallet @relation(name: "spl_creator_wallet", fields: [creator_wallet_id], references: [solana_wallet_id])
 	uploaded_image								uploaded_image @relation(fields: [uploaded_image_id], references: [uploaded_image_id])
+	uploaded_video								uploaded_video @relation(fields: [uploaded_video_id], references: [uploaded_video_id])
 
 	spl_ownership 								spl_ownership[]
 	spl_transfer 								spl_transfer[]
@@ -203,6 +204,18 @@ model spl_transfer {
 model uploaded_image {
 	uploaded_image_id 							Int @id @default(autoincrement())
 	image_url									String
+	file_name									String
+	uuid										String
+
+	created_at    								DateTime  @default(now())
+	updated_at    								DateTime  @default(now()) @updatedAt
+
+	spl spl[]
+}
+
+model uploaded_video {
+	uploaded_video_id 							Int @id @default(autoincrement())
+	video_url									String
 	file_name									String
 	uuid										String
 

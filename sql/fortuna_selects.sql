@@ -7,6 +7,7 @@
 -- select * from spl_ownership;
 -- select * from token_account;
 -- select * from uploaded_image;
+-- select * from uploaded_video;
 
 -- To delete an spl:
 -- delete from spl_ownership;
