@@ -6,7 +6,7 @@ declare global {
 		offeringSharePriceSol: number
 		imageUrl: string
 		fileName: string
-		description?: string
+		description: string
 	}
 
 	interface NewSPLData extends SLPDataSavedToS3 {

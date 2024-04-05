@@ -104,6 +104,7 @@ model spl {
 	meta_data_address 							String  // On-chain Address of the SPL metadata
 	public_key_address							String 	// The SPL's public key address
 	listing_price_per_share_sol					Float
+	initial_creator_ownership_percentage		Float
 	total_number_of_shares						Int
 	creator_wallet_id							Int
 	uploaded_image_id							Int
@@ -117,7 +118,7 @@ model spl {
 	create_spl_metadata_payer_solana_wallet_id	Int?
 
 	spl_listing_status 							SPLListingStatus
-	description  								String?   // Description of the SPL
+	description  								String   // Description of the SPL
 
 	created_at    								DateTime  @default(now())
 	updated_at    								DateTime  @default(now()) @updatedAt
