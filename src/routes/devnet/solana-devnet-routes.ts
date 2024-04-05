@@ -43,10 +43,6 @@ solanaDevnetRoutes.post(
 	transferSol
 )
 
-solanaDevnetRoutes.get(
-	"/get-creator-content-list",
-	attachDevnetSolanaWalletByUserId,
-	getCreatorContentList
-)
+solanaDevnetRoutes.get("/get-creator-content-list", attachDevnetSolanaWalletByUserId, getCreatorContentList)
 
 export default solanaDevnetRoutes
