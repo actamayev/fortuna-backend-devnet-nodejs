@@ -1,9 +1,9 @@
 import _ from "lodash"
 import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
+import AwsS3 from "../../../../classes/aws-s3"
 import { createS3Key } from "../../../../utils/s3/create-s3-key"
 import createSPLToken from "../../../../utils/solana/create-spl-token"
-import AwsStorageService from "../../../../classes/aws-storage-service"
 import getSolPriceInUSD from "../../../../utils/solana/get-sol-price-in-usd"
 import addSPLRecord from "../../../../utils/db-operations/spl/add-spl-record"
 import assignSPLTokenShares from "../../../../utils/solana/assign-spl-token-shares"
@@ -21,7 +21,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		const uploadJSONS3Key = createS3Key("spl-metadata", newSPLData.splName, newSPLData.uuid)
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { uuid, uploadedImageId, ...restOfNewSPLData } = newSPLData
-		const metadataJSONUrl = await AwsStorageService.getInstance().uploadJSON(restOfNewSPLData, uploadJSONS3Key)
+		const metadataJSONUrl = await AwsS3.getInstance().uploadJSON(restOfNewSPLData, uploadJSONS3Key)
 		if (metadataJSONUrl === undefined) return res.status(400).json({ message: "Unable to upload JSON" })
 
 		const createSPLResponse = await createSPLToken(metadataJSONUrl, newSPLData.splName, solPriceInUSD)
@@ -42,7 +42,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		)
 		if (newSPLId === undefined) return res.status(400).json({ message: "Unable to save SPL to DB" })
 
-		await AwsStorageService.getInstance().updateJSONInS3(uploadJSONS3Key, { splTokenPublicKey: createSPLResponse.mint.toString()})
+		await AwsS3.getInstance().updateJSONInS3(uploadJSONS3Key, { splTokenPublicKey: createSPLResponse.mint.toString()})
 
 		const creatorPublicKey = new PublicKey(solanaWallet.public_key)
 		const assignSPLTokenSharesResponse = await assignSPLTokenShares(

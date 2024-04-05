@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { Request, Response } from "express"
-import AwsStorageService from "../../classes/aws-storage-service"
+import AwsS3 from "../../classes/aws-s3"
 import { createS3Key } from "../../utils/s3/create-s3-key"
 import addUploadImageRecord from "../../utils/db-operations/upload/add-upload-image-record"
 
@@ -13,7 +13,7 @@ export default async function uploadImageToS3 (req: Request, res: Response): Pro
 		const uuid = req.body.uuid
 
 		const uploadImageToS3Key = createS3Key("uploaded-images", fileName, uuid)
-		const imageUploadUrl = await AwsStorageService.getInstance().uploadImage(fileBuffer, uploadImageToS3Key)
+		const imageUploadUrl = await AwsS3.getInstance().uploadImage(fileBuffer, uploadImageToS3Key)
 		if (imageUploadUrl === undefined) return res.status(400).json({ message: "Unable to Save Image" })
 
 		const uploadedImageId = await addUploadImageRecord(imageUploadUrl, fileName, uuid)

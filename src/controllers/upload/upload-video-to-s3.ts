@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { Request, Response } from "express"
-import AwsStorageService from "../../classes/aws-storage-service"
+import AwsS3 from "../../classes/aws-s3"
 import { createS3KeyGenerateUUID } from "../../utils/s3/create-s3-key"
 import addUploadVideoRecord from "../../utils/db-operations/upload/add-upload-video-record"
 
@@ -12,7 +12,7 @@ export default async function uploadVideoToS3 (req: Request, res: Response): Pro
 		const fileName = req.file.originalname
 
 		const uploadVideoToS3KeyAndUUID = createS3KeyGenerateUUID("uploaded-videos", fileName)
-		const videoUploadUrl = await AwsStorageService.getInstance().uploadVideo(fileBuffer, uploadVideoToS3KeyAndUUID.key)
+		const videoUploadUrl = await AwsS3.getInstance().uploadVideo(fileBuffer, uploadVideoToS3KeyAndUUID.key)
 		if (_.isUndefined(videoUploadUrl)) return res.status(400).json({ message: "Unable to Save Video" })
 
 		const uploadedVideoId = await addUploadVideoRecord(videoUploadUrl, fileName, uploadVideoToS3KeyAndUUID.uuid)

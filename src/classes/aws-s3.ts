@@ -1,8 +1,8 @@
 import _ from "lodash"
 import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
 
-export default class AwsStorageService {
-	private static instance: AwsStorageService | null = null
+export default class AwsS3 {
+	private static instance: AwsS3 | null = null
 	private s3: S3Client
 
 	private constructor() {
@@ -16,11 +16,11 @@ export default class AwsStorageService {
 		})
 	}
 
-	public static getInstance(): AwsStorageService {
-		if (_.isNull(AwsStorageService.instance)) {
-			AwsStorageService.instance = new AwsStorageService()
+	public static getInstance(): AwsS3 {
+		if (_.isNull(AwsS3.instance)) {
+			AwsS3.instance = new AwsS3()
 		}
-		return AwsStorageService.instance
+		return AwsS3.instance
 	}
 
 	public async uploadJSON(jsonData: SLPDataSavedToS3, key: string): Promise<string | void> {
