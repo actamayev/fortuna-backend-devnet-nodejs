@@ -27,7 +27,7 @@ export default class AwsStorageService {
 		const jsonBuffer = Buffer.from(JSON.stringify(jsonData))
 
 		const command = new PutObjectCommand({
-			Bucket: process.env.AWS_S3_BUCKET_NAME,
+			Bucket: process.env.DEVNET_S3_BUCKET,
 			Key: key,
 			Body: jsonBuffer,
 			ContentType: "application/json",
@@ -35,7 +35,7 @@ export default class AwsStorageService {
 
 		try {
 			await this.s3.send(command)
-			const url = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
+			const url = `https://${process.env.DEVNET_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
 			return url
 		} catch (error) {
 			console.error("Error uploading JSON to S3:", error)
@@ -46,7 +46,7 @@ export default class AwsStorageService {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private async getJSONFromS3(key: string): Promise<any> {
 		const command = new GetObjectCommand({
-			Bucket: process.env.AWS_S3_BUCKET_NAME,
+			Bucket: process.env.DEVNET_S3_BUCKET,
 			Key: key,
 		})
 
@@ -67,7 +67,7 @@ export default class AwsStorageService {
 			const updatedData = { ...currentData, ...updates }
 
 			const command = new PutObjectCommand({
-				Bucket: process.env.AWS_S3_BUCKET_NAME,
+				Bucket: process.env.DEVNET_S3_BUCKET,
 				Key: key,
 				Body: JSON.stringify(updatedData),
 				ContentType: "application/json",
@@ -80,20 +80,38 @@ export default class AwsStorageService {
 		}
 	}
 
-	public async uploadImage(fileBuffer: Buffer, key: string): Promise<string | void> {
+	public async uploadImage(fileBuffer: Buffer, key: string): Promise<string | undefined> {
+		try {
+			return await this.uploadFile(fileBuffer, key, "image/jpeg")
+		} catch (error) {
+			console.error(error)
+			throw error
+		}
+	}
+
+	public async uploadVideo(fileBuffer: Buffer, key: string): Promise<string | undefined> {
+		try {
+			return await this.uploadFile(fileBuffer, key, "video/mp4")
+		} catch (error) {
+			console.error(error)
+			throw error
+		}
+	}
+
+	private async uploadFile(fileBuffer: Buffer, key: string, contentType: string): Promise<string> {
 		const command = new PutObjectCommand({
-			Bucket: process.env.AWS_S3_BUCKET_NAME,
+			Bucket: process.env.DEVNET_S3_BUCKET,
 			Key: key,
 			Body: fileBuffer,
-			ContentType: "image/jpeg",
+			ContentType: contentType,
 		})
 
 		try {
 			await this.s3.send(command)
-			const url = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
+			const url = `https://${process.env.DEVNET_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
 			return url
 		} catch (error) {
-			console.error("Error uploading image to S3:", error)
+			console.error("Error uploading file to S3:", error)
 			throw error
 		}
 	}

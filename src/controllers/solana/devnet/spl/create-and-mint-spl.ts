@@ -18,7 +18,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		const solPriceInUSD = await getSolPriceInUSD()
 		if (_.isNull(solPriceInUSD)) return res.status(400).json({ message: "Unable to retrieve Sol Price" })
 
-		const uploadJSONS3Key = createS3Key("spl-metadata", newSPLData.fileName, newSPLData.uuid)
+		const uploadJSONS3Key = createS3Key("spl-metadata", newSPLData.splName, newSPLData.uuid)
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { uuid, uploadedImageId, ...restOfNewSPLData } = newSPLData
 		const metadataJSONUrl = await AwsStorageService.getInstance().uploadJSON(restOfNewSPLData, uploadJSONS3Key)

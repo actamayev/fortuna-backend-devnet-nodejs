@@ -5,13 +5,14 @@ declare global {
 		creatorOwnershipPercentage: number
 		offeringSharePriceSol: number
 		imageUrl: string
-		fileName: string
+		videoUrl: string
 		description: string
 	}
 
 	interface NewSPLData extends SLPDataSavedToS3 {
 		uuid: string
 		uploadedImageId: number
+		uploadedVideoId: number
 	}
 }
 
