@@ -10,6 +10,9 @@ export default async function getCreatorContentList(req: Request, res: Response)
 			where: {
 				creator_wallet_id: solanaWallet.solana_wallet_id
 			},
+			orderBy: {
+				created_at: "desc"
+			},
 			select: {
 				spl_id: true,
 				spl_name: true,
@@ -28,7 +31,7 @@ export default async function getCreatorContentList(req: Request, res: Response)
 					}
 				},
 				public_key_address: true
-			}
+			},
 		})
 
 		const creatorContentList = transformCreatorContentList(creatorSPLData)
