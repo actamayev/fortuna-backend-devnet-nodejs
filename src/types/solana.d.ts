@@ -9,7 +9,7 @@ declare global {
 		description: string
 	}
 
-	interface NewSPLData extends SLPDataSavedToS3 {
+	interface IncomingNewSPLData extends SLPDataSavedToS3 {
 		uuid: string
 		uploadedImageId: number
 		uploadedVideoId: number

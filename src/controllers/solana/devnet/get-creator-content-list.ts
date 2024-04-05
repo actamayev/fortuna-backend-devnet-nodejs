@@ -31,7 +31,7 @@ export default async function getCreatorContentList(req: Request, res: Response)
 					}
 				},
 				public_key_address: true
-			},
+			}
 		})
 
 		const creatorContentList = transformCreatorContentList(creatorSPLData)

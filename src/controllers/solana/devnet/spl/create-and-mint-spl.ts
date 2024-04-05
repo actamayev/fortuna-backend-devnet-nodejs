@@ -13,7 +13,7 @@ import { findSolanaWalletByPublicKey } from "../../../../utils/find/find-solana-
 export default async function createAndMintSPL (req: Request, res: Response): Promise<Response> {
 	try {
 		const solanaWallet = req.solanaWallet
-		const newSPLData = req.body.newSPLData as NewSPLData
+		const newSPLData = req.body.newSPLData as IncomingNewSPLData
 
 		const solPriceInUSD = await getSolPriceInUSD()
 		if (_.isNull(solPriceInUSD)) return res.status(400).json({ message: "Unable to retrieve Sol Price" })

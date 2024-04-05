@@ -3,7 +3,7 @@ import prismaClient from "../../../prisma-client"
 
 export default async function addSPLRecord (
 	metadataJSONUrl: string,
-	newSPLData: NewSPLData,
+	newSPLData: IncomingNewSPLData,
 	createSPLResponse: { mint: PublicKey, metadataTransactionSignature: string, feeInSol: number },
 	creatorWalletId: number,
 	fortunaWalletId: number,

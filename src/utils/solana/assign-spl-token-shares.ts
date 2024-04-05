@@ -11,7 +11,7 @@ import getFortunaSolanaWalletFromSecretKey from "./get-fortuna-solana-wallet-fro
 export default async function assignSPLTokenShares (
 	splTokenPublicKey: PublicKey,
 	creatorPublicKey: PublicKey,
-	uploadSplData: NewSPLData,
+	uploadSplData: IncomingNewSPLData,
 	splId: number,
 	creatorWalletId: number,
 	fortunaWalletId: number,
