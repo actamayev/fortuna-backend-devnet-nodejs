@@ -7,6 +7,7 @@ export default async function getDevnetSolanaWalletBalance(req: Request, res: Re
 	try {
 		const solanaWallet = req.solanaWallet
 		const solPriceInUSD = await getSolPriceInUSD()
+		const solPriceRetrievedTime = new Date()
 		if (_.isNull(solPriceInUSD)) return res.status(400).json({ message: "Cannot retrieve Sol-USD conversion" })
 
 		const walletBalanceInfo = await getWalletBalance("devnet", solanaWallet.public_key, solPriceInUSD)
@@ -15,7 +16,8 @@ export default async function getDevnetSolanaWalletBalance(req: Request, res: Re
 		return res.status(200).json({
 			balanceInSol: walletBalanceInfo.balanceInSol,
 			balanceInUsd: walletBalanceInfo.balanceInUsd,
-			solPriceInUSD
+			solPriceInUSD,
+			solPriceRetrievedTime
 		})
 	} catch (error) {
 		console.error(error)
