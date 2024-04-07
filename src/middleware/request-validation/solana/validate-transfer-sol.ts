@@ -8,7 +8,7 @@ import { findPublicKeyFromUsername } from "../../../utils/db-operations/read/fin
 const transferSolSchema = Joi.object({
 	transferSolData: Joi.object({
 		sendingTo: Joi.string().required(),
-		sendingToPublicKeyOrUsername: Joi.string().required().valid("public key", "username"),
+		sendingToPublicKeyOrUsername: Joi.string().required().valid("publicKey", "username"),
 		transferAmountSol: Joi.number().strict().required()
 	}).required()
 }).required()
@@ -21,7 +21,7 @@ export default async function validateTransferSol (req: Request, res: Response, 
 		const transferSolData = req.body.transferSolData as TransferSolData
 
 		let publicKey
-		if (_.isEqual(transferSolData.sendingToPublicKeyOrUsername, "public key")) {
+		if (_.isEqual(transferSolData.sendingToPublicKeyOrUsername, "publicKey")) {
 			const isPKValid = isPublicKeyValid(transferSolData.sendingTo)
 			if (isPKValid === false) return res.status(400).json({ validationError: "Public Key is not Valid" })
 			publicKey = new PublicKey(transferSolData.sendingTo)

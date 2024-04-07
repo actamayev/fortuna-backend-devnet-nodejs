@@ -41,7 +41,7 @@ declare global {
 
 	interface TransferSolData {
 		sendingTo: string
-		sendingToPublicKeyOrUsername: "public key" | "username"
+		sendingToPublicKeyOrUsername: "publicKey" | "username"
 		transferAmountSol: number
 	}
 }

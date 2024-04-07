@@ -5,7 +5,7 @@ import checkIfPublicKeyRegisteredWithFortuna from "../../../utils/db-operations/
 export default async function checkIfPublicKeyPartOfFortuna (req: Request, res: Response, next: NextFunction): Promise<void | Response> {
 	try {
 		const transferSolData = req.body.transferSolData as TransferSolData
-		if (!_.isEqual(transferSolData.sendingToPublicKeyOrUsername, "public key")) {
+		if (!_.isEqual(transferSolData.sendingToPublicKeyOrUsername, "publicKey")) {
 			next()
 			return
 		}
