@@ -26,21 +26,19 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			})
 		)
 
-		console.log("to public key", toPublicKey)
-		console.log("isRecipientFortunaUser",isRecipientFortunaUser)
-		// let keypair: Keypair
-		// if (isRecipientFortunaUser === true) {
-		// 	const fortunaSecretKey = bs58.decode(process.env.FORTUNA_WALLET_SECRET_KEY)
-		// 	keypair = Keypair.fromSecretKey(fortunaSecretKey)
-		// } else {
+		const keypairs: Keypair[] = []
 		const senderSecretKey = bs58.decode(solanaWallet.secret_key)
-		const keypair = Keypair.fromSecretKey(senderSecretKey)
-		// }
+		const senderKeypair = Keypair.fromSecretKey(senderSecretKey)
+		keypairs.push(senderKeypair)
+		if (isRecipientFortunaUser === true) {
+			const fortunaSecretKey = bs58.decode(process.env.FORTUNA_WALLET_SECRET_KEY)
+			const fortunaKeypair = Keypair.fromSecretKey(fortunaSecretKey)
+			keypairs.unshift(fortunaKeypair)
+		}
 		const solPriceInUSD = await getSolPriceInUSD()
 
 		if (_.isNull(solPriceInUSD)) return res.status(500).json({ error: "Internal Server Error: Unable to retrieve last Sol Price" })
-		console.log(keypair)
-		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, [ keypair ])
+		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature, "devnet")
 		if (transactionFeeInSol === undefined) {
 			return res.status(500).json({ error: "Internal Server Error: Unable to determine transaction fee" })
