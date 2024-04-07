@@ -1,5 +1,5 @@
 import { PublicKey } from "@solana/web3.js"
-import prismaClient from "../../prisma-client"
+import prismaClient from "../../../../prisma-client"
 
 export default async function addTokenAccountRecord (
 	splId: number,

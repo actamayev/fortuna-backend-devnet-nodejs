@@ -1,4 +1,4 @@
-import prismaClient from "../../../prisma-client"
+import prismaClient from "../../../../prisma-client"
 
 // eslint-disable-next-line max-params
 export default async function addSPLMintRecord (

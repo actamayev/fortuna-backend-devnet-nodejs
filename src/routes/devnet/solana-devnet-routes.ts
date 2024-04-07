@@ -15,6 +15,7 @@ import attachDevnetSolanaWalletByUserId from "../../middleware/attach/attach-dev
 import validateCreateAndMintSPL from "../../middleware/request-validation/solana/validate-create-and-mint-spl"
 import validateTransactionSignatures from "../../middleware/request-validation/solana/validate-transaction-signatures"
 import confirmUserHasEnoughDevnetSolToTransfer from "../../middleware/solana/confirm-user-has-enough-devnet-sol-to-transfer"
+import checkIfPublicKeyPartOfFortuna from "../../middleware/request-validation/solana/check-if-public-key-part-of-fortuna"
 
 const solanaDevnetRoutes = express.Router()
 
@@ -36,9 +37,10 @@ solanaDevnetRoutes.post("/get-transaction-details", validateTransactionSignature
 solanaDevnetRoutes.post(
 	"/transfer-sol",
 	validateTransferSol,
+	checkIfPublicKeyPartOfFortuna,
+	confirmPublicKeyExists,
 	attachDevnetSolanaWalletByUserId,
 	confirmNotSendingSolToSelf,
-	confirmPublicKeyExists,
 	confirmUserHasEnoughDevnetSolToTransfer,
 	transferSol
 )

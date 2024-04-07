@@ -1,8 +1,8 @@
 import { mintTo } from "@solana/spl-token"
 import { Connection, Keypair, PublicKey } from "@solana/web3.js"
 import calculateTransactionFee from "./calculate-transaction-fee"
-import addSPLMintRecord from "../db-operations/spl/add-spl-mint-record"
-import addSPLOwnershipRecord from "../db-operations/spl/add-spl-ownership-record"
+import addSPLMintRecord from "../db-operations/write/spl/add-spl-mint-record"
+import addSPLOwnershipRecord from "../db-operations/write/spl/add-spl-ownership-record"
 
 // This function is responsible for minting to an account, adding a mint record to DB, and adding a mint ownership record to DB
 // eslint-disable-next-line max-params, max-lines-per-function

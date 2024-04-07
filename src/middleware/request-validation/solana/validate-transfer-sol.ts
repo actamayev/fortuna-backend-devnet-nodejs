@@ -2,24 +2,37 @@ import Joi from "joi"
 import _ from "lodash"
 import { PublicKey } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
-import publicKeyValidator from "../../joi/public-key-validator"
+import isPublicKeyValid from "../../../utils/solana/is-public-key-valid"
+import { findPublicKeyFromUsername } from "../../../utils/db-operations/read/find/find-public-key-from-username"
 
 const transferSolSchema = Joi.object({
-	transferData: Joi.object({
-		recipientPublicKey: publicKeyValidator.required(),
+	transferSolData: Joi.object({
+		sendingTo: Joi.string().required(),
+		sendingToPublicKeyOrUsername: Joi.string().required().valid("public key", "username"),
 		transferAmountSol: Joi.number().strict().required()
 	}).required()
 }).required()
 
-export default function validateTransferSol (req: Request, res: Response, next: NextFunction): void | Response {
+export default async function validateTransferSol (req: Request, res: Response, next: NextFunction): Promise<void | Response> {
 	try {
 		const { error } = transferSolSchema.validate(req.body)
 
 		if (!_.isUndefined(error)) return res.status(400).json({ validationError: error.details[0].message })
+		const transferSolData = req.body.transferSolData as TransferSolData
 
-		const publicKey = new PublicKey(req.body.transferData.recipientPublicKey)
+		let publicKey
+		if (_.isEqual(transferSolData.sendingToPublicKeyOrUsername, "public key")) {
+			const isPKValid = isPublicKeyValid(transferSolData.sendingTo)
+			if (isPKValid === false) return res.status(400).json({ validationError: "Public Key is not Valid" })
+			publicKey = new PublicKey(transferSolData.sendingTo)
+		} else {
+			const recipientUserPublicKey = await findPublicKeyFromUsername(transferSolData.sendingTo)
+			if (_.isNull(recipientUserPublicKey)) return res.status(400).json({ validationError: "Unable to find Username" })
+			req.isRecipientFortunaUser = true
+			publicKey = new PublicKey(recipientUserPublicKey)
+		}
+
 		req.publicKey = publicKey
-
 		next()
 	} catch (error) {
 		console.error(error)

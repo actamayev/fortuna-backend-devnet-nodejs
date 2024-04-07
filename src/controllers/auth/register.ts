@@ -3,22 +3,23 @@ import Hash from "../../classes/hash"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
 import { addLocalUser } from "../../utils/auth-helpers/register/add-local-user"
 import createDevnetSolanaWallet from "../../utils/solana/create-devnet-solana-wallet"
-import doesContactExist from "../../utils/auth-helpers/does-x-exist/does-contact-exist"
+import doesContactExist from "../../utils/db-operations/read/does-x-exist/does-contact-exist"
 import determineContactType from "../../utils/auth-helpers/login/determine-contact-type"
-import doesUsernameExist from "../../utils/auth-helpers/does-x-exist/does-username-exist"
-import addLoginHistoryRecord from "../../utils/db-operations/auth/add-login-history-record"
+import doesUsernameExist from "../../utils/db-operations/read/does-x-exist/does-username-exist"
+import addLoginHistoryRecord from "../../utils/db-operations/write/login-history/add-login-history-record"
 
 export default async function register (req: Request, res: Response): Promise<Response> {
 	try {
 		const { contact, username, password } = req.body.registerInformation as RegisterInformation
 		const contactType = determineContactType(contact)
 
-		if (contactType === "Username") return res.status(400).json({ message: "Please enter a valid Email or Phone Bumber" })
+		if (contactType === "Username") return res.status(400).json({ message: "Please enter a valid Email or Phone Number" })
 
 		const contactExists = await doesContactExist(contact, contactType)
 		if (contactExists === true) return res.status(400).json({ message: `${contactType} already exists` })
 
 		const usernameExists = await doesUsernameExist(username)
+		if (usernameExists === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Check if username exists"})
 		if (usernameExists === true) return res.status(400).json({ message: "Username taken" })
 
 		const hashedPassword = await Hash.hashCredentials(password)

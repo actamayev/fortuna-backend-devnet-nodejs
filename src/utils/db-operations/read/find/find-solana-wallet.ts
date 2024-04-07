@@ -1,5 +1,5 @@
 import { solana_wallet, network_type } from "@prisma/client"
-import prismaClient from "../../prisma-client"
+import prismaClient from "../../../../prisma-client"
 
 export async function findSolanaWalletByUserId(
 	userId: number,

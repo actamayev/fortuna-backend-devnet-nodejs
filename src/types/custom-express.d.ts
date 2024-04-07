@@ -7,6 +7,8 @@ declare global {
 			user: credentials
 			solanaWallet: solana_wallet
 			publicKey: PublicKey
+
+			isRecipientFortunaUser: boolean
 		}
 	}
 }

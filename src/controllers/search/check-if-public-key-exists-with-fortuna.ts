@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import checkIfPublicKeyRegisteredWithFortuna from "../../utils/db-operations/search/check-if-public-key-registered-with-fortuna"
+import checkIfPublicKeyRegisteredWithFortuna from "../../utils/db-operations/read/search/check-if-public-key-registered-with-fortuna"
 
 export default async function checkIfPublicKeyExistsWithFortuna(req: Request, res: Response): Promise<Response> {
 	try {

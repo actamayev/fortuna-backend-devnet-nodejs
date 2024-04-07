@@ -38,6 +38,12 @@ declare global {
 		videoUrl: string
 		mintAddress: string
 	}
+
+	interface TransferSolData {
+		sendingTo: string
+		sendingToPublicKeyOrUsername: "public key" | "username"
+		transferAmountSol: number
+	}
 }
 
 export {}

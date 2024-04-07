@@ -55,8 +55,10 @@ model solana_wallet {
 	spl_creator_wallet							spl[] @relation("spl_creator_wallet")
 	spl_transfer_payer_wallet					spl_transfer[] @relation("spl_transfer_payer_wallet")
 	spl_mint_payer_wallet						spl_mint[] @relation("spl_mint_payer_wallet")
-	payer_solana_wallet							token_account[] @relation("payer_solana_wallet")
-	parent_solana_wallet						token_account[] @relation("parent_solana_wallet")
+	token_account_payer_solana_wallet			token_account[] @relation("payer_solana_wallet")
+	token_accountparent_solana_wallet			token_account[] @relation("parent_solana_wallet")
+	sol_transfer_sender_solana_wallet			sol_transfer[] @relation("sender_solana_wallet")
+	sol_transfer_payer_solana_wallet			sol_transfer[] @relation("payer_solana_wallet")
 
 	@@index([user_id], name: "solana_wallet__user_id_idx")
 	@@unique([user_id, network_type])
@@ -66,7 +68,7 @@ model token_account {
 	token_account_id 							Int  @id @default(autoincrement())
 	spl_id										Int
 	parent_solana_wallet_id						Int
-	public_key									String
+	public_key									String       @db.VarChar(255)
 	token_account_creation_fee_sol 				Float
 	token_account_creation_fee_usd 				Float
 	payer_solana_wallet_id						Int
@@ -223,4 +225,29 @@ model uploaded_video {
 	updated_at    								DateTime  @default(now()) @updatedAt
 
 	spl spl[]
+}
+
+model sol_transfer {
+	sol_transfer_id								Int @id @default(autoincrement())
+	recipient_public_key						String       @db.VarChar(255)
+	is_recipient_fortuna_user					Boolean
+	transaction_signature						String
+
+	sol_transferred								Float
+	usd_transferred								Float
+
+	transfer_fee_sol							Float
+	transfer_fee_usd							Float
+
+	sender_wallet_id							Int
+	payer_solana_wallet_id						Int
+
+	created_at    								DateTime  @default(now())
+	updated_at    								DateTime  @default(now()) @updatedAt
+
+	sender_solana_wallet						solana_wallet @relation(name: "sender_solana_wallet", fields: [sender_wallet_id], references: [solana_wallet_id])
+	payer_solana_wallet							solana_wallet @relation(name: "payer_solana_wallet", fields: [payer_solana_wallet_id], references: [solana_wallet_id])
+
+	@@index([sender_wallet_id], name: "sol_transfer__parent_solana_wallet_id_idx")
+	@@index([payer_solana_wallet_id], name: "sol_transfer__payer_solana_wallet_id_idx")
 }
