@@ -232,7 +232,7 @@ model sol_transfer {
 	sol_transfer_id								Int @id @default(autoincrement())
 	recipient_public_key						String       @db.VarChar(255)
 	recipient_solana_wallet_id					Int?
-	is_recipient_fortuna_user					Boolean
+	is_recipient_fortuna_wallet					Boolean
 	transaction_signature						String
 
 	sol_transferred								Float

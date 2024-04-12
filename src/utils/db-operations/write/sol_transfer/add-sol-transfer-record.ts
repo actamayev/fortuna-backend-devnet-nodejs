@@ -3,7 +3,7 @@ import prismaClient from "../../../../prisma-client"
 // eslint-disable-next-line max-params
 export default async function addSolTransferRecord (
 	recipientPublicKey: string,
-	isRecipientFortunaUser: boolean,
+	isRecipientFortunaWallet: boolean,
 	transactionSignature: string,
 	transferData: TransferSolData,
 	transferFeeSol: number,
@@ -15,7 +15,7 @@ export default async function addSolTransferRecord (
 	try {
 		const solTransferData = {
 			recipient_public_key: recipientPublicKey,
-			is_recipient_fortuna_user: isRecipientFortunaUser,
+			is_recipient_fortuna_wallet: isRecipientFortunaWallet,
 			recipient_solana_wallet_id: recipientSolanaWalletId,
 			transaction_signature: transactionSignature,
 			sol_transferred: transferData.transferAmountSol,

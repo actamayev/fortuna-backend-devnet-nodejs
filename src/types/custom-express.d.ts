@@ -8,7 +8,7 @@ declare global {
 			solanaWallet: solana_wallet
 			publicKey: PublicKey
 
-			isRecipientFortunaUser: boolean
+			isRecipientFortunaWallet: boolean
 			recipientSolanaWalletId: number | undefined
 		}
 	}

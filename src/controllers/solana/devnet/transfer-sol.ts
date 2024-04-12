@@ -14,7 +14,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const solanaWallet = req.solanaWallet
 		const transferData = req.body.transferSolData as TransferSolData
 		const toPublicKey = req.publicKey
-		const isRecipientFortunaUser = req.isRecipientFortunaUser
+		const isRecipientFortunaWallet = req.isRecipientFortunaWallet
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const transaction = new Transaction()
 		const recipientSolanaWalletId = req.recipientSolanaWalletId
@@ -32,7 +32,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const senderSecretKey = bs58.decode(solanaWallet.secret_key)
 		const senderKeypair = Keypair.fromSecretKey(senderSecretKey)
 		keypairs.push(senderKeypair)
-		if (isRecipientFortunaUser === true) {
+		if (isRecipientFortunaWallet === true) {
 			const fortunaSecretKey = bs58.decode(process.env.FORTUNA_WALLET_SECRET_KEY)
 			const fortunaKeypair = Keypair.fromSecretKey(fortunaSecretKey)
 			keypairs.unshift(fortunaKeypair)
@@ -46,7 +46,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			return res.status(500).json({ error: "Internal Server Error: Unable to determine transaction fee" })
 		}
 		let payerSolanaWalletId
-		if (isRecipientFortunaUser === true) {
+		if (isRecipientFortunaWallet === true) {
 			const fortunaSolanaWallet = await findSolanaWalletByPublicKey(process.env.FORTUNA_WALLET_PUBLIC_KEY, "devnet")
 			if (_.isNull(fortunaSolanaWallet) || fortunaSolanaWallet === undefined) {
 				return res.status(500).json({ error: "Unable to find Fortuna Solana Wallet Details" })
@@ -58,7 +58,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 
 		await addSolTransferRecord(
 			toPublicKey.toString(),
-			isRecipientFortunaUser,
+			isRecipientFortunaWallet,
 			transactionSignature,
 			transferData,
 			transactionFeeInSol,

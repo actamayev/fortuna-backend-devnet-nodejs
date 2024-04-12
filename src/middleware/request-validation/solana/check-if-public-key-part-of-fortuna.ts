@@ -9,7 +9,7 @@ export default async function checkIfPublicKeyPartOfFortuna (req: Request, res: 
 		if (receipientSolanaWallet === undefined) return res.status(500).json({
 			error: "Internal Server Error: Unable to check if public key registered with Fortuna"
 		})
-		req.isRecipientFortunaUser = !_.isNull(receipientSolanaWallet)
+		req.isRecipientFortunaWallet = !_.isNull(receipientSolanaWallet)
 		req.recipientSolanaWalletId = receipientSolanaWallet?.solana_wallet_id
 		next()
 	} catch (error) {

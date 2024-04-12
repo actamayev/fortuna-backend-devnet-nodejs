@@ -46,8 +46,8 @@ declare global {
 
 	interface RetrievedDBTransactionListData {
 		sol_transfer_id: number
-		recipient_public_key: string
-		is_recipient_fortuna_user: boolean
+		recipient_public_key?: string
+		is_recipient_fortuna_wallet: boolean
 
 		sol_transferred: number
 		usd_transferred: number
@@ -56,16 +56,17 @@ declare global {
 		transfer_fee_usd: number
 
 		created_at: Date
-		username?: string | null
+		username?: string
 	}
 
 	interface OutputTransactionData {
 		solTransferId: number
 		solTransferred: number
 		usdTransferred: number
+		outgoingOrIncoming: "outgoing" | "incoming"
 
 		transferDateTime: Date
-		transferToUsername?: string | null
+		transferToUsername?: string
 		transferToPublicKey?: string
 		transferFeeSol?: number
 		transferFeeUsd?: number

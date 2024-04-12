@@ -9,14 +9,14 @@ export default async function confirmUserHasEnoughDevnetSolToTransfer(
 	try {
 		const solanaWallet = req.solanaWallet
 		const transferData = req.body.transferSolData as TransferSolData
-		const isRecipientFortunaUser = req.isRecipientFortunaUser
+		const isRecipientFortunaWallet = req.isRecipientFortunaWallet
 
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const publicKey = new PublicKey(solanaWallet.public_key)
 
 		const balanceInLamports = await connection.getBalance(publicKey)
 		const balanceInSol = balanceInLamports / LAMPORTS_PER_SOL
-		if (isRecipientFortunaUser === true) {
+		if (isRecipientFortunaWallet === true) {
 			if (balanceInSol < transferData.transferAmountSol) {
 				return res.status(400).json({ message: "User does not have enough sol to complete the transfer" })
 			}

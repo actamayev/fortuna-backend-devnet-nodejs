@@ -1,8 +1,8 @@
 import prismaClient from "../../../../prisma-client"
 
-export default async function retrieveTransactionsList(solanaWalletId: number): Promise<RetrievedDBTransactionListData[] | void> {
+export default async function retrieveOutgoingTransactionsList(solanaWalletId: number): Promise<RetrievedDBTransactionListData[] | void> {
 	try {
-		const transactionsList = await prismaClient.sol_transfer.findMany({
+		const outgoingTransactionsList = await prismaClient.sol_transfer.findMany({
 			where: {
 				sender_solana_wallet_id: solanaWalletId
 			},
@@ -12,7 +12,7 @@ export default async function retrieveTransactionsList(solanaWalletId: number): 
 			select: {
 				sol_transfer_id: true,
 				recipient_public_key: true,
-				is_recipient_fortuna_user: true,
+				is_recipient_fortuna_wallet: true,
 				sol_transferred: true,
 				usd_transferred: true,
 				transfer_fee_sol: true,
@@ -30,9 +30,10 @@ export default async function retrieveTransactionsList(solanaWalletId: number): 
 			}
 		})
 
-		return transactionsList.map(transaction => ({
+		return outgoingTransactionsList.map(transaction => ({
 			...transaction,
-			username: transaction.is_recipient_fortuna_user ? transaction.recipient_solana_wallet?.user.username : null
+			recipient_public_key: transaction.is_recipient_fortuna_wallet ? undefined : transaction.recipient_public_key,
+			username: transaction.is_recipient_fortuna_wallet ? transaction.recipient_solana_wallet?.user.username : undefined
 		}))
 	} catch (error) {
 		console.error(error)

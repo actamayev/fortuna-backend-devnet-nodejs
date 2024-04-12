@@ -20,7 +20,7 @@ export default async function validateTransferSolToUsername (req: Request, res: 
 
 		const recipientUserPublicKeyAndWalletId = await findPublicKeyFromUsername(transferSolData.sendingTo)
 		if (_.isNull(recipientUserPublicKeyAndWalletId)) return res.status(400).json({ validationError: "Unable to find Username" })
-		req.isRecipientFortunaUser = true
+		req.isRecipientFortunaWallet = true
 		req.recipientSolanaWalletId = recipientUserPublicKeyAndWalletId.solana_wallet_id
 		const publicKey = new PublicKey(recipientUserPublicKeyAndWalletId.public_key)
 
