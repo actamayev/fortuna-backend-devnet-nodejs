@@ -1,13 +1,13 @@
 import _ from "lodash"
 import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
-import AwsS3 from "../../../../classes/aws-s3"
-import { createS3Key } from "../../../../utils/s3/create-s3-key"
-import createSPLToken from "../../../../utils/solana/create-spl-token"
-import getSolPriceInUSD from "../../../../utils/solana/get-sol-price-in-usd"
-import addSPLRecord from "../../../../utils/db-operations/write/spl/add-spl-record"
-import assignSPLTokenShares from "../../../../utils/solana/assign-spl-token-shares"
-import { findSolanaWalletByPublicKey } from "../../../../utils/db-operations/read/find/find-solana-wallet"
+import AwsS3 from "../../../classes/aws-s3"
+import { createS3Key } from "../../../utils/s3/create-s3-key"
+import createSPLToken from "../../../utils/solana/create-spl-token"
+import getSolPriceInUSD from "../../../utils/solana/get-sol-price-in-usd"
+import addSPLRecord from "../../../utils/db-operations/write/spl/add-spl-record"
+import assignSPLTokenShares from "../../../utils/solana/assign-spl-token-shares"
+import { findSolanaWalletByPublicKey } from "../../../utils/db-operations/read/find/find-solana-wallet"
 
 // eslint-disable-next-line complexity, max-lines-per-function
 export default async function createAndMintSPL (req: Request, res: Response): Promise<Response> {

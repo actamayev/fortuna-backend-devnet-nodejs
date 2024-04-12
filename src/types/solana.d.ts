@@ -41,8 +41,34 @@ declare global {
 
 	interface TransferSolData {
 		sendingTo: string
-		sendingToPublicKeyOrUsername: "publicKey" | "username"
 		transferAmountSol: number
+	}
+
+	interface RetrievedDBTransactionListData {
+		sol_transfer_id: number
+		recipient_public_key: string
+		is_recipient_fortuna_user: boolean
+
+		sol_transferred: number
+		usd_transferred: number
+
+		transfer_fee_sol: number
+		transfer_fee_usd: number
+
+		created_at: Date
+		username?: string | null
+	}
+
+	interface OutputTransactionData {
+		solTransferId: number
+		solTransferred: number
+		usdTransferred: number
+
+		transferDateTime: Date
+		transferToUsername?: string | null
+		transferToPublicKey?: string
+		transferFeeSol?: number
+		transferFeeUsd?: number
 	}
 }
 

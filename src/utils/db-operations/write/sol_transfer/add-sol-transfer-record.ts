@@ -5,25 +5,28 @@ export default async function addSolTransferRecord (
 	recipientPublicKey: string,
 	isRecipientFortunaUser: boolean,
 	transactionSignature: string,
-	solTransferred: number,
+	transferData: TransferSolData,
 	transferFeeSol: number,
 	senderWalletId: number,
 	payerSolanaWalletId: number,
+	recipientSolanaWalletId: number | undefined,
 	solPriceInUSD: number
 ): Promise<void> {
 	try {
+		const solTransferData = {
+			recipient_public_key: recipientPublicKey,
+			is_recipient_fortuna_user: isRecipientFortunaUser,
+			recipient_solana_wallet_id: recipientSolanaWalletId,
+			transaction_signature: transactionSignature,
+			sol_transferred: transferData.transferAmountSol,
+			usd_transferred: transferData.transferAmountSol * solPriceInUSD,
+			transfer_fee_sol: transferFeeSol,
+			transfer_fee_usd: transferFeeSol * solPriceInUSD,
+			sender_solana_wallet_id: senderWalletId,
+			payer_solana_wallet_id: payerSolanaWalletId
+		}
 		await prismaClient.sol_transfer.create({
-			data: {
-				recipient_public_key: recipientPublicKey,
-				is_recipient_fortuna_user: isRecipientFortunaUser,
-				transaction_signature: transactionSignature,
-				sol_transferred: solTransferred,
-				usd_transferred: solTransferred * solPriceInUSD,
-				transfer_fee_sol: transferFeeSol,
-				transfer_fee_usd: transferFeeSol * solPriceInUSD,
-				sender_wallet_id: senderWalletId,
-				payer_solana_wallet_id: payerSolanaWalletId
-			}
+			data: solTransferData
 		})
 	} catch (error) {
 		console.error(error)

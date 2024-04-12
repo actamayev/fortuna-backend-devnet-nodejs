@@ -17,6 +17,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const isRecipientFortunaUser = req.isRecipientFortunaUser
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const transaction = new Transaction()
+		const recipientSolanaWalletId = req.recipientSolanaWalletId
 
 		transaction.add(
 			SystemProgram.transfer({
@@ -25,6 +26,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 				lamports: transferData.transferAmountSol * LAMPORTS_PER_SOL
 			})
 		)
+		// TODO: Fix the double-charge problem (when having 2 signers, the fee is doubled)
 
 		const keypairs: Keypair[] = []
 		const senderSecretKey = bs58.decode(solanaWallet.secret_key)
@@ -53,14 +55,16 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		} else {
 			payerSolanaWalletId = solanaWallet.solana_wallet_id
 		}
+
 		await addSolTransferRecord(
 			toPublicKey.toString(),
 			isRecipientFortunaUser,
 			transactionSignature,
-			transferData.transferAmountSol,
+			transferData,
 			transactionFeeInSol,
 			solanaWallet.solana_wallet_id,
 			payerSolanaWalletId,
+			recipientSolanaWalletId,
 			solPriceInUSD
 		)
 

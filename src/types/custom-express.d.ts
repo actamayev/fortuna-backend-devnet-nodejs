@@ -9,6 +9,7 @@ declare global {
 			publicKey: PublicKey
 
 			isRecipientFortunaUser: boolean
+			recipientSolanaWalletId: number | undefined
 		}
 	}
 }

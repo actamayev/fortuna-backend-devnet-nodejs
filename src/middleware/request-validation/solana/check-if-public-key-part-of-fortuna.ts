@@ -1,20 +1,16 @@
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
-import checkIfPublicKeyRegisteredWithFortuna from "../../../utils/db-operations/read/search/check-if-public-key-registered-with-fortuna"
+import { findSolanaWalletByPublicKey } from "../../../utils/db-operations/read/find/find-solana-wallet"
 
 export default async function checkIfPublicKeyPartOfFortuna (req: Request, res: Response, next: NextFunction): Promise<void | Response> {
 	try {
-		const transferSolData = req.body.transferSolData as TransferSolData
-		if (!_.isEqual(transferSolData.sendingToPublicKeyOrUsername, "publicKey")) {
-			next()
-			return
-		}
 		const publicKey = req.publicKey
-		const isPKRegisteredWithFortuna = await checkIfPublicKeyRegisteredWithFortuna(publicKey.toString())
-		if (isPKRegisteredWithFortuna === undefined) return res.status(500).json({
+		const receipientSolanaWallet = await findSolanaWalletByPublicKey(publicKey.toString(), "devnet")
+		if (receipientSolanaWallet === undefined) return res.status(500).json({
 			error: "Internal Server Error: Unable to check if public key registered with Fortuna"
 		})
-		req.isRecipientFortunaUser = isPKRegisteredWithFortuna
+		req.isRecipientFortunaUser = !_.isNull(receipientSolanaWallet)
+		req.recipientSolanaWalletId = receipientSolanaWallet?.solana_wallet_id
 		next()
 	} catch (error) {
 		console.error(error)
