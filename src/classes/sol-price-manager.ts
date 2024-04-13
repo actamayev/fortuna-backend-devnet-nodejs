@@ -20,7 +20,6 @@ export default class SolPriceManager {
 		try {
 			const response = await fetch(url)
 			const data = await response.json()
-			console.log(data)
 			return data.solana.usd
 		} catch (error) {
 			console.error("Error fetching SOL price:", error)
@@ -28,11 +27,10 @@ export default class SolPriceManager {
 		}
 	}
 
-	// TODO: Check the coin gecko api. how often am i allowed to request the price?
 	public async getPrice(): Promise<number | null> {
 		const currentTime = Date.now()
 		// Check if the last fetched time is more than 1 minute ago
-		if (this.lastFetchedTime < currentTime - 60000 || this.lastPrice === null) {
+		if (this.lastFetchedTime < currentTime - 30000 || this.lastPrice === null) {
 			this.lastPrice = await this.fetchPrice()
 			this.lastFetchedTime = currentTime
 		}
