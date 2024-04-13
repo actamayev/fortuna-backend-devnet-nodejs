@@ -8,7 +8,7 @@ export async function findUserById(userId: number): Promise<credentials | null> 
 		})
 		return user
 	} catch (error) {
-		console.error("Error finding user:", error)
+		console.error("Error finding user by Id:", error)
 		throw error
 	}
 }

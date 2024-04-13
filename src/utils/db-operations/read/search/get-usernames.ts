@@ -10,18 +10,18 @@ export default async function getUsernames(
 				AND: [ // Use AND to combine multiple conditions
 					{ username: {
 						contains: username,
-						mode: "insensitive",
+						mode: "insensitive"
 					}},
 					{ username: {
 						not: {
 							equals: excludeUsername,
-						},
-					}},
-				],
+						}
+					}}
+				]
 			},
 			select: {
 				username: true
-			},
+			}
 		})
 
 		return usernames

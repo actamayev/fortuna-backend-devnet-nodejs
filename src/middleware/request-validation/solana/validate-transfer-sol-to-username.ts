@@ -22,9 +22,9 @@ export default async function validateTransferSolToUsername (req: Request, res: 
 		if (_.isNull(recipientUserPublicKeyAndWalletId)) return res.status(400).json({ validationError: "Unable to find Username" })
 		req.isRecipientFortunaWallet = true
 		req.recipientSolanaWalletId = recipientUserPublicKeyAndWalletId.solana_wallet_id
-		const publicKey = new PublicKey(recipientUserPublicKeyAndWalletId.public_key)
+		const recipientPublicKey = new PublicKey(recipientUserPublicKeyAndWalletId.public_key)
 
-		req.recipientPublicKey = publicKey
+		req.recipientPublicKey = recipientPublicKey
 		next()
 	} catch (error) {
 		console.error(error)
