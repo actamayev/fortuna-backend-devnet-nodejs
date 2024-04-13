@@ -27,18 +27,16 @@ export default class SolPriceManager {
 		}
 	}
 
-	public async getPrice(): Promise<number> {
-		try {
-			const currentTime = Date.now()
-			// Check if the last fetched time is more than 30 seconds ago
-			if (this.lastFetchedTime < currentTime - 30000 || this.lastPrice === null) {
-				this.lastPrice = await this.fetchPrice()
-				this.lastFetchedTime = currentTime
-			}
-			return this.lastPrice
-		} catch (error) {
-			console.error(error)
-			throw error
+	public async getPrice(): Promise<{ price: number; fetchedAt: Date }> {
+		const currentTime = Date.now()
+		// Check if the last fetched time is more than 30 seconds ago
+		if (this.lastFetchedTime < currentTime - 30000 || this.lastPrice === null) {
+			this.lastPrice = await this.fetchPrice()
+			this.lastFetchedTime = currentTime
+		}
+		return {
+			price: this.lastPrice,
+			fetchedAt: new Date(this.lastFetchedTime) // Convert the timestamp to a Date object
 		}
 	}
 }

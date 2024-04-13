@@ -11,6 +11,6 @@ export default async function searchForUsername(req: Request, res: Response): Pr
 		return res.status(200).json({ usernames })
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Search for username" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to search for username" })
 	}
 }

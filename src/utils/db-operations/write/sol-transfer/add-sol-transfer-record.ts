@@ -13,16 +13,16 @@ export default async function addSolTransferRecord (
 	recipientSolanaWalletId: number | undefined,
 ): Promise<AddSolTransferToDB> {
 	try {
-		const solPriceInUSD = await SolPriceManager.getInstance().getPrice()
+		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
 		const solTransferData = {
 			recipient_public_key: recipientPublicKey,
 			is_recipient_fortuna_wallet: isRecipientFortunaWallet,
 			recipient_solana_wallet_id: recipientSolanaWalletId,
 			transaction_signature: transactionSignature,
 			sol_transferred: transferData.transferAmountSol,
-			usd_transferred: transferData.transferAmountSol * solPriceInUSD,
+			usd_transferred: transferData.transferAmountSol * solPriceDetails.price,
 			transfer_fee_sol: transferFeeSol,
-			transfer_fee_usd: transferFeeSol * solPriceInUSD,
+			transfer_fee_usd: transferFeeSol * solPriceDetails.price,
 			sender_solana_wallet_id: senderWalletId,
 			payer_solana_wallet_id: payerSolanaWalletId
 		}

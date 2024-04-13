@@ -8,7 +8,6 @@ import addSPLRecord from "../../../utils/db-operations/write/spl/add-spl-record"
 import assignSPLTokenShares from "../../../utils/solana/assign-spl-token-shares"
 import { findSolanaWalletByPublicKey } from "../../../utils/db-operations/read/find/find-solana-wallet"
 
-// eslint-disable-next-line max-lines-per-function
 export default async function createAndMintSPL (req: Request, res: Response): Promise<Response> {
 	try {
 		const solanaWallet = req.solanaWallet
@@ -22,9 +21,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		const createSPLResponse = await createSPLToken(metadataJSONUrl, newSPLData.splName)
 
 		const fortunaWalletDB = await findSolanaWalletByPublicKey(process.env.FORTUNA_WALLET_PUBLIC_KEY, "devnet")
-		if (_.isNull(fortunaWalletDB)) {
-			return res.status(400).json({ message: "Unable to find Fortuna's Solana Wallet" })
-		}
+		if (_.isNull(fortunaWalletDB)) return res.status(400).json({ message: "Unable to find Fortuna's Solana Wallet" })
 
 		const newSPLId = await addSPLRecord(
 			metadataJSONUrl,

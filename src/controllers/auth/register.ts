@@ -8,7 +8,6 @@ import doesContactExist from "../../utils/db-operations/read/does-x-exist/does-c
 import doesUsernameExist from "../../utils/db-operations/read/does-x-exist/does-username-exist"
 import addLoginHistoryRecord from "../../utils/db-operations/write/login-history/add-login-history-record"
 
-// eslint-disable-next-line complexity
 export default async function register (req: Request, res: Response): Promise<Response> {
 	try {
 		const { contact, username, password } = req.body.registerInformation as RegisterInformation

@@ -7,7 +7,7 @@ import { findSolanaWalletByPublicKey } from "../db-operations/read/find/find-sol
 import getFortunaSolanaWalletFromSecretKey from "./get-fortuna-solana-wallet-from-secret-key"
 import addTokenAccountRecord from "../db-operations/write/token-account/add-token-account-record"
 
-// eslint-disable-next-line max-params, max-lines-per-function, complexity
+// eslint-disable-next-line max-lines-per-function
 export default async function assignSPLTokenShares (
 	splTokenPublicKey: PublicKey,
 	creatorPublicKey: PublicKey,

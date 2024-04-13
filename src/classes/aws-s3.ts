@@ -30,7 +30,7 @@ export default class AwsS3 {
 			Bucket: process.env.DEVNET_S3_BUCKET,
 			Key: key,
 			Body: jsonBuffer,
-			ContentType: "application/json",
+			ContentType: "application/json"
 		})
 
 		try {
@@ -47,7 +47,7 @@ export default class AwsS3 {
 	private async getJSONFromS3(key: string): Promise<any> {
 		const command = new GetObjectCommand({
 			Bucket: process.env.DEVNET_S3_BUCKET,
-			Key: key,
+			Key: key
 		})
 
 		try {
@@ -70,7 +70,7 @@ export default class AwsS3 {
 				Bucket: process.env.DEVNET_S3_BUCKET,
 				Key: key,
 				Body: JSON.stringify(updatedData),
-				ContentType: "application/json",
+				ContentType: "application/json"
 			})
 
 			await this.s3.send(command)
@@ -103,7 +103,7 @@ export default class AwsS3 {
 			Bucket: process.env.DEVNET_S3_BUCKET,
 			Key: key,
 			Body: fileBuffer,
-			ContentType: contentType,
+			ContentType: contentType
 		})
 
 		try {

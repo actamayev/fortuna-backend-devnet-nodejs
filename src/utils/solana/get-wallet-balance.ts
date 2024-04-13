@@ -11,8 +11,8 @@ export default async function getWalletBalance(
 		const publicKey = new PublicKey(publicKeyString)
 		const balanceInLamports = await connection.getBalance(publicKey)
 		const balanceInSol = balanceInLamports / LAMPORTS_PER_SOL
-		const solPriceInUSD = await SolPriceManager.getInstance().getPrice()
-		const balanceInUsd = balanceInSol * solPriceInUSD
+		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
+		const balanceInUsd = balanceInSol * solPriceDetails.price
 
 		return {
 			balanceInSol,

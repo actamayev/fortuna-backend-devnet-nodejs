@@ -10,7 +10,7 @@ export default async function addSPLRecord (
 	fortunaWalletId: number,
 ): Promise<number> {
 	try {
-		const solPriceInUSD = await SolPriceManager.getInstance().getPrice()
+		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
 		const addSPLResponse = await prismaClient.spl.create({
 			data: {
 				meta_data_url: metadataJSONUrl,
@@ -26,7 +26,7 @@ export default async function addSPLRecord (
 				uploaded_video_id: newSPLData.uploadedVideoId,
 
 				spl_creation_fee_sol: createSPLResponse.feeInSol,
-				spl_creation_fee_usd: createSPLResponse.feeInSol * solPriceInUSD,
+				spl_creation_fee_usd: createSPLResponse.feeInSol * solPriceDetails.price,
 				create_spl_payer_solana_wallet_id: fortunaWalletId,
 
 				// The metadata creation fees are 0. When the meta data is set, a transaction signature is returned. See createTokenMetadata

@@ -7,10 +7,10 @@ export default async function getTransactionFees(req: Request, res: Response): P
 	try {
 		const transactionSignatures = req.body as string[]
 
-		const solPriceInUSD = await SolPriceManager.getInstance().getPrice()
+		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
 
 		const transactionFees = await Promise.all(transactionSignatures.map(async (signature) => {
-			const result = await determineTransactionFee(signature, "devnet", solPriceInUSD)
+			const result = await determineTransactionFee(signature, "devnet", solPriceDetails.price)
 			return {
 				signature,
 				...result

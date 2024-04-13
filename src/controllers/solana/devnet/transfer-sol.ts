@@ -8,7 +8,7 @@ import { transformTransaction } from "../../../utils/solana/transform-transactio
 import { findSolanaWalletByPublicKey } from "../../../utils/db-operations/read/find/find-solana-wallet"
 import addSolTransferRecord from "../../../utils/db-operations/write/sol-transfer/add-sol-transfer-record"
 
-// eslint-disable-next-line max-lines-per-function, complexity
+// eslint-disable-next-line max-lines-per-function
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
 	try {
 		const solanaWallet = req.solanaWallet
