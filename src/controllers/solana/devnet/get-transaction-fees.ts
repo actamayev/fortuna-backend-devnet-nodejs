@@ -22,7 +22,7 @@ export default async function getTransactionFees(req: Request, res: Response): P
 			return res.status(400).json({ message: "Unable to determine Transaction Fees for any of the transactions" })
 		}
 
-		return res.status(200).json(transactionFees)
+		return res.status(200).json({ transactionFees })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Get Transaction Fee" })

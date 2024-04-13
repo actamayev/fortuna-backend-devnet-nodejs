@@ -7,8 +7,8 @@ export default async function doesUsernameExist(username: string): Promise<boole
 				username: {
 					equals: username,
 					mode: "insensitive"
-				},
-			},
+				}
+			}
 		})
 		return user !== null
 	} catch (error) {

@@ -26,6 +26,6 @@ export default function validateTransferSolToPublicKey (req: Request, res: Respo
 		next()
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Validate Sol Transfer" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to Validate Transfer Sol to Public Key" })
 	}
 }

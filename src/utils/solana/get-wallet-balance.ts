@@ -5,9 +5,7 @@ import SolPriceManager from "../../classes/sol-price-manager"
 export default async function getWalletBalance(
 	clusterType: Cluster,
 	publicKeyString: string,
-): Promise<
-	void | { balanceInSol: number, balanceInUsd: number }
-> {
+): Promise<{ balanceInSol: number, balanceInUsd: number } | void> {
 	try {
 		const connection = new Connection(clusterApiUrl(clusterType), "confirmed")
 

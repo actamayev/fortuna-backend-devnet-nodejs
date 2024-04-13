@@ -10,7 +10,7 @@ export async function findSolanaWalletByUserId(
 			where: {
 				user_id: userId,
 				network_type: networkType
-			},
+			}
 		})
 		return solanaWallet
 	} catch (error) {
@@ -27,7 +27,7 @@ export async function findSolanaWalletByPublicKey(
 			where: {
 				public_key: publicKey,
 				network_type: networkType
-			},
+			}
 		})
 		return solanaWallet
 	} catch (error) {

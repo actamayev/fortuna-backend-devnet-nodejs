@@ -11,7 +11,7 @@ export default async function checkIfPublicKeyRegisteredWithFortuna(publicKey: s
 				network_type: {
 					equals: "devnet"
 				}
-			},
+			}
 		})
 
 		return count > 0

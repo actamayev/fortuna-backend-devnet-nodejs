@@ -29,7 +29,7 @@ export default class SolPriceManager {
 
 	public async getPrice(): Promise<number | null> {
 		const currentTime = Date.now()
-		// Check if the last fetched time is more than 1 minute ago
+		// Check if the last fetched time is more than 30 seconds ago
 		if (this.lastFetchedTime < currentTime - 30000 || this.lastPrice === null) {
 			this.lastPrice = await this.fetchPrice()
 			this.lastFetchedTime = currentTime
