@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { Request, Response } from "express"
-import SolPriceManager from "../../../classes/sol-price-manager"
-import determineTransactionFee from "../../../utils/solana/determine-transaction-fee"
+import SolPriceManager from "../../classes/sol-price-manager"
+import determineTransactionFee from "../../utils/solana/determine-transaction-fee"
 
 export default async function getTransactionFees(req: Request, res: Response): Promise<Response> {
 	try {
@@ -10,7 +10,7 @@ export default async function getTransactionFees(req: Request, res: Response): P
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
 
 		const transactionFees = await Promise.all(transactionSignatures.map(async (signature) => {
-			const result = await determineTransactionFee(signature, "devnet", solPriceDetails.price)
+			const result = await determineTransactionFee(signature, solPriceDetails.price)
 			return {
 				signature,
 				...result

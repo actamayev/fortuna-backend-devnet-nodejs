@@ -13,7 +13,7 @@ export default async function createSPLToken (metadataJSONUrl: string, splName: 
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
 
-		const initialWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
+		const initialWalletBalance = await getWalletBalance(process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
 		const mint = await createMint(
 			connection,
@@ -22,7 +22,7 @@ export default async function createSPLToken (metadataJSONUrl: string, splName: 
 			null,
 			0
 		)
-		const secondWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
+		const secondWalletBalance = await getWalletBalance(process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
 		const feeInSol = initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol
 
@@ -46,12 +46,10 @@ async function createTokenMetadata(
 	splName: string
 ): Promise<string> {
 	try {
-		const endpoint = clusterApiUrl("devnet")
 		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
-
-		const umi = createUmi(endpoint, "confirmed")
-
 		const keypair = fromWeb3JsKeypair(fortunaWallet)
+
+		const umi = createUmi(clusterApiUrl("devnet"), "confirmed")
 		const signer = createSignerFromKeypair(umi, keypair)
 		umi.identity = signer
 		umi.payer = signer

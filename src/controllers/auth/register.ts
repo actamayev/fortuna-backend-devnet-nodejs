@@ -1,8 +1,8 @@
 import { Response, Request } from "express"
 import Hash from "../../classes/hash"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
+import createSolanaWallet from "../../utils/solana/create-solana-wallet"
 import { addLocalUser } from "../../utils/auth-helpers/register/add-local-user"
-import createDevnetSolanaWallet from "../../utils/solana/create-devnet-solana-wallet"
 import determineContactType from "../../utils/auth-helpers/login/determine-contact-type"
 import doesContactExist from "../../utils/db-operations/read/does-x-exist/does-contact-exist"
 import doesUsernameExist from "../../utils/db-operations/read/does-x-exist/does-username-exist"
@@ -27,7 +27,7 @@ export default async function register (req: Request, res: Response): Promise<Re
 
 		const accessToken = signJWT({ userId, newUser: true })
 
-		const walletInformation = await createDevnetSolanaWallet(userId)
+		const walletInformation = await createSolanaWallet(userId)
 
 		await addLoginHistoryRecord(userId)
 

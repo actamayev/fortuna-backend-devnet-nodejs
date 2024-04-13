@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import transformCreatorContentList from "../../../utils/solana/transform-creator-content-list"
-import retrieveCreatorContentList from "../../../utils/db-operations/read/spl/retrieve-creator-content-list"
+import transformCreatorContentList from "../../utils/solana/transform-creator-content-list"
+import retrieveCreatorContentList from "../../utils/db-operations/read/spl/retrieve-creator-content-list"
 
 export default async function getCreatorContentList(req: Request, res: Response): Promise<Response> {
 	try {

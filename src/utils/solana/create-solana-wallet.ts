@@ -1,7 +1,7 @@
 import { Keypair, Connection, clusterApiUrl } from "@solana/web3.js"
 import addSolanaWalletRecord from "../db-operations/write/solana-wallet/add-solana-wallet-record"
 
-export default async function createDevnetSolanaWallet(
+export default async function createSolanaWallet(
 	userId: number
 ): Promise<{ publicKey: string, balance: number }> {
 	try {
