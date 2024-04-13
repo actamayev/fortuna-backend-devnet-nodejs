@@ -11,13 +11,12 @@ import getFortunaSolanaWalletFromSecretKey from "./get-fortuna-solana-wallet-fro
 export default async function createSPLToken (
 	metadataJSONUrl: string,
 	splName: string,
-	solPriceInUSD: number
 ): Promise<{ mint: PublicKey, metadataTransactionSignature: string, feeInSol: number } | void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
 
-		const initialWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
+		const initialWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
 		const mint = await createMint(
 			connection,
@@ -26,7 +25,7 @@ export default async function createSPLToken (
 			null,
 			0
 		)
-		const secondWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
+		const secondWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
 		if (initialWalletBalance === undefined || secondWalletBalance === undefined) return
 
 		const feeInSol = initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol

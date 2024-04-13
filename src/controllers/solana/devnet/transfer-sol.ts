@@ -3,7 +3,6 @@ import bs58 from "bs58"
 import { Request, Response } from "express"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction,
 	clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
-import getSolPriceInUSD from "../../../utils/solana/get-sol-price-in-usd"
 import calculateTransactionFee from "../../../utils/solana/calculate-transaction-fee"
 import { transformTransaction } from "../../../utils/solana/transform-transactions-list"
 import { findSolanaWalletByPublicKey } from "../../../utils/db-operations/read/find/find-solana-wallet"
@@ -38,9 +37,6 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			const fortunaKeypair = Keypair.fromSecretKey(fortunaSecretKey)
 			keypairs.unshift(fortunaKeypair)
 		}
-		const solPriceInUSD = await getSolPriceInUSD()
-
-		if (_.isNull(solPriceInUSD)) return res.status(500).json({ error: "Internal Server Error: Unable to retrieve last Sol Price" })
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature, "devnet")
 		if (transactionFeeInSol === undefined) {
@@ -66,7 +62,6 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			solanaWallet.solana_wallet_id,
 			payerSolanaWalletId,
 			recipientSolanaWalletId,
-			solPriceInUSD
 		)
 
 		if (solTransferRecord === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Save Transfer Record"})

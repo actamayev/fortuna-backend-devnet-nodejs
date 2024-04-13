@@ -4,19 +4,15 @@ import { PublicKey } from "@solana/web3.js"
 import AwsS3 from "../../../classes/aws-s3"
 import { createS3Key } from "../../../utils/s3/create-s3-key"
 import createSPLToken from "../../../utils/solana/create-spl-token"
-import getSolPriceInUSD from "../../../utils/solana/get-sol-price-in-usd"
 import addSPLRecord from "../../../utils/db-operations/write/spl/add-spl-record"
 import assignSPLTokenShares from "../../../utils/solana/assign-spl-token-shares"
 import { findSolanaWalletByPublicKey } from "../../../utils/db-operations/read/find/find-solana-wallet"
 
-// eslint-disable-next-line complexity, max-lines-per-function
+// eslint-disable-next-line max-lines-per-function
 export default async function createAndMintSPL (req: Request, res: Response): Promise<Response> {
 	try {
 		const solanaWallet = req.solanaWallet
 		const newSPLData = req.body.newSPLData as IncomingNewSPLData
-
-		const solPriceInUSD = await getSolPriceInUSD()
-		if (_.isNull(solPriceInUSD)) return res.status(400).json({ message: "Unable to retrieve Sol Price" })
 
 		const uploadJSONS3Key = createS3Key("spl-metadata", newSPLData.splName, newSPLData.uuid)
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -24,7 +20,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		const metadataJSONUrl = await AwsS3.getInstance().uploadJSON(restOfNewSPLData, uploadJSONS3Key)
 		if (metadataJSONUrl === undefined) return res.status(400).json({ message: "Unable to upload JSON" })
 
-		const createSPLResponse = await createSPLToken(metadataJSONUrl, newSPLData.splName, solPriceInUSD)
+		const createSPLResponse = await createSPLToken(metadataJSONUrl, newSPLData.splName)
 		if (createSPLResponse === undefined) return res.status(400).json({ message: "Unable to create NFT" })
 
 		const fortunaWalletDB = await findSolanaWalletByPublicKey(process.env.FORTUNA_WALLET_PUBLIC_KEY, "devnet")
@@ -38,7 +34,6 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 			createSPLResponse,
 			solanaWallet.solana_wallet_id,
 			fortunaWalletDB.solana_wallet_id,
-			solPriceInUSD
 		)
 		if (newSPLId === undefined) return res.status(400).json({ message: "Unable to save SPL to DB" })
 
@@ -52,7 +47,6 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 			newSPLId,
 			solanaWallet.solana_wallet_id,
 			fortunaWalletDB.solana_wallet_id,
-			solPriceInUSD
 		)
 
 		if (!_.isEqual(assignSPLTokenSharesResponse, "success")) {

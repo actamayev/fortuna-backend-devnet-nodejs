@@ -1,4 +1,6 @@
+import _ from "lodash"
 import prismaClient from "../../../../prisma-client"
+import SolPriceManager from "../../../../classes/sol-price-manager"
 
 // eslint-disable-next-line max-params
 export default async function addSolTransferRecord (
@@ -10,9 +12,10 @@ export default async function addSolTransferRecord (
 	senderWalletId: number,
 	payerSolanaWalletId: number,
 	recipientSolanaWalletId: number | undefined,
-	solPriceInUSD: number
 ): Promise<AddSolTransferToDB | undefined> {
 	try {
+		const solPriceInUSD = await SolPriceManager.getInstance().getPrice()
+		if (_.isNull(solPriceInUSD)) throw Error("Unable to retrieve Sol price")
 		const solTransferData = {
 			recipient_public_key: recipientPublicKey,
 			is_recipient_fortuna_wallet: isRecipientFortunaWallet,
