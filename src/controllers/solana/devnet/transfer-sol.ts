@@ -26,7 +26,9 @@ export default async function transferSol(req: Request, res: Response): Promise<
 				lamports: transferData.transferAmountSol * LAMPORTS_PER_SOL
 			})
 		)
-		// TODO: Fix the double-charge problem (when having 2 signers, the fee is doubled)
+		// FUTURE TODO: Fix the double-charge problem (when having 2 signers, the fee is doubled)
+		// May be possible to fix by making Fortuna a co-signer, if all Fortuna wallets are made to be multi-signature accounts.
+		// Would have to think about wheather or not we want this.
 
 		const keypairs: Keypair[] = []
 		const senderSecretKey = bs58.decode(solanaWallet.secret_key)
