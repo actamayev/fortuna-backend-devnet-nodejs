@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
 import { Connection, PublicKey, LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js"
-import getWalletBalance from "../../../utils/solana/get-wallet-balance"
+import getWalletBalance from "../../utils/solana/get-wallet-balance"
 
-export default async function requestDevnetSolanaAirdrop(req: Request, res: Response): Promise<Response> {
+export default async function requestSolanaAirdrop(req: Request, res: Response): Promise<Response> {
 	try {
 		const solanaWallet = req.solanaWallet
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
@@ -18,7 +18,7 @@ export default async function requestDevnetSolanaAirdrop(req: Request, res: Resp
 			lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
 			signature
 		})
-		const walletBalance = await getWalletBalance("devnet", solanaWallet.public_key)
+		const walletBalance = await getWalletBalance(solanaWallet.public_key)
 
 		return res.status(200).json({
 			balanceInSol: walletBalance.balanceInSol,
@@ -26,6 +26,6 @@ export default async function requestDevnetSolanaAirdrop(req: Request, res: Resp
 		})
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Request Devnet Solana Airdrop" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to Request Solana Airdrop" })
 	}
 }

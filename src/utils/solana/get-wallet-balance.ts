@@ -1,12 +1,11 @@
-import { Cluster, Connection, LAMPORTS_PER_SOL, PublicKey, clusterApiUrl } from "@solana/web3.js"
+import { Connection, LAMPORTS_PER_SOL, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import SolPriceManager from "../../classes/sol-price-manager"
 
 export default async function getWalletBalance(
-	clusterType: Cluster,
 	publicKeyString: string,
 ): Promise<{ balanceInSol: number, balanceInUsd: number }> {
 	try {
-		const connection = new Connection(clusterApiUrl(clusterType), "confirmed")
+		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 
 		const publicKey = new PublicKey(publicKeyString)
 		const balanceInLamports = await connection.getBalance(publicKey)

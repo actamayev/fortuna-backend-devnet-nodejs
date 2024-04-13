@@ -29,7 +29,7 @@ export default async function mintSPLHelper(
 			// If the share count is 140, then Fortuna's ownership is 1.4, which won't work b/c the decimal is 0 (shares are indivisible)
 		)
 
-		const feeInSol = await calculateTransactionFee(mintTransactionSignature, "devnet")
+		const feeInSol = await calculateTransactionFee(mintTransactionSignature)
 
 		await addSPLMintRecord(
 			splId,

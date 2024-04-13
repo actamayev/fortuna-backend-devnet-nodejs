@@ -1,6 +1,6 @@
 module.exports = {
 	apps : [{
-		name: "fortuna-backend-nodejs",
+		name: "fortuna-backend-devnet-nodejs",
 		script: "./index.js", // Your main application file
 		instances: "max", // Number of instances to run
 		autorestart: true, // Automatically restart the app if it crashes

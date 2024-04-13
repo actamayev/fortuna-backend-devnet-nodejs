@@ -9,8 +9,7 @@ export default async function addSolanaWalletRecord(keypair: Keypair, userId: nu
 			data: {
 				public_key: keypair.publicKey.toBase58(),
 				secret_key: bs58.encode(Buffer.from(keypair.secretKey)),
-				user_id: userId,
-				network_type: "devnet"
+				user_id: userId
 			}
 		})
 

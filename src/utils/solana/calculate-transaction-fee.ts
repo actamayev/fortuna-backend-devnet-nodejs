@@ -1,9 +1,9 @@
 import _ from "lodash"
-import { Cluster, Connection, LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js"
+import { Connection, LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js"
 
-export default async function calculateTransactionFee(signature: string, clusterType: Cluster): Promise<number> {
+export default async function calculateTransactionFee(signature: string): Promise<number> {
 	try {
-		const connection = new Connection(clusterApiUrl(clusterType), "confirmed")
+		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const transactionDetails = await connection.getTransaction(
 			signature,
 			{ commitment: "confirmed", maxSupportedTransactionVersion: 0 }

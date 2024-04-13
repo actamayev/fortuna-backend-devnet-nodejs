@@ -3,10 +3,10 @@ import bs58 from "bs58"
 import { Request, Response } from "express"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction,
 	clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
-import calculateTransactionFee from "../../../utils/solana/calculate-transaction-fee"
-import { transformTransaction } from "../../../utils/solana/transform-transactions-list"
-import { findSolanaWalletByPublicKey } from "../../../utils/db-operations/read/find/find-solana-wallet"
-import addSolTransferRecord from "../../../utils/db-operations/write/sol-transfer/add-sol-transfer-record"
+import calculateTransactionFee from "../../utils/solana/calculate-transaction-fee"
+import { transformTransaction } from "../../utils/solana/transform-transactions-list"
+import { findSolanaWalletByPublicKey } from "../../utils/db-operations/read/find/find-solana-wallet"
+import addSolTransferRecord from "../../utils/db-operations/write/sol-transfer/add-sol-transfer-record"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
@@ -40,11 +40,11 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			keypairs.unshift(fortunaKeypair)
 		}
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
-		const transactionFeeInSol = await calculateTransactionFee(transactionSignature, "devnet")
+		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
 		let payerSolanaWalletId
 		if (isRecipientFortunaWallet === true) {
-			const fortunaSolanaWallet = await findSolanaWalletByPublicKey(process.env.FORTUNA_WALLET_PUBLIC_KEY, "devnet")
+			const fortunaSolanaWallet = await findSolanaWalletByPublicKey(process.env.FORTUNA_WALLET_PUBLIC_KEY)
 			if (_.isNull(fortunaSolanaWallet)) {
 				return res.status(500).json({ error: "Unable to find Fortuna Solana Wallet Details" })
 			}

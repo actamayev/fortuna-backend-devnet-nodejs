@@ -14,7 +14,7 @@ declare namespace NodeJS {
 		AWS_SECRET_ACCESS_KEY: string
 		AWS_REGION: string
 
-		DEVNET_S3_BUCKET: string
+		S3_BUCKET: string
 
 		FORTUNA_WALLET_PUBLIC_KEY: string
 		FORTUNA_WALLET_SECRET_KEY: string

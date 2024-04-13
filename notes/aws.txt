@@ -1,4 +1,4 @@
-To copy important files to AWS, run the following commands from the fortuna-backend-nodejs root directory.
+To copy important files to AWS, run the following commands from the fortuna-backend-devnet-nodejs root directory.
 Locally, run `npm run build`
 scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem -r ./dist ubuntu@34.238.255.61:/home/ubuntu/fortuna
 scp -i C:\Users\actam\Downloads\fortuna-key-pair-1.pem -r ./prisma ubuntu@34.238.255.61:/home/ubuntu/fortuna/dist/src
