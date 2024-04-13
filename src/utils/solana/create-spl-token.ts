@@ -8,10 +8,7 @@ import { fromWeb3JsKeypair, fromWeb3JsPublicKey } from "@metaplex-foundation/umi
 import getWalletBalance from "./get-wallet-balance"
 import getFortunaSolanaWalletFromSecretKey from "./get-fortuna-solana-wallet-from-secret-key"
 
-export default async function createSPLToken (
-	metadataJSONUrl: string,
-	splName: string,
-): Promise<{ mint: PublicKey, metadataTransactionSignature: string, feeInSol: number }> {
+export default async function createSPLToken (metadataJSONUrl: string, splName: string): Promise<CreateSPLResponse> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()

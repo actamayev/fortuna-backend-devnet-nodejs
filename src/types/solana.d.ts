@@ -1,4 +1,12 @@
+import { PublicKey } from "@solana/web3.js"
+
 declare global {
+	interface CreateSPLResponse {
+		mint: PublicKey
+		metadataTransactionSignature: string
+		feeInSol: number
+	}
+
 	interface SLPDataSavedToS3 {
 		splName: string
 		numberOfShares: number

@@ -15,7 +15,7 @@ export default async function assignSPLTokenShares (
 	splId: number,
 	creatorWalletId: number,
 	fortunaWalletId: number,
-): Promise<"success" | void> {
+): Promise<void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
@@ -66,7 +66,8 @@ export default async function assignSPLTokenShares (
 		)
 		const fourthWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
 		const fortunaEscrowWalletDB = await findSolanaWalletByPublicKey(process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY, "devnet")
-		if (_.isNull(fortunaEscrowWalletDB)) return
+		if (_.isNull(fortunaEscrowWalletDB)) throw Error("Cannot find Fortuna's Escrow Wallet")
+
 		const fortunaEscrowTokenAccountId = await addTokenAccountRecord(
 			splId,
 			fortunaEscrowWalletDB.solana_wallet_id,
@@ -112,8 +113,6 @@ export default async function assignSPLTokenShares (
 			fortunaEscrowTokenAccountId,
 			fortunaWalletId,
 		)
-
-		return "success"
 	} catch (error) {
 		console.error(error)
 		throw error

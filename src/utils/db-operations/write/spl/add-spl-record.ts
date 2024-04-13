@@ -1,13 +1,12 @@
-import { PublicKey } from "@solana/web3.js"
 import prismaClient from "../../../../prisma-client"
 import SolPriceManager from "../../../../classes/sol-price-manager"
 
 export default async function addSPLRecord (
 	metadataJSONUrl: string,
 	newSPLData: IncomingNewSPLData,
-	createSPLResponse: { mint: PublicKey, metadataTransactionSignature: string, feeInSol: number },
+	createSPLResponse: CreateSPLResponse,
 	creatorWalletId: number,
-	fortunaWalletId: number,
+	fortunaWalletId: number
 ): Promise<number> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()

@@ -34,7 +34,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		await AwsS3.getInstance().updateJSONInS3(uploadJSONS3Key, { splTokenPublicKey: createSPLResponse.mint.toString()})
 
 		const creatorPublicKey = new PublicKey(solanaWallet.public_key)
-		const assignSPLTokenSharesResponse = await assignSPLTokenShares(
+		await assignSPLTokenShares(
 			createSPLResponse.mint,
 			creatorPublicKey,
 			newSPLData,
@@ -42,10 +42,6 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 			solanaWallet.solana_wallet_id,
 			fortunaWalletDB.solana_wallet_id,
 		)
-
-		if (!_.isEqual(assignSPLTokenSharesResponse, "success")) {
-			return res.status(400).json({ message: "Unable to assign SPL Shares" })
-		}
 
 		return res.status(200).json({ newSPLId, mintAddress: createSPLResponse.mint })
 	} catch (error) {
