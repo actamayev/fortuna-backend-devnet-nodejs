@@ -4,8 +4,8 @@ import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js"
 import mintSPLHelper from "./mint-spl-helper"
 import getWalletBalance from "./get-wallet-balance"
 import { findSolanaWalletByPublicKey } from "../db-operations/read/find/find-solana-wallet"
-import addTokenAccountRecord from "../db-operations/write/token_account/add-token-account-record"
 import getFortunaSolanaWalletFromSecretKey from "./get-fortuna-solana-wallet-from-secret-key"
+import addTokenAccountRecord from "../db-operations/write/token-account/add-token-account-record"
 
 // eslint-disable-next-line max-params, max-lines-per-function, complexity
 export default async function assignSPLTokenShares (

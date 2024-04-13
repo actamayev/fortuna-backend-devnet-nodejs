@@ -16,7 +16,7 @@ export default async function retrieveUserFromContact(
 		}
 
 		const user = await prismaClient.credentials.findFirst({
-			where: whereCondition,
+			where: whereCondition
 		})
 
 		return user

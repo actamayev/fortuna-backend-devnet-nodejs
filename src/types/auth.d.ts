@@ -4,10 +4,8 @@ declare global {
 		password: string
 	}
 
-	interface RegisterInformation {
-		contact: string
+	interface RegisterInformation extends LoginInformation {
 		username: string
-		password: string
 	}
 
 	interface NewLocalUserFields {

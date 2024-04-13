@@ -6,7 +6,7 @@ import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transa
 import calculateTransactionFee from "../../../utils/solana/calculate-transaction-fee"
 import { transformTransaction } from "../../../utils/solana/transform-transactions-list"
 import { findSolanaWalletByPublicKey } from "../../../utils/db-operations/read/find/find-solana-wallet"
-import addSolTransferRecord from "../../../utils/db-operations/write/sol_transfer/add-sol-transfer-record"
+import addSolTransferRecord from "../../../utils/db-operations/write/sol-transfer/add-sol-transfer-record"
 
 // eslint-disable-next-line max-lines-per-function, complexity
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
