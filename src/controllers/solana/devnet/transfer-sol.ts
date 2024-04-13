@@ -5,10 +5,11 @@ import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transa
 	clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
 import getSolPriceInUSD from "../../../utils/solana/get-sol-price-in-usd"
 import calculateTransactionFee from "../../../utils/solana/calculate-transaction-fee"
+import { transformTransaction } from "../../../utils/solana/transform-transactions-list"
 import { findSolanaWalletByPublicKey } from "../../../utils/db-operations/read/find/find-solana-wallet"
 import addSolTransferRecord from "../../../utils/db-operations/write/sol_transfer/add-sol-transfer-record"
 
-// eslint-disable-next-line max-lines-per-function
+// eslint-disable-next-line max-lines-per-function, complexity
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
 	try {
 		const solanaWallet = req.solanaWallet
@@ -56,7 +57,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			payerSolanaWalletId = solanaWallet.solana_wallet_id
 		}
 
-		await addSolTransferRecord(
+		const solTransferRecord = await addSolTransferRecord(
 			toPublicKey.toString(),
 			isRecipientFortunaWallet,
 			transactionSignature,
@@ -68,7 +69,12 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			solPriceInUSD
 		)
 
-		return res.status(200).json({ success: "" })
+		if (solTransferRecord === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Save Transfer Record"})
+		if (isRecipientFortunaWallet === true) {
+			solTransferRecord.username = transferData.sendingTo
+		}
+		const solTransferData = transformTransaction(solTransferRecord, solanaWallet.public_key)
+		return res.status(200).json({ solTransferData })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Transfer Sol" })

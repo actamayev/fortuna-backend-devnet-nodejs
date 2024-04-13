@@ -59,6 +59,21 @@ declare global {
 		username?: string
 	}
 
+	interface AddSolTransferToDB {
+		sol_transfer_id: number
+		recipient_public_key: string
+		is_recipient_fortuna_wallet: boolean
+
+		sol_transferred: number
+		usd_transferred: number
+
+		transfer_fee_sol: number
+		transfer_fee_usd: number
+
+		created_at: Date
+		username?: string
+	}
+
 	interface OutputTransactionData {
 		solTransferId: number
 		solTransferred: number

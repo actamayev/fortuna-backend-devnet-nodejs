@@ -1,4 +1,3 @@
-import { sol_transfer } from "@prisma/client"
 import prismaClient from "../../../../prisma-client"
 
 // eslint-disable-next-line max-params
@@ -12,7 +11,7 @@ export default async function addSolTransferRecord (
 	payerSolanaWalletId: number,
 	recipientSolanaWalletId: number | undefined,
 	solPriceInUSD: number
-): Promise<sol_transfer | undefined> {
+): Promise<AddSolTransferToDB | undefined> {
 	try {
 		const solTransferData = {
 			recipient_public_key: recipientPublicKey,
