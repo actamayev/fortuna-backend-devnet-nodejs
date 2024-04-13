@@ -8,7 +8,8 @@ export default function isPublicKeyValid(publicKey: string): boolean {
 			return false
 		}
 		return true
-	} catch (e) {
-		return false
+	} catch (error) {
+		console.error(error)
+		throw error
 	}
 }

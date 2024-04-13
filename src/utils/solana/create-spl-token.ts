@@ -28,7 +28,11 @@ export default async function createSPLToken (metadataJSONUrl: string, splName: 
 
 		const metadataTransactionSignature = await createTokenMetadata(mint, metadataJSONUrl, splName)
 
-		return { mint, metadataTransactionSignature, feeInSol }
+		return {
+			mint,
+			metadataTransactionSignature,
+			feeInSol
+		}
 	} catch (error) {
 		console.error(error)
 		throw error
