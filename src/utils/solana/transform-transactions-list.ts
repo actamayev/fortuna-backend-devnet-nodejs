@@ -2,16 +2,22 @@ export default function transformTransactionsList(
 	input: RetrievedDBTransactionListData[],
 	solanaPublicKey: string
 ): OutputTransactionData[] {
-	return input.map( item => ({
-		solTransferId: item.sol_transfer_id,
-		solTransferred: item.sol_transferred,
-		usdTransferred: item.usd_transferred,
+	return input.map(transaction => transformTransaction(transaction, solanaPublicKey))
+}
 
-		transferDateTime: item.created_at,
-		transferToUsername: item.username,
-		transferToPublicKey: item.recipient_public_key,
-		transferFeeSol: item.transfer_fee_sol,
-		transferFeeUsd: item.transfer_fee_usd,
-		outgoingOrIncoming: item.recipient_public_key === solanaPublicKey ? "incoming" : "outgoing"
-	}))
+export function transformTransaction(
+	transaction: RetrievedDBTransactionListData,
+	solanaPublicKey: string
+): OutputTransactionData {
+	return {
+		solTransferId: transaction.sol_transfer_id,
+		solTransferred: transaction.sol_transferred,
+		usdTransferred: transaction.usd_transferred,
+		transferDateTime: transaction.created_at,
+		transferToUsername: transaction.username,
+		transferToPublicKey: transaction.recipient_public_key,
+		transferFeeSol: transaction.transfer_fee_sol,
+		transferFeeUsd: transaction.transfer_fee_usd,
+		outgoingOrIncoming: transaction.recipient_public_key === solanaPublicKey ? "incoming" : "outgoing"
+	}
 }
