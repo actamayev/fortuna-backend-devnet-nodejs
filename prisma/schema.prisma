@@ -56,7 +56,7 @@ model solana_wallet {
 	spl_transfer_payer_wallet					spl_transfer[] @relation("spl_transfer_payer_wallet")
 	spl_mint_payer_wallet						spl_mint[] @relation("spl_mint_payer_wallet")
 	token_account_payer_solana_wallet			token_account[] @relation("payer_solana_wallet")
-	token_accountparent_solana_wallet			token_account[] @relation("parent_solana_wallet")
+	token_account_parent_solana_wallet			token_account[] @relation("parent_solana_wallet")
 	sol_transfer_sender_solana_wallet			sol_transfer[] @relation("sender_solana_wallet")
 	sol_transfer_payer_solana_wallet			sol_transfer[] @relation("payer_solana_wallet")
 	sol_transfer_recipient_solana_wallet		sol_transfer[] @relation("recipient_solana_wallet")
