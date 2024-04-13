@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from "express"
 export default function confirmNotSendingSolToSelf(req: Request, res: Response, next: NextFunction): void | Response {
 	try {
 		const solanaWallet = req.solanaWallet
-		const recipientPublicKey = req.publicKey
+		const recipientPublicKey = req.recipientPublicKey
 
 		if (_.isEqual(solanaWallet.public_key, recipientPublicKey.toString())) {
 			return res.status(400).json({ message: "Cannot send sol to self" })

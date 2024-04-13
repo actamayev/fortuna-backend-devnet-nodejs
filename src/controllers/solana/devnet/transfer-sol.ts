@@ -13,7 +13,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 	try {
 		const solanaWallet = req.solanaWallet
 		const transferData = req.body.transferSolData as TransferSolData
-		const toPublicKey = req.publicKey
+		const recipientPublicKey = req.recipientPublicKey
 		const isRecipientFortunaWallet = req.isRecipientFortunaWallet
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const transaction = new Transaction()
@@ -22,7 +22,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		transaction.add(
 			SystemProgram.transfer({
 				fromPubkey: new PublicKey(solanaWallet.public_key),
-				toPubkey: toPublicKey,
+				toPubkey: recipientPublicKey,
 				lamports: transferData.transferAmountSol * LAMPORTS_PER_SOL
 			})
 		)
@@ -52,7 +52,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		}
 
 		const solTransferRecord = await addSolTransferRecord(
-			toPublicKey.toString(),
+			recipientPublicKey.toString(),
 			isRecipientFortunaWallet,
 			transactionSignature,
 			transferData,

@@ -24,7 +24,7 @@ export default async function validateTransferSolToUsername (req: Request, res: 
 		req.recipientSolanaWalletId = recipientUserPublicKeyAndWalletId.solana_wallet_id
 		const publicKey = new PublicKey(recipientUserPublicKeyAndWalletId.public_key)
 
-		req.publicKey = publicKey
+		req.recipientPublicKey = publicKey
 		next()
 	} catch (error) {
 		console.error(error)

@@ -16,6 +16,6 @@ export default async function getTransactions(req: Request, res: Response): Prom
 		return res.status(200).json({ transactions })
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Retrieve Creator content list" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to Retrieve Transactions" })
 	}
 }

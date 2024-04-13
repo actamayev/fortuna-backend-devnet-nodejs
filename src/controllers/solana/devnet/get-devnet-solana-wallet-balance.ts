@@ -5,8 +5,8 @@ import getWalletBalance from "../../../utils/solana/get-wallet-balance"
 export default async function getDevnetSolanaWalletBalance(req: Request, res: Response): Promise<Response> {
 	try {
 		const solanaWallet = req.solanaWallet
-		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
 		const walletBalanceInfo = await getWalletBalance("devnet", solanaWallet.public_key)
+		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
 
 		return res.status(200).json({
 			balanceInSol: walletBalanceInfo.balanceInSol,

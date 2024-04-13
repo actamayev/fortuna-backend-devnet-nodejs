@@ -22,7 +22,7 @@ export default function validateTransferSolToPublicKey (req: Request, res: Respo
 		if (isPKValid === false) return res.status(400).json({ validationError: "Public Key is not Valid" })
 		const publicKey = new PublicKey(transferSolData.sendingTo)
 
-		req.publicKey = publicKey
+		req.recipientPublicKey = publicKey
 		next()
 	} catch (error) {
 		console.error(error)

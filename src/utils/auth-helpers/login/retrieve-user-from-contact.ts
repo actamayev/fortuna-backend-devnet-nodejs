@@ -2,7 +2,8 @@ import { credentials } from "@prisma/client"
 import { findUserByWhereCondition } from "../../db-operations/read/find/find-user"
 
 export default async function retrieveUserFromContact(
-	contact: string, contactType: EmailOrPhoneOrUsername
+	contact: string,
+	contactType: EmailOrPhoneOrUsername
 ): Promise<credentials | null> {
 	try {
 		let whereCondition

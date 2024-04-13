@@ -6,7 +6,7 @@ declare global {
 		interface Request {
 			user: credentials
 			solanaWallet: solana_wallet
-			publicKey: PublicKey
+			recipientPublicKey: PublicKey
 
 			isRecipientFortunaWallet: boolean
 			recipientSolanaWalletId: number | undefined

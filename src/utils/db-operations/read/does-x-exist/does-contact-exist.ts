@@ -40,7 +40,6 @@ async function doesPhoneExist(phoneNumber: string): Promise<boolean> {
 				}
 			}
 		})
-
 		return user !== null
 	} catch (error) {
 		console.error(error)
