@@ -3,17 +3,17 @@ import Hash from "../../classes/hash"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
 import { addLocalUser } from "../../utils/auth-helpers/register/add-local-user"
 import createDevnetSolanaWallet from "../../utils/solana/create-devnet-solana-wallet"
-import doesContactExist from "../../utils/auth-helpers/does-x-exist/does-contact-exist"
 import determineContactType from "../../utils/auth-helpers/login/determine-contact-type"
-import doesUsernameExist from "../../utils/auth-helpers/does-x-exist/does-username-exist"
-import addLoginHistoryRecord from "../../utils/db-operations/auth/add-login-history-record"
+import doesContactExist from "../../utils/db-operations/read/does-x-exist/does-contact-exist"
+import doesUsernameExist from "../../utils/db-operations/read/does-x-exist/does-username-exist"
+import addLoginHistoryRecord from "../../utils/db-operations/write/login-history/add-login-history-record"
 
 export default async function register (req: Request, res: Response): Promise<Response> {
 	try {
 		const { contact, username, password } = req.body.registerInformation as RegisterInformation
 		const contactType = determineContactType(contact)
 
-		if (contactType === "Username") return res.status(400).json({ message: "Please enter a valid Email or Phone Bumber" })
+		if (contactType === "Username") return res.status(400).json({ message: "Please enter a valid Email or Phone Number" })
 
 		const contactExists = await doesContactExist(contact, contactType)
 		if (contactExists === true) return res.status(400).json({ message: `${contactType} already exists` })
@@ -24,14 +24,10 @@ export default async function register (req: Request, res: Response): Promise<Re
 		const hashedPassword = await Hash.hashCredentials(password)
 
 		const userId = await addLocalUser(req.body.registerInformation, hashedPassword, contactType)
-		if (userId === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Create User" })
 
 		const accessToken = signJWT({ userId, newUser: true })
-		if (accessToken === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Sign JWT" })
 
 		const walletInformation = await createDevnetSolanaWallet(userId)
-
-		if (walletInformation === undefined) return res.status(400).json({ message: "Unable to make devnet wallet" })
 
 		await addLoginHistoryRecord(userId)
 

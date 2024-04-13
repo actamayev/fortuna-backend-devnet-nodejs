@@ -2,9 +2,9 @@ import _ from "lodash"
 import { Response, Request } from "express"
 import Hash from "../../classes/hash"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
-import addLoginHistoryRecord from "../../utils/db-operations/auth/add-login-history-record"
 import determineContactType from "../../utils/auth-helpers/login/determine-contact-type"
 import retrieveUserFromContact from "../../utils/auth-helpers/login/retrieve-user-from-contact"
+import addLoginHistoryRecord from "../../utils/db-operations/write/login-history/add-login-history-record"
 
 export default async function login (req: Request, res: Response): Promise<Response> {
 	try {
@@ -18,7 +18,6 @@ export default async function login (req: Request, res: Response): Promise<Respo
 		if (doPasswordsMatch === false) return res.status(400).json({ message: "Wrong Username or Password!" })
 
 		const accessToken = signJWT({ userId: credentialsResult.user_id, newUser: false })
-		if (accessToken === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Sign JWT" })
 
 		await addLoginHistoryRecord(credentialsResult.user_id)
 

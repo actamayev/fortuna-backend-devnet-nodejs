@@ -8,16 +8,12 @@ import { fromWeb3JsKeypair, fromWeb3JsPublicKey } from "@metaplex-foundation/umi
 import getWalletBalance from "./get-wallet-balance"
 import getFortunaSolanaWalletFromSecretKey from "./get-fortuna-solana-wallet-from-secret-key"
 
-export default async function createSPLToken (
-	metadataJSONUrl: string,
-	splName: string,
-	solPriceInUSD: number
-): Promise<{ mint: PublicKey, metadataTransactionSignature: string, feeInSol: number } | void> {
+export default async function createSPLToken (metadataJSONUrl: string, splName: string): Promise<CreateSPLResponse> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
 
-		const initialWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
+		const initialWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
 		const mint = await createMint(
 			connection,
@@ -26,18 +22,20 @@ export default async function createSPLToken (
 			null,
 			0
 		)
-		const secondWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
-		if (initialWalletBalance === undefined || secondWalletBalance === undefined) return
+		const secondWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
 		const feeInSol = initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol
 
 		const metadataTransactionSignature = await createTokenMetadata(mint, metadataJSONUrl, splName)
 
-		if (metadataTransactionSignature === undefined) return
-
-		return { mint, metadataTransactionSignature, feeInSol }
+		return {
+			mint,
+			metadataTransactionSignature,
+			feeInSol
+		}
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }
 
@@ -46,7 +44,7 @@ async function createTokenMetadata(
 	mint: PublicKey,
 	metadataJSONUrl: string,
 	splName: string
-): Promise<string | void> {
+): Promise<string> {
 	try {
 		const endpoint = clusterApiUrl("devnet")
 		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
@@ -88,5 +86,6 @@ async function createTokenMetadata(
 		return signature[0]
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

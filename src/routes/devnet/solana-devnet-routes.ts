@@ -1,8 +1,9 @@
 import express from "express"
 
 import transferSol from "../../controllers/solana/devnet/transfer-sol"
+import getTransactions from "../../controllers/solana/devnet/get-transactions"
+import createAndMintSPL from "../../controllers/solana/devnet/create-and-mint-spl"
 import getTransactionFees from "../../controllers/solana/devnet/get-transaction-fees"
-import createAndMintSPL from "../../controllers/solana/devnet/spl/create-and-mint-spl"
 import getTransactionDetails from "../../controllers/solana/devnet/get-transaction-details"
 import getCreatorContentList from "../../controllers/solana/devnet/get-creator-content-list"
 import requestDevnetSolanaAirdrop from "../../controllers/solana/devnet/request-devnet-solana-airdrop"
@@ -10,10 +11,12 @@ import getDevnetSolanaWalletBalance from "../../controllers/solana/devnet/get-de
 
 import confirmPublicKeyExists from "../../middleware/solana/confirm-public-key-exists"
 import confirmNotSendingSolToSelf from "../../middleware/solana/confirm-not-sending-sol-to-self"
-import validateTransferSol from "../../middleware/request-validation/solana/validate-transfer-sol"
 import attachDevnetSolanaWalletByUserId from "../../middleware/attach/attach-devnet-solana-wallet-by-user-id"
 import validateCreateAndMintSPL from "../../middleware/request-validation/solana/validate-create-and-mint-spl"
 import validateTransactionSignatures from "../../middleware/request-validation/solana/validate-transaction-signatures"
+import validateTransferSolToUsername from "../../middleware/request-validation/solana/validate-transfer-sol-to-username"
+import checkIfPublicKeyPartOfFortuna from "../../middleware/request-validation/solana/check-if-public-key-part-of-fortuna"
+import validateTransferSolToPublicKey from "../../middleware/request-validation/solana/validate-transfer-sol-to-public-key"
 import confirmUserHasEnoughDevnetSolToTransfer from "../../middleware/solana/confirm-user-has-enough-devnet-sol-to-transfer"
 
 const solanaDevnetRoutes = express.Router()
@@ -34,15 +37,27 @@ solanaDevnetRoutes.post("/get-transaction-fees", validateTransactionSignatures, 
 solanaDevnetRoutes.post("/get-transaction-details", validateTransactionSignatures, getTransactionDetails)
 
 solanaDevnetRoutes.post(
-	"/transfer-sol",
-	validateTransferSol,
+	"/transfer-sol-to-username",
+	validateTransferSolToUsername,
+	confirmPublicKeyExists,
 	attachDevnetSolanaWalletByUserId,
 	confirmNotSendingSolToSelf,
-	confirmPublicKeyExists,
 	confirmUserHasEnoughDevnetSolToTransfer,
 	transferSol
 )
 
+solanaDevnetRoutes.post(
+	"/transfer-sol-to-public-key",
+	validateTransferSolToPublicKey,
+	checkIfPublicKeyPartOfFortuna,
+	confirmPublicKeyExists,
+	attachDevnetSolanaWalletByUserId,
+	confirmNotSendingSolToSelf,
+	confirmUserHasEnoughDevnetSolToTransfer,
+	transferSol
+)
+
+solanaDevnetRoutes.get("/get-transactions", attachDevnetSolanaWalletByUserId, getTransactions)
 solanaDevnetRoutes.get("/get-creator-content-list", attachDevnetSolanaWalletByUserId, getCreatorContentList)
 
 export default solanaDevnetRoutes

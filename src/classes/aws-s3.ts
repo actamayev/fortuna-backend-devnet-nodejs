@@ -23,14 +23,14 @@ export default class AwsS3 {
 		return AwsS3.instance
 	}
 
-	public async uploadJSON(jsonData: SLPDataSavedToS3, key: string): Promise<string | void> {
+	public async uploadJSON(jsonData: SLPDataSavedToS3, key: string): Promise<string> {
 		const jsonBuffer = Buffer.from(JSON.stringify(jsonData))
 
 		const command = new PutObjectCommand({
 			Bucket: process.env.DEVNET_S3_BUCKET,
 			Key: key,
 			Body: jsonBuffer,
-			ContentType: "application/json",
+			ContentType: "application/json"
 		})
 
 		try {
@@ -47,7 +47,7 @@ export default class AwsS3 {
 	private async getJSONFromS3(key: string): Promise<any> {
 		const command = new GetObjectCommand({
 			Bucket: process.env.DEVNET_S3_BUCKET,
-			Key: key,
+			Key: key
 		})
 
 		try {
@@ -70,7 +70,7 @@ export default class AwsS3 {
 				Bucket: process.env.DEVNET_S3_BUCKET,
 				Key: key,
 				Body: JSON.stringify(updatedData),
-				ContentType: "application/json",
+				ContentType: "application/json"
 			})
 
 			await this.s3.send(command)
@@ -80,7 +80,7 @@ export default class AwsS3 {
 		}
 	}
 
-	public async uploadImage(fileBuffer: Buffer, key: string): Promise<string | undefined> {
+	public async uploadImage(fileBuffer: Buffer, key: string): Promise<string> {
 		try {
 			return await this.uploadFile(fileBuffer, key, "image/jpeg")
 		} catch (error) {
@@ -89,7 +89,7 @@ export default class AwsS3 {
 		}
 	}
 
-	public async uploadVideo(fileBuffer: Buffer, key: string): Promise<string | undefined> {
+	public async uploadVideo(fileBuffer: Buffer, key: string): Promise<string> {
 		try {
 			return await this.uploadFile(fileBuffer, key, "video/mp4")
 		} catch (error) {
@@ -103,7 +103,7 @@ export default class AwsS3 {
 			Bucket: process.env.DEVNET_S3_BUCKET,
 			Key: key,
 			Body: fileBuffer,
-			ContentType: contentType,
+			ContentType: contentType
 		})
 
 		try {
