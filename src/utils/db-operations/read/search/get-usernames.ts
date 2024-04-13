@@ -3,7 +3,7 @@ import prismaClient from "../../../../prisma-client"
 export default async function getUsernames(
 	username: string,
 	excludeUsername: string
-): Promise<{username: string}[] | undefined> {
+): Promise<{username: string}[] | void> {
 	try {
 		const usernames = await prismaClient.credentials.findMany({
 			where: {

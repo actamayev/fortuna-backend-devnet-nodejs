@@ -12,7 +12,9 @@ export default async function login (req: Request, res: Response): Promise<Respo
 		const contactType = determineContactType(contact)
 
 		const credentialsResult = await retrieveUserFromContact(contact, contactType)
-		if (_.isNull(credentialsResult)) return res.status(400).json({ message: `${contactType} not found!` })
+		if (_.isNull(credentialsResult) || credentialsResult === undefined) {
+			return res.status(400).json({ message: `${contactType} not found!` })
+		}
 
 		const doPasswordsMatch = await Hash.checkPassword(password, credentialsResult.password)
 		if (doPasswordsMatch === false) return res.status(400).json({ message: "Wrong Username or Password!" })

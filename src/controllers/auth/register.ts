@@ -8,6 +8,7 @@ import doesContactExist from "../../utils/db-operations/read/does-x-exist/does-c
 import doesUsernameExist from "../../utils/db-operations/read/does-x-exist/does-username-exist"
 import addLoginHistoryRecord from "../../utils/db-operations/write/login-history/add-login-history-record"
 
+// eslint-disable-next-line complexity
 export default async function register (req: Request, res: Response): Promise<Response> {
 	try {
 		const { contact, username, password } = req.body.registerInformation as RegisterInformation
@@ -16,10 +17,11 @@ export default async function register (req: Request, res: Response): Promise<Re
 		if (contactType === "Username") return res.status(400).json({ message: "Please enter a valid Email or Phone Number" })
 
 		const contactExists = await doesContactExist(contact, contactType)
+		if (contactExists === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to check if contact exists" })
 		if (contactExists === true) return res.status(400).json({ message: `${contactType} already exists` })
 
 		const usernameExists = await doesUsernameExist(username)
-		if (usernameExists === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Check if username exists"})
+		if (usernameExists === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to check if username exists"})
 		if (usernameExists === true) return res.status(400).json({ message: "Username taken" })
 
 		const hashedPassword = await Hash.hashCredentials(password)

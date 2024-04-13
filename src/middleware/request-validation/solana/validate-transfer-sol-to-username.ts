@@ -2,7 +2,7 @@ import Joi from "joi"
 import _ from "lodash"
 import { PublicKey } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
-import { findPublicKeyFromUsername } from "../../../utils/db-operations/read/find/find-public-key-from-username"
+import { findPublicKeyAndSolWalletFromUsername } from "../../../utils/db-operations/read/find/find-public-key-and-sol-wallet-from-username"
 
 const transferSolToUsernameSchema = Joi.object({
 	transferSolData: Joi.object({
@@ -18,7 +18,7 @@ export default async function validateTransferSolToUsername (req: Request, res: 
 		if (!_.isUndefined(error)) return res.status(400).json({ validationError: error.details[0].message })
 		const transferSolData = req.body.transferSolData as TransferSolData
 
-		const recipientUserPublicKeyAndWalletId = await findPublicKeyFromUsername(transferSolData.sendingTo)
+		const recipientUserPublicKeyAndWalletId = await findPublicKeyAndSolWalletFromUsername(transferSolData.sendingTo)
 		if (_.isNull(recipientUserPublicKeyAndWalletId)) return res.status(400).json({ validationError: "Unable to find Username" })
 		req.isRecipientFortunaWallet = true
 		req.recipientSolanaWalletId = recipientUserPublicKeyAndWalletId.solana_wallet_id

@@ -22,7 +22,7 @@ export default async function jwtVerify(req: Request, res: Response, next: NextF
 
 		const user = await findUserById(userId)
 
-		if (_.isNull(user)) return handleUnauthorized()
+		if (_.isNull(user) || user === undefined) return handleUnauthorized()
 
 		req.user = user
 		next()

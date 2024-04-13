@@ -3,20 +3,24 @@ import prismaClient from "../../../prisma-client"
 
 export default async function retrieveUserFromContact(
 	contact: string, contactType: EmailOrPhoneOrUsername
-): Promise<credentials | null> {
-	let whereCondition
+): Promise<credentials | null | void> {
+	try {
+		let whereCondition
 
-	if (contactType === "Username") {
-		whereCondition = { username: contact }
-	} else if (contactType === "Email") {
-		whereCondition = { email: contact }
-	} else {
-		whereCondition = { phone_number: contact }
+		if (contactType === "Username") {
+			whereCondition = { username: contact }
+		} else if (contactType === "Email") {
+			whereCondition = { email: contact }
+		} else {
+			whereCondition = { phone_number: contact }
+		}
+
+		const user = await prismaClient.credentials.findFirst({
+			where: whereCondition,
+		})
+
+		return user
+	} catch (error) {
+		console.error(error)
 	}
-
-	const user = await prismaClient.credentials.findFirst({
-		where: whereCondition,
-	})
-
-	return user
 }

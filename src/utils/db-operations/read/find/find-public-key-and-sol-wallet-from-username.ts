@@ -1,7 +1,7 @@
 import _ from "lodash"
 import prismaClient from "../../../../prisma-client"
 
-export async function findPublicKeyFromUsername(username: string): Promise<{
+export async function findPublicKeyAndSolWalletFromUsername(username: string): Promise<{
 	solana_wallet_id: number,
 	public_key: string
 } | null> {

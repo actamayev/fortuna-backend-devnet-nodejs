@@ -12,7 +12,7 @@ export default async function addSolTransferRecord (
 	senderWalletId: number,
 	payerSolanaWalletId: number,
 	recipientSolanaWalletId: number | undefined,
-): Promise<AddSolTransferToDB | undefined> {
+): Promise<AddSolTransferToDB | void> {
 	try {
 		const solPriceInUSD = await SolPriceManager.getInstance().getPrice()
 		if (_.isNull(solPriceInUSD)) throw Error("Unable to retrieve Sol price")

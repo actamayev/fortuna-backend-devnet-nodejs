@@ -1,6 +1,6 @@
 import prismaClient from "../../../../prisma-client"
 
-export default async function doesUsernameExist(username: string): Promise<boolean | undefined> {
+export default async function doesUsernameExist(username: string): Promise<boolean | void> {
 	try {
 		const user = await prismaClient.credentials.findFirst({
 			where: {
@@ -12,7 +12,6 @@ export default async function doesUsernameExist(username: string): Promise<boole
 		})
 		return user !== null
 	} catch (error) {
-		return undefined
+		console.error(error)
 	}
 }
-

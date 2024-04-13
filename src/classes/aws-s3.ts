@@ -80,7 +80,7 @@ export default class AwsS3 {
 		}
 	}
 
-	public async uploadImage(fileBuffer: Buffer, key: string): Promise<string | undefined> {
+	public async uploadImage(fileBuffer: Buffer, key: string): Promise<string> {
 		try {
 			return await this.uploadFile(fileBuffer, key, "image/jpeg")
 		} catch (error) {
@@ -89,7 +89,7 @@ export default class AwsS3 {
 		}
 	}
 
-	public async uploadVideo(fileBuffer: Buffer, key: string): Promise<string | undefined> {
+	public async uploadVideo(fileBuffer: Buffer, key: string): Promise<string> {
 		try {
 			return await this.uploadFile(fileBuffer, key, "video/mp4")
 		} catch (error) {

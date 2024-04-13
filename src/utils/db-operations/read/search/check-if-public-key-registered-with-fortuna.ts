@@ -1,6 +1,6 @@
 import prismaClient from "../../../../prisma-client"
 
-export default async function checkIfPublicKeyRegisteredWithFortuna(publicKey: string): Promise<boolean | undefined> {
+export default async function checkIfPublicKeyRegisteredWithFortuna(publicKey: string): Promise<boolean | void> {
 	try {
 		const count = await prismaClient.solana_wallet.count({
 			where: {
@@ -16,6 +16,6 @@ export default async function checkIfPublicKeyRegisteredWithFortuna(publicKey: s
 
 		return count > 0
 	} catch (error) {
-		console.error("Error adding login record:", error)
+		console.error("Error checking if public key registered with fortuna:", error)
 	}
 }
