@@ -1,5 +1,5 @@
 import { credentials } from "@prisma/client"
-import prismaClient from "../../../prisma-client"
+import { findUserByWhereCondition } from "../../db-operations/read/find/find-user"
 
 export default async function retrieveUserFromContact(
 	contact: string, contactType: EmailOrPhoneOrUsername
@@ -15,9 +15,7 @@ export default async function retrieveUserFromContact(
 			whereCondition = { phone_number: contact }
 		}
 
-		const user = await prismaClient.credentials.findFirst({
-			where: whereCondition
-		})
+		const user = await findUserByWhereCondition(whereCondition)
 
 		return user
 	} catch (error) {

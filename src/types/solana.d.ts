@@ -1,4 +1,10 @@
 declare global {
+	interface NewSolanaWalletFields {
+		public_key: string
+		secret_key: string
+		user_id: number
+	}
+
 	interface SLPDataSavedToS3 {
 		splName: string
 		numberOfShares: number

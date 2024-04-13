@@ -1,4 +1,4 @@
-import prismaClient from "../../../prisma-client"
+import addCredentialsRecord from "../../db-operations/write/credentials/add-credentials-record"
 
 export async function addLocalUser(
 	registerInformation: RegisterInformation,
@@ -18,9 +18,7 @@ export async function addLocalUser(
 			userFields.phone_number = registerInformation.contact
 		}
 
-		const user = await prismaClient.credentials.create({
-			data: userFields
-		})
+		const user = await addCredentialsRecord(userFields)
 
 		return user.user_id
 	} catch (error) {
