@@ -1,4 +1,3 @@
-import _ from "lodash"
 import { hash, compare } from "bcrypt"
 
 export default class Hash {
@@ -14,14 +13,13 @@ export default class Hash {
 		}
 	}
 
-	public static async checkPassword(plaintextPassword: string, hashedPassword: string | undefined): Promise<boolean> {
+	public static async checkPassword(plaintextPassword: string, hashedPassword: string): Promise<boolean> {
 		try {
-			if (_.isUndefined(hashedPassword)) return false
 			const isMatch = await compare(plaintextPassword, hashedPassword)
 			return isMatch
 		} catch (error) {
 			console.error(error)
-			return false
+			throw error
 		}
 	}
 }

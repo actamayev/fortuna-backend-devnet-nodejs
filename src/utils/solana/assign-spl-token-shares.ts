@@ -3,11 +3,11 @@ import { getOrCreateAssociatedTokenAccount } from "@solana/spl-token"
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js"
 import mintSPLHelper from "./mint-spl-helper"
 import getWalletBalance from "./get-wallet-balance"
-import { findSolanaWalletByPublicKey } from "../find/find-solana-wallet"
-import addTokenAccountRecord from "../db-operations/add-token-account-record"
+import { findSolanaWalletByPublicKey } from "../db-operations/read/find/find-solana-wallet"
 import getFortunaSolanaWalletFromSecretKey from "./get-fortuna-solana-wallet-from-secret-key"
+import addTokenAccountRecord from "../db-operations/write/token-account/add-token-account-record"
 
-// eslint-disable-next-line max-params, max-lines-per-function, complexity
+// eslint-disable-next-line max-lines-per-function
 export default async function assignSPLTokenShares (
 	splTokenPublicKey: PublicKey,
 	creatorPublicKey: PublicKey,
@@ -15,13 +15,12 @@ export default async function assignSPLTokenShares (
 	splId: number,
 	creatorWalletId: number,
 	fortunaWalletId: number,
-	solPriceInUSD: number
-): Promise<"success" | void> {
+): Promise<void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
 
-		const initialWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
+		const initialWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
 		// Get or Create Token Accounts:
 		const fortunaTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
@@ -30,8 +29,7 @@ export default async function assignSPLTokenShares (
 			fortunaWallet.publicKey
 		)
 
-		const secondWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
-		if (initialWalletBalance === undefined || secondWalletBalance === undefined) return
+		const secondWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
 		const fortunaTokenAccountId = await addTokenAccountRecord(
 			splId,
@@ -41,7 +39,6 @@ export default async function assignSPLTokenShares (
 			initialWalletBalance.balanceInUsd - secondWalletBalance.balanceInUsd,
 			fortunaWalletId
 		)
-		if (_.isNull(fortunaTokenAccountId) || fortunaTokenAccountId === undefined) return
 
 		const creatorTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
@@ -49,9 +46,8 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			creatorPublicKey
 		)
-		const thirdWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
+		const thirdWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
-		if (thirdWalletBalance === undefined) return
 		const creatorTokenAccountId = await addTokenAccountRecord(
 			splId,
 			creatorWalletId,
@@ -60,7 +56,6 @@ export default async function assignSPLTokenShares (
 			secondWalletBalance.balanceInUsd - thirdWalletBalance.balanceInUsd,
 			fortunaWalletId
 		)
-		if (_.isNull(creatorTokenAccountId) || creatorTokenAccountId === undefined) return
 
 		const fortunaEscrowPublicKey = new PublicKey(process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY)
 		const fortunaEscrowTokenAccount = await getOrCreateAssociatedTokenAccount(
@@ -69,10 +64,10 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			fortunaEscrowPublicKey
 		)
-		const fourthWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY, solPriceInUSD)
-		if (fourthWalletBalance === undefined) return
+		const fourthWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
 		const fortunaEscrowWalletDB = await findSolanaWalletByPublicKey(process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY, "devnet")
-		if (fortunaEscrowWalletDB === undefined || _.isNull(fortunaEscrowWalletDB)) return
+		if (_.isNull(fortunaEscrowWalletDB)) throw Error("Cannot find Fortuna's Escrow Wallet")
+
 		const fortunaEscrowTokenAccountId = await addTokenAccountRecord(
 			splId,
 			fortunaEscrowWalletDB.solana_wallet_id,
@@ -81,7 +76,6 @@ export default async function assignSPLTokenShares (
 			thirdWalletBalance.balanceInUsd - fourthWalletBalance.balanceInUsd,
 			fortunaWalletId
 		)
-		if (_.isNull(fortunaEscrowTokenAccountId) || fortunaEscrowTokenAccountId === undefined) return
 
 		// Mint SPLs:
 		await mintSPLHelper(
@@ -94,7 +88,6 @@ export default async function assignSPLTokenShares (
 			uploadSplData.numberOfShares * (1 / 100),
 			fortunaTokenAccountId,
 			fortunaWalletId,
-			solPriceInUSD
 		)
 
 		await mintSPLHelper(
@@ -107,7 +100,6 @@ export default async function assignSPLTokenShares (
 			uploadSplData.numberOfShares * (uploadSplData.creatorOwnershipPercentage / 100),
 			creatorTokenAccountId,
 			fortunaWalletId,
-			solPriceInUSD
 		)
 
 		await mintSPLHelper(
@@ -120,14 +112,9 @@ export default async function assignSPLTokenShares (
 			uploadSplData.numberOfShares * ((99 - uploadSplData.creatorOwnershipPercentage) / 100),
 			fortunaEscrowTokenAccountId,
 			fortunaWalletId,
-			solPriceInUSD
 		)
-
-		// FUTURE TODO: See if there's a way to prevent more shares from being minted after assigning the shares.
-		// FUTURE TODO: Also, then transfer the ownership of the SPL to the creator
-
-		return "success"
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

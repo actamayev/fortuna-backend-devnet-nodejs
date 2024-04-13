@@ -20,5 +20,6 @@ export default async function printWalletBalance(initialLogMessage: string): Pro
 		console.info("------------------------------------------------")
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

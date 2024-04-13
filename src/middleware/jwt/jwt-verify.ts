@@ -1,8 +1,8 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
-import findUser from "../../utils/find/find-user"
 import getDecodedId from "../../utils/auth-helpers/get-decoded-id"
+import { findUserById } from "../../utils/db-operations/read/find/find-user"
 
 const authorizationSchema = Joi.object({
 	authorization: Joi.string().required()
@@ -18,9 +18,7 @@ export default async function jwtVerify(req: Request, res: Response, next: NextF
 
 		const userId = getDecodedId(accessToken)
 
-		if (userId === undefined) return handleUnauthorized()
-
-		const user = await findUser(userId)
+		const user = await findUserById(userId)
 
 		if (_.isNull(user)) return handleUnauthorized()
 

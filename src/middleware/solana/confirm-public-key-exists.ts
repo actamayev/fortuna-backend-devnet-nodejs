@@ -4,7 +4,7 @@ import { Connection, clusterApiUrl } from "@solana/web3.js"
 
 export default async function confirmPublicKeyExists(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
 	try {
-		const recipientPublicKey = req.publicKey
+		const recipientPublicKey = req.recipientPublicKey
 
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const accountInfo = await connection.getAccountInfo(recipientPublicKey)
