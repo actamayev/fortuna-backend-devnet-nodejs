@@ -2,9 +2,9 @@ import bs58 from "bs58"
 import { Keypair, Connection, clusterApiUrl } from "@solana/web3.js"
 import prismaClient from "../../prisma-client"
 
-export default async function createDevnetSolanaWallet(userId: number): Promise<
-	{ publicKey: string, balance: number} | void
-> {
+export default async function createDevnetSolanaWallet(
+	userId: number
+): Promise<{ publicKey: string, balance: number }> {
 	try {
 		const wallet = Keypair.generate()
 		const publicKey = wallet.publicKey.toBase58()
@@ -25,5 +25,6 @@ export default async function createDevnetSolanaWallet(userId: number): Promise<
 		return { publicKey, balance }
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

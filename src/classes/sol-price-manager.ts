@@ -15,7 +15,7 @@ export default class SolPriceManager {
 		return SolPriceManager.instance
 	}
 
-	private async fetchPrice(): Promise<number | null> {
+	private async fetchPrice(): Promise<number> {
 		const url = "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
 		try {
 			const response = await fetch(url)
@@ -23,17 +23,22 @@ export default class SolPriceManager {
 			return data.solana.usd
 		} catch (error) {
 			console.error("Error fetching SOL price:", error)
-			return null
+			throw error
 		}
 	}
 
-	public async getPrice(): Promise<number | null> {
-		const currentTime = Date.now()
-		// Check if the last fetched time is more than 30 seconds ago
-		if (this.lastFetchedTime < currentTime - 30000 || this.lastPrice === null) {
-			this.lastPrice = await this.fetchPrice()
-			this.lastFetchedTime = currentTime
+	public async getPrice(): Promise<number> {
+		try {
+			const currentTime = Date.now()
+			// Check if the last fetched time is more than 30 seconds ago
+			if (this.lastFetchedTime < currentTime - 30000 || this.lastPrice === null) {
+				this.lastPrice = await this.fetchPrice()
+				this.lastFetchedTime = currentTime
+			}
+			return this.lastPrice
+		} catch (error) {
+			console.error(error)
+			throw error
 		}
-		return this.lastPrice
 	}
 }

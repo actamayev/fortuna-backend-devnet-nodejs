@@ -8,7 +8,6 @@ export default async function getDevnetSolanaWalletBalance(req: Request, res: Re
 		const solPriceRetrievedTime = new Date()
 		const solPriceInUSD = await SolPriceManager.getInstance().getPrice()
 		const walletBalanceInfo = await getWalletBalance("devnet", solanaWallet.public_key)
-		if (walletBalanceInfo === undefined) return res.status(400).json({ message: "Cannot retrieve wallet balance info" })
 
 		return res.status(200).json({
 			balanceInSol: walletBalanceInfo.balanceInSol,

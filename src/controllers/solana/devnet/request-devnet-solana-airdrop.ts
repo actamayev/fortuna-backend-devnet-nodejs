@@ -19,7 +19,6 @@ export default async function requestDevnetSolanaAirdrop(req: Request, res: Resp
 			signature
 		})
 		const walletBalance = await getWalletBalance("devnet", solanaWallet.public_key)
-		if (walletBalance === undefined) return res.status(400).json({ message: "Unable to get Wallet Balance" })
 
 		return res.status(200).json({
 			balanceInSol: walletBalance.balanceInSol,

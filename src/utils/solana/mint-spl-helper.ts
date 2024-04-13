@@ -31,8 +31,6 @@ export default async function mintSPLHelper(
 
 		const feeInSol = await calculateTransactionFee(mintTransactionSignature, "devnet")
 
-		if (feeInSol === undefined) return
-
 		await addSPLMintRecord(
 			splId,
 			tokenAccountId,
@@ -49,5 +47,6 @@ export default async function mintSPLHelper(
 		)
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

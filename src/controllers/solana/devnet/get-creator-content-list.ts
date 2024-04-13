@@ -8,7 +8,6 @@ export default async function getCreatorContentList(req: Request, res: Response)
 
 		const creatorSPLData = await retrieveCreatorContentList(solanaWallet.solana_wallet_id)
 
-		if (creatorSPLData === undefined) return res.status(400).json({ message: "Unable to retrieve Creator Content List" })
 		const creatorContentList = transformCreatorContentList(creatorSPLData)
 
 		return res.status(200).json({ creatorContentList })

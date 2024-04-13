@@ -1,6 +1,6 @@
 import prismaClient from "../../../../prisma-client"
 
-export default async function retrieveIncomingTransactionsList(publicKey: string): Promise<RetrievedDBTransactionListData[] | void> {
+export default async function retrieveIncomingTransactionsList(publicKey: string): Promise<RetrievedDBTransactionListData[]> {
 	try {
 		const incomingTransactionsList = await prismaClient.sol_transfer.findMany({
 			where: {
@@ -36,5 +36,6 @@ export default async function retrieveIncomingTransactionsList(publicKey: string
 		}))
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

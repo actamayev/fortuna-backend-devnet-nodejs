@@ -3,7 +3,7 @@ import prismaClient from "../../../../prisma-client"
 export default async function getUsernames(
 	username: string,
 	excludeUsername: string
-): Promise<{username: string}[] | void> {
+): Promise<{username: string}[]> {
 	try {
 		const usernames = await prismaClient.credentials.findMany({
 			where: {
@@ -27,5 +27,6 @@ export default async function getUsernames(
 		return usernames
 	} catch (error) {
 		console.error("Error adding login record:", error)
+		throw error
 	}
 }

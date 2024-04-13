@@ -17,24 +17,18 @@ export default async function register (req: Request, res: Response): Promise<Re
 		if (contactType === "Username") return res.status(400).json({ message: "Please enter a valid Email or Phone Number" })
 
 		const contactExists = await doesContactExist(contact, contactType)
-		if (contactExists === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to check if contact exists" })
 		if (contactExists === true) return res.status(400).json({ message: `${contactType} already exists` })
 
 		const usernameExists = await doesUsernameExist(username)
-		if (usernameExists === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to check if username exists"})
 		if (usernameExists === true) return res.status(400).json({ message: "Username taken" })
 
 		const hashedPassword = await Hash.hashCredentials(password)
 
 		const userId = await addLocalUser(req.body.registerInformation, hashedPassword, contactType)
-		if (userId === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Create User" })
 
 		const accessToken = signJWT({ userId, newUser: true })
-		if (accessToken === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Sign JWT" })
 
 		const walletInformation = await createDevnetSolanaWallet(userId)
-
-		if (walletInformation === undefined) return res.status(400).json({ message: "Unable to make devnet wallet" })
 
 		await addLoginHistoryRecord(userId)
 

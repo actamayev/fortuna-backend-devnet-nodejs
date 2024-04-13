@@ -6,7 +6,7 @@ export default async function attachDevnetSolanaWalletByUserId(req: Request, res
 	try {
 		const user = req.user
 		const solanaWallet = await findSolanaWalletByUserId(user.user_id, "devnet")
-		if (_.isNull(solanaWallet) || solanaWallet === undefined) {
+		if (_.isNull(solanaWallet)) {
 			return res.status(400).json({ message: "Cannot find Devnet Solana Wallet" })
 		}
 

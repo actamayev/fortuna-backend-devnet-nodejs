@@ -23,7 +23,7 @@ export default class AwsS3 {
 		return AwsS3.instance
 	}
 
-	public async uploadJSON(jsonData: SLPDataSavedToS3, key: string): Promise<string | void> {
+	public async uploadJSON(jsonData: SLPDataSavedToS3, key: string): Promise<string> {
 		const jsonBuffer = Buffer.from(JSON.stringify(jsonData))
 
 		const command = new PutObjectCommand({

@@ -39,13 +39,11 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		}
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature, "devnet")
-		if (transactionFeeInSol === undefined) {
-			return res.status(500).json({ error: "Internal Server Error: Unable to determine transaction fee" })
-		}
+
 		let payerSolanaWalletId
 		if (isRecipientFortunaWallet === true) {
 			const fortunaSolanaWallet = await findSolanaWalletByPublicKey(process.env.FORTUNA_WALLET_PUBLIC_KEY, "devnet")
-			if (_.isNull(fortunaSolanaWallet) || fortunaSolanaWallet === undefined) {
+			if (_.isNull(fortunaSolanaWallet)) {
 				return res.status(500).json({ error: "Unable to find Fortuna Solana Wallet Details" })
 			}
 			payerSolanaWalletId = fortunaSolanaWallet.solana_wallet_id
@@ -64,7 +62,6 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			recipientSolanaWalletId,
 		)
 
-		if (solTransferRecord === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Save Transfer Record"})
 		if (isRecipientFortunaWallet === true) {
 			solTransferRecord.username = transferData.sendingTo
 		}

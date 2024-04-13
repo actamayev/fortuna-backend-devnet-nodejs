@@ -29,6 +29,6 @@ export async function findPublicKeyAndSolWalletFromUsername(
 		return user.solana_wallet[0]
 	} catch (error) {
 		console.error("Error finding user:", error)
-		return null
+		throw error
 	}
 }

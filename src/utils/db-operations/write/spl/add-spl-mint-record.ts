@@ -1,6 +1,5 @@
-import _ from "lodash"
-import SolPriceManager from "../../../../classes/sol-price-manager"
 import prismaClient from "../../../../prisma-client"
+import SolPriceManager from "../../../../classes/sol-price-manager"
 
 // eslint-disable-next-line max-params
 export default async function addSPLMintRecord (
@@ -13,7 +12,6 @@ export default async function addSPLMintRecord (
 ): Promise<void> {
 	try {
 		const solPriceInUSD = await SolPriceManager.getInstance().getPrice()
-		if (_.isNull(solPriceInUSD)) throw Error("Unable to retrieve Sol price")
 		await prismaClient.spl_mint.create({
 			data: {
 				spl_id: splId,
@@ -27,5 +25,6 @@ export default async function addSPLMintRecord (
 		})
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

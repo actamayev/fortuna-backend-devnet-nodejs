@@ -15,5 +15,6 @@ export default async function addSPLOwnershipRecord (
 		})
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

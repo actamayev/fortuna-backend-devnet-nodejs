@@ -1,4 +1,3 @@
-import _ from "lodash"
 import { PublicKey } from "@solana/web3.js"
 import prismaClient from "../../../../prisma-client"
 import SolPriceManager from "../../../../classes/sol-price-manager"
@@ -9,10 +8,9 @@ export default async function addSPLRecord (
 	createSPLResponse: { mint: PublicKey, metadataTransactionSignature: string, feeInSol: number },
 	creatorWalletId: number,
 	fortunaWalletId: number,
-): Promise<number | void> {
+): Promise<number> {
 	try {
 		const solPriceInUSD = await SolPriceManager.getInstance().getPrice()
-		if (_.isNull(solPriceInUSD)) throw Error("Unable to retrieve Sol price")
 		const addSPLResponse = await prismaClient.spl.create({
 			data: {
 				meta_data_url: metadataJSONUrl,
@@ -47,5 +45,6 @@ export default async function addSPLRecord (
 		return addSPLResponse.spl_id
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

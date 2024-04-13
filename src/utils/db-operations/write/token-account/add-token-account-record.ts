@@ -8,7 +8,7 @@ export default async function addTokenAccountRecord (
 	creationFeeSol: number,
 	creationFeeUsd: number,
 	payerWalletId: number
-): Promise<number | void> {
+): Promise<number> {
 	try {
 		const tokenAccountResponse = await prismaClient.token_account.create({
 			data: {
@@ -24,5 +24,6 @@ export default async function addTokenAccountRecord (
 		return tokenAccountResponse.token_account_id
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

@@ -5,12 +5,9 @@ export default async function determineTransactionFee(
 	signature: string,
 	clusterType: Cluster,
 	solPriceInUSD: number
-): Promise<
-	void | { feeInSol: number, usdPrice: number, solPriceInUSD: number }
-> {
+): Promise<{ feeInSol: number, usdPrice: number, solPriceInUSD: number }> {
 	try {
 		const feeInSol = await calculateTransactionFee(signature, clusterType)
-		if (feeInSol === undefined) return
 		const usdPrice = feeInSol * solPriceInUSD
 
 		return {
@@ -20,5 +17,6 @@ export default async function determineTransactionFee(
 		}
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

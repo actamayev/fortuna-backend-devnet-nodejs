@@ -4,7 +4,7 @@ export async function addLocalUser(
 	registerInformation: RegisterInformation,
 	hashedPassword: string,
 	contactType: EmailOrPhone
-): Promise<number | void> {
+): Promise<number> {
 	try {
 		const userFields: NewLocalUserFields = {
 			username: registerInformation.username,
@@ -25,5 +25,6 @@ export async function addLocalUser(
 		return user.user_id
 	} catch (error) {
 		console.error("Error adding user", error)
+		throw error
 	}
 }

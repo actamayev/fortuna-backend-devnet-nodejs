@@ -12,7 +12,7 @@ export default async function login (req: Request, res: Response): Promise<Respo
 		const contactType = determineContactType(contact)
 
 		const credentialsResult = await retrieveUserFromContact(contact, contactType)
-		if (_.isNull(credentialsResult) || credentialsResult === undefined) {
+		if (_.isNull(credentialsResult)) {
 			return res.status(400).json({ message: `${contactType} not found!` })
 		}
 
@@ -20,7 +20,6 @@ export default async function login (req: Request, res: Response): Promise<Respo
 		if (doPasswordsMatch === false) return res.status(400).json({ message: "Wrong Username or Password!" })
 
 		const accessToken = signJWT({ userId: credentialsResult.user_id, newUser: false })
-		if (accessToken === undefined) return res.status(500).json({ error: "Internal Server Error: Unable to Sign JWT" })
 
 		await addLoginHistoryRecord(credentialsResult.user_id)
 

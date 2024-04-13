@@ -11,7 +11,7 @@ import getFortunaSolanaWalletFromSecretKey from "./get-fortuna-solana-wallet-fro
 export default async function createSPLToken (
 	metadataJSONUrl: string,
 	splName: string,
-): Promise<{ mint: PublicKey, metadataTransactionSignature: string, feeInSol: number } | void> {
+): Promise<{ mint: PublicKey, metadataTransactionSignature: string, feeInSol: number }> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
@@ -26,17 +26,15 @@ export default async function createSPLToken (
 			0
 		)
 		const secondWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
-		if (initialWalletBalance === undefined || secondWalletBalance === undefined) return
 
 		const feeInSol = initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol
 
 		const metadataTransactionSignature = await createTokenMetadata(mint, metadataJSONUrl, splName)
 
-		if (metadataTransactionSignature === undefined) return
-
 		return { mint, metadataTransactionSignature, feeInSol }
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }
 
@@ -45,7 +43,7 @@ async function createTokenMetadata(
 	mint: PublicKey,
 	metadataJSONUrl: string,
 	splName: string
-): Promise<string | void> {
+): Promise<string> {
 	try {
 		const endpoint = clusterApiUrl("devnet")
 		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
@@ -87,5 +85,6 @@ async function createTokenMetadata(
 		return signature[0]
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

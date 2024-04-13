@@ -1,6 +1,6 @@
 import prismaClient from "../../../../prisma-client"
 
-export default async function retrieveCreatorContentList(solanaWalletId: number): Promise<RetrievedDBSplData[] | void> {
+export default async function retrieveCreatorContentList(solanaWalletId: number): Promise<RetrievedDBSplData[]> {
 	try {
 		const creatorSPLData = await prismaClient.spl.findMany({
 			where: {
@@ -33,5 +33,6 @@ export default async function retrieveCreatorContentList(solanaWalletId: number)
 		return creatorSPLData
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

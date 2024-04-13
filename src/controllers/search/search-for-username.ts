@@ -8,8 +8,6 @@ export default async function searchForUsername(req: Request, res: Response): Pr
 
 		const usernames = await getUsernames(username, user.username)
 
-		if (usernames === undefined) return res.status(400).json({ message: "Unable to find usernames" })
-
 		return res.status(200).json({ usernames })
 	} catch (error) {
 		console.error(error)

@@ -18,13 +18,11 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { uuid, uploadedImageId, ...restOfNewSPLData } = newSPLData
 		const metadataJSONUrl = await AwsS3.getInstance().uploadJSON(restOfNewSPLData, uploadJSONS3Key)
-		if (metadataJSONUrl === undefined) return res.status(400).json({ message: "Unable to upload JSON" })
 
 		const createSPLResponse = await createSPLToken(metadataJSONUrl, newSPLData.splName)
-		if (createSPLResponse === undefined) return res.status(400).json({ message: "Unable to create NFT" })
 
 		const fortunaWalletDB = await findSolanaWalletByPublicKey(process.env.FORTUNA_WALLET_PUBLIC_KEY, "devnet")
-		if (_.isNull(fortunaWalletDB) || fortunaWalletDB === undefined) {
+		if (_.isNull(fortunaWalletDB)) {
 			return res.status(400).json({ message: "Unable to find Fortuna's Solana Wallet" })
 		}
 
@@ -35,7 +33,6 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 			solanaWallet.solana_wallet_id,
 			fortunaWalletDB.solana_wallet_id,
 		)
-		if (newSPLId === undefined) return res.status(400).json({ message: "Unable to save SPL to DB" })
 
 		await AwsS3.getInstance().updateJSONInS3(uploadJSONS3Key, { splTokenPublicKey: createSPLResponse.mint.toString()})
 

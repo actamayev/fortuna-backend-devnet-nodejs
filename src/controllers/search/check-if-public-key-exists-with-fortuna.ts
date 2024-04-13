@@ -7,7 +7,7 @@ export default async function checkIfPublicKeyExistsWithFortuna(req: Request, re
 
 		const exists = await checkIfPublicKeyRegisteredWithFortuna(publicKey)
 
-		return res.status(200).json({ exists: exists || false })
+		return res.status(200).json({ exists })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Check if public Key exists with fortuna" })

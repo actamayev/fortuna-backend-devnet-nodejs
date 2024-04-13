@@ -19,7 +19,7 @@ export default class Hash {
 			return isMatch
 		} catch (error) {
 			console.error(error)
-			return false
+			throw error
 		}
 	}
 }

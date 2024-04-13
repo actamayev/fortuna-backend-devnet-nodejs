@@ -10,9 +10,6 @@ export default async function getTransactions(req: Request, res: Response): Prom
 		const outgoingTransactionsList = await retrieveOutgoingTransactionsList(solanaWallet.solana_wallet_id)
 		const incomingTransactionsList = await retrieveIncomingTransactionsList(solanaWallet.public_key)
 
-		if (outgoingTransactionsList === undefined || incomingTransactionsList === undefined) {
-			return res.status(400).json({ message: "Unable to retrieve Creator Content List" })
-		}
 		const combinedTransactionsList = outgoingTransactionsList.concat(incomingTransactionsList)
 		const transactions = transformTransactionsList(combinedTransactionsList, solanaWallet.public_key)
 

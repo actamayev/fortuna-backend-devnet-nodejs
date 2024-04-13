@@ -1,6 +1,6 @@
 import prismaClient from "../../../../prisma-client"
 
-export default async function retrieveOutgoingTransactionsList(solanaWalletId: number): Promise<RetrievedDBTransactionListData[] | void> {
+export default async function retrieveOutgoingTransactionsList(solanaWalletId: number): Promise<RetrievedDBTransactionListData[]> {
 	try {
 		const outgoingTransactionsList = await prismaClient.sol_transfer.findMany({
 			where: {
@@ -37,5 +37,6 @@ export default async function retrieveOutgoingTransactionsList(solanaWalletId: n
 		}))
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

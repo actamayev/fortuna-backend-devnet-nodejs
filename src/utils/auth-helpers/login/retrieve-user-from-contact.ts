@@ -3,7 +3,7 @@ import prismaClient from "../../../prisma-client"
 
 export default async function retrieveUserFromContact(
 	contact: string, contactType: EmailOrPhoneOrUsername
-): Promise<credentials | null | void> {
+): Promise<credentials | null> {
 	try {
 		let whereCondition
 
@@ -22,5 +22,6 @@ export default async function retrieveUserFromContact(
 		return user
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }

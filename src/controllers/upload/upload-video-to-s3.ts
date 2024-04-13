@@ -15,7 +15,6 @@ export default async function uploadVideoToS3 (req: Request, res: Response): Pro
 		const videoUploadUrl = await AwsS3.getInstance().uploadVideo(fileBuffer, uploadVideoToS3KeyAndUUID.key)
 
 		const uploadedVideoId = await addUploadVideoRecord(videoUploadUrl, fileName, uploadVideoToS3KeyAndUUID.uuid)
-		if (uploadedVideoId === undefined) return res.status(400).json({ message: "Unable to Save Details to DB" })
 
 		return res.status(200).json({
 			videoUploadUrl,

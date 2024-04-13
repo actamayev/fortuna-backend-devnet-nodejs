@@ -4,7 +4,7 @@ import prismaClient from "../../../../prisma-client"
 export async function findSolanaWalletByUserId(
 	userId: number,
 	networkType: network_type
-): Promise<solana_wallet | null | void> {
+): Promise<solana_wallet | null> {
 	try {
 		const solanaWallet = await prismaClient.solana_wallet.findFirst({
 			where: {
@@ -15,13 +15,14 @@ export async function findSolanaWalletByUserId(
 		return solanaWallet
 	} catch (error) {
 		console.error(`Error finding ${networkType} Solana wallet:`, error)
+		throw error
 	}
 }
 
 export async function findSolanaWalletByPublicKey(
 	publicKey: string,
 	networkType: network_type
-): Promise<solana_wallet | null | void> {
+): Promise<solana_wallet | null> {
 	try {
 		const solanaWallet = await prismaClient.solana_wallet.findFirst({
 			where: {
@@ -32,5 +33,6 @@ export async function findSolanaWalletByPublicKey(
 		return solanaWallet
 	} catch (error) {
 		console.error(`Error finding ${networkType} Solana wallet:`, error)
+		throw error
 	}
 }

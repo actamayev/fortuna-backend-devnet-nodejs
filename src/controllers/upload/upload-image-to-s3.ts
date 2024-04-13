@@ -16,7 +16,6 @@ export default async function uploadImageToS3 (req: Request, res: Response): Pro
 		const imageUploadUrl = await AwsS3.getInstance().uploadImage(fileBuffer, uploadImageToS3Key)
 
 		const uploadedImageId = await addUploadImageRecord(imageUploadUrl, fileName, uuid)
-		if (uploadedImageId === undefined) return res.status(400).json({ message: "Unable to Save Details to DB" })
 
 		return res.status(200).json({ imageUploadUrl, uploadedImageId })
 	} catch (error) {

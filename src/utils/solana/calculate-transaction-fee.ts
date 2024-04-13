@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { Cluster, Connection, LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js"
 
-export default async function calculateTransactionFee(signature: string, clusterType: Cluster): Promise<number | void> {
+export default async function calculateTransactionFee(signature: string, clusterType: Cluster): Promise<number> {
 	try {
 		const connection = new Connection(clusterApiUrl(clusterType), "confirmed")
 		const transactionDetails = await connection.getTransaction(
@@ -9,7 +9,10 @@ export default async function calculateTransactionFee(signature: string, cluster
 			{ commitment: "confirmed", maxSupportedTransactionVersion: 0 }
 		)
 
-		if (_.isNull(transactionDetails) || _.isNull(transactionDetails.meta)) return
+		if (_.isNull(transactionDetails) || _.isNull(transactionDetails.meta)) {
+			console.error("Unable to retrieve transaction details")
+			throw Error("Unable to retrieve transaction details")
+		}
 
 		const fee = transactionDetails.meta.fee
 		const feeInSol = fee / LAMPORTS_PER_SOL
@@ -17,5 +20,6 @@ export default async function calculateTransactionFee(signature: string, cluster
 		return feeInSol
 	} catch (error) {
 		console.error(error)
+		throw error
 	}
 }
