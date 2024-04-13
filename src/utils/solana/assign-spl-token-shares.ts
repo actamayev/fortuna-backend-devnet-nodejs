@@ -20,7 +20,7 @@ export default async function assignSPLTokenShares (
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
 
-		const initialWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
+		const initialWalletBalance = await getWalletBalance(process.env.FORTUNA_WALLET_PUBLIC_KEY)
 		// Get or Create Token Accounts:
 		const fortunaTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
@@ -29,7 +29,7 @@ export default async function assignSPLTokenShares (
 			fortunaWallet.publicKey
 		)
 
-		const secondWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
+		const secondWalletBalance = await getWalletBalance(process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
 		const fortunaTokenAccountId = await addTokenAccountRecord(
 			splId,
@@ -46,7 +46,7 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			creatorPublicKey
 		)
-		const thirdWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
+		const thirdWalletBalance = await getWalletBalance(process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
 		const creatorTokenAccountId = await addTokenAccountRecord(
 			splId,
@@ -64,8 +64,8 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			fortunaEscrowPublicKey
 		)
-		const fourthWalletBalance = await getWalletBalance("devnet", process.env.FORTUNA_WALLET_PUBLIC_KEY)
-		const fortunaEscrowWalletDB = await findSolanaWalletByPublicKey(process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY, "devnet")
+		const fourthWalletBalance = await getWalletBalance(process.env.FORTUNA_WALLET_PUBLIC_KEY)
+		const fortunaEscrowWalletDB = await findSolanaWalletByPublicKey(process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY)
 		if (_.isNull(fortunaEscrowWalletDB)) throw Error("Cannot find Fortuna's Escrow Wallet")
 
 		const fortunaEscrowTokenAccountId = await addTokenAccountRecord(

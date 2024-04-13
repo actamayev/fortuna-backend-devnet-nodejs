@@ -27,7 +27,7 @@ export default class AwsS3 {
 		const jsonBuffer = Buffer.from(JSON.stringify(jsonData))
 
 		const command = new PutObjectCommand({
-			Bucket: process.env.DEVNET_S3_BUCKET,
+			Bucket: process.env.S3_BUCKET,
 			Key: key,
 			Body: jsonBuffer,
 			ContentType: "application/json"
@@ -35,7 +35,7 @@ export default class AwsS3 {
 
 		try {
 			await this.s3.send(command)
-			const url = `https://${process.env.DEVNET_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
+			const url = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
 			return url
 		} catch (error) {
 			console.error("Error uploading JSON to S3:", error)
@@ -46,7 +46,7 @@ export default class AwsS3 {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private async getJSONFromS3(key: string): Promise<any> {
 		const command = new GetObjectCommand({
-			Bucket: process.env.DEVNET_S3_BUCKET,
+			Bucket: process.env.S3_BUCKET,
 			Key: key
 		})
 
@@ -67,7 +67,7 @@ export default class AwsS3 {
 			const updatedData = { ...currentData, ...updates }
 
 			const command = new PutObjectCommand({
-				Bucket: process.env.DEVNET_S3_BUCKET,
+				Bucket: process.env.S3_BUCKET,
 				Key: key,
 				Body: JSON.stringify(updatedData),
 				ContentType: "application/json"
@@ -100,7 +100,7 @@ export default class AwsS3 {
 
 	private async uploadFile(fileBuffer: Buffer, key: string, contentType: string): Promise<string> {
 		const command = new PutObjectCommand({
-			Bucket: process.env.DEVNET_S3_BUCKET,
+			Bucket: process.env.S3_BUCKET,
 			Key: key,
 			Body: fileBuffer,
 			ContentType: contentType
@@ -108,7 +108,7 @@ export default class AwsS3 {
 
 		try {
 			await this.s3.send(command)
-			const url = `https://${process.env.DEVNET_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
+			const url = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
 			return url
 		} catch (error) {
 			console.error("Error uploading file to S3:", error)

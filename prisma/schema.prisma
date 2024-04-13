@@ -32,18 +32,11 @@ model login_history {
 	@@index([user_id], name: "login_history__user_id_idx")
 }
 
-enum network_type {
-	mainnet_beta
-	devnet
-	testnet
-}
-
 model solana_wallet {
 	solana_wallet_id							Int          @id @default(autoincrement())
 	public_key   								String       @db.VarChar(255)
 	secret_key   								String       @db.VarChar(255) // Consider storing encrypted!
 	user_id      								Int
-	network_type 								network_type
 
 	created_at   								DateTime     @default(now())
 	updated_at   								DateTime     @default(now()) @updatedAt
@@ -62,7 +55,6 @@ model solana_wallet {
 	sol_transfer_recipient_solana_wallet		sol_transfer[] @relation("recipient_solana_wallet")
 
 	@@index([user_id], name: "solana_wallet__user_id_idx")
-	@@unique([user_id, network_type])
 }
 
 model token_account {

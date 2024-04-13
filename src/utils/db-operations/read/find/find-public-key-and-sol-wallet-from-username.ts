@@ -17,9 +17,6 @@ export async function findPublicKeyAndSolWalletFromUsername(
 					select: {
 						public_key: true,
 						solana_wallet_id: true
-					},
-					where: {
-						network_type: "devnet"
 					}
 				}
 			}

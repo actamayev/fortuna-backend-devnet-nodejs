@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 import { Connection, LAMPORTS_PER_SOL, PublicKey, clusterApiUrl } from "@solana/web3.js"
 
-export default async function confirmUserHasEnoughDevnetSolToTransfer(
+export default async function confirmUserHasEnoughSolToTransfer(
 	req: Request,
 	res: Response,
 	next: NextFunction
