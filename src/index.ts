@@ -10,6 +10,7 @@ import authRoutes from "./routes/auth-routes"
 import searchRoutes from "./routes/search-routes"
 import solanaRoutes from "./routes/solana-routes"
 import uploadRoutes from "./routes/upload-routes"
+import videosRoutes from "./routes/videos-routes"
 
 dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.local" })
 
@@ -36,6 +37,7 @@ app.use(express.json())
 const devnetRouter = express.Router()
 
 devnetRouter.use("/auth", authRoutes)
+devnetRouter.use("/videos", videosRoutes)
 devnetRouter.use("/search", jwtVerify, searchRoutes)
 devnetRouter.use("/solana", jwtVerify, solanaRoutes)
 devnetRouter.use("/upload", jwtVerify, uploadRoutes)
