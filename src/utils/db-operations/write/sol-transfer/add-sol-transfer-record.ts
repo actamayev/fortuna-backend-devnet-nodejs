@@ -10,7 +10,8 @@ export default async function addSolTransferRecord (
 	transferFeeSol: number,
 	senderWalletId: number,
 	payerSolanaWalletId: number,
-	recipientSolanaWalletId: number | undefined
+	recipientSolanaWalletId: number | undefined,
+	isSplPurchase: boolean
 ): Promise<AddSolTransferToDB> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
@@ -20,8 +21,9 @@ export default async function addSolTransferRecord (
 				is_recipient_fortuna_wallet: isRecipientFortunaWallet,
 				recipient_solana_wallet_id: recipientSolanaWalletId,
 				transaction_signature: transactionSignature,
-				sol_transferred: transferData.transferAmountSol,
-				usd_transferred: transferData.transferAmountSol * solPriceDetails.price,
+				sol_amount_transferred: transferData.transferAmountSol,
+				usd_amount_transferred: transferData.transferAmountSol * solPriceDetails.price,
+				is_spl_purchase: isSplPurchase,
 				transfer_fee_sol: transferFeeSol,
 				transfer_fee_usd: transferFeeSol * solPriceDetails.price,
 				sender_solana_wallet_id: senderWalletId,

@@ -62,6 +62,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			solanaWallet.solana_wallet_id,
 			payerSolanaWalletId,
 			recipientSolanaWalletId,
+			false
 		)
 
 		if (isRecipientFortunaWallet === true) {

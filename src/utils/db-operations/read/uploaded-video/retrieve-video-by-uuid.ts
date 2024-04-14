@@ -15,7 +15,13 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Vi
 					select: {
 						spl_name: true,
 						listing_price_per_share_sol: true,
-						description: true
+						description: true,
+						total_number_of_shares: true,
+						spl_transfer: {
+							select: {
+								number_spl_shares_transferred: true
+							}
+						}
 					}
 				}
 			}

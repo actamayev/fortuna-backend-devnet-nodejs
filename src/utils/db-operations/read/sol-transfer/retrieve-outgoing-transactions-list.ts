@@ -13,11 +13,12 @@ export default async function retrieveOutgoingTransactionsList(solanaWalletId: n
 				sol_transfer_id: true,
 				recipient_public_key: true,
 				is_recipient_fortuna_wallet: true,
-				sol_transferred: true,
-				usd_transferred: true,
+				sol_amount_transferred: true,
+				usd_amount_transferred: true,
 				transfer_fee_sol: true,
 				transfer_fee_usd: true,
 				created_at: true,
+				is_spl_purchase: true,
 				recipient_solana_wallet: {
 					select: {
 						user: {
@@ -33,7 +34,6 @@ export default async function retrieveOutgoingTransactionsList(solanaWalletId: n
 		return outgoingTransactionsList.map(transaction => ({
 			...transaction,
 			recipient_public_key: transaction.is_recipient_fortuna_wallet ? undefined : transaction.recipient_public_key,
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			username: transaction.is_recipient_fortuna_wallet ? transaction.recipient_solana_wallet?.user?.username : undefined
 		}))
 	} catch (error) {
