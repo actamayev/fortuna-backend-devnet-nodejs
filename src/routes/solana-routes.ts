@@ -18,6 +18,7 @@ import validateTransactionSignatures from "../middleware/request-validation/sola
 import validateTransferSolToUsername from "../middleware/request-validation/solana/validate-transfer-sol-to-username"
 import checkIfPublicKeyPartOfFortuna from "../middleware/request-validation/solana/check-if-public-key-part-of-fortuna"
 import validateTransferSolToPublicKey from "../middleware/request-validation/solana/validate-transfer-sol-to-public-key"
+import getNumberOfTokensInTokenAccount from "../controllers/solana/get-number-of-tokens-in-token-account"
 
 const solanaRoutes = express.Router()
 
@@ -59,5 +60,8 @@ solanaRoutes.post(
 
 solanaRoutes.get("/get-transactions", attachSolanaWalletByUserId, getTransactions)
 solanaRoutes.get("/get-creator-content-list", attachSolanaWalletByUserId, getCreatorContentList)
+
+// Internal use
+solanaRoutes.get("/get-number-tokens-in-token-account/:publicKey", getNumberOfTokensInTokenAccount)
 
 export default solanaRoutes

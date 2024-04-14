@@ -4,10 +4,11 @@ declare global {
 		created_at: Date
 		uuid: string
 		spl: {
-			spl_name: string,
-			listing_price_per_share_sol: number,
-			description: string,
+			spl_name: string
+			listing_price_per_share_sol: number
+			description: string
 			total_number_of_shares: number
+			public_key_address: string
 			spl_transfer: {
 				number_spl_shares_transferred: number
 			}[]
