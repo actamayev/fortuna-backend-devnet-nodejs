@@ -8,7 +8,8 @@
 -- select * from token_account;
 -- select * from uploaded_image;
 -- select * from uploaded_video;
-select * from sol_transfer;
+-- select * from sol_transfer;
+-- select * from spl_purchase;
 
 -- To delete an spl:
 -- delete from spl_ownership;

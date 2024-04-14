@@ -54,7 +54,7 @@ model solana_wallet {
 	sol_transfer_payer_solana_wallet			sol_transfer[] @relation("payer_solana_wallet")
 	sol_transfer_recipient_solana_wallet		sol_transfer[] @relation("recipient_solana_wallet")
 	spl_purchase_purchaser_solana_wallet		spl_purchase[] @relation("purchaser_solana_wallet")
-	spl_payer_solana_wallet						spl_purchase[] @relation("payer_solana_wallet")
+	spl_purchase_payer_solana_wallet			spl_purchase[] @relation("payer_solana_wallet")
 	spl_purchase_recipient_solana_wallet		spl_purchase[] @relation("recipient_solana_wallet")
 
 	@@index([user_id], name: "solana_wallet__user_id_idx")
@@ -76,6 +76,7 @@ model token_account {
 	payer_solana_wallet							solana_wallet @relation(name: "payer_solana_wallet", fields: [payer_solana_wallet_id], references: [solana_wallet_id])
 	parent_solana_wallet						solana_wallet @relation(name: "parent_solana_wallet", fields: [parent_solana_wallet_id], references: [solana_wallet_id])
 
+	spl_purchase_purchaser_token_account		spl_purchase[]
 	spl_ownership								spl_ownership[]
 	spl_mint									spl_mint[]
 
@@ -102,8 +103,8 @@ model spl {
 	initial_creator_ownership_percentage		Float
 	total_number_of_shares						Int
 	creator_wallet_id							Int
-	uploaded_image_id							Int
-	uploaded_video_id							Int
+	uploaded_image_id							Int		@unique
+	uploaded_video_id							Int		@unique
 
 	spl_creation_fee_sol						Float
 	spl_creation_fee_usd						Float
@@ -122,8 +123,8 @@ model spl {
 	create_spl_payer_wallet						solana_wallet @relation(name: "create_spl_payer_wallet", fields: [create_spl_payer_solana_wallet_id], references: [solana_wallet_id])
 	create_spl_metadata_payer_wallet			solana_wallet? @relation(name: "create_spl_metadata_payer_wallet", fields: [create_spl_metadata_payer_solana_wallet_id], references: [solana_wallet_id])
 	spl_creator_wallet							solana_wallet @relation(name: "spl_creator_wallet", fields: [creator_wallet_id], references: [solana_wallet_id])
-	uploaded_image								uploaded_image @relation(fields: [uploaded_image_id], references: [uploaded_image_id])
-	uploaded_video								uploaded_video @relation(fields: [uploaded_video_id], references: [uploaded_video_id])
+	uploaded_image                              uploaded_image @relation(fields: [uploaded_image_id], references: [uploaded_image_id])
+    uploaded_video                              uploaded_video @relation(fields: [uploaded_video_id], references: [uploaded_video_id])
 
 	spl_ownership 								spl_ownership[]
 	token_account								token_account[]
@@ -137,7 +138,7 @@ model spl {
 }
 
 model spl_mint {
-	splt_mint_id								Int @id @default(autoincrement())
+	spl_mint_id									Int @id @default(autoincrement())
 	spl_id										Int
   	token_account_id    						Int
 	number_of_shares							Int
@@ -183,7 +184,7 @@ model uploaded_image {
 	created_at    								DateTime  @default(now())
 	updated_at    								DateTime  @default(now()) @updatedAt
 
-	spl spl[]
+    spl                                         spl?
 }
 
 model uploaded_video {
@@ -195,7 +196,7 @@ model uploaded_video {
 	created_at    								DateTime  @default(now())
 	updated_at    								DateTime  @default(now()) @updatedAt
 
-	spl spl[]
+    spl                                         spl?
 }
 
 model sol_transfer {
@@ -235,18 +236,20 @@ model spl_purchase {
 	usd_paid_per_share							Float
 	number_shares_purchased						Int
 	purchaser_solana_wallet_id					Int
+	purchaser_token_account_id					Int
 	payer_solana_wallet_id						Int
 	recipient_solana_wallet_id					Int // This is the creator
 
-	spl_mint_id									Int
-	sol_transfer_id								Int
+	spl_mint_id									Int		@unique
+	sol_transfer_id								Int		@unique
 
 	spl         								spl @relation(fields: [spl_id], references: [spl_id])
 	purchaser_solana_wallet						solana_wallet @relation(name: "purchaser_solana_wallet", fields: [purchaser_solana_wallet_id], references: [solana_wallet_id])
 	payer_solana_wallet							solana_wallet @relation(name: "payer_solana_wallet", fields: [payer_solana_wallet_id], references: [solana_wallet_id])
 	recipient_solana_wallet						solana_wallet @relation(name: "recipient_solana_wallet", fields: [recipient_solana_wallet_id], references: [solana_wallet_id])
-	spl_mint									spl_mint @relation(fields: [spl_mint_id], references: [splt_mint_id])
-	sol_transfer								sol_transfer @relation(fields: [sol_transfer_id], references: [sol_transfer_id])
+    spl_mint                          			spl_mint       @relation(fields: [spl_mint_id], references: [spl_mint_id])
+	sol_transfer								sol_transfer   @relation(fields: [sol_transfer_id], references: [sol_transfer_id])
+	token_account       						token_account @relation(fields: [purchaser_token_account_id], references: [token_account_id])
 
 	created_at    								DateTime  @default(now())
 	updated_at    								DateTime  @default(now()) @updatedAt
