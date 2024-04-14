@@ -31,7 +31,7 @@ declare global {
 		description: string
 		initial_creator_ownership_percentage: number
 		uploaded_image: { image_url: string }
-		uploaded_video: { video_url: string }
+		uploaded_video: { video_url: string, uuid: string }
 		public_key_address: string
 	}
 
@@ -44,6 +44,7 @@ declare global {
 		creatorOwnershipPercentage: number
 		imageUrl: string
 		videoUrl: string
+		uuid: string
 		mintAddress: string
 	}
 

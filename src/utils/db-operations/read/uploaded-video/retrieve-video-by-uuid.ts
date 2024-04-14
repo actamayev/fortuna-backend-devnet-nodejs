@@ -16,17 +16,16 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Vi
 						spl_name: true,
 						listing_price_per_share_sol: true,
 						description: true
-					},
-					take: 1
+					}
 				}
 			}
 		})
 
-		if (_.isNull(retrievedVideo)) return null
+		if (_.isNull(retrievedVideo) || _.isNull(retrievedVideo.spl)) return null
 
 		return {
 			...retrievedVideo,
-			spl: retrievedVideo.spl[0]
+			spl: retrievedVideo.spl
 		}
 	} catch (error) {
 		console.error(error)

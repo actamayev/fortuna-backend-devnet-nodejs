@@ -33,7 +33,8 @@ export default async function retrieveOutgoingTransactionsList(solanaWalletId: n
 		return outgoingTransactionsList.map(transaction => ({
 			...transaction,
 			recipient_public_key: transaction.is_recipient_fortuna_wallet ? undefined : transaction.recipient_public_key,
-			username: transaction.is_recipient_fortuna_wallet ? transaction.recipient_solana_wallet?.user.username : undefined
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			username: transaction.is_recipient_fortuna_wallet ? transaction.recipient_solana_wallet?.user?.username : undefined
 		}))
 	} catch (error) {
 		console.error(error)

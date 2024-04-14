@@ -7,7 +7,6 @@ datasource db {
 	url      = env("DATABASE_URL")
 }
 
-// Remove unnecessary 1 to many contrasints, change to 1-1. for example, each user can only have one solana wallet.
 model credentials {
 	user_id     								Int      @id @default(autoincrement())
 	username     								String
@@ -20,7 +19,7 @@ model credentials {
 	updated_at   								DateTime @default(now()) @updatedAt
 
 	login_history 								login_history[]
-	solana_wallet   							solana_wallet @relation(fields: [user_id], references: [user_id])
+	solana_wallet   							solana_wallet?
 }
 
 model login_history {
@@ -42,7 +41,7 @@ model solana_wallet {
 	created_at   								DateTime     @default(now())
 	updated_at   								DateTime     @default(now()) @updatedAt
 
-	user        								credentials?
+	user        								credentials @relation(fields: [user_id], references: [user_id])
 
 	create_spl_payer_wallet						spl[] @relation("create_spl_payer_wallet")
 	create_spl_metadata_payer_wallet			spl[] @relation("create_spl_metadata_payer_wallet")

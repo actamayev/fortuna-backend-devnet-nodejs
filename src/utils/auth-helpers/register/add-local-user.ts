@@ -1,15 +1,12 @@
-import addCredentialsRecord from "../../db-operations/write/credentials/add-credentials-record"
-
-export async function addLocalUser(
+export function addLocalUser(
 	registerInformation: RegisterInformation,
 	hashedPassword: string,
 	contactType: EmailOrPhone
-): Promise<number> {
+): NewLocalUserFields {
 	try {
 		const userFields: NewLocalUserFields = {
 			username: registerInformation.username,
 			password: hashedPassword,
-			is_active: true,
 		}
 
 		if (contactType === "Email") {
@@ -18,9 +15,7 @@ export async function addLocalUser(
 			userFields.phone_number = registerInformation.contact
 		}
 
-		const user = await addCredentialsRecord(userFields)
-
-		return user.user_id
+		return userFields
 	} catch (error) {
 		console.error("Error adding user", error)
 		throw error
