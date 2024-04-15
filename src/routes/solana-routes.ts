@@ -11,10 +11,11 @@ import getCreatorContentList from "../controllers/solana/get-creator-content-lis
 import getSolanaWalletBalance from "../controllers/solana/get-solana-wallet-balance"
 import getNumberOfTokensInTokenAccount from "../controllers/solana/get-number-of-tokens-in-token-account"
 
-import attachSplDetailsByPublicKey from "../middleware/attach/attach-spl-details-by-public-key"
 import confirmPublicKeyExists from "../middleware/solana/confirm-public-key-exists"
 import confirmNotSendingSolToSelf from "../middleware/solana/confirm-not-sending-sol-to-self"
 import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
+import attachSplDetailsByPublicKey from "../middleware/attach/attach-spl-details-by-public-key"
+import confirmCreatorNotBuyingOwnShares from "../middleware/solana/confirm-creator-not-buying-own-shares"
 import validateCreateAndMintSPL from "../middleware/request-validation/solana/validate-create-and-mint-spl"
 import confirmUserHasEnoughSolToTransfer from "../middleware/solana/confirm-user-has-enough-sol-to-transfer"
 import validatePurchaseSplTokens from "../middleware/request-validation/solana/validate-purchase-spl-tokens"
@@ -67,11 +68,15 @@ solanaRoutes.post(
 	"/purchase-spl-tokens",
 	validatePurchaseSplTokens,
 	attachSplDetailsByPublicKey,
-	confirmEnoughSharesInEscrowToCompletePurchase,
 	attachSolanaWalletByUserId,
+	confirmCreatorNotBuyingOwnShares,
+	confirmEnoughSharesInEscrowToCompletePurchase,
 	confirmUserHasEnoughSolToPurchaseTokens,
 	purchaseSplTokens
 )
+
+// FUTURE TODO: Add an endpoint that allows for a creator to buy their own shares.
+// The creator will pay the Fortuna Wallet for the shares they're buying
 
 solanaRoutes.get("/get-transactions", attachSolanaWalletByUserId, getTransactions)
 solanaRoutes.get("/get-creator-content-list", attachSolanaWalletByUserId, getCreatorContentList)

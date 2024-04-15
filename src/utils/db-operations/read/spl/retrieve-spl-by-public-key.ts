@@ -13,7 +13,8 @@ export default async function retrieveSplByPublicKey(
 				spl_id: true,
 				public_key_address: true,
 				total_number_of_shares: true,
-				listing_price_per_share_sol: true
+				listing_price_per_share_sol: true,
+				creator_wallet_id: true
 			}
 		})
 
@@ -22,7 +23,8 @@ export default async function retrieveSplByPublicKey(
 			splId: creatorSPLData.spl_id,
 			publicKeyAddress: creatorSPLData.public_key_address,
 			listingPricePerShareSol: creatorSPLData.listing_price_per_share_sol,
-			totalNumberOfShares: creatorSPLData.total_number_of_shares
+			totalNumberOfShares: creatorSPLData.total_number_of_shares,
+			creatorWalletId: creatorSPLData.creator_wallet_id
 		}
 	} catch (error) {
 		console.error(error)

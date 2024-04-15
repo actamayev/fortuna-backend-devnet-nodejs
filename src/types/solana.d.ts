@@ -103,6 +103,7 @@ declare global {
 		publicKeyAddress: string
 		listingPricePerShareSol: number
 		totalNumberOfShares: number
+		creatorWalletId: number
 	}
 
 	interface PurchaseSPLTokensData {
