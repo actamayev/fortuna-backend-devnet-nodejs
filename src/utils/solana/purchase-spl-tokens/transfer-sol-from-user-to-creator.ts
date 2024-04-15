@@ -8,8 +8,7 @@ import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSolFromUserToCreator(
 	senderSolanaWallet: solana_wallet,
-	recipientWalletId: number,
-	toPublicKey: string,
+	recipientPublicKeyAndWalletId: { public_key: string, solana_wallet_id: number },
 	solToTransfer: number
 ): Promise<number> {
 	try {
@@ -19,7 +18,7 @@ export default async function transferSolFromUserToCreator(
 		transaction.add(
 			SystemProgram.transfer({
 				fromPubkey: new PublicKey(senderSolanaWallet.public_key),
-				toPubkey: new PublicKey(toPublicKey),
+				toPubkey: new PublicKey(recipientPublicKeyAndWalletId.public_key),
 				lamports: solToTransfer * LAMPORTS_PER_SOL
 			})
 		)
@@ -40,14 +39,14 @@ export default async function transferSolFromUserToCreator(
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
 		const solTransferRecord = await addSolTransferRecord(
-			toPublicKey,
+			recipientPublicKeyAndWalletId.public_key,
 			true,
 			transactionSignature,
 			solToTransfer,
 			transactionFeeInSol,
 			senderSolanaWallet.solana_wallet_id,
 			Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB),
-			recipientWalletId,
+			recipientPublicKeyAndWalletId.solana_wallet_id,
 			true
 		)
 
