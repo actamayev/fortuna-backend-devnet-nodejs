@@ -7,3 +7,10 @@ export function getFortunaSolanaWalletFromSecretKey(): Keypair {
 
 	return fortunaWallet
 }
+
+export function getFortunaEscrowSolanaWalletFromSecretKey(): Keypair {
+	const fortunaEscrowSecretKey = bs58.decode(process.env.FORTUNA_ESCROW_WALLET_SECRET_KEY)
+	const fortunaEscrowWallet = Keypair.fromSecretKey(fortunaEscrowSecretKey)
+
+	return fortunaEscrowWallet
+}

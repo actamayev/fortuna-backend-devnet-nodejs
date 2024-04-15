@@ -5,7 +5,8 @@ import { getOrCreateAssociatedTokenAccount, transfer } from "@solana/spl-token"
 import { getWalletBalanceWithUSD } from "../get-wallet-balance"
 import calculateTransactionFee from "../calculate-transaction-fee"
 import addSplTransferRecord from "../../db-operations/write/spl-transfer/add-spl-transfer-record"
-import { getFortunaSolanaWalletFromSecretKey } from "../get-fortuna-solana-wallet-from-secret-key"
+import { getFortunaEscrowSolanaWalletFromSecretKey, getFortunaSolanaWalletFromSecretKey }
+	from "../get-fortuna-solana-wallet-from-secret-key"
 import addTokenAccountRecord from "../../db-operations/write/token-account/add-token-account-record"
 import retrieveTokenAccountBySplAddress from "../../db-operations/read/token-account/retrieve-token-account-by-spl-address"
 
@@ -48,15 +49,14 @@ export default async function transferSplTokensToUser(
 
 		if (_.isNull(fortunaEscrowTokenAccount)) throw Error("Unable to find Escrow Wallet in DB")
 
+		const fortunaEscrowWallet = getFortunaEscrowSolanaWalletFromSecretKey()
 		const transactionSignature = await transfer(
 			connection,
 			fortunaWallet,
 			new PublicKey(fortunaEscrowTokenAccount.public_key),
 			new PublicKey(userTokenAccount.public_key),
-			new PublicKey(process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY),
+			fortunaEscrowWallet,
 			purchaseSplTokensData.numberOfTokensPurchasing
-			// may need to add the fortuna wallet and fortuna escrow wallet as cosigners.
-			// doesn't make sense that you can transfer from escrow without having escrow's secret key.
 		)
 
 		const transferFeeSol = await calculateTransactionFee(transactionSignature)
