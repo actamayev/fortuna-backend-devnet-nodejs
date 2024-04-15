@@ -10,6 +10,9 @@ export default async function purchaseSplTokens(req: Request, res: Response): Pr
 		const solanaWallet = req.solanaWallet
 		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchaseSPLTokensData
 		const splDetails = req.splDetails
+		// FUTURE TODO: See if there's a way to simultaneously transfer Spl tokens to user and transfer sol from user to creator
+		// Better for this to be done as one transaction (so that if either one fails, neither go through)
+
 		// transfer spl from escrow to user (fortuna wallet should cover transaction)
 		// as part of the transfer to user, may need to create a token account for the user.
 		// record the transaction (save to spl_transfer table)
