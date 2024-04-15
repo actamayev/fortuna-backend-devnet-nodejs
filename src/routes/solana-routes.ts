@@ -11,7 +11,7 @@ import getCreatorContentList from "../controllers/solana/get-creator-content-lis
 import getSolanaWalletBalance from "../controllers/solana/get-solana-wallet-balance"
 import getNumberOfTokensInTokenAccount from "../controllers/solana/get-number-of-tokens-in-token-account"
 
-import attachSplByPublicKey from "../middleware/attach/attach-spl-by-public-key"
+import attachSplDetailsByPublicKey from "../middleware/attach/attach-spl-details-by-public-key"
 import confirmPublicKeyExists from "../middleware/solana/confirm-public-key-exists"
 import confirmNotSendingSolToSelf from "../middleware/solana/confirm-not-sending-sol-to-self"
 import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
@@ -66,10 +66,10 @@ solanaRoutes.post(
 solanaRoutes.post(
 	"/purchase-spl-tokens",
 	validatePurchaseSplTokens,
-	attachSplByPublicKey,
+	attachSplDetailsByPublicKey,
+	confirmEnoughSharesInEscrowToCompletePurchase,
 	attachSolanaWalletByUserId,
 	confirmUserHasEnoughSolToPurchaseTokens,
-	confirmEnoughSharesInEscrowToCompletePurchase,
 	purchaseSplTokens
 )
 

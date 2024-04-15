@@ -12,7 +12,10 @@ export default async function confirmEnoughSharesInEscrowToCompletePurchase(
 		const numberOfTokensRemainingInEscrow = await determineNumberOfTokensRemainingInEscrow(splDetails.publicKeyAddress)
 
 		if (numberOfTokensRemainingInEscrow < purchaseSplTokensData.numberOfTokensPurchasing) {
-			return res.status(400).json({ message: "Attempting to purchase more shares than are available" })
+			return res.status(400).json({
+				// eslint-disable-next-line max-len
+				message: `Attempting to purchase more shares than are available. There are only ${numberOfTokensRemainingInEscrow} shares available`
+			})
 		}
 		next()
 	} catch (error) {
