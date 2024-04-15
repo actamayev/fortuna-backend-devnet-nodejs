@@ -1,4 +1,5 @@
 import { PublicKey } from "@solana/web3.js"
+import { token_account } from "@prisma/client"
 import prismaClient from "../../../../prisma-client"
 
 export default async function addTokenAccountRecord (
@@ -8,7 +9,7 @@ export default async function addTokenAccountRecord (
 	creationFeeSol: number,
 	creationFeeUsd: number,
 	payerWalletId: number
-): Promise<number> {
+): Promise<token_account> {
 	try {
 		const tokenAccountResponse = await prismaClient.token_account.create({
 			data: {
@@ -21,7 +22,7 @@ export default async function addTokenAccountRecord (
 			}
 		})
 
-		return tokenAccountResponse.token_account_id
+		return tokenAccountResponse
 	} catch (error) {
 		console.error(error)
 		throw error

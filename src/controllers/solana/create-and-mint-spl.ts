@@ -1,12 +1,10 @@
-import _ from "lodash"
 import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
 import AwsS3 from "../../classes/aws-s3"
 import { createS3Key } from "../../utils/s3/create-s3-key"
-import createSPLToken from "../../utils/solana/create-spl-token"
+import createSPLToken from "../../utils/solana/create-and-mint-spl/create-spl-token"
 import addSPLRecord from "../../utils/db-operations/write/spl/add-spl-record"
-import assignSPLTokenShares from "../../utils/solana/assign-spl-token-shares"
-import { findSolanaWalletByPublicKey } from "../../utils/db-operations/read/find/find-solana-wallet"
+import assignSPLTokenShares from "../../utils/solana/create-and-mint-spl/assign-spl-token-shares"
 
 export default async function createAndMintSPL (req: Request, res: Response): Promise<Response> {
 	try {
@@ -20,15 +18,12 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 
 		const createSPLResponse = await createSPLToken(metadataJSONUrl, newSPLData.splName)
 
-		const fortunaWalletDB = await findSolanaWalletByPublicKey(process.env.FORTUNA_WALLET_PUBLIC_KEY)
-		if (_.isNull(fortunaWalletDB)) return res.status(400).json({ message: "Unable to find Fortuna's Solana Wallet" })
-
 		const newSPLId = await addSPLRecord(
 			metadataJSONUrl,
 			newSPLData,
 			createSPLResponse,
 			solanaWallet.solana_wallet_id,
-			fortunaWalletDB.solana_wallet_id,
+			Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB),
 		)
 
 		await AwsS3.getInstance().updateJSONInS3(uploadJSONS3Key, { splTokenPublicKey: createSPLResponse.mint.toString()})
@@ -40,7 +35,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 			newSPLData,
 			newSPLId,
 			solanaWallet.solana_wallet_id,
-			fortunaWalletDB.solana_wallet_id,
+			Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB),
 		)
 
 		return res.status(200).json({ newSPLId, mintAddress: createSPLResponse.mint })

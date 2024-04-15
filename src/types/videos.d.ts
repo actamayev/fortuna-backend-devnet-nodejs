@@ -17,6 +17,7 @@ declare global {
 
 	interface VideoDataSendingToFrontend {
 		splName: string
+		splPublicKey: string
 		offeringSharePriceSol: number
 		description: string
 		imageUrl: string

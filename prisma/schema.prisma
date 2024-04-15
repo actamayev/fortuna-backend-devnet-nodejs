@@ -237,6 +237,7 @@ model spl_transfer {
 	spl_id										Int
 	recipient_solana_wallet_id					Int
 	recipient_token_account_id					Int
+	transaction_signature						String
 
 	sender_solana_wallet_id						Int // for spl purchases, this is fortuna's escrow wallet id. for peer-peer spl transfers, this would be a different id.
 	sender_token_account_id						Int

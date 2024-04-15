@@ -5,6 +5,7 @@ export default function transformVideoAndImageData(
 ): VideoDataSendingToFrontend {
 	return {
 		splName: videoData.spl.spl_name,
+		splPublicKey: videoData.spl.public_key_address,
 		offeringSharePriceSol: videoData.spl.listing_price_per_share_sol,
 		description: videoData.spl.description,
 		imageUrl,

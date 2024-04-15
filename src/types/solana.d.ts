@@ -97,6 +97,18 @@ declare global {
 		transferFeeSol?: number
 		transferFeeUsd?: number
 	}
+
+	interface RetrieveSplByPublicKey {
+		splId: number
+		publicKeyAddress: string
+		listingPricePerShareSol: number
+		totalNumberOfShares: number
+	}
+
+	interface PurchaseSPLTokensData {
+		numberOfTokensPurchasing: number
+		splPublicKey: string
+	}
 }
 
 export {}
