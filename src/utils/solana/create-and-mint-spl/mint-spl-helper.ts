@@ -15,7 +15,7 @@ export default async function mintSPLHelper(
 	destinationAddress: PublicKey,
 	sharesToMint: number,
 	tokenAccountId: number,
-	payerSolanaWalletId: number,
+	payerSolanaWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB),
 ): Promise<void> {
 	try {
 		const mintTransactionSignature = await mintTo(

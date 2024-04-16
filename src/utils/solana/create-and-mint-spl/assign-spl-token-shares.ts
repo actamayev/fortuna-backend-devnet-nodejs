@@ -12,7 +12,7 @@ export default async function assignSPLTokenShares (
 	uploadSplData: IncomingNewSPLData,
 	splId: number,
 	creatorWalletId: number,
-	fortunaWalletId: number,
+	fortunaWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB),
 ): Promise<void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
@@ -34,8 +34,7 @@ export default async function assignSPLTokenShares (
 			fortunaWalletId,
 			fortunaTokenAccount.address,
 			initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol,
-			initialWalletBalance.balanceInUsd - secondWalletBalance.balanceInUsd,
-			fortunaWalletId
+			initialWalletBalance.balanceInUsd - secondWalletBalance.balanceInUsd
 		)
 
 		const creatorTokenAccount = await getOrCreateAssociatedTokenAccount(
@@ -51,8 +50,7 @@ export default async function assignSPLTokenShares (
 			creatorWalletId,
 			creatorTokenAccount.address,
 			secondWalletBalance.balanceInSol - thirdWalletBalance.balanceInSol,
-			secondWalletBalance.balanceInUsd - thirdWalletBalance.balanceInUsd,
-			fortunaWalletId
+			secondWalletBalance.balanceInUsd - thirdWalletBalance.balanceInUsd
 		)
 
 		const fortunaEscrowPublicKey = new PublicKey(process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY)
@@ -69,8 +67,7 @@ export default async function assignSPLTokenShares (
 			Number(process.env.FORTUNA_ESCROW_SOLANA_WALLET_ID_DB),
 			fortunaEscrowTokenAccount.address,
 			thirdWalletBalance.balanceInSol - fourthWalletBalance.balanceInSol,
-			thirdWalletBalance.balanceInUsd - fourthWalletBalance.balanceInUsd,
-			fortunaWalletId
+			thirdWalletBalance.balanceInUsd - fourthWalletBalance.balanceInUsd
 		)
 
 		// Mint SPLs:
@@ -82,8 +79,7 @@ export default async function assignSPLTokenShares (
 			fortunaWallet.publicKey,
 			fortunaTokenAccount.address,
 			uploadSplData.numberOfShares * (1 / 100),
-			fortunaTokenAccountDB.token_account_id,
-			fortunaWalletId,
+			fortunaTokenAccountDB.token_account_id
 		)
 
 		await mintSPLHelper(
@@ -94,8 +90,7 @@ export default async function assignSPLTokenShares (
 			fortunaWallet.publicKey,
 			creatorTokenAccount.address,
 			uploadSplData.numberOfShares * (uploadSplData.creatorOwnershipPercentage / 100),
-			creatorTokenAccountDB.token_account_id,
-			fortunaWalletId,
+			creatorTokenAccountDB.token_account_id
 		)
 
 		await mintSPLHelper(
@@ -106,8 +101,7 @@ export default async function assignSPLTokenShares (
 			fortunaWallet.publicKey,
 			fortunaEscrowTokenAccount.address,
 			uploadSplData.numberOfShares * ((99 - uploadSplData.creatorOwnershipPercentage) / 100),
-			fortunaEscrowTokenAccountDB.token_account_id,
-			fortunaWalletId,
+			fortunaEscrowTokenAccountDB.token_account_id
 		)
 	} catch (error) {
 		console.error(error)

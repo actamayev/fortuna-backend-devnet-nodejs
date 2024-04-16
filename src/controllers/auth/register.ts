@@ -32,7 +32,7 @@ export default async function register (req: Request, res: Response): Promise<Re
 
 		const accessToken = signJWT({ userId, newUser: true })
 
-		return res.status(200).json({ accessToken, publicKey: publicKey })
+		return res.status(200).json({ accessToken, publicKey })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Register New User" })

@@ -6,7 +6,7 @@ export default async function addSPLRecord (
 	newSPLData: IncomingNewSPLData,
 	createSPLResponse: CreateSPLResponse,
 	creatorWalletId: number,
-	fortunaWalletId: number
+	fortunaWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
 ): Promise<number> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()

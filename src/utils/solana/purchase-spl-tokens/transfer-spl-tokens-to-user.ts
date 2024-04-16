@@ -74,8 +74,7 @@ export default async function transferSplTokensToUser(
 			fortunaEscrowTokenAccount.token_account_id,
 			true,
 			purchaseSplTokensData.numberOfTokensPurchasing,
-			transferFeeSol,
-			Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
+			transferFeeSol
 		)
 
 		// Adds/updates an ownership record for the user:

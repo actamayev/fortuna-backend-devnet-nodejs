@@ -12,7 +12,7 @@ export default async function addSplTransferRecord(
 	isSplPurchase: boolean,
 	numberSplSharesTransferred: number,
 	transferFeeSol: number,
-	feePayerSolanaWalletId: number
+	feePayerSolanaWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
 ): Promise<number> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
