@@ -4,12 +4,10 @@ import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import { getOrCreateAssociatedTokenAccount, transfer } from "@solana/spl-token"
 import { getWalletBalanceWithUSD } from "../get-wallet-balance"
 import calculateTransactionFee from "../calculate-transaction-fee"
-import addSplTransferRecord from "../../db-operations/write/spl-transfer/add-spl-transfer-record"
 import { getFortunaEscrowSolanaWalletFromSecretKey, getFortunaSolanaWalletFromSecretKey }
 	from "../get-fortuna-solana-wallet-from-secret-key"
 import addTokenAccountRecord from "../../db-operations/write/token-account/add-token-account-record"
-import addSPLOwnershipRecord from "../../db-operations/write/spl/spl-ownership/add-spl-ownership-record"
-import updateSplOwnershipRecord from "../../db-operations/write/spl/spl-ownership/update-spl-ownership-record"
+import addSplTransferRecordAndUpdateOwnership from "../../db-operations/write/add-spl-transfer-and-update-ownership"
 import retrieveTokenAccountBySplAddress from "../../db-operations/read/token-account/retrieve-token-account-by-spl-address"
 
 // eslint-disable-next-line max-lines-per-function
@@ -64,7 +62,7 @@ export default async function transferSplTokensToUser(
 
 		const transferFeeSol = await calculateTransactionFee(transactionSignature)
 
-		const splTransferId = await addSplTransferRecord(
+		const splTransferId = await addSplTransferRecordAndUpdateOwnership(
 			splId,
 			transactionSignature,
 			solanaWallet.solana_wallet_id,
@@ -73,30 +71,8 @@ export default async function transferSplTokensToUser(
 			fortunaEscrowTokenAccount.token_account_id,
 			true,
 			purchaseSplTokensData.numberOfTokensPurchasing,
-			transferFeeSol
-		)
-
-		// Adds/updates an ownership record for the user:
-		if (userHasExistingTokenAccount === true) {
-			await updateSplOwnershipRecord(
-				splId,
-				userTokenAccount.token_account_id,
-				purchaseSplTokensData.numberOfTokensPurchasing,
-				"add"
-			)
-		} else {
-			await addSPLOwnershipRecord(
-				splId,
-				userTokenAccount.token_account_id,
-				purchaseSplTokensData.numberOfTokensPurchasing
-			)
-		}
-		// Updates escrow's ownership record:
-		await updateSplOwnershipRecord(
-			splId,
-			fortunaEscrowTokenAccount.token_account_id,
-			purchaseSplTokensData.numberOfTokensPurchasing,
-			"subtract"
+			transferFeeSol,
+			userHasExistingTokenAccount
 		)
 
 		return splTransferId
