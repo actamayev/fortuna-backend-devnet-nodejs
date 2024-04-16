@@ -1,6 +1,6 @@
 import prismaClient from "../../../../prisma-client"
 
-export default async function retrieveCreatorPublicKeyFromSpl(
+export default async function retrieveCreatorWalletInfoFromSpl(
 	splId: number
 ): Promise<{ public_key: string, solana_wallet_id: number } | undefined> {
 	try {
