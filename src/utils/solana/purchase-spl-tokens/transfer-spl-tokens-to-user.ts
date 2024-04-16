@@ -9,6 +9,8 @@ import { getFortunaEscrowSolanaWalletFromSecretKey, getFortunaSolanaWalletFromSe
 	from "../get-fortuna-solana-wallet-from-secret-key"
 import addTokenAccountRecord from "../../db-operations/write/token-account/add-token-account-record"
 import retrieveTokenAccountBySplAddress from "../../db-operations/read/token-account/retrieve-token-account-by-spl-address"
+import updateSplOwnershipRecord from "../../db-operations/write/spl/spl-ownership/update-spl-ownership-record"
+import addSPLOwnershipRecord from "../../db-operations/write/spl/spl-ownership/add-spl-ownership-record"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSplTokensToUser(
@@ -21,8 +23,10 @@ export default async function transferSplTokensToUser(
 		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
 
 		// check if the user has a token account with the db.
+		let userHasExistingTokenAccount = true
 		let userTokenAccount = await retrieveTokenAccountBySplAddress(purchaseSplTokensData.splPublicKey, solanaWallet.public_key)
 		if (_.isNull(userTokenAccount)) {
+			userHasExistingTokenAccount = false
 			const initialWalletBalance = await getWalletBalanceWithUSD(process.env.FORTUNA_WALLET_PUBLIC_KEY)
 			const newTokenAccount = await getOrCreateAssociatedTokenAccount(
 				connection,
@@ -72,6 +76,29 @@ export default async function transferSplTokensToUser(
 			purchaseSplTokensData.numberOfTokensPurchasing,
 			transferFeeSol,
 			Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
+		)
+
+		// Adds/updates an ownership record for the user:
+		if (userHasExistingTokenAccount === true) {
+			await updateSplOwnershipRecord(
+				splDetails.splId,
+				userTokenAccount.token_account_id,
+				purchaseSplTokensData.numberOfTokensPurchasing,
+				"add"
+			)
+		} else {
+			await addSPLOwnershipRecord(
+				splDetails.splId,
+				userTokenAccount.token_account_id,
+				purchaseSplTokensData.numberOfTokensPurchasing
+			)
+		}
+		// Updates escrow's ownership record:
+		await updateSplOwnershipRecord(
+			splDetails.splId,
+			fortunaEscrowTokenAccount.token_account_id,
+			purchaseSplTokensData.numberOfTokensPurchasing,
+			"subtract"
 		)
 
 		return splTransferId
