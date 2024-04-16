@@ -47,7 +47,7 @@ export default async function transferSplTokensToUser(
 			purchaseSplTokensData.splPublicKey, process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY
 		)
 
-		if (_.isNull(fortunaEscrowTokenAccount)) throw Error("Unable to find Escrow Wallet in DB")
+		if (_.isNull(fortunaEscrowTokenAccount)) throw Error("Unable to find Escrow Token Account in DB")
 
 		const fortunaEscrowWallet = getFortunaEscrowSolanaWalletFromSecretKey()
 		const transactionSignature = await transfer(
