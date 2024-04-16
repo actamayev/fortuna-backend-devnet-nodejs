@@ -18,7 +18,7 @@ export default async function addSPLMintRecord (
 				number_of_shares: numberOfShares,
 				spl_mint_fee_sol: splMintFeeSol,
 				spl_mint_fee_usd: splMintFeeSol * solPriceDetails.price,
-				payer_solana_wallet_id: payerSolanaWalletId,
+				fee_payer_solana_wallet_id: payerSolanaWalletId,
 				transaction_signature: transactionSignature
 			}
 		})

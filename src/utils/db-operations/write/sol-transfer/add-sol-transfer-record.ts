@@ -27,7 +27,7 @@ export default async function addSolTransferRecord (
 				transfer_fee_sol: transferFeeSol,
 				transfer_fee_usd: transferFeeSol * solPriceDetails.price,
 				sender_solana_wallet_id: senderWalletId,
-				payer_solana_wallet_id: payerSolanaWalletId
+				fee_payer_solana_wallet_id: payerSolanaWalletId
 			}
 		})
 
