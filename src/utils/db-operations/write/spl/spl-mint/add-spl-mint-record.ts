@@ -1,5 +1,5 @@
-import prismaClient from "../../../../prisma-client"
-import SolPriceManager from "../../../../classes/sol-price-manager"
+import prismaClient from "../../../../../prisma-client"
+import SolPriceManager from "../../../../../classes/sol-price-manager"
 
 export default async function addSPLMintRecord (
 	splId: number,

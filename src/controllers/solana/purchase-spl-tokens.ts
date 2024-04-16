@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { Request, Response } from "express"
-import addSplPurchaseRecord from "../../utils/db-operations/write/spl-purchase/add-spl-purchase-record"
+import addSplPurchaseRecord from "../../utils/db-operations/write/spl/spl-purchase/add-spl-purchase-record"
 import transferSplTokensToUser from "../../utils/solana/purchase-spl-tokens/transfer-spl-tokens-to-user"
 import transferSolFromUserToCreator from "../../utils/solana/purchase-spl-tokens/transfer-sol-from-user-to-creator"
 import retrieveCreatorPublicKeyFromSpl from "../../utils/db-operations/read/spl/retrieve-creator-public-key-from-spl"
