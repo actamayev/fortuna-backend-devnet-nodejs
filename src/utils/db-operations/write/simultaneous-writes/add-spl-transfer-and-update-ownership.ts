@@ -36,7 +36,15 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 			})
 
 			// Adds/updates an ownership record for the user:
-			if (userHasExistingTokenAccount === true) {
+			if (userHasExistingTokenAccount === false) {
+				await prisma.spl_ownership.create({
+					data: {
+						spl_id: splId,
+						token_account_id: recipientTokenAccountId,
+						number_of_shares: numberSplSharesTransferred
+					}
+				})
+			} else {
 				await prisma.spl_ownership.update({
 					where: {
 						spl_id_token_account_id: {
@@ -48,14 +56,6 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 						number_of_shares: {
 							increment: numberSplSharesTransferred
 						}
-					}
-				})
-			} else {
-				await prisma.spl_ownership.create({
-					data: {
-						spl_id: splId,
-						token_account_id: recipientTokenAccountId,
-						number_of_shares: numberSplSharesTransferred
 					}
 				})
 			}
