@@ -1,4 +1,3 @@
-import _ from "lodash"
 import { token_account } from "@prisma/client"
 import prismaClient from "../../../../prisma-client"
 
@@ -17,8 +16,6 @@ export default async function retrieveTokenAccountBySplAddress(
 				}
 			}
 		})
-
-		if (_.isNull(tokenAccount)) return null
 
 		return tokenAccount
 	} catch (error) {
