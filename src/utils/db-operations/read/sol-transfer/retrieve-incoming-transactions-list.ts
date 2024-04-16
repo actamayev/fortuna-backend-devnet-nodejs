@@ -33,7 +33,7 @@ export default async function retrieveIncomingTransactionsList(publicKey: string
 
 		return incomingTransactionsList.map(transaction => ({
 			...transaction,
-			username: transaction.is_recipient_fortuna_wallet ? transaction.recipient_solana_wallet?.user?.username : undefined
+			username: transaction.is_recipient_fortuna_wallet ? transaction.recipient_solana_wallet?.user.username : undefined
 		}))
 	} catch (error) {
 		console.error(error)
