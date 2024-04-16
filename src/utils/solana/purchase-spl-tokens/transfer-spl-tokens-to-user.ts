@@ -8,9 +8,9 @@ import addSplTransferRecord from "../../db-operations/write/spl-transfer/add-spl
 import { getFortunaEscrowSolanaWalletFromSecretKey, getFortunaSolanaWalletFromSecretKey }
 	from "../get-fortuna-solana-wallet-from-secret-key"
 import addTokenAccountRecord from "../../db-operations/write/token-account/add-token-account-record"
-import retrieveTokenAccountBySplAddress from "../../db-operations/read/token-account/retrieve-token-account-by-spl-address"
-import updateSplOwnershipRecord from "../../db-operations/write/spl/spl-ownership/update-spl-ownership-record"
 import addSPLOwnershipRecord from "../../db-operations/write/spl/spl-ownership/add-spl-ownership-record"
+import updateSplOwnershipRecord from "../../db-operations/write/spl/spl-ownership/update-spl-ownership-record"
+import retrieveTokenAccountBySplAddress from "../../db-operations/read/token-account/retrieve-token-account-by-spl-address"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSplTokensToUser(
@@ -42,7 +42,6 @@ export default async function transferSplTokensToUser(
 				newTokenAccount.address,
 				initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol,
 				initialWalletBalance.balanceInUsd - secondWalletBalance.balanceInUsd,
-				Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
 			)
 			userTokenAccount = tokenAccount
 		}

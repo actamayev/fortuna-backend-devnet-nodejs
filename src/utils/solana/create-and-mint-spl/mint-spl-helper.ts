@@ -5,7 +5,7 @@ import addSPLMintRecord from "../../db-operations/write/spl/spl-mint/add-spl-min
 import addSPLOwnershipRecord from "../../db-operations/write/spl/spl-ownership/add-spl-ownership-record"
 
 // This function is responsible for minting to an account, adding a mint record to DB, and adding a mint ownership record to DB
-// eslint-disable-next-line max-params, max-lines-per-function
+// eslint-disable-next-line max-params
 export default async function mintSPLHelper(
 	connection: Connection,
 	payerWallet: Keypair,
@@ -14,8 +14,7 @@ export default async function mintSPLHelper(
 	mintAuthority: PublicKey,
 	destinationAddress: PublicKey,
 	sharesToMint: number,
-	tokenAccountId: number,
-	payerSolanaWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB),
+	tokenAccountId: number
 ): Promise<void> {
 	try {
 		const mintTransactionSignature = await mintTo(
@@ -25,7 +24,7 @@ export default async function mintSPLHelper(
 			destinationAddress,
 			mintAuthority,
 			sharesToMint
-			// FUTURE TODO: Figure out what happens if the share count is non-divisiable by 100
+			// ASAP TODO: Figure out what happens if the share count is non-divisiable by 100
 			// If the share count is 140, then Fortuna's ownership is 1.4, which won't work b/c the decimal is 0 (shares are indivisible)
 		)
 
@@ -36,7 +35,6 @@ export default async function mintSPLHelper(
 			tokenAccountId,
 			sharesToMint,
 			feeInSol,
-			payerSolanaWalletId,
 			mintTransactionSignature
 		)
 

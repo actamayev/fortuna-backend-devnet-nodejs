@@ -1,7 +1,6 @@
 import { Connection, LAMPORTS_PER_SOL, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import SolPriceManager from "../../classes/sol-price-manager"
 
-// TODO: Make a separate function to get just the sol baalnce (bypass the solpricemanager)
 export async function getWalletBalanceWithUSD(
 	publicKeyString: string,
 ): Promise<{ balanceInSol: number, balanceInUsd: number }> {

@@ -6,8 +6,8 @@ export default async function addSPLMintRecord (
 	tokenAccountId: number,
 	numberOfShares: number,
 	splMintFeeSol: number,
-	payerSolanaWalletId: number,
-	transactionSignature: string
+	transactionSignature: string,
+	feePayerSolanaWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
 ): Promise<void> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
@@ -18,7 +18,7 @@ export default async function addSPLMintRecord (
 				number_of_shares: numberOfShares,
 				spl_mint_fee_sol: splMintFeeSol,
 				spl_mint_fee_usd: splMintFeeSol * solPriceDetails.price,
-				fee_payer_solana_wallet_id: payerSolanaWalletId,
+				fee_payer_solana_wallet_id: feePayerSolanaWalletId,
 				transaction_signature: transactionSignature
 			}
 		})

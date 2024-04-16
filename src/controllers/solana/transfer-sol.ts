@@ -40,11 +40,11 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
-		let payerSolanaWalletId
+		let feePayerSolanaWalletId
 		if (isRecipientFortunaWallet === true) {
-			payerSolanaWalletId = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
+			feePayerSolanaWalletId = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
 		} else {
-			payerSolanaWalletId = solanaWallet.solana_wallet_id
+			feePayerSolanaWalletId = solanaWallet.solana_wallet_id
 		}
 
 		const solTransferRecord = await addSolTransferRecord(
@@ -54,9 +54,9 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			transferData.transferAmountSol,
 			transactionFeeInSol,
 			solanaWallet.solana_wallet_id,
-			payerSolanaWalletId,
 			recipientSolanaWalletId,
-			false
+			false,
+			feePayerSolanaWalletId,
 		)
 
 		if (isRecipientFortunaWallet === true) {

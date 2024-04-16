@@ -8,7 +8,7 @@ export default async function addTokenAccountRecord (
 	publicKey: PublicKey,
 	creationFeeSol: number,
 	creationFeeUsd: number,
-	payerWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
+	feePayerSolanaWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
 ): Promise<token_account> {
 	try {
 		const tokenAccountResponse = await prismaClient.token_account.create({
@@ -18,7 +18,7 @@ export default async function addTokenAccountRecord (
 				public_key: publicKey.toString(),
 				token_account_creation_fee_sol: creationFeeSol,
 				token_account_creation_fee_usd: creationFeeUsd,
-				fee_payer_solana_wallet_id: payerWalletId
+				fee_payer_solana_wallet_id: feePayerSolanaWalletId
 			}
 		})
 

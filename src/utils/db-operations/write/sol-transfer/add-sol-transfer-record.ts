@@ -9,9 +9,9 @@ export default async function addSolTransferRecord (
 	transferAmountSol: number,
 	transferFeeSol: number,
 	senderWalletId: number,
-	payerSolanaWalletId: number,
 	recipientSolanaWalletId: number | undefined,
-	isSplPurchase: boolean
+	isSplPurchase: boolean,
+	feePayerSolanaWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
 ): Promise<AddSolTransferToDB> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
@@ -27,7 +27,7 @@ export default async function addSolTransferRecord (
 				transfer_fee_sol: transferFeeSol,
 				transfer_fee_usd: transferFeeSol * solPriceDetails.price,
 				sender_solana_wallet_id: senderWalletId,
-				fee_payer_solana_wallet_id: payerSolanaWalletId
+				fee_payer_solana_wallet_id: feePayerSolanaWalletId
 			}
 		})
 

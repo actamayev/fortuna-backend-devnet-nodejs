@@ -11,8 +11,7 @@ export default async function assignSPLTokenShares (
 	creatorPublicKey: PublicKey,
 	uploadSplData: IncomingNewSPLData,
 	splId: number,
-	creatorWalletId: number,
-	fortunaWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB),
+	creatorWalletId: number
 ): Promise<void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
@@ -31,7 +30,7 @@ export default async function assignSPLTokenShares (
 
 		const fortunaTokenAccountDB = await addTokenAccountRecord(
 			splId,
-			fortunaWalletId,
+			Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB),
 			fortunaTokenAccount.address,
 			initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol,
 			initialWalletBalance.balanceInUsd - secondWalletBalance.balanceInUsd

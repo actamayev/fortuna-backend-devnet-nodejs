@@ -45,7 +45,6 @@ export default async function transferSolFromUserToCreator(
 			solToTransfer,
 			transactionFeeInSol,
 			senderSolanaWallet.solana_wallet_id,
-			Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB),
 			recipientPublicKeyAndWalletId.solana_wallet_id,
 			true
 		)
