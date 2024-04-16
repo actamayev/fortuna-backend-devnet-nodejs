@@ -11,7 +11,7 @@ const transferSolSchema = Joi.object({
 	}).required()
 }).required()
 
-export default function validateTransferSolToPublicKey (req: Request, res: Response, next: NextFunction): void | Response {
+export default function validateTransferSolToPublicKey (req: Request, res: Response, next: NextFunction): Response | void {
 	try {
 		const { error } = transferSolSchema.validate(req.body)
 

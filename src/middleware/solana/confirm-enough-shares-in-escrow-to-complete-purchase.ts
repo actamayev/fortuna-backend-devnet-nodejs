@@ -5,7 +5,7 @@ export default async function confirmEnoughSharesInEscrowToCompletePurchase(
 	req: Request,
 	res: Response,
 	next: NextFunction
-): Promise<void | Response> {
+): Promise<Response | void> {
 	try {
 		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchaseSPLTokensData
 		const splDetails = req.splDetails

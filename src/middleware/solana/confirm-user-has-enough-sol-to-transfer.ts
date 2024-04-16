@@ -6,17 +6,15 @@ export default async function confirmUserHasEnoughSolToTransfer(
 	req: Request,
 	res: Response,
 	next: NextFunction
-): Promise<void | Response> {
+): Promise<Response | void> {
 	try {
 		const solanaWallet = req.solanaWallet
 		const transferData = req.body.transferSolData as TransferSolData
 		const isRecipientFortunaWallet = req.isRecipientFortunaWallet
 		const balanceInSol = await getWalletBalanceSol(solanaWallet.public_key)
 
-		if (isRecipientFortunaWallet === true) {
-			if (balanceInSol < transferData.transferAmountSol) {
-				return res.status(400).json({ message: "User does not have enough sol to complete the transfer" })
-			}
+		if (isRecipientFortunaWallet === true && balanceInSol < transferData.transferAmountSol) {
+			return res.status(400).json({ message: "User does not have enough sol to complete the transfer" })
 		} else {
 			// This is if the recipient is not registered with Fortuna. In this case, the sender must cover the transaction fee.
 			const transferCostSol = 5000 / LAMPORTS_PER_SOL

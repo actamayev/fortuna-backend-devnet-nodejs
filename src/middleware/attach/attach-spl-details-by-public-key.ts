@@ -2,7 +2,7 @@ import _ from "lodash"
 import { NextFunction, Request, Response } from "express"
 import retrieveSplByPublicKey from "../../utils/db-operations/read/spl/retrieve-spl-by-public-key"
 
-export default async function attachSplDetailsByPublicKey(req: Request, res: Response, next: NextFunction) : Promise<void | Response> {
+export default async function attachSplDetailsByPublicKey(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {
 		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchaseSPLTokensData
 		const splDetails = await retrieveSplByPublicKey(purchaseSplTokensData.splPublicKey)

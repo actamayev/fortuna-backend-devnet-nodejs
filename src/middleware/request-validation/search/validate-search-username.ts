@@ -6,7 +6,7 @@ const usernameSchema = Joi.object({
 	username: Joi.string().required().trim()
 }).required()
 
-export default function validateSearchUsername (req: Request, res: Response, next: NextFunction): void | Response {
+export default function validateSearchUsername (req: Request, res: Response, next: NextFunction): Response | void {
 	try {
 		const { error } = usernameSchema.validate(req.params)
 

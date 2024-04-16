@@ -2,7 +2,7 @@ import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 import { Connection, clusterApiUrl } from "@solana/web3.js"
 
-export default async function confirmPublicKeyExists(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
+export default async function confirmPublicKeyExists(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {
 		const recipientPublicKey = req.recipientPublicKey
 

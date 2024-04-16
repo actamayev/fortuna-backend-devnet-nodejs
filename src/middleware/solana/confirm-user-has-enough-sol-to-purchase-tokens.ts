@@ -5,7 +5,7 @@ export default async function confirmUserHasEnoughSolToPurchaseTokens(
 	req: Request,
 	res: Response,
 	next: NextFunction
-): Promise<void | Response> {
+): Promise<Response | void> {
 	try {
 		const solanaWallet = req.solanaWallet
 		const splDetails = req.splDetails

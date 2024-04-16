@@ -6,7 +6,7 @@ const videoUUIDSchema = Joi.object({
 	videoUUID: Joi.string().uuid({ version: "uuidv4" }).required().trim()
 }).required()
 
-export default function validateVideoUUID (req: Request, res: Response, next: NextFunction): void | Response {
+export default function validateVideoUUID (req: Request, res: Response, next: NextFunction): Response | void {
 	try {
 		const { error } = videoUUIDSchema.validate(req.params)
 

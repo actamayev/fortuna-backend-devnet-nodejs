@@ -11,7 +11,7 @@ const transferSolToUsernameSchema = Joi.object({
 	}).required()
 }).required()
 
-export default async function validateTransferSolToUsername (req: Request, res: Response, next: NextFunction): Promise<void | Response> {
+export default async function validateTransferSolToUsername (req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {
 		const { error } = transferSolToUsernameSchema.validate(req.body)
 

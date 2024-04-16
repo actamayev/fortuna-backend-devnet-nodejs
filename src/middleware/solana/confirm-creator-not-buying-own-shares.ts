@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 
-export default function confirmCreatorNotBuyingOwnShares(req: Request, res: Response, next: NextFunction):void | Response {
+export default function confirmCreatorNotBuyingOwnShares(req: Request, res: Response, next: NextFunction):Response | void {
 	try {
 		const solanaWallet = req.solanaWallet
 		const splDetails = req.splDetails

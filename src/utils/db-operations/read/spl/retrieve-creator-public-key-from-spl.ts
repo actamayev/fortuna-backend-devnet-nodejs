@@ -1,9 +1,9 @@
 import _ from "lodash"
 import prismaClient from "../../../../prisma-client"
 
-export default async function retrieveCreatorPublicKeyFromSpl(splId: number): Promise<{
-	public_key: string, solana_wallet_id: number
-} | null> {
+export default async function retrieveCreatorPublicKeyFromSpl(
+	splId: number
+): Promise<{ public_key: string, solana_wallet_id: number } | null> {
 	try {
 		const creatorSPLData = await prismaClient.spl.findFirst({
 			where: {
