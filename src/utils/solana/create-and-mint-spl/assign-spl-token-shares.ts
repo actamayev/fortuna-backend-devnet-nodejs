@@ -28,6 +28,7 @@ export default async function assignSPLTokenShares (
 
 		const secondWalletBalance = await getWalletBalanceWithUSD(process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
+		// FUTURE TODO: Combine the addtokenAccountRecord with the mint spl helper (addsplmintwithownership)
 		const fortunaTokenAccountDB = await addTokenAccountRecord(
 			splId,
 			Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB),

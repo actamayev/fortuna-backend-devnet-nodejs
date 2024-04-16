@@ -17,14 +17,14 @@ export default async function determineNumberOfTokensRemainingInEscrow(splPublic
 		tokenAccounts.value.forEach((tokenAccount) => {
 			const accountData = AccountLayout.decode(tokenAccount.account.data)
 			const accountDetails = {
-				publicKey: new PublicKey(accountData.mint).toString(),  // Converting PublicKey to String for easy JSON handling
+				publicKey: new PublicKey(accountData.mint).toString(),
 				amount: accountData.amount.toString()
 			}
-			accounts.push(accountDetails)  // Assuming 'accounts' is an array initialized earlier
+			accounts.push(accountDetails)
 		})
 
-		const account = accounts.find(account1 => account1.publicKey === splPublicKey)
-		return account ? Number(account.amount) : 0
+		const tokenAccount = accounts.find(account => account.publicKey === splPublicKey)
+		return tokenAccount ? Number(tokenAccount.amount) : 0
 	} catch (error) {
 		console.error(error)
 		throw error

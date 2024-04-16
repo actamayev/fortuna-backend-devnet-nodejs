@@ -26,14 +26,12 @@ export default async function transferSolFromUserToCreator(
 		// May be possible to fix by making Fortuna a co-signer, if all Fortuna wallets are made to be multi-signature accounts.
 		// Would have to think about wheather or not we want this.
 
-		const keypairs: Keypair[] = []
 		const senderSecretKey = bs58.decode(senderSolanaWallet.secret_key)
 		const senderKeypair = Keypair.fromSecretKey(senderSecretKey)
-		keypairs.push(senderKeypair)
-
 		const fortunaSecretKey = bs58.decode(process.env.FORTUNA_WALLET_SECRET_KEY)
 		const fortunaKeypair = Keypair.fromSecretKey(fortunaSecretKey)
-		keypairs.unshift(fortunaKeypair)
+
+		const keypairs: Keypair[] = [fortunaKeypair, senderKeypair]
 
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
