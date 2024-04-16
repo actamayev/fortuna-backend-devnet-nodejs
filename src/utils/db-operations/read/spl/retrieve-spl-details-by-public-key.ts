@@ -1,7 +1,7 @@
 import _ from "lodash"
 import prismaClient from "../../../../prisma-client"
 
-export default async function retrieveSplByPublicKey(
+export default async function retrieveSplDetailsByPublicKey(
 	splPublicKey: string
 ): Promise<RetrieveSplByPublicKey | null> {
 	try {

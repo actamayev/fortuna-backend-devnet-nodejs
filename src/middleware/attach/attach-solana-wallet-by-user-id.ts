@@ -12,6 +12,6 @@ export default async function attachSolanaWalletByUserId(req: Request, res: Resp
 		next()
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Attach Solana Wallet" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to Attach Solana Wallet by UserId" })
 	}
 }

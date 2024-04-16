@@ -18,6 +18,6 @@ export default async function confirmUserHasEnoughSolToPurchaseTokens(
 		next()
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Check if User has enough Sol to complete the transfer" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to Check if User has enough Sol to purchase tokens" })
 	}
 }

@@ -1,8 +1,8 @@
 import express from "express"
 
-import validateVideoUUID from "../middleware/request-validation/videos/validate-video-uuid"
-
 import getVideoByUUID from "../controllers/videos/get-video-by-uuid"
+
+import validateVideoUUID from "../middleware/request-validation/videos/validate-video-uuid"
 
 const videosRoutes = express.Router()
 

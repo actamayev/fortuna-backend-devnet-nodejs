@@ -13,6 +13,6 @@ export default function validateTransactionSignatures (req: Request, res: Respon
 		next()
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Validate Create and Mint SPL Data" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to Validate Transaction Signatures" })
 	}
 }

@@ -16,7 +16,7 @@ import retrieveTokenAccountBySplAddress from "../../db-operations/read/token-acc
 export default async function transferSplTokensToUser(
 	solanaWallet: solana_wallet,
 	purchaseSplTokensData: PurchaseSPLTokensData,
-	splDetails: RetrieveSplByPublicKey
+	splId: number
 ): Promise<number> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
@@ -37,7 +37,7 @@ export default async function transferSplTokensToUser(
 			const secondWalletBalance = await getWalletBalanceWithUSD(process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
 			const tokenAccount = await addTokenAccountRecord(
-				splDetails.splId,
+				splId,
 				solanaWallet.solana_wallet_id,
 				newTokenAccount.address,
 				initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol,
@@ -65,7 +65,7 @@ export default async function transferSplTokensToUser(
 		const transferFeeSol = await calculateTransactionFee(transactionSignature)
 
 		const splTransferId = await addSplTransferRecord(
-			splDetails.splId,
+			splId,
 			transactionSignature,
 			solanaWallet.solana_wallet_id,
 			userTokenAccount.token_account_id,
@@ -79,21 +79,21 @@ export default async function transferSplTokensToUser(
 		// Adds/updates an ownership record for the user:
 		if (userHasExistingTokenAccount === true) {
 			await updateSplOwnershipRecord(
-				splDetails.splId,
+				splId,
 				userTokenAccount.token_account_id,
 				purchaseSplTokensData.numberOfTokensPurchasing,
 				"add"
 			)
 		} else {
 			await addSPLOwnershipRecord(
-				splDetails.splId,
+				splId,
 				userTokenAccount.token_account_id,
 				purchaseSplTokensData.numberOfTokensPurchasing
 			)
 		}
 		// Updates escrow's ownership record:
 		await updateSplOwnershipRecord(
-			splDetails.splId,
+			splId,
 			fortunaEscrowTokenAccount.token_account_id,
 			purchaseSplTokensData.numberOfTokensPurchasing,
 			"subtract"

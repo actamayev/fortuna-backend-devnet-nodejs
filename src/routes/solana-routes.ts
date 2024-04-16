@@ -68,9 +68,9 @@ solanaRoutes.post(
 	"/purchase-spl-tokens",
 	validatePurchaseSplTokens,
 	attachSplDetailsByPublicKey,
+	confirmEnoughSharesInEscrowToCompletePurchase,
 	attachSolanaWalletByUserId,
 	confirmCreatorNotBuyingOwnShares,
-	confirmEnoughSharesInEscrowToCompletePurchase,
 	confirmUserHasEnoughSolToPurchaseTokens,
 	purchaseSplTokens
 )
