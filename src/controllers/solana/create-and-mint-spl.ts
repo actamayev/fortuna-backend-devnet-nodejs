@@ -8,7 +8,7 @@ import assignSPLTokenShares from "../../utils/solana/create-and-mint-spl/assign-
 
 export default async function createAndMintSPL (req: Request, res: Response): Promise<Response> {
 	try {
-		const solanaWallet = req.solanaWallet
+		const creatorSolanaWallet = req.solanaWallet
 		const newSPLData = req.body.newSPLData as IncomingNewSPLData
 
 		const uploadJSONS3Key = createS3Key("spl-metadata", newSPLData.splName, newSPLData.uuid)
@@ -22,18 +22,18 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 			metadataJSONUrl,
 			newSPLData,
 			createSPLResponse,
-			solanaWallet.solana_wallet_id
+			creatorSolanaWallet.solana_wallet_id
 		)
 
 		await AwsS3.getInstance().updateJSONInS3(uploadJSONS3Key, { splTokenPublicKey: createSPLResponse.mint.toString()})
 
-		const creatorPublicKey = new PublicKey(solanaWallet.public_key)
+		const creatorPublicKey = new PublicKey(creatorSolanaWallet.public_key)
 		await assignSPLTokenShares(
 			createSPLResponse.mint,
 			creatorPublicKey,
 			newSPLData,
 			newSPLId,
-			solanaWallet.solana_wallet_id
+			creatorSolanaWallet.solana_wallet_id
 		)
 
 		return res.status(200).json({ newSPLId, mintAddress: createSPLResponse.mint })

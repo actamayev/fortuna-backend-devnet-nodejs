@@ -1,5 +1,5 @@
-import SolPriceManager from "../../../classes/sol-price-manager"
-import prismaClient from "../../../prisma-client"
+import prismaClient from "../../../../prisma-client"
+import SolPriceManager from "../../../../classes/sol-price-manager"
 
 // eslint-disable-next-line max-params, max-lines-per-function
 export default async function addSplTransferRecordAndUpdateOwnership(
