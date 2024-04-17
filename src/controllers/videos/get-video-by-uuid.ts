@@ -18,7 +18,7 @@ export default async function getVideoByUUID (req: Request, res: Response): Prom
 
 		const transformedVideoData = transformVideoAndImageData(videoData, imageUrl.image_url, remainingSharesForSale)
 
-		return res.status(200).json({ video: transformedVideoData })
+		return res.status(200).json({ videoData: transformedVideoData })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to get video by UUID" })

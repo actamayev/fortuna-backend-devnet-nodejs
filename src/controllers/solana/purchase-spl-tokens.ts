@@ -32,7 +32,14 @@ export default async function purchaseSplTokens(req: Request, res: Response): Pr
 		// 3) Record to spl_purchase table:
 		await addSplPurchaseRecord(splDetails.splId, splTransferId, solTransferId)
 
-		return res.status(200).json({ success: `Purchased ${purchaseSplTokensData.numberOfTokensPurchasing} tokens` })
+		return res.status(200).json({
+			splName: splDetails.splName,
+			splPublicKey: splDetails.publicKeyAddress,
+			numberOfShares: purchaseSplTokensData.numberOfTokensPurchasing,
+			imageUrl: splDetails.imageUrl,
+			uuid: splDetails.uuid,
+			isMyContent: splDetails.creatorWalletId === solanaWallet.solana_wallet_id
+		})
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to complete purchase of Spl token(s)"})
