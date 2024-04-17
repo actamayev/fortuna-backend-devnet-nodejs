@@ -11,6 +11,7 @@ export default async function getSplOwnershipsByWalletId(
 				}
 			},
 			select: {
+				number_of_shares: true,
 				spl: {
 					select: {
 						creator_wallet_id: true,
@@ -23,8 +24,7 @@ export default async function getSplOwnershipsByWalletId(
 							}
 						}
 					}
-				},
-				number_of_shares: true
+				}
 			}
 		})
 

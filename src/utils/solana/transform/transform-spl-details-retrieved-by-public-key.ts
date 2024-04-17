@@ -1,6 +1,6 @@
 export default function transformSplDetailsRetrievedByPublicKey(
 	splData: RetrievedSplByPublicKeyData
-): SplByPublicKey {
+): SplByPublicKeyData {
 	try {
 		return {
 			splName: splData.spl_name,

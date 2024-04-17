@@ -111,7 +111,7 @@ declare global {
 		}
 	}
 
-	interface SplByPublicKey {
+	interface SplByPublicKeyData {
 		splName: string
 		splId: number
 		publicKeyAddress: string

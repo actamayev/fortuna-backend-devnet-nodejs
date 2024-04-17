@@ -10,10 +10,7 @@ export default function transformTransactionsList(
 	}
 }
 
-export function transformTransaction(
-	transaction: RetrievedDBTransactionListData,
-	solanaPublicKey: string
-): OutputTransactionData {
+export function transformTransaction(transaction: RetrievedDBTransactionListData, solanaPublicKey: string): OutputTransactionData {
 	try {
 		return {
 			solTransferId: transaction.sol_transfer_id,

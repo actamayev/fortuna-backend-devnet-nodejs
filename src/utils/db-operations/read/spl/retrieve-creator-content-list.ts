@@ -16,6 +16,7 @@ export default async function retrieveCreatorContentList(solanaWalletId: number)
 				listing_price_per_share_sol: true,
 				description: true,
 				initial_creator_ownership_percentage: true,
+				public_key_address: true,
 				uploaded_image: {
 					select: {
 						image_url: true
@@ -26,8 +27,7 @@ export default async function retrieveCreatorContentList(solanaWalletId: number)
 						video_url: true,
 						uuid: true
 					}
-				},
-				public_key_address: true
+				}
 			}
 		})
 
