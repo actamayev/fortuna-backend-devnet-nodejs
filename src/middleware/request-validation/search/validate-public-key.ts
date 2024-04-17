@@ -7,7 +7,7 @@ const publicKeySchema = Joi.object({
 	publicKey: publicKeyValidator.required().trim()
 }).required()
 
-export default function validatePublicKey (req: Request, res: Response, next: NextFunction): void | Response {
+export default function validatePublicKey (req: Request, res: Response, next: NextFunction): Response | void {
 	try {
 		const { error } = publicKeySchema.validate(req.params)
 

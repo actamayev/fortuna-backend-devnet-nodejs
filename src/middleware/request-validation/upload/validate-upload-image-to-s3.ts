@@ -6,7 +6,7 @@ const uploadImageToS3Schema = Joi.object({
 	uuid: Joi.string().uuid({ version: "uuidv4" }).required(),
 }).required()
 
-export default function validateUploadImageToS3 (req: Request, res: Response, next: NextFunction): void | Response {
+export default function validateUploadImageToS3 (req: Request, res: Response, next: NextFunction): Response | void {
 	try {
 		const { error } = uploadImageToS3Schema.validate(req.body)
 

@@ -5,15 +5,15 @@ import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import { createMetadataAccountV3 } from "@metaplex-foundation/mpl-token-metadata"
 import { fromWeb3JsKeypair, fromWeb3JsPublicKey } from "@metaplex-foundation/umi-web3js-adapters"
-import getWalletBalance from "./get-wallet-balance"
-import getFortunaSolanaWalletFromSecretKey from "./get-fortuna-solana-wallet-from-secret-key"
+import { getWalletBalanceSol } from "../get-wallet-balance"
+import { getFortunaSolanaWalletFromSecretKey } from "../get-fortuna-solana-wallet-from-secret-key"
 
 export default async function createSPLToken (metadataJSONUrl: string, splName: string): Promise<CreateSPLResponse> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
 
-		const initialWalletBalance = await getWalletBalance(process.env.FORTUNA_WALLET_PUBLIC_KEY)
+		const initialWalletBalanceSol = await getWalletBalanceSol(process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
 		const mint = await createMint(
 			connection,
@@ -22,9 +22,9 @@ export default async function createSPLToken (metadataJSONUrl: string, splName: 
 			null,
 			0
 		)
-		const secondWalletBalance = await getWalletBalance(process.env.FORTUNA_WALLET_PUBLIC_KEY)
+		const secondWalletBalanceSol = await getWalletBalanceSol(process.env.FORTUNA_WALLET_PUBLIC_KEY)
 
-		const feeInSol = initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol
+		const feeInSol = initialWalletBalanceSol - secondWalletBalanceSol
 
 		const metadataTransactionSignature = await createTokenMetadata(mint, metadataJSONUrl, splName)
 

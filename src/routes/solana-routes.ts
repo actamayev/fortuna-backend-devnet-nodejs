@@ -4,20 +4,27 @@ import transferSol from "../controllers/solana/transfer-sol"
 import getTransactions from "../controllers/solana/get-transactions"
 import createAndMintSPL from "../controllers/solana/create-and-mint-spl"
 import getTransactionFees from "../controllers/solana/get-transaction-fees"
+import purchaseSplTokens from "../controllers/solana/purchase-spl-tokens"
 import requestSolanaAirdrop from "../controllers/solana/request-solana-airdrop"
 import getTransactionDetails from "../controllers/solana/get-transaction-details"
 import getCreatorContentList from "../controllers/solana/get-creator-content-list"
 import getSolanaWalletBalance from "../controllers/solana/get-solana-wallet-balance"
+import getNumberOfTokensInTokenAccount from "../controllers/solana/get-number-of-tokens-in-token-account"
 
 import confirmPublicKeyExists from "../middleware/solana/confirm-public-key-exists"
 import confirmNotSendingSolToSelf from "../middleware/solana/confirm-not-sending-sol-to-self"
 import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
+import attachSplDetailsByPublicKey from "../middleware/attach/attach-spl-details-by-public-key"
+import confirmCreatorNotBuyingOwnShares from "../middleware/solana/confirm-creator-not-buying-own-shares"
 import validateCreateAndMintSPL from "../middleware/request-validation/solana/validate-create-and-mint-spl"
 import confirmUserHasEnoughSolToTransfer from "../middleware/solana/confirm-user-has-enough-sol-to-transfer"
+import validatePurchaseSplTokens from "../middleware/request-validation/solana/validate-purchase-spl-tokens"
 import validateTransactionSignatures from "../middleware/request-validation/solana/validate-transaction-signatures"
 import validateTransferSolToUsername from "../middleware/request-validation/solana/validate-transfer-sol-to-username"
 import checkIfPublicKeyPartOfFortuna from "../middleware/request-validation/solana/check-if-public-key-part-of-fortuna"
 import validateTransferSolToPublicKey from "../middleware/request-validation/solana/validate-transfer-sol-to-public-key"
+import confirmUserHasEnoughSolToPurchaseTokens from "../middleware/solana/confirm-user-has-enough-sol-to-purchase-tokens"
+import confirmEnoughSharesInEscrowToCompletePurchase from "../middleware/solana/confirm-enough-shares-in-escrow-to-complete-purchase"
 
 const solanaRoutes = express.Router()
 
@@ -57,7 +64,24 @@ solanaRoutes.post(
 	transferSol
 )
 
+solanaRoutes.post(
+	"/purchase-spl-tokens",
+	validatePurchaseSplTokens,
+	attachSplDetailsByPublicKey,
+	confirmEnoughSharesInEscrowToCompletePurchase,
+	attachSolanaWalletByUserId,
+	confirmCreatorNotBuyingOwnShares,
+	confirmUserHasEnoughSolToPurchaseTokens,
+	purchaseSplTokens
+)
+
+// FUTURE TODO: Add an endpoint that allows for a creator to buy their own shares.
+// The creator will pay the Fortuna Wallet for the shares they're buying
+
 solanaRoutes.get("/get-transactions", attachSolanaWalletByUserId, getTransactions)
 solanaRoutes.get("/get-creator-content-list", attachSolanaWalletByUserId, getCreatorContentList)
+
+// Internal use
+solanaRoutes.get("/get-number-tokens-in-token-account/:publicKey", getNumberOfTokensInTokenAccount)
 
 export default solanaRoutes

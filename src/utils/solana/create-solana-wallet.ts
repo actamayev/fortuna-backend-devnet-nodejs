@@ -1,20 +1,15 @@
 import { Keypair, Connection, clusterApiUrl } from "@solana/web3.js"
-import addSolanaWalletRecord from "../db-operations/write/solana-wallet/add-solana-wallet-record"
 
-export default async function createSolanaWallet(
-	userId: number
-): Promise<{ publicKey: string, balance: number }> {
+export default async function createSolanaWallet(): Promise<Keypair> {
 	try {
 		const wallet = Keypair.generate()
-		await addSolanaWalletRecord(wallet, userId)
 
+		// This is here to "access" the wallet after creating it.
+		// Without doing this, sometimes accessing the wallet in the future doesn't work
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const balance = await connection.getBalance(wallet.publicKey)
+		await connection.getBalance(wallet.publicKey)
 
-		return {
-			publicKey: wallet.publicKey.toBase58(),
-			balance
-		}
+		return wallet
 	} catch (error) {
 		console.error(error)
 		throw error

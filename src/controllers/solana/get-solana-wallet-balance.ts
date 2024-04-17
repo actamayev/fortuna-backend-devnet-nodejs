@@ -1,11 +1,11 @@
 import { Request, Response } from "express"
 import SolPriceManager from "../../classes/sol-price-manager"
-import getWalletBalance from "../../utils/solana/get-wallet-balance"
+import { getWalletBalanceWithUSD } from "../../utils/solana/get-wallet-balance"
 
 export default async function getSolanaWalletBalance(req: Request, res: Response): Promise<Response> {
 	try {
 		const solanaWallet = req.solanaWallet
-		const walletBalanceInfo = await getWalletBalance(solanaWallet.public_key)
+		const walletBalanceInfo = await getWalletBalanceWithUSD(solanaWallet.public_key)
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
 
 		return res.status(200).json({

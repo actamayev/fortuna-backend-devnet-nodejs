@@ -17,7 +17,7 @@ const createAndMintSPLSchema = Joi.object({
 	}).required()
 }).required()
 
-export default function validateCreateAndMintSPL (req: Request, res: Response, next: NextFunction): void | Response {
+export default function validateCreateAndMintSPL (req: Request, res: Response, next: NextFunction): Response | void {
 	try {
 		const { error } = createAndMintSPLSchema.validate(req.body)
 

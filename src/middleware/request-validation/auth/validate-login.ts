@@ -9,7 +9,7 @@ const loginInformationSchema = Joi.object({
 	}).required()
 }).required()
 
-export default function validateLogin (req: Request, res: Response, next: NextFunction): void | Response {
+export default function validateLogin (req: Request, res: Response, next: NextFunction): Response | void {
 	try {
 		const { error } = loginInformationSchema.validate(req.body)
 
