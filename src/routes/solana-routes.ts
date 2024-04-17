@@ -1,6 +1,7 @@
 import express from "express"
 
 import transferSol from "../controllers/solana/transfer-sol"
+import getMyOwnership from "../controllers/solana/get-my-ownership"
 import getTransactions from "../controllers/solana/get-transactions"
 import createAndMintSPL from "../controllers/solana/create-and-mint-spl"
 import getTransactionFees from "../controllers/solana/get-transaction-fees"
@@ -80,6 +81,7 @@ solanaRoutes.post(
 
 solanaRoutes.get("/get-transactions", attachSolanaWalletByUserId, getTransactions)
 solanaRoutes.get("/get-creator-content-list", attachSolanaWalletByUserId, getCreatorContentList)
+solanaRoutes.get("/get-my-ownership", attachSolanaWalletByUserId, getMyOwnership)
 
 // Internal use
 solanaRoutes.get("/get-number-tokens-in-token-account/:publicKey", getNumberOfTokensInTokenAccount)

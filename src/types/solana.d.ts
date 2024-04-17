@@ -110,6 +110,11 @@ declare global {
 		numberOfTokensPurchasing: number
 		splPublicKey: string
 	}
+
+	interface RetrievedMyOwnershipData {
+		spl_id: number
+		number_of_shares: number
+	}
 }
 
 export {}
