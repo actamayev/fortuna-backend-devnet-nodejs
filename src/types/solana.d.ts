@@ -98,7 +98,20 @@ declare global {
 		transferFeeUsd?: number
 	}
 
-	interface RetrieveSplByPublicKey {
+	interface RetrievedSplByPublicKeyData {
+		spl_name: string
+		spl_id: number
+		public_key_address: string
+		total_number_of_shares: number
+		listing_price_per_share_sol: number
+		creator_wallet_id: number
+		uploaded_image: {
+			uuid: string
+			image_url: string
+		}
+	}
+
+	interface SplByPublicKey {
 		splName: string
 		splId: number
 		publicKeyAddress: string

@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import transformTransactionsList from "../../utils/solana/transform-transactions-list"
+import transformTransactionsList from "../../utils/solana/transform/transform-transactions-list"
 import retrieveOutgoingTransactionsList from "../../utils/db-operations/read/sol-transfer/retrieve-outgoing-transactions-list"
 import retrieveIncomingTransactionsList from "../../utils/db-operations/read/sol-transfer/retrieve-incoming-transactions-list"
 

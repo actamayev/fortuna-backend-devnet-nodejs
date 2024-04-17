@@ -8,7 +8,7 @@ declare global {
 			solanaWallet: solana_wallet
 			recipientPublicKey: PublicKey
 
-			splDetails: RetrieveSplByPublicKey
+			splDetails: SplByPublicKey
 
 			isRecipientFortunaWallet: boolean
 			recipientSolanaWalletId: number | undefined

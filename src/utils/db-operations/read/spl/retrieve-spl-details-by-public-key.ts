@@ -1,9 +1,8 @@
-import _ from "lodash"
 import prismaClient from "../../../../prisma-client"
 
 export default async function retrieveSplDetailsByPublicKey(
 	splPublicKey: string
-): Promise<RetrieveSplByPublicKey | null> {
+): Promise<RetrievedSplByPublicKeyData | null> {
 	try {
 		const creatorSPLData = await prismaClient.spl.findFirst({
 			where: {
@@ -25,17 +24,7 @@ export default async function retrieveSplDetailsByPublicKey(
 			}
 		})
 
-		if (_.isNull(creatorSPLData)) return null
-		return {
-			splName: creatorSPLData.spl_name,
-			splId: creatorSPLData.spl_id,
-			publicKeyAddress: creatorSPLData.public_key_address,
-			listingPricePerShareSol: creatorSPLData.listing_price_per_share_sol,
-			totalNumberOfShares: creatorSPLData.total_number_of_shares,
-			creatorWalletId: creatorSPLData.creator_wallet_id,
-			imageUrl: creatorSPLData.uploaded_image.image_url,
-			uuid: creatorSPLData.uploaded_image.uuid
-		}
+		return creatorSPLData
 	} catch (error) {
 		console.error(error)
 		throw error

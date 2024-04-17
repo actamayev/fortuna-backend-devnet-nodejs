@@ -22,7 +22,7 @@ export default async function purchaseSplTokens(req: Request, res: Response): Pr
 		if (_.isUndefined(creatorWalletInfo)) return res.status(500).json({ error: "Unable to find creator's public key" })
 
 		// 2) Transfer sol from user to creator (fortuna wallet should cover transaction)
-		// Record the transaction (save to sol_transfer tablep)
+		// Record the transaction (save to sol_transfer table)
 		const solTransferId = await transferSolFromUserToCreator(
 			solanaWallet,
 			creatorWalletInfo,
