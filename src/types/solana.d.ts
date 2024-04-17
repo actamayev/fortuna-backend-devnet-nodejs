@@ -112,8 +112,13 @@ declare global {
 	}
 
 	interface RetrievedMyOwnershipData {
-		spl_id: number
+		spl_public_key: string
 		number_of_shares: number
+	}
+
+	interface MyOwnershipData {
+		splPublicKey: string
+		numberOfShares: number
 	}
 }
 

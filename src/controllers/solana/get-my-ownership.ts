@@ -1,4 +1,5 @@
 import { Request, Response } from "express"
+import transformOwnershipList from "../../utils/solana/transform-ownership-list"
 import getSplOwnershipsByWalletId from "../../utils/db-operations/read/spl-ownership.ts/retrieve-spl-ownership-by-wallet-id"
 
 export default async function getMyOwnership(req: Request, res: Response): Promise<Response> {
@@ -7,7 +8,9 @@ export default async function getMyOwnership(req: Request, res: Response): Promi
 
 		const myOwnership = await getSplOwnershipsByWalletId(solanaWallet.solana_wallet_id)
 
-		return res.status(200).json({ myOwnership })
+		const myOwnershipList = transformOwnershipList(myOwnership)
+
+		return res.status(200).json({ myOwnershipList })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Retrieve my ownership" })
