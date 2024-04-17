@@ -10,21 +10,31 @@ export default async function retrieveSplDetailsByPublicKey(
 				public_key_address: splPublicKey
 			},
 			select: {
+				spl_name: true,
 				spl_id: true,
 				public_key_address: true,
 				total_number_of_shares: true,
 				listing_price_per_share_sol: true,
-				creator_wallet_id: true
+				creator_wallet_id: true,
+				uploaded_image: {
+					select: {
+						uuid: true,
+						image_url: true
+					}
+				}
 			}
 		})
 
 		if (_.isNull(creatorSPLData)) return null
 		return {
+			splName: creatorSPLData.spl_name,
 			splId: creatorSPLData.spl_id,
 			publicKeyAddress: creatorSPLData.public_key_address,
 			listingPricePerShareSol: creatorSPLData.listing_price_per_share_sol,
 			totalNumberOfShares: creatorSPLData.total_number_of_shares,
-			creatorWalletId: creatorSPLData.creator_wallet_id
+			creatorWalletId: creatorSPLData.creator_wallet_id,
+			imageUrl: creatorSPLData.uploaded_image.image_url,
+			uuid: creatorSPLData.uploaded_image.uuid
 		}
 	} catch (error) {
 		console.error(error)

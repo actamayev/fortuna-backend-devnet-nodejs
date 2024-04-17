@@ -99,11 +99,14 @@ declare global {
 	}
 
 	interface RetrieveSplByPublicKey {
+		splName: string
 		splId: number
 		publicKeyAddress: string
 		listingPricePerShareSol: number
 		totalNumberOfShares: number
 		creatorWalletId: number
+		imageUrl: string
+		uuid: string
 	}
 
 	interface PurchaseSPLTokensData {
@@ -112,13 +115,25 @@ declare global {
 	}
 
 	interface RetrievedMyOwnershipData {
-		spl_public_key: string
 		number_of_shares: number
+		spl: {
+			public_key_address: string
+			creator_wallet_id: number
+			spl_name: string
+			uploaded_image: {
+				image_url: string
+				uuid: string
+			},
+		}
 	}
 
 	interface MyOwnershipData {
 		splPublicKey: string
 		numberOfShares: number
+		imageUrl: string
+		uuid: string
+		isMyContent: boolean
+		splName: string
 	}
 }
 

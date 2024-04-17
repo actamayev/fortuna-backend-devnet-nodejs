@@ -8,7 +8,7 @@ export default async function getMyOwnership(req: Request, res: Response): Promi
 
 		const myOwnership = await getSplOwnershipsByWalletId(solanaWallet.solana_wallet_id)
 
-		const myOwnershipList = transformOwnershipList(myOwnership)
+		const myOwnershipList = transformOwnershipList(myOwnership, solanaWallet.solana_wallet_id)
 
 		return res.status(200).json({ myOwnershipList })
 	} catch (error) {
