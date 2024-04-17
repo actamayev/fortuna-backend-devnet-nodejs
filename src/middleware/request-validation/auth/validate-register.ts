@@ -11,7 +11,7 @@ const registerInformationSchema = Joi.object({
 	}).required()
 }).required()
 
-export default function validateRegister (req: Request, res: Response, next: NextFunction): void | Response {
+export default function validateRegister (req: Request, res: Response, next: NextFunction): Response | void {
 	try {
 		const { error } = registerInformationSchema.validate(req.body)
 

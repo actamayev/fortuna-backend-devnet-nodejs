@@ -1,30 +1,25 @@
+import { LAMPORTS_PER_SOL } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
-import { Connection, LAMPORTS_PER_SOL, PublicKey, clusterApiUrl } from "@solana/web3.js"
+import { getWalletBalanceSol } from "../../utils/solana/get-wallet-balance"
 
 export default async function confirmUserHasEnoughSolToTransfer(
 	req: Request,
 	res: Response,
 	next: NextFunction
-): Promise<void | Response> {
+): Promise<Response | void> {
 	try {
 		const solanaWallet = req.solanaWallet
 		const transferData = req.body.transferSolData as TransferSolData
 		const isRecipientFortunaWallet = req.isRecipientFortunaWallet
+		const balanceInSol = await getWalletBalanceSol(solanaWallet.public_key)
 
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const publicKey = new PublicKey(solanaWallet.public_key)
-
-		const balanceInLamports = await connection.getBalance(publicKey)
-		const balanceInSol = balanceInLamports / LAMPORTS_PER_SOL
-		if (isRecipientFortunaWallet === true) {
-			if (balanceInSol < transferData.transferAmountSol) {
-				return res.status(400).json({ message: "User does not have enough sol to complete the transfer" })
-			}
+		if (isRecipientFortunaWallet === true && balanceInSol < transferData.transferAmountSol) {
+			return res.status(400).json({ message: "User does not have enough sol to complete the internal transfer" })
 		} else {
 			// This is if the recipient is not registered with Fortuna. In this case, the sender must cover the transaction fee.
 			const transferCostSol = 5000 / LAMPORTS_PER_SOL
 			if (balanceInSol < (transferData.transferAmountSol + transferCostSol)) {
-				return res.status(400).json({ message: "User does not have enough sol to complete the transfer" })
+				return res.status(400).json({ message: "User does not have enough sol to complete the external transfer" })
 			}
 		}
 

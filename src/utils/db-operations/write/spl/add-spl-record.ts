@@ -6,7 +6,7 @@ export default async function addSPLRecord (
 	newSPLData: IncomingNewSPLData,
 	createSPLResponse: CreateSPLResponse,
 	creatorWalletId: number,
-	fortunaWalletId: number
+	feePayerWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
 ): Promise<number> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
@@ -26,7 +26,7 @@ export default async function addSPLRecord (
 
 				spl_creation_fee_sol: createSPLResponse.feeInSol,
 				spl_creation_fee_usd: createSPLResponse.feeInSol * solPriceDetails.price,
-				create_spl_payer_solana_wallet_id: fortunaWalletId,
+				create_spl_fee_payer_solana_wallet_id: feePayerWalletId,
 
 				// The metadata creation fees are 0. When the meta data is set, a transaction signature is returned. See createTokenMetadata
 				// When the fee for this signature is determined (by using the logic in calculate-tranaction-fee, it returns 5*10^-6 sol).
@@ -34,7 +34,7 @@ export default async function addSPLRecord (
 				// For the database to be consistent with the wallet, the spl_metadata creation fee is set to 0 here.
 				spl_metadata_creation_fee_sol: 0,
 				spl_metadata_creation_fee_usd: 0,
-				create_spl_metadata_payer_solana_wallet_id: fortunaWalletId,
+				create_spl_metadata_fee_payer_solana_wallet_id: feePayerWalletId,
 
 				spl_listing_status: "LISTED",
 				description: newSPLData.description,

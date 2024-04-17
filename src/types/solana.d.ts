@@ -31,7 +31,7 @@ declare global {
 		description: string
 		initial_creator_ownership_percentage: number
 		uploaded_image: { image_url: string }
-		uploaded_video: { video_url: string }
+		uploaded_video: { video_url: string, uuid: string }
 		public_key_address: string
 	}
 
@@ -44,6 +44,7 @@ declare global {
 		creatorOwnershipPercentage: number
 		imageUrl: string
 		videoUrl: string
+		uuid: string
 		mintAddress: string
 	}
 
@@ -57,8 +58,9 @@ declare global {
 		recipient_public_key?: string
 		is_recipient_fortuna_wallet: boolean
 
-		sol_transferred: number
-		usd_transferred: number
+		sol_amount_transferred: number
+		usd_amount_transferred: number
+		is_spl_purchase: boolean
 
 		transfer_fee_sol: number
 		transfer_fee_usd: number
@@ -72,11 +74,12 @@ declare global {
 		recipient_public_key: string
 		is_recipient_fortuna_wallet: boolean
 
-		sol_transferred: number
-		usd_transferred: number
+		sol_amount_transferred: number
+		usd_amount_transferred: number
 
 		transfer_fee_sol: number
 		transfer_fee_usd: number
+		is_spl_purchase: boolean
 
 		created_at: Date
 		username?: string
@@ -84,8 +87,8 @@ declare global {
 
 	interface OutputTransactionData {
 		solTransferId: number
-		solTransferred: number
-		usdTransferred: number
+		solAmountTransferred: number
+		usdAmountTransferred: number
 		outgoingOrIncoming: "outgoing" | "incoming"
 
 		transferDateTime: Date
@@ -93,6 +96,19 @@ declare global {
 		transferToPublicKey?: string
 		transferFeeSol?: number
 		transferFeeUsd?: number
+	}
+
+	interface RetrieveSplByPublicKey {
+		splId: number
+		publicKeyAddress: string
+		listingPricePerShareSol: number
+		totalNumberOfShares: number
+		creatorWalletId: number
+	}
+
+	interface PurchaseSPLTokensData {
+		numberOfTokensPurchasing: number
+		splPublicKey: string
 	}
 }
 

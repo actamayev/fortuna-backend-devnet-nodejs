@@ -11,8 +11,8 @@ export function transformTransaction(
 ): OutputTransactionData {
 	return {
 		solTransferId: transaction.sol_transfer_id,
-		solTransferred: transaction.sol_transferred,
-		usdTransferred: transaction.usd_transferred,
+		solAmountTransferred: transaction.sol_amount_transferred,
+		usdAmountTransferred: transaction.usd_amount_transferred,
 		transferDateTime: transaction.created_at,
 		transferToUsername: transaction.username,
 		transferToPublicKey: transaction.recipient_public_key,

@@ -23,7 +23,8 @@ export default async function retrieveCreatorContentList(solanaWalletId: number)
 				},
 				uploaded_video: {
 					select: {
-						video_url: true
+						video_url: true,
+						uuid: true
 					}
 				},
 				public_key_address: true

@@ -11,7 +11,6 @@ declare global {
 	interface NewLocalUserFields {
 		username: string
 		password: string
-		is_active: boolean
 		email?: string
 		phone_number?: string
 	}
