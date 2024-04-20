@@ -3,7 +3,12 @@ import SolPriceManager from "../../classes/sol-price-manager"
 
 export async function getWalletBalanceWithUSD(
 	publicKeyString: string,
-): Promise<{ balanceInSol: number, balanceInUsd: number }> {
+): Promise<{
+	balanceInSol: number,
+	balanceInUsd: number,
+	solPriceInUSD: number,
+	solPriceRetrievedTime: Date
+}> {
 	try {
 		const balanceInSol = await getWalletBalanceSol(publicKeyString)
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
@@ -11,7 +16,9 @@ export async function getWalletBalanceWithUSD(
 
 		return {
 			balanceInSol,
-			balanceInUsd
+			balanceInUsd,
+			solPriceInUSD: solPriceDetails.price,
+			solPriceRetrievedTime: solPriceDetails.fetchedAt
 		}
 	} catch (error) {
 		console.error(error)

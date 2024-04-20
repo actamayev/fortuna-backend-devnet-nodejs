@@ -22,7 +22,9 @@ export default async function requestSolanaAirdrop(req: Request, res: Response):
 
 		return res.status(200).json({
 			balanceInSol: walletBalance.balanceInSol,
-			balanceInUsd: walletBalance.balanceInUsd
+			balanceInUsd: walletBalance.balanceInUsd,
+			solPriceInUSD: walletBalance.solPriceInUSD,
+			solPriceRetrievedTime: walletBalance.solPriceRetrievedTime
 		})
 	} catch (error) {
 		console.error(error)
