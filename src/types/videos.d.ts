@@ -26,6 +26,22 @@ declare global {
 		totalNumberShares: number
 		sharesRemainingForSale: number
 	}
+
+	interface HomePageVideoRetrievedFromDB {
+		video_url: string
+		created_at: Date
+		uuid: string
+		spl: {
+			spl_name: string
+			listing_price_per_share_sol: number
+			description: string
+			total_number_of_shares: number
+			public_key_address: string
+			uploaded_image: {
+				image_url
+			}
+		} | null
+	}
 }
 
 export {}

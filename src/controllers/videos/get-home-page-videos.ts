@@ -1,14 +1,16 @@
 import { Response, Request } from "express"
-// import retrieveAllVideos from "../../utils/db-operations/read/uploaded-video/retrieve-all-videos"
+import transformHomePageVideoData from "../../utils/transform/transform-home-page-video-data"
+import retrieveHomePageVideos from "../../utils/db-operations/read/uploaded-video/retrieve-home-page-videos"
 
-// TODO: Complete this
-export default function getHomePageVideos (req: Request, res: Response): Response {
+export default async function getHomePageVideos (req: Request, res: Response): Promise<Response> {
 	try {
-		// const videoData = await retrieveAllVideos()
+		const videoData = await retrieveHomePageVideos()
 
-		return res.status(200).json({ videoData: [] })
+		const homePageVideos = await transformHomePageVideoData(videoData)
+
+		return res.status(200).json({ homePageVideos })
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to get video by UUID" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to get home page videos" })
 	}
 }

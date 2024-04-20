@@ -1,6 +1,6 @@
 import prismaClient from "../../../../prisma-client"
 
-export default async function retrieveImageUrlByUUID(videoUUID: string): Promise<{ image_url: string } | null> {
+export default async function retrieveImageUrlByUUID(videoUUID: string): Promise<string | null> {
 	try {
 		const retrievedImageUrl = await prismaClient.uploaded_image.findFirst({
 			where: {
@@ -11,7 +11,7 @@ export default async function retrieveImageUrlByUUID(videoUUID: string): Promise
 			}
 		})
 
-		return retrievedImageUrl
+		return retrievedImageUrl?.image_url || null
 	} catch (error) {
 		console.error(error)
 		throw error
