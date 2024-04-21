@@ -12,6 +12,7 @@ declare global {
 		numberOfShares: number
 		creatorOwnershipPercentage: number
 		offeringSharePriceSol: number
+		offeringSharePriceUsd: number
 		imageUrl: string
 		videoUrl: string
 		description: string
@@ -28,6 +29,7 @@ declare global {
 		spl_name: string
 		total_number_of_shares: number
 		listing_price_per_share_sol: number
+		listing_price_per_share_usd: number
 		description: string
 		initial_creator_ownership_percentage: number
 		uploaded_image: { image_url: string }
@@ -40,6 +42,7 @@ declare global {
 		splName: string
 		numberOfShares: number
 		offeringSharePriceSol: number
+		offeringSharePriceUsd: number
 		description: string
 		creatorOwnershipPercentage: number
 		imageUrl: string

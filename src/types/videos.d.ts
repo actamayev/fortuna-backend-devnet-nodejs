@@ -6,6 +6,7 @@ declare global {
 		spl: {
 			spl_name: string
 			listing_price_per_share_sol: number
+			listing_price_per_share_usd: number
 			description: string
 			total_number_of_shares: number
 			public_key_address: string
@@ -19,6 +20,7 @@ declare global {
 		splName: string
 		splPublicKey: string
 		offeringSharePriceSol: number
+		offeringSharePriceUsd: number
 		description: string
 		imageUrl: string
 		videoUrl: string
@@ -34,6 +36,7 @@ declare global {
 		spl: {
 			spl_name: string
 			listing_price_per_share_sol: number
+			listing_price_per_share_usd: number
 			description: string
 			total_number_of_shares: number
 			public_key_address: string
