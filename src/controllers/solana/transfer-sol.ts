@@ -3,7 +3,7 @@ import { Request, Response } from "express"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction,
 	clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
 import calculateTransactionFee from "../../utils/solana/calculate-transaction-fee"
-import { transformTransaction } from "../../utils/solana/transform/transform-transactions-list"
+import { transformTransaction } from "../../utils/transform/transform-transactions-list"
 import addSolTransferRecord from "../../utils/db-operations/write/sol-transfer/add-sol-transfer-record"
 
 // eslint-disable-next-line max-lines-per-function
