@@ -116,7 +116,6 @@ model spl {
 	meta_data_address 								String  // On-chain Address of the SPL metadata
 	public_key_address								String 	// The SPL's public key address
 	listing_price_per_share_sol						Float
-	listing_price_per_share_usd						Float
 	initial_creator_ownership_percentage			Float
 	total_number_of_shares							Int
 	creator_wallet_id								Int
