@@ -7,6 +7,7 @@ export default function transformVideoAndImageData(
 		splName: videoData.spl.spl_name,
 		splPublicKey: videoData.spl.public_key_address,
 		offeringSharePriceSol: videoData.spl.listing_price_per_share_sol,
+		offeringSharePriceUsd: videoData.spl.listing_price_per_share_usd,
 		description: videoData.spl.description,
 		imageUrl,
 		videoUrl: videoData.video_url,

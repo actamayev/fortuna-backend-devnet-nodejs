@@ -1,6 +1,7 @@
 import express from "express"
 
 import transferSol from "../controllers/solana/transfer-sol"
+import getSolPrice from "../controllers/solana/get-sol-price"
 import getMyOwnership from "../controllers/solana/get-my-ownership"
 import getTransactions from "../controllers/solana/get-transactions"
 import createAndMintSPL from "../controllers/solana/create-and-mint-spl"
@@ -12,6 +13,7 @@ import getCreatorContentList from "../controllers/solana/get-creator-content-lis
 import getSolanaWalletBalance from "../controllers/solana/get-solana-wallet-balance"
 import getNumberOfTokensInTokenAccount from "../controllers/solana/get-number-of-tokens-in-token-account"
 
+import jwtVerify from "../middleware/jwt/jwt-verify"
 import confirmPublicKeyExists from "../middleware/solana/confirm-public-key-exists"
 import confirmNotSendingSolToSelf from "../middleware/solana/confirm-not-sending-sol-to-self"
 import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
@@ -29,23 +31,45 @@ import confirmEnoughSharesInEscrowToCompletePurchase from "../middleware/solana/
 
 const solanaRoutes = express.Router()
 
-solanaRoutes.get("/get-wallet-balance", attachSolanaWalletByUserId, getSolanaWalletBalance)
+solanaRoutes.get(
+	"/get-wallet-balance",
+	jwtVerify,
+	attachSolanaWalletByUserId,
+	getSolanaWalletBalance
+)
 
-solanaRoutes.post("/request-airdrop", attachSolanaWalletByUserId, requestSolanaAirdrop)
+solanaRoutes.post(
+	"/request-airdrop",
+	jwtVerify,
+	attachSolanaWalletByUserId,
+	requestSolanaAirdrop
+)
 
 solanaRoutes.post(
 	"/create-and-mint-spl",
+	jwtVerify,
 	validateCreateAndMintSPL,
 	attachSolanaWalletByUserId,
 	createAndMintSPL
 )
 
-solanaRoutes.post("/get-transaction-fees", validateTransactionSignatures, getTransactionFees)
+solanaRoutes.post(
+	"/get-transaction-fees",
+	jwtVerify,
+	validateTransactionSignatures,
+	getTransactionFees
+)
 
-solanaRoutes.post("/get-transaction-details", validateTransactionSignatures, getTransactionDetails)
+solanaRoutes.post(
+	"/get-transaction-details",
+	jwtVerify,
+	validateTransactionSignatures,
+	getTransactionDetails
+)
 
 solanaRoutes.post(
 	"/transfer-sol-to-username",
+	jwtVerify,
 	validateTransferSolToUsername,
 	confirmPublicKeyExists,
 	attachSolanaWalletByUserId,
@@ -56,6 +80,7 @@ solanaRoutes.post(
 
 solanaRoutes.post(
 	"/transfer-sol-to-public-key",
+	jwtVerify,
 	validateTransferSolToPublicKey,
 	checkIfPublicKeyPartOfFortuna,
 	confirmPublicKeyExists,
@@ -67,6 +92,7 @@ solanaRoutes.post(
 
 solanaRoutes.post(
 	"/purchase-spl-tokens",
+	jwtVerify,
 	validatePurchaseSplTokens,
 	attachSplDetailsByPublicKey,
 	confirmEnoughSharesInEscrowToCompletePurchase,
@@ -79,11 +105,30 @@ solanaRoutes.post(
 // FUTURE TODO: Add an endpoint that allows for a creator to buy their own shares.
 // The creator will pay the Fortuna Wallet for the shares they're buying
 
-solanaRoutes.get("/get-transactions", attachSolanaWalletByUserId, getTransactions)
-solanaRoutes.get("/get-creator-content-list", attachSolanaWalletByUserId, getCreatorContentList)
-solanaRoutes.get("/get-my-ownership", attachSolanaWalletByUserId, getMyOwnership)
+solanaRoutes.get(
+	"/get-transactions",
+	jwtVerify,
+	attachSolanaWalletByUserId,
+	getTransactions
+)
+
+solanaRoutes.get(
+	"/get-creator-content-list",
+	jwtVerify,
+	attachSolanaWalletByUserId,
+	getCreatorContentList
+)
+
+solanaRoutes.get(
+	"/get-my-ownership",
+	jwtVerify,
+	attachSolanaWalletByUserId,
+	getMyOwnership
+)
+
+solanaRoutes.get("/get-sol-price", getSolPrice)
 
 // Internal use
-solanaRoutes.get("/get-number-tokens-in-token-account/:publicKey", getNumberOfTokensInTokenAccount)
+solanaRoutes.get("/get-number-tokens-in-token-account/:publicKey", jwtVerify, getNumberOfTokensInTokenAccount)
 
 export default solanaRoutes
