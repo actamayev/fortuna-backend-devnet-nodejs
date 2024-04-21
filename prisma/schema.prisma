@@ -12,12 +12,18 @@ enum Currencies {
 	sol
 }
 
+enum SiteThemes {
+	light
+	dark
+}
+
 model credentials {
 	user_id     									Int      @id @default(autoincrement())
 	username     									String
 	password     									String
 	is_active    									Boolean  @default(true)
 	default_currency								Currencies @default(usd)
+	default_site_theme								SiteThemes @default(light)
 
 	email        									String?
 	phone_number 									String?
