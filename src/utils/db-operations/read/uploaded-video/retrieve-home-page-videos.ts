@@ -19,6 +19,15 @@ export default async function retrieveHomePageVideos(): Promise<HomePageVideoRet
 							select: {
 								image_url: true
 							}
+						},
+						spl_creator_wallet: {
+							select: {
+								user: {
+									select: {
+										username: true
+									}
+								}
+							}
 						}
 					}
 				}

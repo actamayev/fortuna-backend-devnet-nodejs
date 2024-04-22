@@ -10,9 +10,11 @@ declare global {
 			description: string
 			total_number_of_shares: number
 			public_key_address: string
-			spl_transfer: {
-				number_spl_shares_transferred: number
-			}[]
+			spl_creator_wallet: {
+				user: {
+					username: string
+				}
+			}
 		}
 	}
 
@@ -27,6 +29,7 @@ declare global {
 		uuid: string
 		totalNumberShares: number
 		sharesRemainingForSale: number
+		creatorUsername: string
 	}
 
 	interface HomePageVideoRetrievedFromDB {
@@ -41,7 +44,12 @@ declare global {
 			total_number_of_shares: number
 			public_key_address: string
 			uploaded_image: {
-				image_url
+				image_url: string
+			}
+			spl_creator_wallet: {
+				user: {
+					username: string
+				}
 			}
 		} | null
 	}

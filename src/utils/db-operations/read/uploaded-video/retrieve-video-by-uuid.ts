@@ -19,9 +19,11 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Vi
 						description: true,
 						total_number_of_shares: true,
 						public_key_address: true,
-						spl_transfer: {
+						spl_creator_wallet: {
 							select: {
-								number_spl_shares_transferred: true
+								user: {
+									select: { username: true }
+								}
 							}
 						}
 					}
