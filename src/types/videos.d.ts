@@ -13,6 +13,9 @@ declare global {
 			spl_creator_wallet: {
 				user: {
 					username: string
+					profile_picture: {
+						image_url: string
+					} | null
 				}
 			}
 		}
@@ -30,6 +33,7 @@ declare global {
 		totalNumberShares: number
 		sharesRemainingForSale: number
 		creatorUsername: string
+		creatorProfilePictureUrl: string | null
 	}
 
 	interface HomePageVideoRetrievedFromDB {
@@ -49,6 +53,9 @@ declare global {
 			spl_creator_wallet: {
 				user: {
 					username: string
+					profile_picture: {
+						image_url: string
+					} | null
 				}
 			}
 		} | null

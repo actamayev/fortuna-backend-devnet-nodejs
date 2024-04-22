@@ -14,6 +14,7 @@ export default function transformVideoAndImageData(
 		uuid: videoData.uuid,
 		totalNumberShares: videoData.spl.total_number_of_shares,
 		sharesRemainingForSale,
-		creatorUsername: videoData.spl.spl_creator_wallet.user.username
+		creatorUsername: videoData.spl.spl_creator_wallet.user.username,
+		creatorProfilePictureUrl: videoData.spl.spl_creator_wallet.user.profile_picture?.image_url || null
 	}
 }

@@ -17,7 +17,8 @@ export default async function transformHomePageVideoData(input: HomePageVideoRet
 				uuid: item.uuid,
 				totalNumberShares: item.spl.total_number_of_shares,
 				sharesRemainingForSale,
-				creatorUsername: item.spl.spl_creator_wallet.user.username
+				creatorUsername: item.spl.spl_creator_wallet.user.username,
+				creatorProfilePictureUrl: item.spl.spl_creator_wallet.user.profile_picture?.image_url || null
 			}
 		}))
 

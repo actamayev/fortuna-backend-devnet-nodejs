@@ -1,5 +1,6 @@
 import prismaClient from "../../../../prisma-client"
 
+// eslint-disable-next-line max-lines-per-function
 export default async function retrieveHomePageVideos(): Promise<HomePageVideoRetrievedFromDB[]> {
 	try {
 		const mediaDetails = await prismaClient.uploaded_video.findMany({
@@ -24,7 +25,12 @@ export default async function retrieveHomePageVideos(): Promise<HomePageVideoRet
 							select: {
 								user: {
 									select: {
-										username: true
+										username: true,
+										profile_picture: {
+											select: {
+												image_url: true
+											}
+										}
 									}
 								}
 							}
