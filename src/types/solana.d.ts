@@ -69,7 +69,8 @@ declare global {
 		transfer_fee_usd: number
 
 		created_at: Date
-		username?: string
+		recipient_username?: string
+		sender_username: string
 	}
 
 	interface AddSolTransferToDB {
@@ -97,6 +98,7 @@ declare global {
 		transferDateTime: Date
 		transferToUsername?: string
 		transferToPublicKey?: string
+		transferFromUsername: string
 		transferFeeSol?: number
 		transferFeeUsd?: number
 	}

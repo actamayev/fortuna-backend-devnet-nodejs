@@ -1,3 +1,4 @@
+import _ from "lodash"
 import bs58 from "bs58"
 import { solana_wallet } from "@prisma/client"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram,
@@ -19,7 +20,7 @@ export default async function transferSolFromUserToCreator(
 			SystemProgram.transfer({
 				fromPubkey: new PublicKey(senderSolanaWallet.public_key),
 				toPubkey: new PublicKey(recipientPublicKeyAndWalletId.public_key),
-				lamports: solToTransfer * LAMPORTS_PER_SOL
+				lamports: _.round(solToTransfer * LAMPORTS_PER_SOL)
 			})
 		)
 		// FUTURE TODO: Fix the double-charge problem (when having 2 signers, the fee is doubled)
