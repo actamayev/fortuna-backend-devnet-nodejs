@@ -1,9 +1,15 @@
 export default function transformTransactionsList(
 	input: RetrievedDBTransactionListData[],
-	solanaPublicKey: string
+	solanaWalletPublicKey: string
 ): OutputTransactionData[] {
 	try {
-		return input.map(transaction => transformTransaction(transaction, solanaPublicKey))
+		const transformedTransactions = input.map(transaction => transformTransaction(transaction, solanaWalletPublicKey))
+		const sortedTransactions = transformedTransactions.sort((a, b) => {
+			const dateA = new Date(a.createdAt)
+			const dateB = new Date(b.createdAt)
+			return dateB.getTime() - dateA.getTime()
+		})
+		return sortedTransactions
 	} catch (error) {
 		console.error(error)
 		throw error
@@ -12,7 +18,7 @@ export default function transformTransactionsList(
 
 export function transformTransaction(
 	transaction: RetrievedDBTransactionListData,
-	solanaPublicKey: string
+	solanaWalletPublicKey: string
 ): OutputTransactionData {
 	try {
 		return {
@@ -25,7 +31,8 @@ export function transformTransaction(
 			transferFromUsername: transaction.sender_username,
 			transferFeeSol: transaction.transfer_fee_sol,
 			transferFeeUsd: transaction.transfer_fee_usd,
-			outgoingOrIncoming: transaction.recipient_public_key === solanaPublicKey ? "incoming" : "outgoing"
+			outgoingOrIncoming: transaction.recipient_public_key === solanaWalletPublicKey ? "incoming" : "outgoing",
+			createdAt: transaction.created_at
 		}
 	} catch (error) {
 		console.error(error)

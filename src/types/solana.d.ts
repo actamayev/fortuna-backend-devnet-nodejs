@@ -101,6 +101,7 @@ declare global {
 		transferFromUsername: string
 		transferFeeSol?: number
 		transferFeeUsd?: number
+		createdAt: Date
 	}
 
 	interface RetrievedSplByPublicKeyData {
