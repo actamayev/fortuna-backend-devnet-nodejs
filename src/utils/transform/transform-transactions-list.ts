@@ -7,7 +7,7 @@ export default function transformTransactionsList(
 		const sortedTransactions = transformedTransactions.sort((a, b) => {
 			const dateA = new Date(a.createdAt)
 			const dateB = new Date(b.createdAt)
-			return dateB.getTime() - dateA.getTime()
+			return dateA.getTime() - dateB.getTime()
 		})
 		return sortedTransactions
 	} catch (error) {

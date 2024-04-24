@@ -10,7 +10,7 @@ import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol
 export default async function transferSolFromUserToCreator(
 	senderSolanaWallet: solana_wallet,
 	recipientPublicKeyAndWalletId: { public_key: string, solana_wallet_id: number },
-	solToTransfer: number
+	transferDetails: { solToTransfer: number, usdToTransfer: number },
 ): Promise<number> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
@@ -20,7 +20,7 @@ export default async function transferSolFromUserToCreator(
 			SystemProgram.transfer({
 				fromPubkey: new PublicKey(senderSolanaWallet.public_key),
 				toPubkey: new PublicKey(recipientPublicKeyAndWalletId.public_key),
-				lamports: _.round(solToTransfer * LAMPORTS_PER_SOL)
+				lamports: _.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL)
 			})
 		)
 		// FUTURE TODO: Fix the double-charge problem (when having 2 signers, the fee is doubled)
@@ -41,7 +41,7 @@ export default async function transferSolFromUserToCreator(
 			recipientPublicKeyAndWalletId.public_key,
 			true,
 			transactionSignature,
-			solToTransfer,
+			transferDetails,
 			transactionFeeInSol,
 			senderSolanaWallet.solana_wallet_id,
 			recipientPublicKeyAndWalletId.solana_wallet_id,

@@ -53,7 +53,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			recipientPublicKey.toString(),
 			isRecipientFortunaWallet,
 			transactionSignature,
-			transferData.transferAmountSol,
+			{ solToTransfer: transferData.transferAmountSol, usdToTransfer: transferData.transferAmountUsd },
 			transactionFeeInSol,
 			solanaWallet.solana_wallet_id,
 			recipientSolanaWalletId,
