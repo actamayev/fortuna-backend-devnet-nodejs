@@ -24,6 +24,7 @@ model credentials {
 	is_active    									Boolean  @default(true)
 	default_currency								Currencies @default(usd)
 	default_site_theme								SiteThemes @default(light)
+	is_approved_to_be_creator						Boolean @default(true)
 
 	email        									String?
 	phone_number 									String?

@@ -20,7 +20,7 @@ For Database migrations, navigate to dist/src, and run::
 	If doing a database migration, will need to restart the process. Doing `pm2 restart <app_name or app_id>` won't work (this doesn't re-start the TS server)
 	Delete the process `pm2 delete app_name_or_id`, and then `pm2 start ecosystem.config.js --env production` (must be done where the index.js file is)
 	Run `npx prisma generate` in the src directory.
-	To be honest, not sure which of the steps above make it work, or if it's just a time thing (db needs time to reset)
+	Not sure which of the steps above make it work, or if it's just a time thing (db needs time to reset)
 
 I am using the package pm2 to run the server on the instance (even after I close my connection)
 Important pm2 commands:
