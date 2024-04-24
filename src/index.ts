@@ -35,17 +35,13 @@ app.use(cors({
 app.use(cookieParser())
 app.use(express.json())
 
-const devnetRouter = express.Router()
-
-devnetRouter.use("/auth", authRoutes)
-devnetRouter.use("/personal-info", jwtVerify, personalInfoRoutes)
-devnetRouter.use("/search", jwtVerify, searchRoutes)
-devnetRouter.use("/solana", solanaRoutes)
-devnetRouter.use("/upload", jwtVerify, uploadRoutes)
-devnetRouter.use("/videos", videosRoutes)
-devnetRouter.use("/health", checkHealth)
-
-app.use("/devnet", devnetRouter)
+app.use("/auth", authRoutes)
+app.use("/personal-info", jwtVerify, personalInfoRoutes)
+app.use("/search", jwtVerify, searchRoutes)
+app.use("/solana", solanaRoutes)
+app.use("/upload", jwtVerify, uploadRoutes)
+app.use("/videos", videosRoutes)
+app.use("/health", checkHealth)
 
 app.use("*", (req, res) => res.status(404).json({ error: "Route not found"}))
 
