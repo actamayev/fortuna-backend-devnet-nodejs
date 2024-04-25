@@ -1,15 +1,13 @@
-import _ from "lodash"
+import { PublicKey } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
-import { Connection, clusterApiUrl } from "@solana/web3.js"
 
-export default async function confirmPublicKeyExists(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+export default function confirmPublicKeyExists(req: Request, res: Response, next: NextFunction): Response | void {
 	try {
 		const recipientPublicKey = req.recipientPublicKey
 
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const accountInfo = await connection.getAccountInfo(recipientPublicKey)
+		const isOnSolana = PublicKey.isOnCurve(recipientPublicKey)
 
-		if (_.isNull(accountInfo)) return res.status(400).json({ message: "Recipient Public key does not exist" })
+		if (isOnSolana === false) return res.status(400).json({ message: "Recipient Public key does not exist" })
 
 		next()
 	} catch (error) {

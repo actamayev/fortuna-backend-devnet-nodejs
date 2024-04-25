@@ -7,10 +7,10 @@ export default async function getSolPrice(req: Request, res: Response): Promise<
 
 		return res.status(200).json({
 			solPriceInUSD: solPriceDetails.price,
-			lastRetrieved: solPriceDetails.fetchedAt
+			lastRetrievedTime: solPriceDetails.fetchedAt
 		})
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Retrieve Solana Wallet Balance" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to Retrieve Solana price" })
 	}
 }

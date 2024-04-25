@@ -7,7 +7,7 @@ declare global {
 		feeInSol: number
 	}
 
-	interface SLPDataSavedToS3 {
+	interface SPLDataSavedToS3 {
 		splName: string
 		numberOfShares: number
 		creatorOwnershipPercentage: number
@@ -18,7 +18,7 @@ declare global {
 		description: string
 	}
 
-	interface IncomingNewSPLData extends SLPDataSavedToS3 {
+	interface IncomingNewSPLData extends SPLDataSavedToS3 {
 		uuid: string
 		uploadedImageId: number
 		uploadedVideoId: number
@@ -54,6 +54,7 @@ declare global {
 	interface TransferSolData {
 		sendingTo: string
 		transferAmountSol: number
+		transferAmountUsd: number
 	}
 
 	interface RetrievedDBTransactionListData {
@@ -69,7 +70,8 @@ declare global {
 		transfer_fee_usd: number
 
 		created_at: Date
-		username?: string
+		recipient_username?: string
+		sender_username: string
 	}
 
 	interface AddSolTransferToDB {
@@ -79,10 +81,10 @@ declare global {
 
 		sol_amount_transferred: number
 		usd_amount_transferred: number
+		is_spl_purchase: boolean
 
 		transfer_fee_sol: number
 		transfer_fee_usd: number
-		is_spl_purchase: boolean
 
 		created_at: Date
 		username?: string
@@ -97,8 +99,10 @@ declare global {
 		transferDateTime: Date
 		transferToUsername?: string
 		transferToPublicKey?: string
+		transferFromUsername: string
 		transferFeeSol?: number
 		transferFeeUsd?: number
+		createdAt: Date
 	}
 
 	interface RetrievedSplByPublicKeyData {
@@ -107,6 +111,7 @@ declare global {
 		public_key_address: string
 		total_number_of_shares: number
 		listing_price_per_share_sol: number
+		listing_price_per_share_usd: number
 		creator_wallet_id: number
 		uploaded_image: {
 			uuid: string
@@ -119,6 +124,7 @@ declare global {
 		splId: number
 		publicKeyAddress: string
 		listingPricePerShareSol: number
+		listingPricePerShareUsd: number
 		totalNumberOfShares: number
 		creatorWalletId: number
 		imageUrl: string

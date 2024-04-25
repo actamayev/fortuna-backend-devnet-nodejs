@@ -7,6 +7,7 @@ export default function transformSplDetailsRetrievedByPublicKey(
 			splId: splData.spl_id,
 			publicKeyAddress: splData.public_key_address,
 			listingPricePerShareSol: splData.listing_price_per_share_sol,
+			listingPricePerShareUsd: splData.listing_price_per_share_usd,
 			totalNumberOfShares: splData.total_number_of_shares,
 			creatorWalletId: splData.creator_wallet_id,
 			imageUrl: splData.uploaded_image.image_url,

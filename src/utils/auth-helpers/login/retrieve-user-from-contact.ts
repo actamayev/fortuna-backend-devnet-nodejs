@@ -6,14 +6,14 @@ export default async function retrieveUserFromContact(
 	contactType: EmailOrPhoneOrUsername
 ): Promise<credentials | null> {
 	try {
-		let whereCondition
+		let whereCondition = {}
 
 		if (contactType === "Username") {
-			whereCondition = { username: contact }
+			whereCondition = { username: { equals: contact, mode: "insensitive" } }
 		} else if (contactType === "Email") {
-			whereCondition = { email: contact }
+			whereCondition = { email: { equals: contact, mode: "insensitive" } }
 		} else {
-			whereCondition = { phone_number: contact }
+			whereCondition = { phone_number: { equals: contact, mode: "insensitive" } }
 		}
 
 		const user = await findUserByWhereCondition(whereCondition)

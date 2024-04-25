@@ -26,7 +26,10 @@ export default async function purchaseSplTokens(req: Request, res: Response): Pr
 		const solTransferId = await transferSolFromUserToCreator(
 			solanaWallet,
 			creatorWalletInfo,
-			purchaseSplTokensData.numberOfTokensPurchasing * splDetails.listingPricePerShareSol
+			{
+				solToTransfer: purchaseSplTokensData.numberOfTokensPurchasing * splDetails.listingPricePerShareSol,
+				usdToTransfer: purchaseSplTokensData.numberOfTokensPurchasing * splDetails.listingPricePerShareUsd
+			}
 		)
 
 		// 3) Record to spl_purchase table:
