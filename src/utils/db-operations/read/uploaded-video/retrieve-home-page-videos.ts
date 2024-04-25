@@ -40,7 +40,9 @@ export default async function retrieveHomePageVideos(): Promise<HomePageVideoRet
 			}
 		})
 
-		return mediaDetails
+		const filteredMediaDetails = mediaDetails.filter((media): media is HomePageVideoRetrievedFromDB => media.spl !== null)
+
+		return filteredMediaDetails
 	} catch (error) {
 		console.error(error)
 		throw error

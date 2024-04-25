@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express"
 import { PublicKey } from "@solana/web3.js"
+import { Request, Response, NextFunction } from "express"
 
 export default function confirmPublicKeyExists(req: Request, res: Response, next: NextFunction): Response | void {
 	try {

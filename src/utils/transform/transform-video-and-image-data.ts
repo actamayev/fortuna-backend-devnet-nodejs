@@ -1,8 +1,8 @@
 export default function transformVideoAndImageData(
-	videoData: VideoRetrievedFromDB,
+	videoData: HomePageVideoRetrievedFromDB,
 	imageUrl: string,
 	sharesRemainingForSale: number
-): VideoDataSendingToFrontend {
+): VideoDataSendingToFrontend | null {
 	return {
 		splName: videoData.spl.spl_name,
 		splPublicKey: videoData.spl.public_key_address,

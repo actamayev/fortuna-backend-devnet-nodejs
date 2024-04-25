@@ -81,10 +81,10 @@ declare global {
 
 		sol_amount_transferred: number
 		usd_amount_transferred: number
+		is_spl_purchase: boolean
 
 		transfer_fee_sol: number
 		transfer_fee_usd: number
-		is_spl_purchase: boolean
 
 		created_at: Date
 		username?: string
