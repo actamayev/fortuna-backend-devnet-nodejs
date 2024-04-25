@@ -14,7 +14,10 @@ export async function findUserById(userId: number): Promise<credentials | null> 
 }
 
 export async function findUserByWhereCondition(
-	whereCondition: { username: string } | { email: string } | { phone_number: string }
+	whereCondition:
+		{ username?: { equals: string, mode: "insensitive" } } |
+		{ email?: { equals: string, mode: "insensitive" } } |
+		{ phone_number?: { equals: string, mode: "insensitive" } }
 ): Promise<credentials | null> {
 	try {
 		const user = await prismaClient.credentials.findFirst({

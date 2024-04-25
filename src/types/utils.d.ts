@@ -11,7 +11,8 @@ declare global {
 	type S3FolderNames =
 		"uploaded-images" |
 		"uploaded-videos" |
-		"spl-metadata"
+		"spl-metadata" |
+		"profile-pictures"
 }
 
 export {}

@@ -7,7 +7,8 @@ import { findPublicKeyAndSolWalletFromUsername } from "../../../utils/db-operati
 const transferSolToUsernameSchema = Joi.object({
 	transferSolData: Joi.object({
 		sendingTo: Joi.string().required(),
-		transferAmountSol: Joi.number().strict().required()
+		transferAmountSol: Joi.number().strict().required(),
+		transferAmountUsd: Joi.number().strict().required()
 	}).required()
 }).required()
 

@@ -1,5 +1,6 @@
 import prismaClient from "../../../../prisma-client"
 
+// eslint-disable-next-line max-lines-per-function
 export default async function retrieveIncomingTransactionsList(publicKey: string): Promise<RetrievedDBTransactionListData[]> {
 	try {
 		const incomingTransactionsList = await prismaClient.sol_transfer.findMany({
@@ -27,13 +28,23 @@ export default async function retrieveIncomingTransactionsList(publicKey: string
 							}
 						}
 					}
+				},
+				sender_solana_wallet: {
+					select: {
+						user: {
+							select: {
+								username: true
+							}
+						}
+					}
 				}
 			}
 		})
 
 		return incomingTransactionsList.map(transaction => ({
 			...transaction,
-			username: transaction.is_recipient_fortuna_wallet ? transaction.recipient_solana_wallet?.user.username : undefined
+			recipient_username: transaction.is_recipient_fortuna_wallet ? transaction.recipient_solana_wallet?.user.username : undefined,
+			sender_username: transaction.sender_solana_wallet.user.username
 		}))
 	} catch (error) {
 		console.error(error)

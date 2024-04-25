@@ -7,7 +7,8 @@ import isPublicKeyValid from "../../../utils/solana/is-public-key-valid"
 const transferSolSchema = Joi.object({
 	transferSolData: Joi.object({
 		sendingTo: Joi.string().required(),
-		transferAmountSol: Joi.number().strict().required()
+		transferAmountSol: Joi.number().strict().required(),
+		transferAmountUsd: Joi.number().strict().required()
 	}).required()
 }).required()
 

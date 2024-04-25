@@ -3,6 +3,7 @@ import express from "express"
 
 import uploadImageToS3 from "../controllers/upload/upload-image-to-s3"
 import uploadVideoToS3 from "../controllers/upload/upload-video-to-s3"
+import uploadProfilePictureImage from "../controllers/upload/upload-profile-picture"
 
 import validateVideoType from "../middleware/request-validation/upload/validate-video-type"
 import validateImageType from "../middleware/request-validation/upload/validate-image-type"
@@ -24,6 +25,13 @@ uploadRoutes.post(
 	validateImageType,
 	validateUploadImageToS3,
 	uploadImageToS3
+)
+
+uploadRoutes.post(
+	"/upload-profile-picture",
+	upload.single("file"),
+	validateImageType,
+	uploadProfilePictureImage
 )
 
 export default uploadRoutes

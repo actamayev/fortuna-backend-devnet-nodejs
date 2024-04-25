@@ -24,15 +24,20 @@ model credentials {
 	is_active    									Boolean  @default(true)
 	default_currency								Currencies @default(usd)
 	default_site_theme								SiteThemes @default(light)
+	is_approved_to_be_creator						Boolean @default(true)
 
 	email        									String?
 	phone_number 									String?
+  	profile_picture_id 								Int?	@unique
 
 	created_at   									DateTime @default(now())
 	updated_at   									DateTime @default(now()) @updatedAt
 
 	login_history 									login_history[]
 	solana_wallet   								solana_wallet?
+
+  	profile_picture    								profile_picture? @relation(fields: [profile_picture_id], references: [profile_picture_id])
+	@@index([profile_picture_id], name:"credentials__profile_picture_id_idx")
 }
 
 model login_history {
@@ -292,4 +297,17 @@ model spl_purchase {
 	@@index([spl_id], name: "spl_purchase__spl_id_idx")
 	@@index([spl_transfer_id], name: "spl_purchase__spl_transfer_id_idx")
 	@@index([sol_transfer_id], name: "spl_purchase__sol_transfer_id_idx")
+}
+
+model profile_picture {
+	profile_picture_id								Int @id @default(autoincrement())
+	image_url										String
+	file_name										String
+	uuid											String
+
+	created_at    									DateTime  @default(now())
+	updated_at    									DateTime  @default(now()) @updatedAt
+
+  	user											credentials?
+  	@@unique([profile_picture_id], name: "unique_profile_picture_id")
 }

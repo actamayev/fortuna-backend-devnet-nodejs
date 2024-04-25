@@ -1,7 +1,8 @@
 import _ from "lodash"
 import prismaClient from "../../../../prisma-client"
 
-export default async function retrieveVideoByUUID(videoUUID: string): Promise<VideoRetrievedFromDB | null> {
+// eslint-disable-next-line max-lines-per-function
+export default async function retrieveVideoByUUID(videoUUID: string): Promise<HomePageVideoRetrievedFromDB | null> {
 	try {
 		const retrievedVideo = await prismaClient.uploaded_video.findFirst({
 			where: {
@@ -19,9 +20,23 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Vi
 						description: true,
 						total_number_of_shares: true,
 						public_key_address: true,
-						spl_transfer: {
+						uploaded_image: {
 							select: {
-								number_spl_shares_transferred: true
+								image_url: true
+							}
+						},
+						spl_creator_wallet: {
+							select: {
+								user: {
+									select: {
+										username: true,
+										profile_picture: {
+											select: {
+												image_url: true
+											}
+										}
+									}
+								}
 							}
 						}
 					}

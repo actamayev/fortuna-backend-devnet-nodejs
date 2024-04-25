@@ -1,15 +1,18 @@
 import { Request, Response } from "express"
+import retrieveProfilePictureUrlByUserId from "../../utils/db-operations/read/profile-picture/retrieve-profile-picture-url-by-user-id"
 
-export default function retrievePersonalInfo(req: Request, res: Response): Response {
+export default async function retrievePersonalInfo(req: Request, res: Response): Promise<Response> {
 	try {
 		const user = req.user
+		const profilePictureUrl = await retrieveProfilePictureUrlByUserId(user.user_id)
 
 		return res.status(200).json({
 			username: user.username,
 			email: user.email,
 			phoneNumber: user.phone_number,
 			defaultCurrency: user.default_currency,
-			defaultSiteTheme: user.default_site_theme
+			defaultSiteTheme: user.default_site_theme,
+			profilePictureUrl
 		})
 	} catch (error) {
 		console.error(error)
