@@ -5,8 +5,7 @@ export default async function checkIfPublicKeyRegisteredWithFortuna(publicKey: s
 		const wallet = await prismaClient.solana_wallet.findFirst({
 			where: {
 				public_key: {
-					equals: publicKey,
-					mode: "insensitive"
+					equals: publicKey
 				}
 			},
 			select: {
