@@ -1,3 +1,4 @@
+import _ from "lodash"
 import { getOrCreateAssociatedTokenAccount } from "@solana/spl-token"
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js"
 import mintSPLHelper from "./mint-spl-helper"
@@ -70,6 +71,8 @@ export default async function assignSPLTokenShares (
 			thirdWalletBalance.balanceInUsd - fourthWalletBalance.balanceInUsd
 		)
 
+		const fortunaShares = _.ceil(uploadSplData.numberOfShares * (0.01))
+
 		// Mint SPLs:
 		await mintSPLHelper(
 			connection,
@@ -78,9 +81,11 @@ export default async function assignSPLTokenShares (
 			splId,
 			fortunaWallet.publicKey,
 			fortunaTokenAccount.address,
-			uploadSplData.numberOfShares * (1 / 100),
+			fortunaShares,
 			fortunaTokenAccountDB.token_account_id
 		)
+
+		const creatorShares = _.floor(uploadSplData.creatorOwnershipPercentage * uploadSplData.numberOfShares * 0.01)
 
 		await mintSPLHelper(
 			connection,
@@ -89,9 +94,11 @@ export default async function assignSPLTokenShares (
 			splId,
 			fortunaWallet.publicKey,
 			creatorTokenAccount.address,
-			uploadSplData.numberOfShares * (uploadSplData.creatorOwnershipPercentage / 100),
+			creatorShares,
 			creatorTokenAccountDB.token_account_id
 		)
+
+		const escrowShares = uploadSplData.numberOfShares - creatorShares - fortunaShares
 
 		await mintSPLHelper(
 			connection,
@@ -100,7 +107,7 @@ export default async function assignSPLTokenShares (
 			splId,
 			fortunaWallet.publicKey,
 			fortunaEscrowTokenAccount.address,
-			uploadSplData.numberOfShares * ((99 - uploadSplData.creatorOwnershipPercentage) / 100),
+			escrowShares,
 			fortunaEscrowTokenAccountDB.token_account_id
 		)
 	} catch (error) {

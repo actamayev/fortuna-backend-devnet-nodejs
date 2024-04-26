@@ -1,3 +1,4 @@
+import _ from "lodash"
 import { createMint } from "@solana/spl-token"
 import { base58 } from "@metaplex-foundation/umi/serializers"
 import { createSignerFromKeypair } from "@metaplex-foundation/umi"
@@ -60,9 +61,9 @@ async function createTokenMetadata(
 			payer: signer,
 			updateAuthority: keypair.publicKey,
 			data: {
-				name: splName,
-				symbol: "",
-				uri: metadataJSONUrl,
+				name: _.truncate(splName, { length: 32 }),
+				symbol:"", // TODO: Add a symbol?
+				uri: _.truncate(metadataJSONUrl, { length: 200 }),
 				sellerFeeBasisPoints: 0,
 				creators: null,
 				collection: null,
