@@ -6,7 +6,8 @@ export default async function retrieveCreatorsByUsername(usernameSearchTerm: str
 			where: {
 				username: {
 					contains: usernameSearchTerm
-				}
+				},
+				is_approved_to_be_creator: true
 			},
 			select: {
 				username: true,
