@@ -12,9 +12,10 @@ export default async function generalSearch(req: Request, res: Response): Promis
 		const creators = await retrieveCreatorsByUsername(searchTerm)
 		const transformedCreatorData = transformCreatorSearchData(creators)
 		const transformedVideoSearchData = await transformVideoSearchData(videos)
-		const searchResults: SearchData[] = []
-		searchResults.concat(transformedCreatorData)
-		searchResults.concat(transformedVideoSearchData)
+		const searchResults: SearchData[] = [
+			...transformedCreatorData,
+			...transformedVideoSearchData
+		]
 
 		return res.status(200).json({ searchResults })
 	} catch (error) {
