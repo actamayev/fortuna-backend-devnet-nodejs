@@ -1,6 +1,5 @@
 export default function transformVideoAndImageData(
 	videoData: HomePageVideoRetrievedFromDB,
-	imageUrl: string,
 	sharesRemainingForSale: number
 ): VideoDataSendingToFrontend {
 	return {
@@ -9,7 +8,7 @@ export default function transformVideoAndImageData(
 		offeringSharePriceSol: videoData.spl.listing_price_per_share_sol,
 		offeringSharePriceUsd: videoData.spl.listing_price_per_share_usd,
 		description: videoData.spl.description,
-		imageUrl,
+		imageUrl: videoData.spl.uploaded_image.image_url,
 		videoUrl: videoData.video_url,
 		uuid: videoData.uuid,
 		totalNumberShares: videoData.spl.total_number_of_shares,

@@ -1,11 +1,13 @@
-import _ from "lodash"
-import determineNumberOfTokensRemainingInEscrow from "../solana/determine-number-of-remaining-tokens-in-escrow"
+import determineRemainingTokensInEscrowByPublicKeys from "../solana/determine-remaining-tokens-in-escrow-by-public-keys"
 
 export default async function transformHomePageVideoData(input: HomePageVideoRetrievedFromDB[]): Promise<VideoDataSendingToFrontend[]> {
 	try {
-		const results = await Promise.all(input.map(async (item) => {
-			if (_.isNull(item.spl)) return undefined
-			const sharesRemainingForSale = await determineNumberOfTokensRemainingInEscrow(item.spl.public_key_address)
+		const publicKeys = input.map(item => item.spl.public_key_address)
+
+		const tokensRemaining = await determineRemainingTokensInEscrowByPublicKeys(publicKeys)
+
+		const results = input.map(item => {
+			const sharesRemainingForSale = tokensRemaining[item.spl.public_key_address]
 			return {
 				splName: item.spl.spl_name,
 				splPublicKey: item.spl.public_key_address,
@@ -20,10 +22,9 @@ export default async function transformHomePageVideoData(input: HomePageVideoRet
 				creatorUsername: item.spl.spl_creator_wallet.user.username,
 				creatorProfilePictureUrl: item.spl.spl_creator_wallet.user.profile_picture?.image_url || null
 			}
-		}))
+		})
 
-		// Filter out any undefined entries from the results
-		return results.filter((result): result is VideoDataSendingToFrontend => result !== undefined)
+		return results
 	} catch (error) {
 		console.error(error)
 		throw error

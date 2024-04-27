@@ -37,7 +37,7 @@ app.use(express.json())
 
 app.use("/auth", authRoutes)
 app.use("/personal-info", jwtVerify, personalInfoRoutes)
-app.use("/search", jwtVerify, searchRoutes)
+app.use("/search", searchRoutes)
 app.use("/solana", solanaRoutes)
 app.use("/upload", jwtVerify, uploadRoutes)
 app.use("/videos", videosRoutes)

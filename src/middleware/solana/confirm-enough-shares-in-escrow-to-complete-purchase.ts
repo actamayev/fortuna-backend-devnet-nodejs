@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import determineNumberOfTokensRemainingInEscrow from "../../utils/solana/determine-number-of-remaining-tokens-in-escrow"
+import determineRemainingTokensInEscrowSinglePublicKey from "../../utils/solana/determine-remaining-tokens-in-escrow-single-public-key"
 
 export default async function confirmEnoughSharesInEscrowToCompletePurchase(
 	req: Request,
@@ -9,7 +9,7 @@ export default async function confirmEnoughSharesInEscrowToCompletePurchase(
 	try {
 		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchaseSPLTokensData
 		const splDetails = req.splDetails
-		const numberOfTokensRemainingInEscrow = await determineNumberOfTokensRemainingInEscrow(splDetails.publicKeyAddress)
+		const numberOfTokensRemainingInEscrow = await determineRemainingTokensInEscrowSinglePublicKey(splDetails.publicKeyAddress)
 
 		if (numberOfTokensRemainingInEscrow < purchaseSplTokensData.numberOfTokensPurchasing) {
 			return res.status(400).json({

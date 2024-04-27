@@ -26,7 +26,7 @@ export default async function getUsernames(
 
 		return usernames
 	} catch (error) {
-		console.error("Error adding login record:", error)
+		console.error(error)
 		throw error
 	}
 }
