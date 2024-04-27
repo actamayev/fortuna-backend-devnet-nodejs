@@ -5,7 +5,8 @@ export default async function retrieveCreatorsByUsername(usernameSearchTerm: str
 		const creatorData = await prismaClient.credentials.findMany({
 			where: {
 				username: {
-					contains: usernameSearchTerm
+					contains: usernameSearchTerm,
+					mode: "insensitive"
 				},
 				is_approved_to_be_creator: true
 			},

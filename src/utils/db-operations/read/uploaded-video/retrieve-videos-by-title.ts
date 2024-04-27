@@ -6,7 +6,8 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 		const retrievedVideos = await prismaClient.spl.findMany({
 			where: {
 				spl_name: {
-					contains: videoTitle
+					contains: videoTitle,
+					mode: "insensitive"
 				}
 			},
 			select: {
