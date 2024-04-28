@@ -24,6 +24,38 @@ declare global {
 		}
 	}
 
+	interface RetrievedVideosByTitle {
+		spl_name: string
+		public_key_address: string
+		listing_price_per_share_sol: number
+		listing_price_per_share_usd: number
+		total_number_of_shares: number
+		description: string
+		spl_creator_wallet: {
+			user: {
+				username: string
+				profile_picture: {
+					image_url: string
+				} | null
+			}
+		}
+		uploaded_image: {
+			image_url: string
+		}
+		uploaded_video: {
+			video_url: string
+			created_at: Date
+			uuid: string
+		}
+	}
+
+	interface RetrievedCreatorsByUsername {
+		username: string
+		profile_picture: {
+			image_url: string
+		} | null
+	}
+
 	interface VideoDataSendingToFrontend {
 		splName: string
 		splPublicKey: string
@@ -38,6 +70,13 @@ declare global {
 		creatorUsername: string
 		creatorProfilePictureUrl: string | null
 	}
+
+	interface CreatorSearchDataSendingToFrontend {
+		creatorUsername: string
+		creatorProfilePictureUrl: string | null
+	}
+
+	type SearchData = VideoDataSendingToFrontend | CreatorSearchDataSendingToFrontend
 }
 
 export {}
