@@ -12,6 +12,7 @@ export default async function retrievePersonalInfo(req: Request, res: Response):
 			phoneNumber: user.phone_number,
 			defaultCurrency: user.default_currency,
 			defaultSiteTheme: user.default_site_theme,
+			isApprovedToBeCreator: user.is_approved_to_be_creator,
 			profilePictureUrl
 		})
 	} catch (error) {
