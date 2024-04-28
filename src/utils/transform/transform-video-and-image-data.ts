@@ -13,6 +13,7 @@ export default function transformVideoAndImageData(
 		uuid: videoData.uuid,
 		totalNumberShares: videoData.spl.total_number_of_shares,
 		sharesRemainingForSale,
+		contentMintDate: videoData.created_at,
 		creatorUsername: videoData.spl.spl_creator_wallet.user.username,
 		creatorProfilePictureUrl: videoData.spl.spl_creator_wallet.user.profile_picture?.image_url || null
 	}
