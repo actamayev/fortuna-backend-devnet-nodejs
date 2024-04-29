@@ -9,11 +9,14 @@ export default async function getVideosByCreatorUsername (req: Request, res: Res
 
 		const retrievedVideoData = await retrieveVideosByCreatorUsername(creatorUsername)
 		if (_.isNull(retrievedVideoData)) return res.status(400).json({ message: "Unable to find creator associated with this username" })
-		const transformedVideoData = await transformVideosByCreatorUsername(retrievedVideoData)
 
+		const transformedVideoData = await transformVideosByCreatorUsername(retrievedVideoData)
 		if (_.isNull(transformedVideoData)) return res.status(400).json({ message: "Unable to find creator associated with this username"})
 
-		return res.status(200).json({ videoData: transformedVideoData.videoData, creatorData: transformedVideoData.creatorData })
+		return res.status(200).json({
+			videoData: transformedVideoData.videoData,
+			creatorData: transformedVideoData.creatorData
+		})
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to get videos by creator username" })

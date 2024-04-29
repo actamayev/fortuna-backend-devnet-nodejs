@@ -10,6 +10,6 @@ export default function confirmUserIsCreator (req: Request, res: Response, next:
 		next()
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Validate if user is approved to be a creator" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to confirm if user is approved to be a creator" })
 	}
 }
