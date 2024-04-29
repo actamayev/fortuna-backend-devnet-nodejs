@@ -1,4 +1,4 @@
-select * from credentials;
+-- select * from credentials;
 -- select * from login_history;
 -- select * from solana_wallet;
 -- select * from spl;

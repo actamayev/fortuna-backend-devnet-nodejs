@@ -19,6 +19,7 @@ export default async function transformVideoSearchData(input: RetrievedVideosByT
 				uuid: item.uploaded_video.uuid,
 				totalNumberShares: item.total_number_of_shares,
 				sharesRemainingForSale,
+				originalContentUrl: item.original_content_url,
 				contentMintDate: item.uploaded_video.created_at,
 				creatorUsername: item.spl_creator_wallet.user.username,
 				creatorProfilePictureUrl: item.spl_creator_wallet.user.profile_picture?.image_url || null

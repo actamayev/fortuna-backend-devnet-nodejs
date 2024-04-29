@@ -30,6 +30,7 @@ export default async function transformVideosByCreatorUsername(
 				uuid: wallet.uploaded_video.uuid,
 				totalNumberShares: wallet.total_number_of_shares,
 				sharesRemainingForSale,
+				originalContentUrl: wallet.original_content_url,
 				contentMintDate: wallet.uploaded_video.created_at,
 				creatorUsername: input.username,
 				creatorProfilePictureUrl: input.profile_picture?.image_url || null
