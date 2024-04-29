@@ -20,6 +20,7 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Ho
 						description: true,
 						total_number_of_shares: true,
 						public_key_address: true,
+						original_content_url: true,
 						uploaded_image: {
 							select: {
 								image_url: true

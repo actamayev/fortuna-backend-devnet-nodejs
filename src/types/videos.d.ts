@@ -10,6 +10,7 @@ declare global {
 			description: string
 			total_number_of_shares: number
 			public_key_address: string
+			original_content_url: string | null
 			uploaded_image: {
 				image_url: string
 			}
@@ -31,6 +32,7 @@ declare global {
 		listing_price_per_share_usd: number
 		total_number_of_shares: number
 		description: string
+		original_content_url: string | null
 		spl_creator_wallet: {
 			user: {
 				username: string
@@ -57,6 +59,7 @@ declare global {
 				listing_price_per_share_sol: number
 				listing_price_per_share_usd: number
 				total_number_of_shares: number
+				original_content_url: string | null
 				description: string
 				uploaded_image: {
 					image_url: string
@@ -92,6 +95,7 @@ declare global {
 		uuid: string
 		totalNumberShares: number
 		sharesRemainingForSale: number
+		originalContentUrl: string | null
 		contentMintDate: Date
 		creatorUsername: string
 		creatorProfilePictureUrl: string | null
