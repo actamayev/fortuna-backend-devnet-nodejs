@@ -14,6 +14,7 @@ import getSolanaWalletBalance from "../controllers/solana/get-solana-wallet-bala
 import getNumberOfTokensInTokenAccount from "../controllers/solana/get-number-of-tokens-in-token-account"
 
 import jwtVerify from "../middleware/jwt/jwt-verify"
+import confirmUserIsCreator from "../middleware/confirm-user-is-creator"
 import confirmPublicKeyExists from "../middleware/solana/confirm-public-key-exists"
 import confirmNotSendingSolToSelf from "../middleware/solana/confirm-not-sending-sol-to-self"
 import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
@@ -48,23 +49,10 @@ solanaRoutes.post(
 solanaRoutes.post(
 	"/create-and-mint-spl",
 	jwtVerify,
+	confirmUserIsCreator,
 	validateCreateAndMintSPL,
 	attachSolanaWalletByUserId,
 	createAndMintSPL
-)
-
-solanaRoutes.post(
-	"/get-transaction-fees",
-	jwtVerify,
-	validateTransactionSignatures,
-	getTransactionFees
-)
-
-solanaRoutes.post(
-	"/get-transaction-details",
-	jwtVerify,
-	validateTransactionSignatures,
-	getTransactionDetails
 )
 
 solanaRoutes.post(
@@ -115,6 +103,7 @@ solanaRoutes.get(
 solanaRoutes.get(
 	"/get-creator-content-list",
 	jwtVerify,
+	confirmUserIsCreator,
 	attachSolanaWalletByUserId,
 	getCreatorContentList
 )
@@ -130,5 +119,18 @@ solanaRoutes.get("/get-sol-price", getSolPrice)
 
 // Internal use
 solanaRoutes.get("/get-number-tokens-in-token-account/:publicKey", jwtVerify, getNumberOfTokensInTokenAccount)
+solanaRoutes.post(
+	"/get-transaction-fees",
+	jwtVerify,
+	validateTransactionSignatures,
+	getTransactionFees
+)
+
+solanaRoutes.post(
+	"/get-transaction-details",
+	jwtVerify,
+	validateTransactionSignatures,
+	getTransactionDetails
+)
 
 export default solanaRoutes

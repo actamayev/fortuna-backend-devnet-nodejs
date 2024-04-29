@@ -49,6 +49,31 @@ declare global {
 		}
 	}
 
+	interface RetrievedVideosByCreatorUsername {
+		solana_wallet: {
+			spl_creator_wallet: {
+				spl_name: string
+				public_key_address: string
+				listing_price_per_share_sol: number
+				listing_price_per_share_usd: number
+				total_number_of_shares: number
+				description: string
+				uploaded_image: {
+					image_url: string
+				}
+				uploaded_video: {
+					video_url: string
+					created_at: Date
+					uuid: string
+				}
+			}[]
+		} | null
+		username: string
+		profile_picture: {
+			image_url: string
+		} | null
+	}
+
 	interface RetrievedCreatorsByUsername {
 		username: string
 		profile_picture: {
@@ -67,6 +92,7 @@ declare global {
 		uuid: string
 		totalNumberShares: number
 		sharesRemainingForSale: number
+		contentMintDate: Date
 		creatorUsername: string
 		creatorProfilePictureUrl: string | null
 	}
