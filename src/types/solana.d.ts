@@ -16,7 +16,7 @@ declare global {
 		imageUrl: string
 		videoUrl: string
 		description: string
-		originalContentUrl?: string
+		originalContentUrl: string
 	}
 
 	interface IncomingNewSPLData extends SPLDataSavedToS3 {
