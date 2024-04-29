@@ -127,6 +127,7 @@ model spl {
 	creator_wallet_id								Int
 	uploaded_image_id								Int		@unique
 	uploaded_video_id								Int		@unique
+	original_content_url							String @default("")
 
 	spl_creation_fee_sol							Float
 	spl_creation_fee_usd							Float

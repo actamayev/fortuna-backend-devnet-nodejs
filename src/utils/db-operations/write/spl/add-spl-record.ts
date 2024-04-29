@@ -39,6 +39,7 @@ export default async function addSPLRecord (
 
 				spl_listing_status: "LISTED",
 				description: newSPLData.description,
+				original_content_url: newSPLData.originalContentUrl
 			}
 		})
 

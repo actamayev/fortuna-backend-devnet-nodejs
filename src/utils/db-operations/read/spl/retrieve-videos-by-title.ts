@@ -17,6 +17,7 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 				description: true,
 				total_number_of_shares: true,
 				public_key_address: true,
+				original_content_url: true,
 				uploaded_image: {
 					select: {
 						image_url: true
