@@ -8,7 +8,7 @@ export default async function getVideosByCreatorUsername (req: Request, res: Res
 		const creatorUsername = req.params.creatorUsername as string
 
 		const retrievedVideoData = await retrieveVideosByCreatorUsername(creatorUsername)
-		if (_.isNull(retrievedVideoData)) return res.status(400).json({ message: "" })
+		if (_.isNull(retrievedVideoData)) return res.status(400).json({ message: "Unable to find creator associated with this username" })
 		const transformedVideoData = await transformVideosByCreatorUsername(retrievedVideoData)
 
 		if (_.isNull(transformedVideoData)) return res.status(400).json({ message: "Unable to find creator associated with this username"})

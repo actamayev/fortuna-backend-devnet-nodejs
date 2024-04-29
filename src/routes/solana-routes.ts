@@ -56,20 +56,6 @@ solanaRoutes.post(
 )
 
 solanaRoutes.post(
-	"/get-transaction-fees",
-	jwtVerify,
-	validateTransactionSignatures,
-	getTransactionFees
-)
-
-solanaRoutes.post(
-	"/get-transaction-details",
-	jwtVerify,
-	validateTransactionSignatures,
-	getTransactionDetails
-)
-
-solanaRoutes.post(
 	"/transfer-sol-to-username",
 	jwtVerify,
 	validateTransferSolToUsername,
@@ -133,5 +119,18 @@ solanaRoutes.get("/get-sol-price", getSolPrice)
 
 // Internal use
 solanaRoutes.get("/get-number-tokens-in-token-account/:publicKey", jwtVerify, getNumberOfTokensInTokenAccount)
+solanaRoutes.post(
+	"/get-transaction-fees",
+	jwtVerify,
+	validateTransactionSignatures,
+	getTransactionFees
+)
+
+solanaRoutes.post(
+	"/get-transaction-details",
+	jwtVerify,
+	validateTransactionSignatures,
+	getTransactionDetails
+)
 
 export default solanaRoutes
