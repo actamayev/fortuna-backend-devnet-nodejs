@@ -34,3 +34,5 @@ Important pm2 commands:
 Other:
 - If getting this error:  `Error: @prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.`, run:
 	`npx prisma generate` in the src directory
+- If getting this error after a migration: `Unknown field `original_content_url` for select statement on model`
+	Check that the field exists in PGAdmin (remote into the RDS box). If it does, run `npx prisma generate` in the src directory

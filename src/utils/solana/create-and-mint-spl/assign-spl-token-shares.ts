@@ -3,6 +3,7 @@ import { getOrCreateAssociatedTokenAccount } from "@solana/spl-token"
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js"
 import mintSPLHelper from "./mint-spl-helper"
 import { getWalletBalanceWithUSD } from "../get-wallet-balance"
+import EscrowWalletManager from "../../../classes/escrow-wallet-manager"
 import { getFortunaSolanaWalletFromSecretKey } from "../get-fortuna-solana-wallet-from-secret-key"
 import addTokenAccountRecord from "../../db-operations/write/token-account/add-token-account-record"
 
@@ -110,6 +111,8 @@ export default async function assignSPLTokenShares (
 			escrowShares,
 			fortunaEscrowTokenAccountDB.token_account_id
 		)
+
+		EscrowWalletManager.getInstance().addSplToMap(splTokenPublicKey.toString(), escrowShares)
 	} catch (error) {
 		console.error(error)
 		throw error

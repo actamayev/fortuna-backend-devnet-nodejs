@@ -4,6 +4,7 @@ import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import { getOrCreateAssociatedTokenAccount, transfer } from "@solana/spl-token"
 import { getWalletBalanceWithUSD } from "../get-wallet-balance"
 import calculateTransactionFee from "../calculate-transaction-fee"
+import EscrowWalletManager from "../../../classes/escrow-wallet-manager"
 import addTokenAccountRecord from "../../db-operations/write/token-account/add-token-account-record"
 import retrieveTokenAccountBySplAddress from "../../db-operations/read/token-account/retrieve-token-account-by-spl-address"
 import addSplTransferRecordAndUpdateOwnership from "../../db-operations/write/simultaneous-writes/add-spl-transfer-and-update-ownership"
@@ -44,7 +45,8 @@ export default async function transferSplTokensToUser(
 		}
 
 		const fortunaEscrowTokenAccount = await retrieveTokenAccountBySplAddress(
-			purchaseSplTokensData.splPublicKey, process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY
+			purchaseSplTokensData.splPublicKey,
+			process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY
 		)
 
 		if (_.isNull(fortunaEscrowTokenAccount)) throw Error("Unable to find Escrow Token Account in DB")
@@ -72,6 +74,11 @@ export default async function transferSplTokensToUser(
 			purchaseSplTokensData.numberOfTokensPurchasing,
 			transferFeeSol,
 			userHasExistingTokenAccount
+		)
+
+		await EscrowWalletManager.getInstance().decrementTokenAmount(
+			purchaseSplTokensData.splPublicKey,
+			purchaseSplTokensData.numberOfTokensPurchasing
 		)
 
 		return splTransferId
