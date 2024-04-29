@@ -1,9 +1,10 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import usernameValidator from "../../joi/username-validator"
 
 const usernameSchema = Joi.object({
-	username: Joi.string().required().trim()
+	username: usernameValidator.required().trim()
 }).required()
 
 export default function validateSearchUsername (req: Request, res: Response, next: NextFunction): Response | void {
