@@ -120,14 +120,15 @@ model spl {
 	spl_name      									String  // Name of the SPL
 	meta_data_address 								String  // On-chain Address of the SPL metadata
 	public_key_address								String 	// The SPL's public key address
-	listing_price_per_share_sol						Float
-	listing_price_per_share_usd						Float
+	listing_price_per_share							Float
+	listing_currency								Currencies
+
 	initial_creator_ownership_percentage			Float
 	total_number_of_shares							Int
 	creator_wallet_id								Int
 	uploaded_image_id								Int		@unique
 	uploaded_video_id								Int		@unique
-	original_content_url							String @default("")
+	original_content_url							String
 
 	spl_creation_fee_sol							Float
 	spl_creation_fee_usd							Float
@@ -139,6 +140,7 @@ model spl {
 
 	spl_listing_status 								SPLListingStatus
 	description  									String   // Description of the SPL
+	is_active    									Boolean  @default(true)
 
 	created_at    									DateTime  @default(now())
 	updated_at    									DateTime  @default(now()) @updatedAt
@@ -231,6 +233,7 @@ model sol_transfer {
 
 	sol_amount_transferred							Float
 	usd_amount_transferred							Float
+	transfer_currency								Currencies
 
 	transfer_fee_sol								Float
 	transfer_fee_usd								Float
@@ -264,6 +267,7 @@ model spl_transfer {
 
 	is_spl_purchase									Boolean // True for spl purchases (transferring from escrow to user), but not for peer-peer transfers.
 	number_spl_shares_transferred					Int
+	is_secondary_market_transaction					Boolean
 
 	transfer_fee_sol								Float
 	transfer_fee_usd								Float
