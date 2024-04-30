@@ -1,5 +1,5 @@
 import _ from "lodash"
-import determineRemainingTokensInEscrowByPublicKeys from "../solana/determine-remaining-tokens-in-escrow-by-public-keys"
+import EscrowWalletManager from "../../classes/escrow-wallet-manager"
 
 export default async function transformVideosByCreatorUsername(
 	input: RetrievedVideosByCreatorUsername
@@ -13,7 +13,7 @@ export default async function transformVideosByCreatorUsername(
 		const publicKeys = validEntries.map(wallet => wallet.public_key_address)
 
 		// Fetch remaining tokens for these public keys
-		const tokensRemaining = await determineRemainingTokensInEscrowByPublicKeys(publicKeys)
+		const tokensRemaining = await EscrowWalletManager.getInstance().retrieveTokenAmountsByPublicKeys(publicKeys)
 
 		// Transform data using validated and filtered entries
 		const videoData = validEntries.map(wallet => {

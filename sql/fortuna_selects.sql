@@ -10,6 +10,7 @@
 -- select * from uploaded_video;
 -- select * from sol_transfer;
 -- select * from spl_purchase;
+-- select * from _prisma_migrations;
 
 -- To delete an spl:
 -- delete from spl_ownership;
