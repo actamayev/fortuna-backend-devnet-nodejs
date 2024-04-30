@@ -1,10 +1,10 @@
-import determineRemainingTokensInEscrowByPublicKeys from "../solana/determine-remaining-tokens-in-escrow-by-public-keys"
+import EscrowWalletManager from "../../classes/escrow-wallet-manager"
 
 export default async function transformVideoSearchData(input: RetrievedVideosByTitle[]): Promise<VideoDataSendingToFrontend[]> {
 	try {
 		const publicKeys = input.map(item => item.public_key_address)
 
-		const tokensRemaining = await determineRemainingTokensInEscrowByPublicKeys(publicKeys)
+		const tokensRemaining = await EscrowWalletManager.getInstance().retrieveTokenAmountsByPublicKeys(publicKeys)
 
 		const results = input.map(item => {
 			const sharesRemainingForSale = tokensRemaining[item.public_key_address]
