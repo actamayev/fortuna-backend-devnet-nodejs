@@ -17,7 +17,7 @@ export default class EscrowWalletManager {
 		return EscrowWalletManager.instance
 	}
 
-	get doesTokenAccountMapNeedRefresh(): boolean {
+	private get doesTokenAccountMapNeedRefresh(): boolean {
 		const currentTime = Date.now()
 		return this.lastFetchedTime < currentTime - 60000 // 1 minute
 	}
