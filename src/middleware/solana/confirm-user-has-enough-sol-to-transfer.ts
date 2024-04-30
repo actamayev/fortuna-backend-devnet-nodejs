@@ -1,5 +1,6 @@
 import { LAMPORTS_PER_SOL } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
+import SolPriceManager from "../../classes/sol-price-manager"
 import { getWalletBalanceSol } from "../../utils/solana/get-wallet-balance"
 
 export default async function confirmUserHasEnoughSolToTransfer(
@@ -13,13 +14,28 @@ export default async function confirmUserHasEnoughSolToTransfer(
 		const isRecipientFortunaWallet = req.isRecipientFortunaWallet
 		const balanceInSol = await getWalletBalanceSol(solanaWallet.public_key)
 
-		if (isRecipientFortunaWallet === true && balanceInSol < transferData.transferAmountSol) {
-			return res.status(400).json({ message: "User does not have enough sol to complete the internal transfer" })
+		if (transferData.transferCurrency === "sol") {
+			if (isRecipientFortunaWallet === true && balanceInSol < transferData.transferAmount) {
+				return res.status(400).json({ message: "User does not have enough sol to complete the internal transfer" })
+			} else {
+				// This is if the recipient is not registered with Fortuna. In this case, the sender must cover the transaction fee.
+				const transferCostSol = 5000 / LAMPORTS_PER_SOL
+				// eslint-disable-next-line max-depth
+				if (balanceInSol < (transferData.transferAmount + transferCostSol)) {
+					return res.status(400).json({ message: "User does not have enough sol to complete the external transfer" })
+				}
+			}
 		} else {
-			// This is if the recipient is not registered with Fortuna. In this case, the sender must cover the transaction fee.
-			const transferCostSol = 5000 / LAMPORTS_PER_SOL
-			if (balanceInSol < (transferData.transferAmountSol + transferCostSol)) {
-				return res.status(400).json({ message: "User does not have enough sol to complete the external transfer" })
+			const solPriceInUSD = (await SolPriceManager.getInstance().getPrice()).price
+			if (isRecipientFortunaWallet === true && (balanceInSol * solPriceInUSD) < transferData.transferAmount) {
+				return res.status(400).json({ message: "User does not have enough sol to complete the internal transfer" })
+			} else {
+				// This is if the recipient is not registered with Fortuna. In this case, the sender must cover the transaction fee.
+				const transferCostUsd = solPriceInUSD * (5000 / LAMPORTS_PER_SOL)
+				// eslint-disable-next-line max-depth
+				if ((solPriceInUSD * balanceInSol) < (transferData.transferAmount + transferCostUsd)) {
+					return res.status(400).json({ message: "User does not have enough sol to complete the external transfer" })
+				}
 			}
 		}
 

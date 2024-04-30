@@ -8,8 +8,8 @@ import { findPublicKeyAndSolWalletFromUsername } from "../../../utils/db-operati
 const transferSolToUsernameSchema = Joi.object({
 	transferSolData: Joi.object({
 		sendingTo: usernameValidator.required().trim(),
-		transferAmountSol: Joi.number().strict().required(),
-		transferAmountUsd: Joi.number().strict().required()
+		transferAmount: Joi.number().strict().required(),
+		transferCurrency: Joi.string().required().trim().valid("usd", "sol")
 	}).required()
 }).required()
 

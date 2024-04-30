@@ -25,6 +25,7 @@ export function transformTransaction(
 			solTransferId: transaction.sol_transfer_id,
 			solAmountTransferred: transaction.sol_amount_transferred,
 			usdAmountTransferred: transaction.usd_amount_transferred,
+			transferByCurrency: transaction.transfer_by_currency,
 			transferDateTime: transaction.created_at,
 			transferToUsername: transaction.recipient_username,
 			transferToPublicKey: transaction.recipient_public_key,

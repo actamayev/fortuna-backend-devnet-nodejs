@@ -3,6 +3,7 @@ import bs58 from "bs58"
 import { Request, Response } from "express"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction,
 	clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
+import SolPriceManager from "../../classes/sol-price-manager"
 import calculateTransactionFee from "../../utils/solana/calculate-transaction-fee"
 import { transformTransaction } from "../../utils/transform/transform-transactions-list"
 import addSolTransferRecord from "../../utils/db-operations/write/sol-transfer/add-sol-transfer-record"
@@ -18,12 +19,21 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const transaction = new Transaction()
 		const recipientSolanaWalletId = req.recipientSolanaWalletId
+		const transferCurrencyAmounts = { transferAmountSol: 0, transferAmountUsd: 0 }
 
+		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
+		if (transferData.transferCurrency === "sol") {
+			transferCurrencyAmounts.transferAmountSol = transferData.transferAmount
+			transferCurrencyAmounts.transferAmountUsd = transferData.transferAmount * solPrice
+		} else {
+			transferCurrencyAmounts.transferAmountSol = transferData.transferAmount / solPrice
+			transferCurrencyAmounts.transferAmountUsd = transferData.transferAmount
+		}
 		transaction.add(
 			SystemProgram.transfer({
 				fromPubkey: new PublicKey(solanaWallet.public_key),
 				toPubkey: recipientPublicKey,
-				lamports: _.round(transferData.transferAmountSol * LAMPORTS_PER_SOL)
+				lamports: _.round(transferCurrencyAmounts.transferAmountSol * LAMPORTS_PER_SOL)
 			})
 		)
 		// FUTURE TODO: Fix the double-charge problem (when having 2 signers, the fee is doubled)
@@ -53,7 +63,11 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			recipientPublicKey.toString(),
 			isRecipientFortunaWallet,
 			transactionSignature,
-			{ solToTransfer: transferData.transferAmountSol, usdToTransfer: transferData.transferAmountUsd },
+			{
+				solToTransfer: transferCurrencyAmounts.transferAmountSol,
+				usdToTransfer: transferCurrencyAmounts.transferAmountUsd,
+				defaultCurrency: transferData.transferCurrency
+			},
 			transactionFeeInSol,
 			solanaWallet.solana_wallet_id,
 			recipientSolanaWalletId,

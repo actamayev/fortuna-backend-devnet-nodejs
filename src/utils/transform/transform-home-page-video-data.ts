@@ -11,8 +11,8 @@ export default async function transformHomePageVideoData(input: HomePageVideoRet
 			return {
 				splName: item.spl.spl_name,
 				splPublicKey: item.spl.public_key_address,
-				offeringSharePriceSol: item.spl.listing_price_per_share_sol,
-				offeringSharePriceUsd: item.spl.listing_price_per_share_usd,
+				listingSharePrice: item.spl.listing_price_per_share,
+				listingDefaultCurrency: item.spl.listing_currency_peg,
 				description: item.spl.description,
 				imageUrl: item.spl.uploaded_image.image_url,
 				videoUrl: item.video_url,
