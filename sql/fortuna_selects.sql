@@ -1,7 +1,7 @@
 -- select * from credentials;
 -- select * from login_history;
 -- select * from solana_wallet;
-select * from spl;
+-- select * from spl;
 -- select * from spl_mint;
 -- Select solana_wallet.user_id, solana_wallet.solana_wallet_id, public_key, secret_key, username, email from credentials join solana_wallet on credentials.user_id = solana_wallet.user_id;
 -- select * from spl_ownership;
@@ -11,6 +11,7 @@ select * from spl;
 -- select * from sol_transfer;
 -- select * from spl_purchase;
 -- select * from _prisma_migrations;
+-- select * from spl_transfer;
 
 -- To delete an spl:
 -- delete from spl_ownership;
