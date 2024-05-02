@@ -1,5 +1,6 @@
 import _ from "lodash"
 import { Request, Response } from "express"
+import SolPriceManager from "../../classes/sol-price-manager"
 import transferSplTokensToUser from "../../utils/solana/purchase-spl-tokens/transfer-spl-tokens-to-user"
 import addSplPurchaseRecord from "../../utils/db-operations/write/spl/spl-purchase/add-spl-purchase-record"
 import transferSolFromUserToCreator from "../../utils/solana/purchase-spl-tokens/transfer-sol-from-user-to-creator"
@@ -21,14 +22,25 @@ export default async function purchaseSplTokens(req: Request, res: Response): Pr
 		const creatorWalletInfo = await retrieveCreatorWalletInfoFromSpl(splDetails.splId)
 		if (_.isUndefined(creatorWalletInfo)) return res.status(500).json({ error: "Unable to find creator's public key" })
 
+		const transferCurrencyAmounts = { solPriceToTransferAt: 0, usdPriceToTransferAt: 0 }
+
+		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
+		if (splDetails.listingDefaultCurrency === "sol") {
+			transferCurrencyAmounts.solPriceToTransferAt = splDetails.listingSharePrice
+			transferCurrencyAmounts.usdPriceToTransferAt = splDetails.listingSharePrice * solPrice
+		} else {
+			transferCurrencyAmounts.solPriceToTransferAt = splDetails.listingSharePrice / solPrice
+			transferCurrencyAmounts.usdPriceToTransferAt = splDetails.listingSharePrice
+		}
 		// 2) Transfer sol from user to creator (fortuna wallet should cover transaction)
 		// Record the transaction (save to sol_transfer table)
 		const solTransferId = await transferSolFromUserToCreator(
 			solanaWallet,
 			creatorWalletInfo,
 			{
-				solToTransfer: purchaseSplTokensData.numberOfTokensPurchasing * splDetails.listingPricePerShareSol,
-				usdToTransfer: purchaseSplTokensData.numberOfTokensPurchasing * splDetails.listingPricePerShareUsd
+				solToTransfer: purchaseSplTokensData.numberOfTokensPurchasing * transferCurrencyAmounts.solPriceToTransferAt,
+				usdToTransfer: purchaseSplTokensData.numberOfTokensPurchasing * transferCurrencyAmounts.usdPriceToTransferAt,
+				defaultCurrency: splDetails.listingDefaultCurrency
 			}
 		)
 

@@ -16,6 +16,7 @@ export default async function retrieveOutgoingTransactionsList(solanaWalletId: n
 				is_recipient_fortuna_wallet: true,
 				sol_amount_transferred: true,
 				usd_amount_transferred: true,
+				transfer_by_currency: true,
 				transfer_fee_sol: true,
 				transfer_fee_usd: true,
 				created_at: true,

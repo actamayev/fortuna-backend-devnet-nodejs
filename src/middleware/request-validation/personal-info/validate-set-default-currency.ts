@@ -1,9 +1,10 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import currencyValidatorSchema from "../../joi/currency-validator"
 
 const setDefaultCurrencySchema = Joi.object({
-	defaultCurrency: Joi.string().required().trim().valid("usd", "sol")
+	defaultCurrency: currencyValidatorSchema
 }).required()
 
 export default function validateSetDefaultCurrency (req: Request, res: Response, next: NextFunction): Response | void {

@@ -71,6 +71,7 @@ export default async function transferSplTokensToUser(
 			Number(process.env.FORTUNA_ESCROW_SOLANA_WALLET_ID_DB),
 			fortunaEscrowTokenAccount.token_account_id,
 			true,
+			false,
 			purchaseSplTokensData.numberOfTokensPurchasing,
 			transferFeeSol,
 			userHasExistingTokenAccount

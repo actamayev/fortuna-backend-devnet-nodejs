@@ -1,3 +1,4 @@
+import { Currencies } from "@prisma/client"
 import { PublicKey } from "@solana/web3.js"
 
 declare global {
@@ -11,8 +12,8 @@ declare global {
 		splName: string
 		numberOfShares: number
 		creatorOwnershipPercentage: number
-		offeringSharePriceSol: number
-		offeringSharePriceUsd: number
+		listingSharePrice: number
+		listingDefaultCurrency: Currencies
 		imageUrl: string
 		videoUrl: string
 		description: string
@@ -29,8 +30,8 @@ declare global {
 		spl_id: number
 		spl_name: string
 		total_number_of_shares: number
-		listing_price_per_share_sol: number
-		listing_price_per_share_usd: number
+		listing_price_per_share: number
+		listing_currency_peg: Currencies
 		description: string
 		initial_creator_ownership_percentage: number
 		uploaded_image: { image_url: string }
@@ -42,8 +43,8 @@ declare global {
 		splId: number
 		splName: string
 		numberOfShares: number
-		offeringSharePriceSol: number
-		offeringSharePriceUsd: number
+		listingSharePrice: number
+		listingDefaultCurrency: Currencies
 		description: string
 		creatorOwnershipPercentage: number
 		imageUrl: string
@@ -54,8 +55,8 @@ declare global {
 
 	interface TransferSolData {
 		sendingTo: string
-		transferAmountSol: number
-		transferAmountUsd: number
+		transferAmount: number
+		transferCurrency: Currencies
 	}
 
 	interface RetrievedDBTransactionListData {
@@ -65,6 +66,7 @@ declare global {
 
 		sol_amount_transferred: number
 		usd_amount_transferred: number
+		transfer_by_currency: Currencies
 		is_spl_purchase: boolean
 
 		transfer_fee_sol: number
@@ -82,6 +84,7 @@ declare global {
 
 		sol_amount_transferred: number
 		usd_amount_transferred: number
+		transfer_by_currency: Currencies
 		is_spl_purchase: boolean
 
 		transfer_fee_sol: number
@@ -95,6 +98,7 @@ declare global {
 		solTransferId: number
 		solAmountTransferred: number
 		usdAmountTransferred: number
+		transferByCurrency: Currencies
 		outgoingOrIncoming: "outgoing" | "incoming"
 
 		transferDateTime: Date
@@ -111,8 +115,8 @@ declare global {
 		spl_id: number
 		public_key_address: string
 		total_number_of_shares: number
-		listing_price_per_share_sol: number
-		listing_price_per_share_usd: number
+		listing_price_per_share: number
+		listing_currency_peg: Currencies
 		creator_wallet_id: number
 		uploaded_image: {
 			uuid: string
@@ -124,8 +128,8 @@ declare global {
 		splName: string
 		splId: number
 		publicKeyAddress: string
-		listingPricePerShareSol: number
-		listingPricePerShareUsd: number
+		listingSharePrice: number
+		listingDefaultCurrency: Currencies
 		totalNumberOfShares: number
 		creatorWalletId: number
 		imageUrl: string

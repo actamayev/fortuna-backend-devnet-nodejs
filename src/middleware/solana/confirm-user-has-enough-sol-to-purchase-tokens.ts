@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express"
+import SolPriceManager from "../../classes/sol-price-manager"
 import { getWalletBalanceSol } from "../../utils/solana/get-wallet-balance"
 
 export default async function confirmUserHasEnoughSolToPurchaseTokens(
@@ -12,9 +13,18 @@ export default async function confirmUserHasEnoughSolToPurchaseTokens(
 		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchaseSPLTokensData
 		const balanceInSol = await getWalletBalanceSol(solanaWallet.public_key)
 
-		if (balanceInSol < splDetails.listingPricePerShareSol * purchaseSplTokensData.numberOfTokensPurchasing) {
-			return res.status(400).json({ message: "User does not have enough Sol to complete the purchase" })
+		if (splDetails.listingDefaultCurrency === "sol") {
+			if (balanceInSol < splDetails.listingSharePrice * purchaseSplTokensData.numberOfTokensPurchasing) {
+				return res.status(400).json({ message: "User does not have enough Sol to complete the purchase" })
+			}
+		} else {
+			const solPriceInUSD = (await SolPriceManager.getInstance().getPrice()).price
+			const balanceInUsd = balanceInSol * solPriceInUSD
+			if (balanceInUsd < splDetails.listingSharePrice * purchaseSplTokensData.numberOfTokensPurchasing) {
+				return res.status(400).json({ message: "User does not have enough Sol to complete the purchase" })
+			}
 		}
+
 		next()
 	} catch (error) {
 		console.error(error)
