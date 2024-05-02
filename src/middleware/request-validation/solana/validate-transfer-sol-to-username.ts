@@ -3,13 +3,14 @@ import _ from "lodash"
 import { PublicKey } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
 import usernameValidator from "../../joi/username-validator"
+import currencyValidatorSchema from "../../joi/currency-validator"
 import { findPublicKeyAndSolWalletFromUsername } from "../../../utils/db-operations/read/find/find-public-key-and-sol-wallet-from-username"
 
 const transferSolToUsernameSchema = Joi.object({
 	transferSolData: Joi.object({
 		sendingTo: usernameValidator.required().trim(),
 		transferAmount: Joi.number().strict().required(),
-		transferCurrency: Joi.string().required().trim().valid("usd", "sol")
+		transferCurrency: currencyValidatorSchema
 	}).required()
 }).required()
 

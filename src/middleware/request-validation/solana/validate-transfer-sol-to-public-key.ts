@@ -3,12 +3,13 @@ import _ from "lodash"
 import { PublicKey } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
 import publicKeyValidator from "../../joi/public-key-validator"
+import currencyValidatorSchema from "../../joi/currency-validator"
 
 const transferSolSchema = Joi.object({
 	transferSolData: Joi.object({
 		sendingTo: publicKeyValidator.required().trim(),
 		transferAmount: Joi.number().strict().required(),
-		transferCurrency: Joi.string().required().trim().valid("usd", "sol")
+		transferCurrency: currencyValidatorSchema
 	}).required()
 }).required()
 
