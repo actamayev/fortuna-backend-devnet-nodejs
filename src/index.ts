@@ -19,17 +19,21 @@ const port = parseInt(process.env.PORT, 10) || 8000
 
 const app = express()
 
-app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", req.headers.origin as string)
-	res.header("Access-Control-Allow-Credentials", "true")
-	next()
-})
+const allowedOrigins = ["https://www.mintfortuna.com", "http://localhost:3000"]
 
 app.use(cors({
-	credentials: true,
-	origin: (origin, callback) => {
-		callback(null, true)
-	}
+	origin: function (origin, callback) {
+		// Allow requests with no origin (like mobile apps, curl requests, or Postman)
+		if (!origin) return callback(null, true)
+		if (allowedOrigins.indexOf(origin) === -1) {
+			const msg = "The CORS policy for this site does not allow access from the specified Origin."
+			return callback(new Error(msg), false)
+		}
+		return callback(null, true)
+	},
+	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+	allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+	credentials: true
 }))
 
 app.use(cookieParser())
