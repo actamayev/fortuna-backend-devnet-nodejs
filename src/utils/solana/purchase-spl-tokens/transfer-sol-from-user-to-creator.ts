@@ -1,6 +1,6 @@
 import _ from "lodash"
 import bs58 from "bs58"
-import { solana_wallet } from "@prisma/client"
+import { Currencies, solana_wallet } from "@prisma/client"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram,
 	Transaction, clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
 import calculateTransactionFee from "../calculate-transaction-fee"
@@ -10,7 +10,7 @@ import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol
 export default async function transferSolFromUserToCreator(
 	senderSolanaWallet: solana_wallet,
 	recipientPublicKeyAndWalletId: { public_key: string, solana_wallet_id: number },
-	transferDetails: { solToTransfer: number, usdToTransfer: number },
+	transferDetails: { solToTransfer: number, usdToTransfer: number, defaultCurrency: Currencies },
 ): Promise<number> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")

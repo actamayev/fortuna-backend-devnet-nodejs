@@ -12,8 +12,8 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 			},
 			select: {
 				spl_name: true,
-				listing_price_per_share_sol: true,
-				listing_price_per_share_usd: true,
+				listing_price_per_share: true,
+				listing_currency_peg: true,
 				description: true,
 				total_number_of_shares: true,
 				public_key_address: true,

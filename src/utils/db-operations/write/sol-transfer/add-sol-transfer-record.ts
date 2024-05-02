@@ -1,3 +1,4 @@
+import { Currencies } from "@prisma/client"
 import prismaClient from "../../../../prisma-client"
 import SolPriceManager from "../../../../classes/sol-price-manager"
 
@@ -6,7 +7,7 @@ export default async function addSolTransferRecord (
 	recipientPublicKey: string,
 	isRecipientFortunaWallet: boolean,
 	transactionSignature: string,
-	transferDetails: { solToTransfer: number, usdToTransfer: number },
+	transferDetails: { solToTransfer: number, usdToTransfer: number, defaultCurrency: Currencies },
 	transferFeeSol: number,
 	senderWalletId: number,
 	recipientSolanaWalletId: number | undefined,
@@ -23,6 +24,7 @@ export default async function addSolTransferRecord (
 				transaction_signature: transactionSignature,
 				sol_amount_transferred: transferDetails.solToTransfer,
 				usd_amount_transferred: transferDetails.usdToTransfer,
+				transfer_by_currency: transferDetails.defaultCurrency,
 				is_spl_purchase: isSplPurchase,
 				transfer_fee_sol: transferFeeSol,
 				transfer_fee_usd: transferFeeSol * solPriceDetails.price,

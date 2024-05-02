@@ -3,8 +3,8 @@ export default function transformCreatorContentList(input: RetrievedDBSplData[])
 		return input.map(item => ({
 			splId: item.spl_id,
 			numberOfShares: item.total_number_of_shares,
-			offeringSharePriceSol: item.listing_price_per_share_sol,
-			offeringSharePriceUsd: item.listing_price_per_share_usd,
+			listingSharePrice: item.listing_price_per_share,
+			listingDefaultCurrency: item.listing_currency_peg,
 			description: item.description,
 			creatorOwnershipPercentage: item.initial_creator_ownership_percentage,
 			imageUrl: item.uploaded_image.image_url,
