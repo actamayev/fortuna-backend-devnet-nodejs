@@ -2,7 +2,7 @@ import { Connection, LAMPORTS_PER_SOL, PublicKey, clusterApiUrl } from "@solana/
 import SolPriceManager from "../../classes/sol-price-manager"
 
 export async function getWalletBalanceWithUSD(
-	publicKeyString: string,
+	publicKeyString: string
 ): Promise<{
 	balanceInSol: number,
 	balanceInUsd: number,

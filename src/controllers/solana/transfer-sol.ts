@@ -19,21 +19,21 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const transaction = new Transaction()
 		const recipientSolanaWalletId = req.recipientSolanaWalletId
-		const transferCurrencyAmounts = { transferAmountSol: 0, transferAmountUsd: 0 }
+		const transferCurrencyAmounts = { solToTransfer: 0, usdToTransfer: 0, defaultCurrency: transferData.transferCurrency }
 
 		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
 		if (transferData.transferCurrency === "sol") {
-			transferCurrencyAmounts.transferAmountSol = transferData.transferAmount
-			transferCurrencyAmounts.transferAmountUsd = transferData.transferAmount * solPrice
+			transferCurrencyAmounts.solToTransfer = transferData.transferAmount
+			transferCurrencyAmounts.usdToTransfer = transferData.transferAmount * solPrice
 		} else {
-			transferCurrencyAmounts.transferAmountSol = transferData.transferAmount / solPrice
-			transferCurrencyAmounts.transferAmountUsd = transferData.transferAmount
+			transferCurrencyAmounts.solToTransfer = transferData.transferAmount / solPrice
+			transferCurrencyAmounts.usdToTransfer = transferData.transferAmount
 		}
 		transaction.add(
 			SystemProgram.transfer({
 				fromPubkey: new PublicKey(solanaWallet.public_key),
 				toPubkey: recipientPublicKey,
-				lamports: _.round(transferCurrencyAmounts.transferAmountSol * LAMPORTS_PER_SOL)
+				lamports: _.round(transferCurrencyAmounts.solToTransfer * LAMPORTS_PER_SOL)
 			})
 		)
 		// FUTURE TODO: Fix the double-charge problem (when having 2 signers, the fee is doubled)
@@ -63,11 +63,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			recipientPublicKey.toString(),
 			isRecipientFortunaWallet,
 			transactionSignature,
-			{
-				solToTransfer: transferCurrencyAmounts.transferAmountSol,
-				usdToTransfer: transferCurrencyAmounts.transferAmountUsd,
-				defaultCurrency: transferData.transferCurrency
-			},
+			transferCurrencyAmounts,
 			transactionFeeInSol,
 			solanaWallet.solana_wallet_id,
 			recipientSolanaWalletId,
