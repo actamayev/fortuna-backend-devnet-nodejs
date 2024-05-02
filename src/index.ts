@@ -19,7 +19,7 @@ const port = parseInt(process.env.PORT, 10) || 8000
 
 const app = express()
 
-const allowedOrigins = ["https://www.mintfortuna.com", "https://www.devnet.mintfortuna.com", "http://localhost:3000"]
+const allowedOrigins = ["https://www.mintfortuna.com", "https://devnet.mintfortuna.com", "http://localhost:3000"]
 
 app.use(cors({
 	origin: function (origin, callback) {
