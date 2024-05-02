@@ -13,6 +13,8 @@
 -- select * from _prisma_migrations;
 -- select * from spl_transfer;
 
+-- select * from _prisma_migrations;
+
 -- To delete an spl:
 -- delete from spl_ownership;
 -- delete from spl_mint;
