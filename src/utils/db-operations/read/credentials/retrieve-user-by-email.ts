@@ -1,7 +1,7 @@
 import { credentials } from "@prisma/client"
 import prismaClient from "../../../../prisma-client"
 
-export default async function retrieveCreatorByUsername(email: string): Promise<credentials | null> {
+export default async function retrieveUserByUsername(email: string): Promise<credentials | null> {
 	try {
 		const user = await prismaClient.credentials.findFirst({
 			where: {

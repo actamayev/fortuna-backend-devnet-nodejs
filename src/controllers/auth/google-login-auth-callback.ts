@@ -3,8 +3,8 @@ import { Request, Response } from "express"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
 import createSolanaWallet from "../../utils/solana/create-solana-wallet"
 import createGoogleAuthClient from "../../utils/google/create-google-auth-client"
+import retrieveUserByUsername from "../../utils/db-operations/read/credentials/retrieve-user-by-email"
 import addLoginHistoryRecord from "../../utils/db-operations/write/login-history/add-login-history-record"
-import retrieveCreatorByUsername from "../../utils/db-operations/read/credentials/retrieve-creator-by-email"
 import addGoogleUserWithWallet from "../../utils/db-operations/write/simultaneous-writes/add-google-user-with-wallet"
 
 // TODO: Create 2 endpoints for google auth. one for logging in, and another for importing youtube details
@@ -23,7 +23,7 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 		if (_.isUndefined(payload)) return res.status(500).json({ error: "Unable to get payload" })
 		if (_.isUndefined(payload.email)) return res.status(500).json({ error: "Unable to find user email from payload" })
 
-		const googleUser = await retrieveCreatorByUsername(payload.email)
+		const googleUser = await retrieveUserByUsername(payload.email)
 		let userId = googleUser?.user_id
 		let accessToken
 		let isNewUser = false
