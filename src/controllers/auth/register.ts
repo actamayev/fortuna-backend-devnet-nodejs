@@ -26,7 +26,7 @@ export default async function register (req: Request, res: Response): Promise<Re
 
 		const userData = addLocalUser(registerInformation, hashedPassword, contactType)
 		const walletInformation = await createSolanaWallet()
-		const { userId } = await addUserWithWallet(userData, walletInformation)
+		const userId = await addUserWithWallet(userData, walletInformation)
 
 		await addLoginHistoryRecord(userId)
 

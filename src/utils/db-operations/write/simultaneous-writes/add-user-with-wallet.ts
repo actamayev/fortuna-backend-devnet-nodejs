@@ -5,7 +5,7 @@ import prismaClient from "../../../../prisma-client"
 export default async function addUserWithWallet(
 	userFields: NewLocalUserFields,
 	keypair: Keypair
-): Promise<{ userId: number }> {
+): Promise<number> {
 	try {
 		const result = await prismaClient.$transaction(async (prisma) => {
 			const user = await prisma.credentials.create({
@@ -20,7 +20,7 @@ export default async function addUserWithWallet(
 				}
 			})
 
-			return { userId: user.user_id }
+			return user.user_id
 		})
 
 		return result

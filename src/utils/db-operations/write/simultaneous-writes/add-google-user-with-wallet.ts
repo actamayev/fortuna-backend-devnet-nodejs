@@ -5,7 +5,7 @@ import prismaClient from "../../../../prisma-client"
 export default async function addGoogleUserWithWallet(
 	email: string,
 	keypair: Keypair
-): Promise<{ userId: number }> {
+): Promise<number> {
 	try {
 		const result = await prismaClient.$transaction(async (prisma) => {
 			const user = await prisma.credentials.create({
@@ -23,7 +23,7 @@ export default async function addGoogleUserWithWallet(
 				}
 			})
 
-			return { userId: user.user_id }
+			return user.user_id
 		})
 
 		return result

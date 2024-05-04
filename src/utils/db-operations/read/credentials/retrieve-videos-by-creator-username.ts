@@ -46,7 +46,7 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 			}
 		})
 
-		if (_.isNil(retrievedVideos) || _.isNil(retrievedVideos.username)) return null
+		if (_.isNull(retrievedVideos) || _.isNull(retrievedVideos.username)) return null
 
 		return retrievedVideos as RetrievedVideosByCreatorUsername
 	} catch (error) {
