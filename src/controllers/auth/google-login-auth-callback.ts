@@ -5,7 +5,7 @@ import createSolanaWallet from "../../utils/solana/create-solana-wallet"
 import createGoogleAuthClient from "../../utils/google/create-google-auth-client"
 import addLoginHistoryRecord from "../../utils/db-operations/write/login-history/add-login-history-record"
 import retrieveCreatorByUsername from "../../utils/db-operations/read/credentials/retrieve-creator-by-email"
-import createGoogleUserWithWallet from "../../utils/db-operations/write/simultaneous-writes/add-google-user-with-wallet"
+import addGoogleUserWithWallet from "../../utils/db-operations/write/simultaneous-writes/add-google-user-with-wallet"
 
 // TODO: Create 2 endpoints for google auth. one for logging in, and another for importing youtube details
 // https://react-oauth.vercel.app/
@@ -29,7 +29,7 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 		let isNewUser = false
 		if (_.isUndefined(userId)) {
 			const walletKeypair = await createSolanaWallet()
-			userId = (await createGoogleUserWithWallet(payload.email, walletKeypair)).userId
+			userId = (await addGoogleUserWithWallet(payload.email, walletKeypair)).userId
 			accessToken = signJWT({ userId, newUser: true })
 			isNewUser = true
 		} else {
@@ -41,6 +41,6 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 		return res.status(200).json({ accessToken, isNewUser })
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Logout" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to Login with Google" })
 	}
 }

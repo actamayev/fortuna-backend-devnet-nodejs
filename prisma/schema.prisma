@@ -31,7 +31,7 @@ model credentials {
 	default_site_theme								SiteThemes @default(light)
 	is_approved_to_be_creator						Boolean @default(true)
 
-	auth_method										AuthMethods @default(fortuna)
+	auth_method										AuthMethods
 
 	email        									String?
 	phone_number 									String?

@@ -2,7 +2,7 @@ import bs58 from "bs58"
 import { Keypair } from "@solana/web3.js"
 import prismaClient from "../../../../prisma-client"
 
-export default async function createGoogleUserWithWallet(
+export default async function addGoogleUserWithWallet(
 	email: string,
 	keypair: Keypair
 ): Promise<{ userId: number }> {
