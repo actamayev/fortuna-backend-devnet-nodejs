@@ -13,8 +13,11 @@ export default async function login (req: Request, res: Response): Promise<Respo
 
 		const credentialsResult = await retrieveUserFromContact(contact, contactType)
 		if (_.isNull(credentialsResult)) return res.status(400).json({ message: `${contactType} not found!` })
+		if (credentialsResult.auth_method === "google") {
+			return res.status(400).json({ message: "Please log in via Google" })
+		}
 
-		const doPasswordsMatch = await Hash.checkPassword(password, credentialsResult.password)
+		const doPasswordsMatch = await Hash.checkPassword(password, credentialsResult.password as string)
 		if (doPasswordsMatch === false) return res.status(400).json({ message: "Wrong Username or Password!" })
 
 		const accessToken = signJWT({ userId: credentialsResult.user_id, newUser: false })

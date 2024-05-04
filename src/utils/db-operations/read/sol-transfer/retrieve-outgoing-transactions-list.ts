@@ -42,12 +42,18 @@ export default async function retrieveOutgoingTransactionsList(solanaWalletId: n
 			}
 		})
 
-		return outgoingTransactionsList.map(transaction => ({
+		const filteredTransactions = outgoingTransactionsList.filter(
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			outgoingTransaction => outgoingTransaction.sender_solana_wallet.user.username !== null
+		)
+
+		return filteredTransactions.map(transaction => ({
 			...transaction,
 			recipient_public_key: transaction.is_recipient_fortuna_wallet ? undefined : transaction.recipient_public_key,
-			recipient_username: transaction.is_recipient_fortuna_wallet ? transaction.recipient_solana_wallet?.user.username : undefined,
+			recipient_username: transaction.is_recipient_fortuna_wallet ?
+				transaction.recipient_solana_wallet?.user.username || undefined : undefined,
 			sender_username: transaction.sender_solana_wallet.user.username
-		}))
+		})) as RetrievedDBTransactionListData[]
 	} catch (error) {
 		console.error(error)
 		throw error

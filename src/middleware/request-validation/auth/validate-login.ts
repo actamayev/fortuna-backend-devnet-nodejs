@@ -1,11 +1,12 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import passwordValidatorSchema from "../../joi/password-validator"
 
 const loginInformationSchema = Joi.object({
 	loginInformation: Joi.object({
 		contact: Joi.string().required(),
-		password: Joi.string().min(6).required(),
+		password: passwordValidatorSchema.required(),
 	}).required()
 }).required()
 
