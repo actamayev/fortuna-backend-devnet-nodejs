@@ -1,30 +1,28 @@
+import _ from "lodash"
 import prismaClient from "../../../../prisma-client"
 
 export default async function getUsernames(
 	username: string,
-	excludeUsername: string
-): Promise<{username: string}[]> {
+	excludeUsername: string | null
+): Promise<{ username: string }[]> {
 	try {
 		const usernames = await prismaClient.credentials.findMany({
 			where: {
-				AND: [ // Use AND to combine multiple conditions
-					{ username: {
-						contains: username,
-						mode: "insensitive"
-					}},
-					{ username: {
-						not: {
-							equals: excludeUsername,
-						}
-					}}
-				]
+				username: {
+					contains: username,
+					mode: "insensitive",
+					not: excludeUsername ? {
+						equals: excludeUsername
+					} : undefined
+				}
 			},
 			select: {
 				username: true
 			}
 		})
 
-		return usernames
+		const filteredUsernames = usernames.filter(user => !_.isNull(user.username)) as { username: string }[]
+		return filteredUsernames
 	} catch (error) {
 		console.error(error)
 		throw error

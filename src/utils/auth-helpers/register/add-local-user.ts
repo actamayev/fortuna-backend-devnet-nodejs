@@ -7,6 +7,7 @@ export function addLocalUser(
 		const userFields: NewLocalUserFields = {
 			username: registerInformation.username,
 			password: hashedPassword,
+			auth_method: "fortuna"
 		}
 
 		if (contactType === "Email") {

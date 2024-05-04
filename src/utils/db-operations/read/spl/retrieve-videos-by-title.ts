@@ -47,7 +47,12 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 			}
 		})
 
-		return retrievedVideos
+		const filteredVideos: RetrievedVideosByTitle[] = retrievedVideos.filter(video =>
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			video.spl_creator_wallet.user.username !== null
+		) as RetrievedVideosByTitle[]
+
+		return filteredVideos
 	} catch (error) {
 		console.error(error)
 		throw error

@@ -6,8 +6,8 @@ import { addLocalUser } from "../../utils/auth-helpers/register/add-local-user"
 import determineContactType from "../../utils/auth-helpers/login/determine-contact-type"
 import doesContactExist from "../../utils/db-operations/read/does-x-exist/does-contact-exist"
 import doesUsernameExist from "../../utils/db-operations/read/does-x-exist/does-username-exist"
+import addUserWithWallet from "../../utils/db-operations/write/simultaneous-writes/add-user-with-wallet"
 import addLoginHistoryRecord from "../../utils/db-operations/write/login-history/add-login-history-record"
-import createUserWithWallet from "../../utils/db-operations/write/simultaneous-writes/add-user-with-wallet"
 
 export default async function register (req: Request, res: Response): Promise<Response> {
 	try {
@@ -26,13 +26,13 @@ export default async function register (req: Request, res: Response): Promise<Re
 
 		const userData = addLocalUser(registerInformation, hashedPassword, contactType)
 		const walletInformation = await createSolanaWallet()
-		const { userId, publicKey } = await createUserWithWallet(userData, walletInformation)
+		const userId = await addUserWithWallet(userData, walletInformation)
 
 		await addLoginHistoryRecord(userId)
 
 		const accessToken = signJWT({ userId, newUser: true })
 
-		return res.status(200).json({ accessToken, publicKey })
+		return res.status(200).json({ accessToken })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Register New User" })

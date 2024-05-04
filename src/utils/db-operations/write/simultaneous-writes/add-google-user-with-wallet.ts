@@ -2,14 +2,17 @@ import bs58 from "bs58"
 import { Keypair } from "@solana/web3.js"
 import prismaClient from "../../../../prisma-client"
 
-export default async function addUserWithWallet(
-	userFields: NewLocalUserFields,
+export default async function addGoogleUserWithWallet(
+	email: string,
 	keypair: Keypair
 ): Promise<number> {
 	try {
 		const result = await prismaClient.$transaction(async (prisma) => {
 			const user = await prisma.credentials.create({
-				data: userFields
+				data: {
+					email,
+					auth_method: "google"
+				}
 			})
 
 			await prisma.solana_wallet.create({

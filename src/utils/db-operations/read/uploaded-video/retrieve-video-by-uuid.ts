@@ -45,12 +45,16 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Ho
 			}
 		})
 
-		if (_.isNull(retrievedVideo) || _.isNull(retrievedVideo.spl)) return null
+		if (
+			_.isNull(retrievedVideo) ||
+			_.isNull(retrievedVideo.spl) ||
+			_.isNull(retrievedVideo.spl.spl_creator_wallet.user.username)
+		) return null
 
 		return {
 			...retrievedVideo,
 			spl: retrievedVideo.spl
-		}
+		} as HomePageVideoRetrievedFromDB
 	} catch (error) {
 		console.error(error)
 		throw error

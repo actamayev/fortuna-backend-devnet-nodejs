@@ -6,11 +6,11 @@ import cookieParser from "cookie-parser"
 import checkHealth from "./controllers/health-checks/check-health"
 import jwtVerify from "./middleware/jwt/jwt-verify"
 
-import authRoutes from "./routes/auth-routes"
 import searchRoutes from "./routes/search-routes"
 import solanaRoutes from "./routes/solana-routes"
 import uploadRoutes from "./routes/upload-routes"
 import videosRoutes from "./routes/videos-routes"
+import authRoutes from "./routes/auth/auth-routes"
 import personalInfoRoutes from "./routes/personal-info-routes"
 
 dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.local" })

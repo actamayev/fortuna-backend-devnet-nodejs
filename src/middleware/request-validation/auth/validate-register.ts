@@ -1,13 +1,14 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import usernameValidator from "../../joi/username-validator"
+import passwordValidatorSchema from "../../joi/password-validator"
 
 const registerInformationSchema = Joi.object({
 	registerInformation: Joi.object({
 		contact: Joi.string().required(),
-		// Makes sure that the username does not contain an @ symbol, as that is reserved for the contact field
-		username: Joi.string().required().pattern(new RegExp("^[^@]*$")),
-		password: Joi.string().min(6).required(),
+		username: usernameValidator.required().trim(),
+		password: passwordValidatorSchema.required(),
 	}).required()
 }).required()
 
