@@ -73,7 +73,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 
 		const transactionToTransform: RetrievedDBTransactionListData = {
 			...solTransferRecord,
-			sender_username: user.username,
+			sender_username: user.username as string,
 			...(isRecipientFortunaWallet ? { recipient_username: transferData.sendingTo } : null)
 		}
 

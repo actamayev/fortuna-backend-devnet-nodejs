@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser"
 import checkHealth from "./controllers/health-checks/check-health"
 import jwtVerify from "./middleware/jwt/jwt-verify"
 
-import authRoutes from "./routes/auth-routes"
+import authRoutes from "./routes/auth/auth-routes"
 import searchRoutes from "./routes/search-routes"
 import solanaRoutes from "./routes/solana-routes"
 import uploadRoutes from "./routes/upload-routes"
@@ -19,7 +19,11 @@ const port = parseInt(process.env.PORT, 10) || 8000
 
 const app = express()
 
-const allowedOrigins = ["https://www.mintfortuna.com", "https://devnet.mintfortuna.com", "http://localhost:3000"]
+const allowedOrigins = [
+	"https://www.mintfortuna.com", "https://mintfortuna.com",
+	"https://devnet.mintfortuna.com",
+	"http://localhost:3000"
+]
 
 app.use(cors({
 	origin: function (origin, callback) {

@@ -26,13 +26,13 @@ export default async function register (req: Request, res: Response): Promise<Re
 
 		const userData = addLocalUser(registerInformation, hashedPassword, contactType)
 		const walletInformation = await createSolanaWallet()
-		const { userId, publicKey } = await createUserWithWallet(userData, walletInformation)
+		const { userId } = await createUserWithWallet(userData, walletInformation)
 
 		await addLoginHistoryRecord(userId)
 
 		const accessToken = signJWT({ userId, newUser: true })
 
-		return res.status(200).json({ accessToken, publicKey })
+		return res.status(200).json({ accessToken })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Register New User" })

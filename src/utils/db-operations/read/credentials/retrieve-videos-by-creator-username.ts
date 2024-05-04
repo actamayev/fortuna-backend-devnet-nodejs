@@ -1,3 +1,4 @@
+import _ from "lodash"
 import prismaClient from "../../../../prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
@@ -45,7 +46,9 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 			}
 		})
 
-		return retrievedVideos
+		if (_.isNil(retrievedVideos) || _.isNil(retrievedVideos.username)) return null
+
+		return retrievedVideos as RetrievedVideosByCreatorUsername
 	} catch (error) {
 		console.error(error)
 		throw error
