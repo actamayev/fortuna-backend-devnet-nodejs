@@ -1,9 +1,10 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import usernameValidator from "../../joi/username-validator"
 
 const registerUsernameSchema = Joi.object({
-	username: Joi.string().required().pattern(new RegExp("^[^@]*$")),
+	username: usernameValidator.required().trim()
 }).required()
 
 export default function validateRegisterUsername (req: Request, res: Response, next: NextFunction): Response | void {
