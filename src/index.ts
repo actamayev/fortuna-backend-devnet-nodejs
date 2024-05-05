@@ -11,6 +11,7 @@ import solanaRoutes from "./routes/solana-routes"
 import uploadRoutes from "./routes/upload-routes"
 import videosRoutes from "./routes/videos-routes"
 import authRoutes from "./routes/auth/auth-routes"
+import youTubeRoutes from "./routes/youtube-routes"
 import personalInfoRoutes from "./routes/personal-info-routes"
 
 dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.local" })
@@ -49,6 +50,8 @@ app.use("/search", searchRoutes)
 app.use("/solana", solanaRoutes)
 app.use("/upload", jwtVerify, uploadRoutes)
 app.use("/videos", videosRoutes)
+app.use("/youtube", jwtVerify, youTubeRoutes)
+
 app.use("/health", checkHealth)
 
 app.use("*", (req, res) => res.status(404).json({ error: "Route not found"}))
