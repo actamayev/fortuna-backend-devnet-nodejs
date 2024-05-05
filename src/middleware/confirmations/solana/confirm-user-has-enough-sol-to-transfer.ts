@@ -1,7 +1,7 @@
 import { LAMPORTS_PER_SOL } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
-import SolPriceManager from "../../classes/sol-price-manager"
-import { getWalletBalanceSol } from "../../utils/solana/get-wallet-balance"
+import SolPriceManager from "../../../classes/sol-price-manager"
+import { getWalletBalanceSol } from "../../../utils/solana/get-wallet-balance"
 
 export default async function confirmUserHasEnoughSolToTransfer(
 	req: Request,

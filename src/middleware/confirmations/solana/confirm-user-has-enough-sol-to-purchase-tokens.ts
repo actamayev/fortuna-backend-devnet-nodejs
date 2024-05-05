@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express"
-import SolPriceManager from "../../classes/sol-price-manager"
-import { getWalletBalanceSol } from "../../utils/solana/get-wallet-balance"
+import SolPriceManager from "../../../classes/sol-price-manager"
+import { getWalletBalanceSol } from "../../../utils/solana/get-wallet-balance"
 
 export default async function confirmUserHasEnoughSolToPurchaseTokens(
 	req: Request,

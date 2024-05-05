@@ -36,6 +36,7 @@ model credentials {
 	email        									String?
 	phone_number 									String?
   	profile_picture_id 								Int?	@unique
+	youtube_access_tokens_id						Int? 	@unique
 
 	created_at   									DateTime @default(now())
 	updated_at   									DateTime @default(now()) @updatedAt
@@ -44,7 +45,10 @@ model credentials {
 	solana_wallet   								solana_wallet?
 
   	profile_picture    								profile_picture? @relation(fields: [profile_picture_id], references: [profile_picture_id])
+  	youtube_access_tokens							youtube_access_tokens? @relation(fields: [youtube_access_tokens_id], references: [youtube_access_tokens_id])
+
 	@@index([profile_picture_id], name:"credentials__profile_picture_id_idx")
+	@@index([youtube_access_tokens_id], name:"credentials__youtube_access_tokens_id_idx")
 }
 
 model login_history {
@@ -321,5 +325,16 @@ model profile_picture {
 	updated_at    									DateTime  @default(now()) @updatedAt
 
   	user											credentials?
-  	@@unique([profile_picture_id], name: "unique_profile_picture_id")
+}
+
+model youtube_access_tokens {
+	youtube_access_tokens_id						Int @id @default(autoincrement())
+	access_token									String
+	refresh_token									String
+	expiry_date										DateTime
+
+	created_at    									DateTime  @default(now())
+	updated_at    									DateTime  @default(now()) @updatedAt
+
+  	user											credentials?
 }
