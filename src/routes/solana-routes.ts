@@ -14,21 +14,22 @@ import getSolanaWalletBalance from "../controllers/solana/get-solana-wallet-bala
 import getNumberOfTokensInTokenAccount from "../controllers/solana/get-number-of-tokens-in-token-account"
 
 import jwtVerify from "../middleware/jwt/jwt-verify"
-import confirmUserIsCreator from "../middleware/confirm-user-is-creator"
-import confirmPublicKeyExists from "../middleware/solana/confirm-public-key-exists"
-import confirmNotSendingSolToSelf from "../middleware/solana/confirm-not-sending-sol-to-self"
+import confirmUserIsCreator from "../middleware/confirmations/confirm-user-is-creator"
 import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
 import attachSplDetailsByPublicKey from "../middleware/attach/attach-spl-details-by-public-key"
-import confirmCreatorNotBuyingOwnShares from "../middleware/solana/confirm-creator-not-buying-own-shares"
+import confirmPublicKeyExists from "../middleware/confirmations/solana/confirm-public-key-exists"
 import validateCreateAndMintSPL from "../middleware/request-validation/solana/validate-create-and-mint-spl"
-import confirmUserHasEnoughSolToTransfer from "../middleware/solana/confirm-user-has-enough-sol-to-transfer"
+import confirmNotSendingSolToSelf from "../middleware/confirmations/solana/confirm-not-sending-sol-to-self"
 import validatePurchaseSplTokens from "../middleware/request-validation/solana/validate-purchase-spl-tokens"
 import validateTransactionSignatures from "../middleware/request-validation/solana/validate-transaction-signatures"
 import validateTransferSolToUsername from "../middleware/request-validation/solana/validate-transfer-sol-to-username"
 import checkIfPublicKeyPartOfFortuna from "../middleware/request-validation/solana/check-if-public-key-part-of-fortuna"
+import confirmCreatorNotBuyingOwnShares from "../middleware/confirmations/solana/confirm-creator-not-buying-own-shares"
 import validateTransferSolToPublicKey from "../middleware/request-validation/solana/validate-transfer-sol-to-public-key"
-import confirmUserHasEnoughSolToPurchaseTokens from "../middleware/solana/confirm-user-has-enough-sol-to-purchase-tokens"
-import confirmEnoughSharesInEscrowToCompletePurchase from "../middleware/solana/confirm-enough-shares-in-escrow-to-complete-purchase"
+import confirmUserHasEnoughSolToTransfer from "../middleware/confirmations/solana/confirm-user-has-enough-sol-to-transfer"
+import confirmUserHasEnoughSolToPurchaseTokens from "../middleware/confirmations/solana/confirm-user-has-enough-sol-to-purchase-tokens"
+import confirmEnoughSharesInEscrowToCompletePurchase
+	from "../middleware/confirmations/solana/confirm-enough-shares-in-escrow-to-complete-purchase"
 
 const solanaRoutes = express.Router()
 
