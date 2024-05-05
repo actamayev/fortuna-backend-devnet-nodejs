@@ -3,7 +3,7 @@ import { Request, Response } from "express"
 import createGoogleAuthClient from "../../utils/google/create-google-auth-client"
 import retrieveYouTubeSubscriberCount from "../../utils/google/retrieve-youtube-subscriber-count"
 import approveUserToBeCreator from "../../utils/db-operations/write/credentials/approve-user-to-be-creator"
-import addYoutubeAccessTokenRecord
+import addYouTubeAccessTokenRecord
 	from "../../utils/db-operations/write/simultaneous-writes/add-youtube-access-token-record-and-update-user"
 
 export default async function googleYouTubeAuthCallback(req: Request, res: Response): Promise<Response> {
@@ -19,7 +19,7 @@ export default async function googleYouTubeAuthCallback(req: Request, res: Respo
 			_.isNil(tokens.expiry_date)
 		) return res.status(500).json({ error: "Unable to extract token information" })
 
-		await addYoutubeAccessTokenRecord(user.user_id, tokens.access_token, tokens.refresh_token, tokens.expiry_date)
+		await addYouTubeAccessTokenRecord(user.user_id, tokens.access_token, tokens.refresh_token, tokens.expiry_date)
 
 		const subscriberCount = await retrieveYouTubeSubscriberCount(tokens.access_token)
 		let isApprovedToBeCreator = false
