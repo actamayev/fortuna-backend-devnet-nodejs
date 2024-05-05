@@ -6,16 +6,15 @@ import addProfilePictureRecord from "../../utils/db-operations/write/simultaneou
 
 export default async function uploadProfilePicture (req: Request, res: Response): Promise<Response> {
 	try {
-		const user = req.user
+		const { user } = req
 		if (_.isUndefined(req.file)) return res.status(400).json({ message: "No image uploaded" })
 
-		const fileBuffer = req.file.buffer
-		const fileName = req.file.originalname
+		const { buffer, originalname } = req.file
 
-		const uploadImageToS3Key = createS3KeyGenerateUUID("profile-pictures", fileName)
-		const profilePictureUrl = await AwsS3.getInstance().uploadImage(fileBuffer, uploadImageToS3Key.key)
+		const uploadImageToS3Key = createS3KeyGenerateUUID("profile-pictures", originalname)
+		const profilePictureUrl = await AwsS3.getInstance().uploadImage(buffer, uploadImageToS3Key.key)
 
-		await addProfilePictureRecord(profilePictureUrl, fileName, uploadImageToS3Key.uuid, user.user_id)
+		await addProfilePictureRecord(profilePictureUrl, originalname, uploadImageToS3Key.uuid, user.user_id)
 
 		return res.status(200).json({ profilePictureUrl })
 	} catch (error) {

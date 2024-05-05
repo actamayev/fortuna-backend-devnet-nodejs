@@ -5,7 +5,7 @@ import doesUsernameExist from "../../utils/db-operations/read/does-x-exist/does-
 
 export default async function registerUsername (req: Request, res: Response): Promise<Response> {
 	try {
-		const user = req.user
+		const { user } = req
 		if (!_.isNull(user.username)) return res.status(400).json({ message: "Username already registered" })
 		const { username } = req.body
 		const usernameExists = await doesUsernameExist(username)

@@ -4,9 +4,8 @@ import retrieveYouTubeSubscriberCount from "../../utils/google/retrieve-youtube-
 
 export default async function retrieveUserYouTubeInfo (req: Request, res: Response): Promise<Response> {
 	try {
-		const user = req.user
-		const accessToken = req.youtubeAccessToken
-		const subscriberCount = await retrieveYouTubeSubscriberCount(accessToken)
+		const { user, youtubeAccessToken } = req
+		const subscriberCount = await retrieveYouTubeSubscriberCount(youtubeAccessToken)
 
 		let isApprovedToBeCreator = false
 		if (!_.isNull(subscriberCount)) {

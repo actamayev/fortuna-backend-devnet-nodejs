@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express"
 
 export default function confirmUserIsCreator (req: Request, res: Response, next: NextFunction): Response | void {
 	try {
-		const user = req.user
+		const { user } = req
 
 		if (user.is_approved_to_be_creator === false) {
 			return res.status(400).json({ validationError: "User is not approved to be a creator" })

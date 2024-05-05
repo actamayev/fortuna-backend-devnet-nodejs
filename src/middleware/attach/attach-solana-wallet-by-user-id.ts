@@ -4,7 +4,7 @@ import { findSolanaWalletByUserId } from "../../utils/db-operations/read/find/fi
 
 export default async function attachSolanaWalletByUserId(req: Request, res: Response, next: NextFunction) : Promise<Response | void> {
 	try {
-		const user = req.user
+		const { user } = req
 		const solanaWallet = await findSolanaWalletByUserId(user.user_id)
 		if (_.isNull(solanaWallet)) return res.status(400).json({ message: "Cannot find Solana Wallet" })
 

@@ -5,7 +5,7 @@ import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
 // This endpoint is currently soley for internal use
 export default async function getNumberOfTokensInTokenAccount(req: Request, res: Response): Promise<Response> {
 	try {
-		const publicKey = req.params.publicKey
+		const { publicKey } = req.params
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const tokenAccounts = await connection.getTokenAccountsByOwner(
 			new PublicKey(publicKey),

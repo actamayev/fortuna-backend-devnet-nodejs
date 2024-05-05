@@ -8,7 +8,7 @@ import addYouTubeAccessTokenRecord
 
 export default async function youtubeAuthCallback(req: Request, res: Response): Promise<Response> {
 	try {
-		const user = req.user
+		const { user } = req
 		const { code } = req.body
 		const client = createGoogleAuthClient()
 		const { tokens } = await client.getToken(code)
