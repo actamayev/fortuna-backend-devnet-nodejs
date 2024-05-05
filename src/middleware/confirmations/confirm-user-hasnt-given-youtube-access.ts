@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 
-export default function confirmUserHasntGivenYoutubeAccess(req: Request, res: Response, next: NextFunction): Response | void {
+export default function confirmUserHasntGivenYouTubeAccess(req: Request, res: Response, next: NextFunction): Response | void {
 	try {
 		const user = req.user
 		if (!_.isNull(user.youtube_access_tokens_id)) {

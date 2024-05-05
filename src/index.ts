@@ -11,7 +11,7 @@ import solanaRoutes from "./routes/solana-routes"
 import uploadRoutes from "./routes/upload-routes"
 import videosRoutes from "./routes/videos-routes"
 import authRoutes from "./routes/auth/auth-routes"
-import youTubeRoutes from "./routes/youtube-routes"
+import youtubeRoutes from "./routes/youtube-routes"
 import personalInfoRoutes from "./routes/personal-info-routes"
 
 dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.local" })
@@ -50,7 +50,7 @@ app.use("/search", searchRoutes)
 app.use("/solana", solanaRoutes)
 app.use("/upload", jwtVerify, uploadRoutes)
 app.use("/videos", videosRoutes)
-app.use("/youtube", jwtVerify, youTubeRoutes)
+app.use("/youtube", jwtVerify, youtubeRoutes)
 
 app.use("/health", checkHealth)
 

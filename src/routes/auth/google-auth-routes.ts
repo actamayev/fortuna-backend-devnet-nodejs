@@ -4,7 +4,7 @@ import googleLoginAuthCallback from "../../controllers/auth/google-login-auth-ca
 import googleYouTubeAuthCallback from "../../controllers/auth/google-youtube-auth-callback"
 
 import jwtVerify from "../../middleware/jwt/jwt-verify"
-import confirmUserHasntGivenYoutubeAccess from "../../middleware/confirmations/confirm-user-hasnt-given-youtube-access"
+import confirmUserHasntGivenYouTubeAccess from "../../middleware/confirmations/confirm-user-hasnt-given-youtube-access"
 import validateYouTubeAuthCallback from "../../middleware/request-validation/auth/google/validate-youtube-auth-callback"
 import validateGoogleLoginAuthCallback from "../../middleware/request-validation/auth/google/validate-google-login-auth-callback"
 
@@ -16,8 +16,7 @@ googleAuthRoutes.post(
 	"/youtube-callback",
 	jwtVerify,
 	validateYouTubeAuthCallback,
-	confirmUserHasntGivenYoutubeAccess,
-	// confirm user hasn't already validated youtube credentials
+	confirmUserHasntGivenYouTubeAccess,
 	googleYouTubeAuthCallback
 )
 
