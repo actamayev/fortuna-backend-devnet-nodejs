@@ -4,8 +4,8 @@ import googleLoginAuthCallback from "../../controllers/auth/google-login-auth-ca
 import googleYouTubeAuthCallback from "../../controllers/auth/google-youtube-auth-callback"
 
 import jwtVerify from "../../middleware/jwt/jwt-verify"
-import confirmUserHasntGivenYouTubeAccess from "../../middleware/confirmations/confirm-user-hasnt-given-youtube-access"
 import validateYouTubeAuthCallback from "../../middleware/request-validation/auth/google/validate-youtube-auth-callback"
+import confirmUserHasntGivenYouTubeAccess from "../../middleware/confirmations/google/confirm-user-hasnt-given-youtube-access"
 import validateGoogleLoginAuthCallback from "../../middleware/request-validation/auth/google/validate-google-login-auth-callback"
 
 const googleAuthRoutes = express.Router()
