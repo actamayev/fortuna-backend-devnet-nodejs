@@ -8,10 +8,16 @@ export default async function retrieveUserYouTubeInfo (req: Request, res: Respon
 		const accessToken = req.youtubeAccessToken
 		const subscriberCount = await retrieveYouTubeSubscriberCount(accessToken)
 
+		let isApprovedToBeCreator = false
+		if (!_.isNull(subscriberCount)) {
+			isApprovedToBeCreator = Number(process.env.MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR) <= subscriberCount
+		}
+
 		return res.status(200).json({
 			userHasYouTubeAccessTokens: !_.isNull(user.youtube_access_tokens_id),
-			subscriberCount
-		})
+			subscriberCount,
+			isApprovedToBeCreator
+		} as UserYouTubeData)
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to retrieve user YouTube info" })
