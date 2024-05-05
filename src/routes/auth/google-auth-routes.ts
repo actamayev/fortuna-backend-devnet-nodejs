@@ -1,7 +1,7 @@
 import express from "express"
 
+import youtubeAuthCallback from "../../controllers/auth/youtube-auth-callback"
 import googleLoginAuthCallback from "../../controllers/auth/google-login-auth-callback"
-import googleYouTubeAuthCallback from "../../controllers/auth/google-youtube-auth-callback"
 
 import jwtVerify from "../../middleware/jwt/jwt-verify"
 import validateYouTubeAuthCallback from "../../middleware/request-validation/auth/google/validate-youtube-auth-callback"
@@ -17,7 +17,7 @@ googleAuthRoutes.post(
 	jwtVerify,
 	validateYouTubeAuthCallback,
 	confirmUserHasntGivenYouTubeAccess,
-	googleYouTubeAuthCallback
+	youtubeAuthCallback
 )
 
 export default googleAuthRoutes

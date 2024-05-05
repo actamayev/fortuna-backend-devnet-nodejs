@@ -6,7 +6,7 @@ import approveUserToBeCreator from "../../utils/db-operations/write/credentials/
 import addYouTubeAccessTokenRecord
 	from "../../utils/db-operations/write/simultaneous-writes/add-youtube-access-token-record-and-update-user"
 
-export default async function googleYouTubeAuthCallback(req: Request, res: Response): Promise<Response> {
+export default async function youtubeAuthCallback(req: Request, res: Response): Promise<Response> {
 	try {
 		const user = req.user
 		const { code } = req.body
@@ -29,7 +29,7 @@ export default async function googleYouTubeAuthCallback(req: Request, res: Respo
 		}
 
 		return res.status(200).json({
-			userHasYouTubeAccessTokens: !_.isNull(user.youtube_access_tokens_id),
+			userHasYouTubeAccessTokens: !_.isNull(tokens.access_token),
 			subscriberCount: subscriberCount || 0,
 			isApprovedToBeCreator
 		} as UserYouTubeData)
