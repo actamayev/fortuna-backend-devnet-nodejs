@@ -73,6 +73,15 @@
 				"format": ["camelCase"]
 			},
 			{
+				"selector": "variable",
+				"modifiers": ["destructured"],
+				"filter": {
+					"regex": "DATABASE_URL|SALT_ROUNDS|JWT_KEY|GOOGLE_CLIENT_ID|GOOGLE_CLIENT_SECRET|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY|AWS_REGION|S3_BUCKET|FORTUNA_WALLET_PUBLIC_KEY|FORTUNA_WALLET_SECRET_KEY|FORTUNA_ESCROW_WALLET_PUBLIC_KEY|FORTUNA_ESCROW_WALLET_SECRET_KEY|FORTUNA_SOLANA_WALLET_ID_DB|FORTUNA_ESCROW_SOLANA_WALLET_ID_DB|MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR",
+					"match": true
+				},
+				"format": null
+			},
+			{
 				"selector": "function",
 				"format": ["camelCase"]
 			},

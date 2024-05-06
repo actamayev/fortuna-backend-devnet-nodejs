@@ -2,15 +2,16 @@ import _ from "lodash"
 import dotenv from "dotenv"
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager"
 
-// TODO: Make a method that takes in an array of strings, and returns the values of the secrets keys for each of them
-// This can reduce the number of lines of code in files that use multiple environment variables.
+// TODO: Save the Database url as a secret too (only used in the prisma file - figure out how to configure with AWS secrets manager)
 export default class SecretsManager {
 	private static instance: SecretsManager | null = null
-	private secrets: Map<string, string> = new Map()
+	private secrets: Map<SecretKeys, string> = new Map()
 	private secretsManager?: SecretsManagerClient
 
 	constructor() {
-		if (process.env.NODE_ENV === "production") {
+		if (process.env.NODE_ENV !== "production") {
+			dotenv.config({ path: ".env.local" })
+		} else {
 			this.secretsManager = new SecretsManagerClient({
 				credentials: {
 					accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -19,8 +20,6 @@ export default class SecretsManager {
 
 				region: process.env.AWS_REGION,
 			})
-		} else {
-			dotenv.config({ path: ".env.local" })
 		}
 	}
 
@@ -49,7 +48,44 @@ export default class SecretsManager {
 		}
 	}
 
-	public async fetchSecretFromAWS(key: string): Promise<string> {
+	public async getSecrets(keys: SecretKeys[]): Promise<SecretsObject> {
+		const secrets: Partial<SecretsObject> = {}
+
+		if (process.env.NODE_ENV !== "production") {
+			for (const key of keys) {
+				const secret = process.env[key]
+				secrets[key] = secret
+			}
+		} else {
+			const missingKeys = keys.filter(key => !this.secrets.has(key))
+			if (!_.isEmpty(missingKeys)) await this.fetchAllSecretsFromAWS()
+			for (const key of keys) {
+				const secret = this.secrets.get(key)
+				if (_.isUndefined(secret)) {
+					throw new Error(`Unable to retrieve secret for key: ${key}`)
+				}
+				secrets[key] = secret
+			}
+		}
+
+		return secrets as SecretsObject
+	}
+
+	public async fetchSecretFromAWS(key: SecretKeys): Promise<string> {
+		try {
+			await this.fetchAllSecretsFromAWS()
+			const secretValue = this.secrets.get(key)
+			if (_.isUndefined(secretValue)) {
+				throw new Error(`Secret value for key ${key} is undefined!`)
+			}
+			return secretValue
+		} catch (error) {
+			console.error("Error retrieving secret from AWS:", error)
+			throw error
+		}
+	}
+
+	private async fetchAllSecretsFromAWS(): Promise<void> {
 		const command = new GetSecretValueCommand({
 			SecretId: "new_devnet_secrets"
 		})
@@ -63,17 +99,11 @@ export default class SecretsManager {
 
 			if (_.isUndefined(response.SecretString)) {
 				throw new Error("SecretString is undefined!")
-			} else {
-				this.updateSecretsMap(response.SecretString)
 			}
 
-			const secretValue = this.secrets.get(key)
-			if (_.isUndefined(secretValue)) {
-				throw new Error(`Secret value for key ${key} is undefined!`)
-			}
-			return secretValue
+			this.updateSecretsMap(response.SecretString)
 		} catch (error) {
-			console.error("Error retrieving secret from AWS:", error)
+			console.error("Error retrieving secrets from AWS:", error)
 			throw error
 		}
 	}
@@ -81,9 +111,10 @@ export default class SecretsManager {
 	private updateSecretsMap(secretsString: string): void {
 		const secrets = JSON.parse(secretsString)
 		Object.keys(secrets).forEach(key => {
+			const secretKey = key as SecretKeys  // Type assertion
 			const value = secrets[key]
 			if (!_.isUndefined(value)) {
-				this.secrets.set(key, value)
+				this.secrets.set(secretKey, value)
 			} else {
 				console.error(`Value for key ${key} is undefined.`)
 			}

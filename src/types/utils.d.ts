@@ -31,6 +31,8 @@ declare global {
 		"FORTUNA_SOLANA_WALLET_ID_DB" |  // Note: Despite being a number, it's stored and handled as a string
 		"FORTUNA_ESCROW_SOLANA_WALLET_ID_DB" |  // Same note as above
 		"MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR"
+
+	type SecretsObject = { [K in SecretKeys]: string }
 }
 
 export {}

@@ -2,6 +2,7 @@ import _ from "lodash"
 import { solana_wallet } from "@prisma/client"
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import { getOrCreateAssociatedTokenAccount, transfer } from "@solana/spl-token"
+import SecretsManager from "../../../classes/secrets-manager"
 import { getWalletBalanceWithUSD } from "../get-wallet-balance"
 import calculateTransactionFee from "../calculate-transaction-fee"
 import EscrowWalletManager from "../../../classes/escrow-wallet-manager"
@@ -9,7 +10,6 @@ import addTokenAccountRecord from "../../db-operations/write/token-account/add-t
 import retrieveTokenAccountBySplAddress from "../../db-operations/read/token-account/retrieve-token-account-by-spl-address"
 import addSplTransferRecordAndUpdateOwnership from "../../db-operations/write/simultaneous-writes/add-spl-transfer-and-update-ownership"
 import { getFortunaEscrowSolanaWalletFromSecretKey, getFortunaSolanaWalletFromSecretKey} from "../get-fortuna-solana-wallet-from-secret-key"
-import SecretsManager from "../../../classes/secrets-manager"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSplTokensToUser(
@@ -24,18 +24,24 @@ export default async function transferSplTokensToUser(
 		// Check if the user has a token account with the db.
 		let userHasExistingTokenAccount = true
 		let userTokenAccount = await retrieveTokenAccountBySplAddress(purchaseSplTokensData.splPublicKey, solanaWallet.public_key)
-		const fortunaWalletPublicKey = await SecretsManager.getInstance().getSecret("FORTUNA_WALLET_PUBLIC_KEY")
+		const {
+			FORTUNA_WALLET_PUBLIC_KEY,
+			FORTUNA_ESCROW_WALLET_PUBLIC_KEY,
+			FORTUNA_ESCROW_SOLANA_WALLET_ID_DB
+		} = await SecretsManager.getInstance().getSecrets(
+			["FORTUNA_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_SOLANA_WALLET_ID_DB"]
+		)
 
 		if (_.isNull(userTokenAccount)) {
 			userHasExistingTokenAccount = false
-			const initialWalletBalance = await getWalletBalanceWithUSD(fortunaWalletPublicKey)
+			const initialWalletBalance = await getWalletBalanceWithUSD(FORTUNA_WALLET_PUBLIC_KEY)
 			const newTokenAccount = await getOrCreateAssociatedTokenAccount(
 				connection,
 				fortunaWallet,
 				new PublicKey(purchaseSplTokensData.splPublicKey),
 				new PublicKey(solanaWallet.public_key)
 			)
-			const secondWalletBalance = await getWalletBalanceWithUSD(fortunaWalletPublicKey)
+			const secondWalletBalance = await getWalletBalanceWithUSD(FORTUNA_WALLET_PUBLIC_KEY)
 
 			const tokenAccount = await addTokenAccountRecord(
 				splId,
@@ -47,11 +53,9 @@ export default async function transferSplTokensToUser(
 			userTokenAccount = tokenAccount
 		}
 
-		const fortunaEscrowWalletPublicKey = await SecretsManager.getInstance().getSecret("FORTUNA_ESCROW_WALLET_PUBLIC_KEY")
-
 		const fortunaEscrowTokenAccount = await retrieveTokenAccountBySplAddress(
 			purchaseSplTokensData.splPublicKey,
-			fortunaEscrowWalletPublicKey
+			FORTUNA_ESCROW_WALLET_PUBLIC_KEY
 		)
 
 		if (_.isNull(fortunaEscrowTokenAccount)) throw Error("Unable to find Escrow Token Account in DB")
@@ -68,13 +72,12 @@ export default async function transferSplTokensToUser(
 
 		const transferFeeSol = await calculateTransactionFee(transactionSignature)
 
-		const fortunaEscrowSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_ESCROW_SOLANA_WALLET_ID_DB")
 		const splTransferId = await addSplTransferRecordAndUpdateOwnership(
 			splId,
 			transactionSignature,
 			solanaWallet.solana_wallet_id,
 			userTokenAccount.token_account_id,
-			parseInt(fortunaEscrowSolanaWalletIdDb, 10),
+			parseInt(FORTUNA_ESCROW_SOLANA_WALLET_ID_DB, 10),
 			fortunaEscrowTokenAccount.token_account_id,
 			true,
 			false,

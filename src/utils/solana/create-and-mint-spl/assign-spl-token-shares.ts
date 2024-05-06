@@ -2,11 +2,11 @@ import _ from "lodash"
 import { getOrCreateAssociatedTokenAccount } from "@solana/spl-token"
 import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js"
 import mintSPLHelper from "./mint-spl-helper"
+import SecretsManager from "../../../classes/secrets-manager"
 import { getWalletBalanceWithUSD } from "../get-wallet-balance"
 import EscrowWalletManager from "../../../classes/escrow-wallet-manager"
 import { getFortunaSolanaWalletFromSecretKey } from "../get-fortuna-solana-wallet-from-secret-key"
 import addTokenAccountRecord from "../../db-operations/write/token-account/add-token-account-record"
-import SecretsManager from "../../../classes/secrets-manager"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function assignSPLTokenShares (
@@ -19,9 +19,17 @@ export default async function assignSPLTokenShares (
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fortunaWallet = await getFortunaSolanaWalletFromSecretKey()
-		const fortunaWalletPublicKey = await SecretsManager.getInstance().getSecret("FORTUNA_WALLET_PUBLIC_KEY")
+		const {
+			FORTUNA_WALLET_PUBLIC_KEY,
+			FORTUNA_SOLANA_WALLET_ID_DB,
+			FORTUNA_ESCROW_WALLET_PUBLIC_KEY,
+			FORTUNA_ESCROW_SOLANA_WALLET_ID_DB
+		} = await SecretsManager.getInstance().getSecrets([
+			"FORTUNA_WALLET_PUBLIC_KEY", "FORTUNA_SOLANA_WALLET_ID_DB",
+			"FORTUNA_ESCROW_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_SOLANA_WALLET_ID_DB"
+		])
 
-		const initialWalletBalance = await getWalletBalanceWithUSD(fortunaWalletPublicKey)
+		const initialWalletBalance = await getWalletBalanceWithUSD(FORTUNA_WALLET_PUBLIC_KEY)
 		// Get or Create Token Accounts:
 		const fortunaTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
@@ -30,14 +38,12 @@ export default async function assignSPLTokenShares (
 			fortunaWallet.publicKey
 		)
 
-		const secondWalletBalance = await getWalletBalanceWithUSD(fortunaWalletPublicKey)
-
-		const solanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
+		const secondWalletBalance = await getWalletBalanceWithUSD(FORTUNA_WALLET_PUBLIC_KEY)
 
 		// FUTURE TODO: Combine the addtokenAccountRecord with the mint spl helper (addsplmintwithownership)
 		const fortunaTokenAccountDB = await addTokenAccountRecord(
 			splId,
-			parseInt(solanaWalletIdDb, 10),
+			parseInt(FORTUNA_SOLANA_WALLET_ID_DB, 10),
 			fortunaTokenAccount.address,
 			initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol,
 			initialWalletBalance.balanceInUsd - secondWalletBalance.balanceInUsd
@@ -49,7 +55,7 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			creatorPublicKey
 		)
-		const thirdWalletBalance = await getWalletBalanceWithUSD(fortunaWalletPublicKey)
+		const thirdWalletBalance = await getWalletBalanceWithUSD(FORTUNA_WALLET_PUBLIC_KEY)
 
 		const creatorTokenAccountDB = await addTokenAccountRecord(
 			splId,
@@ -59,22 +65,18 @@ export default async function assignSPLTokenShares (
 			secondWalletBalance.balanceInUsd - thirdWalletBalance.balanceInUsd
 		)
 
-		const fortunaEscrowWalletPublicKey = await SecretsManager.getInstance().getSecret("FORTUNA_ESCROW_WALLET_PUBLIC_KEY")
-
-		const fortunaEscrowPublicKey = new PublicKey(fortunaEscrowWalletPublicKey)
+		const fortunaEscrowPublicKey = new PublicKey(FORTUNA_ESCROW_WALLET_PUBLIC_KEY)
 		const fortunaEscrowTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
 			fortunaWallet,
 			splTokenPublicKey,
 			fortunaEscrowPublicKey
 		)
-		const fourthWalletBalance = await getWalletBalanceWithUSD(fortunaWalletPublicKey)
-
-		const fortunaEscrowSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_ESCROW_SOLANA_WALLET_ID_DB")
+		const fourthWalletBalance = await getWalletBalanceWithUSD(FORTUNA_WALLET_PUBLIC_KEY)
 
 		const fortunaEscrowTokenAccountDB = await addTokenAccountRecord(
 			splId,
-			parseInt(fortunaEscrowSolanaWalletIdDb, 10),
+			parseInt(FORTUNA_ESCROW_SOLANA_WALLET_ID_DB, 10),
 			fortunaEscrowTokenAccount.address,
 			thirdWalletBalance.balanceInSol - fourthWalletBalance.balanceInSol,
 			thirdWalletBalance.balanceInUsd - fourthWalletBalance.balanceInUsd
