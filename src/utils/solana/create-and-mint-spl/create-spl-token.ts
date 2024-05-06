@@ -7,8 +7,8 @@ import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import { createMetadataAccountV3 } from "@metaplex-foundation/mpl-token-metadata"
 import { fromWeb3JsKeypair, fromWeb3JsPublicKey } from "@metaplex-foundation/umi-web3js-adapters"
 import { getWalletBalanceSol } from "../get-wallet-balance"
-import { getFortunaSolanaWalletFromSecretKey } from "../get-fortuna-solana-wallet-from-secret-key"
 import SecretsManager from "../../../classes/secrets-manager"
+import { getFortunaSolanaWalletFromSecretKey } from "../get-fortuna-solana-wallet-from-secret-key"
 
 export default async function createSPLToken (metadataJSONUrl: string, splName: string): Promise<CreateSPLResponse> {
 	try {
