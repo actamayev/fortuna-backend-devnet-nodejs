@@ -14,7 +14,8 @@ export default async function addTokenAccountRecord (
 ): Promise<token_account> {
 	try {
 		if (_.isUndefined(feePayerSolanaWalletId)) {
-			feePayerSolanaWalletId = parseInt(await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB"), 10)
+			const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
+			feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
 		}
 		const tokenAccountResponse = await prismaClient.token_account.create({
 			data: {

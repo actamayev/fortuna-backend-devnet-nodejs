@@ -21,7 +21,8 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
 		if (_.isUndefined(feePayerSolanaWalletId)) {
-			feePayerSolanaWalletId = parseInt(await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB"), 10)
+			const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
+			feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
 		}
 		// eslint-disable-next-line max-lines-per-function
 		const result = await prismaClient.$transaction(async (prisma) => {
