@@ -2,7 +2,7 @@ import { Connection, LAMPORTS_PER_SOL, PublicKey, clusterApiUrl } from "@solana/
 import SolPriceManager from "../../classes/sol-price-manager"
 
 export async function getWalletBalanceWithUSD(
-	publicKeyString: string
+	publicKey: PublicKey
 ): Promise<{
 	balanceInSol: number,
 	balanceInUsd: number,
@@ -10,7 +10,7 @@ export async function getWalletBalanceWithUSD(
 	solPriceRetrievedTime: Date
 }> {
 	try {
-		const balanceInSol = await getWalletBalanceSol(publicKeyString)
+		const balanceInSol = await getWalletBalanceSol(publicKey)
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
 		const balanceInUsd = balanceInSol * solPriceDetails.price
 
@@ -26,11 +26,10 @@ export async function getWalletBalanceWithUSD(
 	}
 }
 
-export async function getWalletBalanceSol(publicKeyString: string): Promise<number> {
+export async function getWalletBalanceSol(publicKey: PublicKey): Promise<number> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 
-		const publicKey = new PublicKey(publicKeyString)
 		const balanceInLamports = await connection.getBalance(publicKey)
 		const balanceInSol = balanceInLamports / LAMPORTS_PER_SOL
 

@@ -1,5 +1,5 @@
-import { LAMPORTS_PER_SOL } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
+import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js"
 import SolPriceManager from "../../../classes/sol-price-manager"
 import { getWalletBalanceSol } from "../../../utils/solana/get-wallet-balance"
 
@@ -11,7 +11,8 @@ export default async function confirmUserHasEnoughSolToTransfer(
 	try {
 		const { solanaWallet, isRecipientFortunaWallet } = req
 		const transferData = req.body.transferSolData as TransferSolData
-		const balanceInSol = await getWalletBalanceSol(solanaWallet.public_key)
+		const publicKey = new PublicKey(solanaWallet.public_key)
+		const balanceInSol = await getWalletBalanceSol(publicKey)
 
 		if (transferData.transferCurrency === "sol") {
 			if (isRecipientFortunaWallet === true && balanceInSol < transferData.transferAmount) {

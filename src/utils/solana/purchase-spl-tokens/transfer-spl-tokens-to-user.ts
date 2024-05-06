@@ -24,24 +24,20 @@ export default async function transferSplTokensToUser(
 		// Check if the user has a token account with the db.
 		let userHasExistingTokenAccount = true
 		let userTokenAccount = await retrieveTokenAccountBySplAddress(purchaseSplTokensData.splPublicKey, solanaWallet.public_key)
-		const {
-			FORTUNA_WALLET_PUBLIC_KEY,
-			FORTUNA_ESCROW_WALLET_PUBLIC_KEY,
-			FORTUNA_ESCROW_SOLANA_WALLET_ID_DB
-		} = await SecretsManager.getInstance().getSecrets(
-			["FORTUNA_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_SOLANA_WALLET_ID_DB"]
+		const { FORTUNA_ESCROW_WALLET_PUBLIC_KEY, FORTUNA_ESCROW_SOLANA_WALLET_ID_DB } = await SecretsManager.getInstance().getSecrets(
+			["FORTUNA_ESCROW_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_SOLANA_WALLET_ID_DB"]
 		)
 
 		if (_.isNull(userTokenAccount)) {
 			userHasExistingTokenAccount = false
-			const initialWalletBalance = await getWalletBalanceWithUSD(FORTUNA_WALLET_PUBLIC_KEY)
+			const initialWalletBalance = await getWalletBalanceWithUSD(fortunaWallet.publicKey)
 			const newTokenAccount = await getOrCreateAssociatedTokenAccount(
 				connection,
 				fortunaWallet,
 				new PublicKey(purchaseSplTokensData.splPublicKey),
 				new PublicKey(solanaWallet.public_key)
 			)
-			const secondWalletBalance = await getWalletBalanceWithUSD(FORTUNA_WALLET_PUBLIC_KEY)
+			const secondWalletBalance = await getWalletBalanceWithUSD(fortunaWallet.publicKey)
 
 			const tokenAccount = await addTokenAccountRecord(
 				splId,

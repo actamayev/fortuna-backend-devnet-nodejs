@@ -20,16 +20,15 @@ export default async function assignSPLTokenShares (
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const fortunaWallet = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
 		const {
-			FORTUNA_WALLET_PUBLIC_KEY,
 			FORTUNA_SOLANA_WALLET_ID_DB,
 			FORTUNA_ESCROW_WALLET_PUBLIC_KEY,
 			FORTUNA_ESCROW_SOLANA_WALLET_ID_DB
 		} = await SecretsManager.getInstance().getSecrets([
-			"FORTUNA_WALLET_PUBLIC_KEY", "FORTUNA_SOLANA_WALLET_ID_DB",
+			"FORTUNA_SOLANA_WALLET_ID_DB",
 			"FORTUNA_ESCROW_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_SOLANA_WALLET_ID_DB"
 		])
 
-		const initialWalletBalance = await getWalletBalanceWithUSD(FORTUNA_WALLET_PUBLIC_KEY)
+		const initialWalletBalance = await getWalletBalanceWithUSD(fortunaWallet.publicKey)
 		// Get or Create Token Accounts:
 		const fortunaTokenAccount = await getOrCreateAssociatedTokenAccount(
 			connection,
@@ -38,7 +37,7 @@ export default async function assignSPLTokenShares (
 			fortunaWallet.publicKey
 		)
 
-		const secondWalletBalance = await getWalletBalanceWithUSD(FORTUNA_WALLET_PUBLIC_KEY)
+		const secondWalletBalance = await getWalletBalanceWithUSD(fortunaWallet.publicKey)
 
 		// FUTURE TODO: Combine the addtokenAccountRecord with the mint spl helper (addsplmintwithownership)
 		const fortunaTokenAccountDB = await addTokenAccountRecord(
@@ -55,7 +54,7 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			creatorPublicKey
 		)
-		const thirdWalletBalance = await getWalletBalanceWithUSD(FORTUNA_WALLET_PUBLIC_KEY)
+		const thirdWalletBalance = await getWalletBalanceWithUSD(fortunaWallet.publicKey)
 
 		const creatorTokenAccountDB = await addTokenAccountRecord(
 			splId,
@@ -72,7 +71,7 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			fortunaEscrowPublicKey
 		)
-		const fourthWalletBalance = await getWalletBalanceWithUSD(FORTUNA_WALLET_PUBLIC_KEY)
+		const fourthWalletBalance = await getWalletBalanceWithUSD(fortunaWallet.publicKey)
 
 		const fortunaEscrowTokenAccountDB = await addTokenAccountRecord(
 			splId,
