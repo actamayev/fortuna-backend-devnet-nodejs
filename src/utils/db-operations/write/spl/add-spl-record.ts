@@ -1,15 +1,21 @@
+import _ from "lodash"
 import prismaClient from "../../../../prisma-client"
+import SecretsManager from "../../../../classes/secrets-manager"
 import SolPriceManager from "../../../../classes/sol-price-manager"
 
+// eslint-disable-next-line max-lines-per-function
 export default async function addSPLRecord (
 	metadataJSONUrl: string,
 	newSPLData: IncomingNewSPLData,
 	createSPLResponse: CreateSPLResponse,
 	creatorWalletId: number,
-	feePayerWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
+	feePayerSolanaWalletId?: number
 ): Promise<number> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
+		if (_.isUndefined(feePayerSolanaWalletId)) {
+			feePayerSolanaWalletId = parseInt(await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB"), 10)
+		}
 		const addSPLResponse = await prismaClient.spl.create({
 			data: {
 				meta_data_url: metadataJSONUrl,
@@ -27,7 +33,7 @@ export default async function addSPLRecord (
 
 				spl_creation_fee_sol: createSPLResponse.feeInSol,
 				spl_creation_fee_usd: createSPLResponse.feeInSol * solPriceDetails.price,
-				create_spl_fee_payer_solana_wallet_id: feePayerWalletId,
+				create_spl_fee_payer_solana_wallet_id: feePayerSolanaWalletId,
 
 				// The metadata creation fees are 0. When the meta data is set, a transaction signature is returned. See createTokenMetadata
 				// When the fee for this signature is determined (by using the logic in calculate-tranaction-fee, it returns 5*10^-6 sol).
@@ -35,7 +41,7 @@ export default async function addSPLRecord (
 				// For the database to be consistent with the wallet, the spl_metadata creation fee is set to 0 here.
 				spl_metadata_creation_fee_sol: 0,
 				spl_metadata_creation_fee_usd: 0,
-				create_spl_metadata_fee_payer_solana_wallet_id: feePayerWalletId,
+				create_spl_metadata_fee_payer_solana_wallet_id: feePayerSolanaWalletId,
 
 				spl_listing_status: "LISTED",
 				description: newSPLData.description,

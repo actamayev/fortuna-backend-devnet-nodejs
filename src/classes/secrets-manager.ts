@@ -2,6 +2,8 @@ import _ from "lodash"
 import dotenv from "dotenv"
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager"
 
+// TODO: Make a method that takes in an array of strings, and returns the values of the secrets keys for each of them
+// This can reduce the number of lines of code in files that use multiple environment variables.
 export default class SecretsManager {
 	private static instance: SecretsManager | null = null
 	private secrets: Map<string, string> = new Map()
@@ -29,48 +31,62 @@ export default class SecretsManager {
 		return SecretsManager.instance
 	}
 
-	public async getSecret(key: SecretKeys): Promise<string | undefined> {
-		if (_.has(this.secrets, key)) {
-			return this.secrets.get(key)
-		} else if (process.env.NODE_ENV === "production") {
-			return await this.fetchSecretFromAWS(key)
-		} else {
-			return process.env[key]
+	public async getSecret(key: SecretKeys): Promise<string> {
+		try {
+			let secret: string | undefined
+			if (this.secrets.has(key)) {
+				secret = this.secrets.get(key)
+			} else if (process.env.NODE_ENV === "production") {
+				secret = await this.fetchSecretFromAWS(key)
+			} else {
+				secret = process.env[key]
+			}
+			if (_.isUndefined(secret)) throw Error("Unable to retrieve secret")
+			return secret
+		} catch (error) {
+			console.error(error)
+			throw error
 		}
 	}
 
-	private async fetchSecretFromAWS(key: SecretKeys): Promise<string | undefined> {
-		const input = { SecretId: key }
-		const command = new GetSecretValueCommand(input)
+	public async fetchSecretFromAWS(key: string): Promise<string> {
+		const command = new GetSecretValueCommand({
+			SecretId: "new_devnet_secrets"
+		})
 
 		if (_.isUndefined(this.secretsManager)) {
-			console.error("Secrets Manager client is not initialized.")
-			return undefined
+			throw new Error("Secrets Manager client is not initialized!")
 		}
 
 		try {
 			const response = await this.secretsManager.send(command)
-			let secretValue: string | undefined
 
-			if (response.SecretString) {
-				const secret = JSON.parse(response.SecretString)
-				secretValue = secret[key]
-				if (_.isUndefined(secretValue)) return undefined
-				this.secrets.set(key, secretValue)
-			} else if (response.SecretBinary) {
-				// Correctly handle SecretBinary which is a Uint8Array
-				const buff = Buffer.from(response.SecretBinary)
-				const secret = JSON.parse(buff.toString("utf8"))
-				secretValue = secret[key]
-				if (_.isUndefined(secretValue)) return undefined
-				this.secrets.set(key, secretValue)
+			if (_.isUndefined(response.SecretString)) {
+				throw new Error("SecretString is undefined!")
+			} else {
+				this.updateSecretsMap(response.SecretString)
 			}
 
-			console.log(`Secret retrieved: ${key} - Version: ${response.VersionId} in stages: ${response.VersionStages?.join(", ")}`)
+			const secretValue = this.secrets.get(key)
+			if (_.isUndefined(secretValue)) {
+				throw new Error(`Secret value for key ${key} is undefined!`)
+			}
 			return secretValue
-		} catch (err) {
-			console.error("Error retrieving secret from AWS:", err)
-			return undefined
+		} catch (error) {
+			console.error("Error retrieving secret from AWS:", error)
+			throw error
 		}
+	}
+
+	private updateSecretsMap(secretsString: string): void {
+		const secrets = JSON.parse(secretsString)
+		Object.keys(secrets).forEach(key => {
+			const value = secrets[key]
+			if (!_.isUndefined(value)) {
+				this.secrets.set(key, value)
+			} else {
+				console.error(`Value for key ${key} is undefined.`)
+			}
+		})
 	}
 }

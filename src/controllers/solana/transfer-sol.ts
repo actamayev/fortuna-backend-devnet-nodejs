@@ -7,6 +7,7 @@ import SolPriceManager from "../../classes/sol-price-manager"
 import calculateTransactionFee from "../../utils/solana/calculate-transaction-fee"
 import { transformTransaction } from "../../utils/transform/transform-transactions-list"
 import addSolTransferRecord from "../../utils/db-operations/write/sol-transfer/add-sol-transfer-record"
+import SecretsManager from "../../classes/secrets-manager"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
@@ -41,16 +42,18 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const senderKeypair = Keypair.fromSecretKey(senderSecretKey)
 		keypairs.push(senderKeypair)
 		if (isRecipientFortunaWallet === true) {
-			const fortunaSecretKey = bs58.decode(process.env.FORTUNA_WALLET_SECRET_KEY)
+			const fortunaWalletSecretKey = await SecretsManager.getInstance().getSecret("FORTUNA_WALLET_SECRET_KEY")
+			const fortunaSecretKey = bs58.decode(fortunaWalletSecretKey)
 			const fortunaKeypair = Keypair.fromSecretKey(fortunaSecretKey)
 			keypairs.unshift(fortunaKeypair)
 		}
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
-		let feePayerSolanaWalletId
+		let feePayerSolanaWalletId: number
 		if (isRecipientFortunaWallet === true) {
-			feePayerSolanaWalletId = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
+			const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
+			feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
 		} else {
 			feePayerSolanaWalletId = solanaWallet.solana_wallet_id
 		}

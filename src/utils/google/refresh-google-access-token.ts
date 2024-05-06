@@ -4,7 +4,7 @@ import updateYouTubeAccessToken from "../db-operations/write/youtube-access-toke
 
 export default async function refreshGoogleAccessToken(youtubeAccessTokensId: number, refreshToken: string): Promise<string> {
 	try {
-		const oauth2Client = createGoogleAuthClient()
+		const oauth2Client = await createGoogleAuthClient()
 		oauth2Client.setCredentials({
 			refresh_token: refreshToken
 		})

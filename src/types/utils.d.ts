@@ -15,7 +15,6 @@ declare global {
 		"profile-pictures"
 
 	type SecretKeys =
-		"PORT" |
 		"DATABASE_URL" |
 		"SALT_ROUNDS" |
 		"JWT_KEY" |

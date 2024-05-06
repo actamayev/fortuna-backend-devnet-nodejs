@@ -5,6 +5,7 @@ import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram,
 	Transaction, clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
 import calculateTransactionFee from "../calculate-transaction-fee"
 import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
+import SecretsManager from "../../../classes/secrets-manager"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSolFromUserToCreator(
@@ -29,7 +30,8 @@ export default async function transferSolFromUserToCreator(
 
 		const senderSecretKey = bs58.decode(senderSolanaWallet.secret_key)
 		const senderKeypair = Keypair.fromSecretKey(senderSecretKey)
-		const fortunaSecretKey = bs58.decode(process.env.FORTUNA_WALLET_SECRET_KEY)
+		const fortunaWalletSecretKey = await SecretsManager.getInstance().getSecret("FORTUNA_WALLET_SECRET_KEY")
+		const fortunaSecretKey = bs58.decode(fortunaWalletSecretKey)
 		const fortunaKeypair = Keypair.fromSecretKey(fortunaSecretKey)
 
 		const keypairs: Keypair[] = [fortunaKeypair, senderKeypair]

@@ -1,6 +1,8 @@
+import _ from "lodash"
 import { PublicKey } from "@solana/web3.js"
 import { token_account } from "@prisma/client"
 import prismaClient from "../../../../prisma-client"
+import SecretsManager from "../../../../classes/secrets-manager"
 
 export default async function addTokenAccountRecord (
 	splId: number,
@@ -8,9 +10,12 @@ export default async function addTokenAccountRecord (
 	publicKey: PublicKey,
 	creationFeeSol: number,
 	creationFeeUsd: number,
-	feePayerSolanaWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
+	feePayerSolanaWalletId?: number
 ): Promise<token_account> {
 	try {
+		if (_.isUndefined(feePayerSolanaWalletId)) {
+			feePayerSolanaWalletId = parseInt(await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB"), 10)
+		}
 		const tokenAccountResponse = await prismaClient.token_account.create({
 			data: {
 				spl_id: splId,

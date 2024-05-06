@@ -1,9 +1,5 @@
 declare namespace NodeJS {
 	interface ProcessEnv {
-		PORT: string
-
-		DATABASE_URL: string
-
 		// Hash:
 		SALT_ROUNDS: string
 
@@ -14,9 +10,6 @@ declare namespace NodeJS {
 		GOOGLE_CLIENT_ID: string
 		GOOGLE_CLIENT_SECRET: string
 
-		AWS_ACCESS_KEY_ID: string
-		AWS_SECRET_ACCESS_KEY: string
-		AWS_REGION: string
 
 		S3_BUCKET: string
 
@@ -29,5 +22,11 @@ declare namespace NodeJS {
 		FORTUNA_ESCROW_SOLANA_WALLET_ID_DB: string // It's actually a number, but when it's read from .env it's converted into a string
 
 		MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR: string
+
+		// Production only:
+		DATABASE_URL: string
+		AWS_ACCESS_KEY_ID: string
+		AWS_SECRET_ACCESS_KEY: string
+		AWS_REGION: string
 	}
 }
