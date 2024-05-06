@@ -18,7 +18,6 @@ export default async function retrieveUserYouTubeInfo (req: Request, res: Respon
 		}
 
 		return res.status(200).json({
-			userHasYouTubeAccessTokens: true,
 			subscriberCount,
 			isApprovedToBeCreator
 		} as UserYouTubeData)

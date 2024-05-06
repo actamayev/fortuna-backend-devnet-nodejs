@@ -3,11 +3,11 @@ import bs58 from "bs58"
 import { Request, Response } from "express"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction,
 	clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
+import SecretsManager from "../../classes/secrets-manager"
 import SolPriceManager from "../../classes/sol-price-manager"
 import calculateTransactionFee from "../../utils/solana/calculate-transaction-fee"
 import { transformTransaction } from "../../utils/transform/transform-transactions-list"
 import addSolTransferRecord from "../../utils/db-operations/write/sol-transfer/add-sol-transfer-record"
-import SecretsManager from "../../classes/secrets-manager"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
@@ -50,12 +50,10 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
-		let feePayerSolanaWalletId: number
+		let feePayerSolanaWalletId = solanaWallet.solana_wallet_id
 		if (isRecipientFortunaWallet === true) {
 			const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
 			feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
-		} else {
-			feePayerSolanaWalletId = solanaWallet.solana_wallet_id
 		}
 
 		const solTransferRecord = await addSolTransferRecord(

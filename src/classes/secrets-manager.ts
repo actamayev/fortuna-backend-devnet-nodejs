@@ -11,16 +11,16 @@ export default class SecretsManager {
 	constructor() {
 		if (process.env.NODE_ENV !== "production") {
 			dotenv.config({ path: ".env.local" })
-		} else {
-			this.secretsManager = new SecretsManagerClient({
-				credentials: {
-					accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-					secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-				},
-
-				region: "us-east-1",
-			})
+			return
 		}
+		this.secretsManager = new SecretsManagerClient({
+			credentials: {
+				accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+				secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+			},
+
+			region: "us-east-1"
+		})
 	}
 
 	public static getInstance(): SecretsManager {
@@ -35,10 +35,10 @@ export default class SecretsManager {
 			let secret: string | undefined
 			if (this.secrets.has(key)) {
 				secret = this.secrets.get(key)
-			} else if (process.env.NODE_ENV === "production") {
-				secret = await this.fetchSecretFromAWS(key)
-			} else {
+			} else if (process.env.NODE_ENV !== "production") {
 				secret = process.env[key]
+			} else {
+				secret = await this.fetchSecretFromAWS(key)
 			}
 			if (_.isUndefined(secret)) throw Error("Unable to retrieve secret")
 			return secret
@@ -71,7 +71,7 @@ export default class SecretsManager {
 		return secrets as SecretsObject
 	}
 
-	public async fetchSecretFromAWS(key: SecretKeys): Promise<string> {
+	private async fetchSecretFromAWS(key: SecretKeys): Promise<string> {
 		try {
 			await this.fetchAllSecretsFromAWS()
 			const secretValue = this.secrets.get(key)

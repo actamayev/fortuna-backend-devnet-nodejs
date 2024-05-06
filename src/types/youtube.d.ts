@@ -6,7 +6,6 @@ declare global {
 	}
 
 	interface UserYouTubeData {
-		userHasYouTubeAccessTokens: boolean
 		subscriberCount: number
 		isApprovedToBeCreator: boolean
 	}

@@ -33,7 +33,6 @@ export default async function youtubeAuthCallback(req: Request, res: Response): 
 		}
 
 		return res.status(200).json({
-			userHasYouTubeAccessTokens: !_.isNull(tokens.access_token),
 			subscriberCount: subscriberCount || 0,
 			isApprovedToBeCreator
 		} as UserYouTubeData)
