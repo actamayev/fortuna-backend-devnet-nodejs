@@ -1,10 +1,12 @@
 import { Request, Response } from "express"
+import { PublicKey } from "@solana/web3.js"
 import { getWalletBalanceWithUSD } from "../../utils/solana/get-wallet-balance"
 
 export default async function getSolanaWalletBalance(req: Request, res: Response): Promise<Response> {
 	try {
 		const { solanaWallet } = req
-		const walletBalanceInfo = await getWalletBalanceWithUSD(solanaWallet.public_key)
+		const publicKey = new PublicKey(solanaWallet.public_key)
+		const walletBalanceInfo = await getWalletBalanceWithUSD(publicKey)
 
 		return res.status(200).json({
 			balanceInSol: walletBalanceInfo.balanceInSol,

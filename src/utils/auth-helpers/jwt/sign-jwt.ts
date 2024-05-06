@@ -1,8 +1,11 @@
 import jwt from "jsonwebtoken"
+import SecretsManager from "../../../classes/secrets-manager"
 
-export default function signJWT(payload: JwtPayload): string {
+export default async function signJWT(payload: JwtPayload): Promise<string> {
 	try {
-		return jwt.sign(payload, process.env.JWT_KEY)
+		const jwtKey = await SecretsManager.getInstance().getSecret("JWT_KEY")
+
+		return jwt.sign(payload, jwtKey)
 	} catch (error) {
 		console.error(error)
 		throw error

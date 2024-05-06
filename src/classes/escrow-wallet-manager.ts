@@ -1,13 +1,16 @@
 import _ from "lodash"
 import { AccountLayout, TOKEN_PROGRAM_ID } from "@solana/spl-token"
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
+import SecretsManager from "./secrets-manager"
 
 export default class EscrowWalletManager {
 	private static instance: EscrowWalletManager | null = null
 	private tokenAccountMap: Map<string, number> = new Map()
 	private lastFetchedTime: number = 0 // Last time the Escrow data was fetched from Blockchain
+	private secretsManagerInstance: SecretsManager
 
 	private constructor() {
+		this.secretsManagerInstance = SecretsManager.getInstance()
 	}
 
 	public static getInstance(): EscrowWalletManager {
@@ -29,15 +32,17 @@ export default class EscrowWalletManager {
 	private async refreshTokenAccountMap(): Promise<void> {
 		try {
 			const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
+			const fortunaEscrowWalletPublicKey = await this.secretsManagerInstance.getSecret("FORTUNA_ESCROW_WALLET_PUBLIC_KEY")
+
 			const tokenAccounts = await connection.getTokenAccountsByOwner(
-				new PublicKey(process.env.FORTUNA_ESCROW_WALLET_PUBLIC_KEY),
+				new PublicKey(fortunaEscrowWalletPublicKey),
 				{ programId: TOKEN_PROGRAM_ID }
 			)
 
 			tokenAccounts.value.forEach(tokenAccount => {
 				const accountData = AccountLayout.decode(tokenAccount.account.data)
 				const publicKey = new PublicKey(accountData.mint).toString()
-				const amount = Number(accountData.amount.toString())
+				const amount = parseInt(accountData.amount.toString(), 10)
 				this.tokenAccountMap.set(publicKey, amount)
 			})
 

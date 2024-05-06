@@ -4,6 +4,7 @@ import express from "express"
 import cookieParser from "cookie-parser"
 
 import checkHealth from "./controllers/health-checks/check-health"
+
 import jwtVerify from "./middleware/jwt/jwt-verify"
 
 import searchRoutes from "./routes/search-routes"
@@ -15,8 +16,6 @@ import youtubeRoutes from "./routes/youtube-routes"
 import personalInfoRoutes from "./routes/personal-info-routes"
 
 dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.local" })
-
-const port = parseInt(process.env.PORT, 10) || 8000
 
 const app = express()
 
@@ -57,6 +56,6 @@ app.use("/health", checkHealth)
 app.use("*", (req, res) => res.status(404).json({ error: "Route not found"}))
 
 // Initialization of server:
-app.listen(port, "0.0.0.0", () => {
-	console.info(`Listening on port ${port}`)
+app.listen(8080, "0.0.0.0", () => {
+	console.info("Listening on port 8080")
 })

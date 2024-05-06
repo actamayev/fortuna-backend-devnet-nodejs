@@ -1,3 +1,4 @@
+import { PublicKey } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
 import SolPriceManager from "../../../classes/sol-price-manager"
 import { getWalletBalanceSol } from "../../../utils/solana/get-wallet-balance"
@@ -10,7 +11,8 @@ export default async function confirmUserHasEnoughSolToPurchaseTokens(
 	try {
 		const { solanaWallet, splDetails } = req
 		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchaseSPLTokensData
-		const balanceInSol = await getWalletBalanceSol(solanaWallet.public_key)
+		const publicKey = new PublicKey(solanaWallet.public_key)
+		const balanceInSol = await getWalletBalanceSol(publicKey)
 
 		if (splDetails.listingDefaultCurrency === "sol") {
 			if (balanceInSol < splDetails.listingSharePrice * purchaseSplTokensData.numberOfTokensPurchasing) {

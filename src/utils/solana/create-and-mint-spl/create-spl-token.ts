@@ -3,18 +3,18 @@ import { createMint } from "@solana/spl-token"
 import { base58 } from "@metaplex-foundation/umi/serializers"
 import { createSignerFromKeypair } from "@metaplex-foundation/umi"
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
-import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
+import { Connection, Keypair, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import { createMetadataAccountV3 } from "@metaplex-foundation/mpl-token-metadata"
 import { fromWeb3JsKeypair, fromWeb3JsPublicKey } from "@metaplex-foundation/umi-web3js-adapters"
 import { getWalletBalanceSol } from "../get-wallet-balance"
-import { getFortunaSolanaWalletFromSecretKey } from "../get-fortuna-solana-wallet-from-secret-key"
+import GetKeypairFromSecretKey from "../get-keypair-from-secret-key"
 
 export default async function createSPLToken (metadataJSONUrl: string, splName: string): Promise<CreateSPLResponse> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
+		const fortunaWallet = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
 
-		const initialWalletBalanceSol = await getWalletBalanceSol(process.env.FORTUNA_WALLET_PUBLIC_KEY)
+		const initialWalletBalanceSol = await getWalletBalanceSol(fortunaWallet.publicKey)
 
 		const mint = await createMint(
 			connection,
@@ -23,11 +23,11 @@ export default async function createSPLToken (metadataJSONUrl: string, splName: 
 			null,
 			0
 		)
-		const secondWalletBalanceSol = await getWalletBalanceSol(process.env.FORTUNA_WALLET_PUBLIC_KEY)
+		const secondWalletBalanceSol = await getWalletBalanceSol(fortunaWallet.publicKey)
 
 		const feeInSol = initialWalletBalanceSol - secondWalletBalanceSol
 
-		const metadataTransactionSignature = await createTokenMetadata(mint, metadataJSONUrl, splName)
+		const metadataTransactionSignature = await createTokenMetadata(mint, metadataJSONUrl, splName, fortunaWallet)
 
 		return {
 			mint,
@@ -44,14 +44,14 @@ export default async function createSPLToken (metadataJSONUrl: string, splName: 
 async function createTokenMetadata(
 	mint: PublicKey,
 	metadataJSONUrl: string,
-	splName: string
+	splName: string,
+	fortunaWallet: Keypair
 ): Promise<string> {
 	try {
-		const fortunaWallet = getFortunaSolanaWalletFromSecretKey()
-		const keypair = fromWeb3JsKeypair(fortunaWallet)
+		const umiKeypair = fromWeb3JsKeypair(fortunaWallet)
 
 		const umi = createUmi(clusterApiUrl("devnet"), "confirmed")
-		const signer = createSignerFromKeypair(umi, keypair)
+		const signer = createSignerFromKeypair(umi, umiKeypair)
 		umi.identity = signer
 		umi.payer = signer
 
@@ -59,10 +59,10 @@ async function createTokenMetadata(
 			mint: fromWeb3JsPublicKey(mint),
 			mintAuthority: signer,
 			payer: signer,
-			updateAuthority: keypair.publicKey,
+			updateAuthority: umiKeypair.publicKey,
 			data: {
 				name: _.truncate(splName, { length: 32 }),
-				symbol:"", // TODO: Add a symbol?
+				symbol:"", // FUTURE TODO: Add a symbol?
 				uri: _.truncate(metadataJSONUrl, { length: 200 }),
 				sellerFeeBasisPoints: 0,
 				creators: null,

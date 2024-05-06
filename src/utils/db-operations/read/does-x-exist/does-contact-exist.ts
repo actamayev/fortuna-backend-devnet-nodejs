@@ -2,7 +2,7 @@ import prismaClient from "../../../../prisma-client"
 
 export default async function doesContactExist(contact: string, contactType: EmailOrPhone): Promise<boolean> {
 	try {
-		let exists
+		let exists: boolean
 		if (contactType === "Email") exists = await doesEmailExist(contact)
 		else exists = await doesPhoneExist(contact)
 

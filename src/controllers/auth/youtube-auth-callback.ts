@@ -1,5 +1,6 @@
 import _ from "lodash"
 import { Request, Response } from "express"
+import SecretsManager from "../../classes/secrets-manager"
 import createGoogleAuthClient from "../../utils/google/create-google-auth-client"
 import retrieveYouTubeSubscriberCount from "../../utils/google/retrieve-youtube-subscriber-count"
 import approveUserToBeCreator from "../../utils/db-operations/write/credentials/approve-user-to-be-creator"
@@ -10,7 +11,7 @@ export default async function youtubeAuthCallback(req: Request, res: Response): 
 	try {
 		const { user } = req
 		const { code } = req.body
-		const client = createGoogleAuthClient()
+		const client = await createGoogleAuthClient()
 		const { tokens } = await client.getToken(code)
 
 		if (
@@ -24,12 +25,14 @@ export default async function youtubeAuthCallback(req: Request, res: Response): 
 		const subscriberCount = await retrieveYouTubeSubscriberCount(tokens.access_token)
 		let isApprovedToBeCreator = false
 		if (!_.isNull(subscriberCount)) {
-			isApprovedToBeCreator = Number(process.env.MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR) <= subscriberCount
+			const minYouTubeSubsToBeFortunaCreator = await SecretsManager.getInstance().getSecret(
+				"MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR"
+			)
+			isApprovedToBeCreator = parseInt(minYouTubeSubsToBeFortunaCreator, 10) <= subscriberCount
 			if (isApprovedToBeCreator === true) await approveUserToBeCreator(user.user_id)
 		}
 
 		return res.status(200).json({
-			userHasYouTubeAccessTokens: !_.isNull(tokens.access_token),
 			subscriberCount: subscriberCount || 0,
 			isApprovedToBeCreator
 		} as UserYouTubeData)

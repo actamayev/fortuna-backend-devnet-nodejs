@@ -1,12 +1,11 @@
 import _ from "lodash"
-import bs58 from "bs58"
 import { Currencies, solana_wallet } from "@prisma/client"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram,
 	Transaction, clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
 import calculateTransactionFee from "../calculate-transaction-fee"
+import GetKeypairFromSecretKey from "../get-keypair-from-secret-key"
 import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
 
-// eslint-disable-next-line max-lines-per-function
 export default async function transferSolFromUserToCreator(
 	senderSolanaWallet: solana_wallet,
 	recipientPublicKeyAndWalletId: { public_key: string, solana_wallet_id: number },
@@ -27,12 +26,9 @@ export default async function transferSolFromUserToCreator(
 		// May be possible to fix by making Fortuna a co-signer, if all Fortuna wallets are made to be multi-signature accounts.
 		// Would have to think about wheather or not we want this.
 
-		const senderSecretKey = bs58.decode(senderSolanaWallet.secret_key)
-		const senderKeypair = Keypair.fromSecretKey(senderSecretKey)
-		const fortunaSecretKey = bs58.decode(process.env.FORTUNA_WALLET_SECRET_KEY)
-		const fortunaKeypair = Keypair.fromSecretKey(fortunaSecretKey)
-
-		const keypairs: Keypair[] = [fortunaKeypair, senderKeypair]
+		const senderKeypair = GetKeypairFromSecretKey.getGenericKeypairFromSecretKey(senderSolanaWallet.secret_key)
+		const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
+		const keypairs: Keypair[] = [fortunaWalletKeypair, senderKeypair]
 
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
