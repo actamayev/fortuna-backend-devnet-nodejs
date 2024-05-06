@@ -1,11 +1,11 @@
 import _ from "lodash"
-import bs58 from "bs58"
 import { Request, Response } from "express"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction,
 	clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
 import SecretsManager from "../../classes/secrets-manager"
 import SolPriceManager from "../../classes/sol-price-manager"
 import calculateTransactionFee from "../../utils/solana/calculate-transaction-fee"
+import GetKeypairFromSecretKey from "../../utils/solana/get-keypair-from-secret-key"
 import { transformTransaction } from "../../utils/transform/transform-transactions-list"
 import addSolTransferRecord from "../../utils/db-operations/write/sol-transfer/add-sol-transfer-record"
 
@@ -38,14 +38,11 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		// Would have to think about wheather or not we want this.
 
 		const keypairs: Keypair[] = []
-		const senderSecretKey = bs58.decode(solanaWallet.secret_key)
-		const senderKeypair = Keypair.fromSecretKey(senderSecretKey)
+		const senderKeypair = GetKeypairFromSecretKey.getGenericKeypairFromSecretKey(solanaWallet.secret_key)
 		keypairs.push(senderKeypair)
 		if (isRecipientFortunaWallet === true) {
-			const fortunaWalletSecretKey = await SecretsManager.getInstance().getSecret("FORTUNA_WALLET_SECRET_KEY")
-			const fortunaSecretKey = bs58.decode(fortunaWalletSecretKey)
-			const fortunaKeypair = Keypair.fromSecretKey(fortunaSecretKey)
-			keypairs.unshift(fortunaKeypair)
+			const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
+			keypairs.unshift(fortunaWalletKeypair)
 		}
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)

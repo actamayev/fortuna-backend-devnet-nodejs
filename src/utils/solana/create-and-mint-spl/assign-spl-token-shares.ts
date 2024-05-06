@@ -4,8 +4,8 @@ import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js"
 import mintSPLHelper from "./mint-spl-helper"
 import SecretsManager from "../../../classes/secrets-manager"
 import { getWalletBalanceWithUSD } from "../get-wallet-balance"
+import GetKeypairFromSecretKey from "../get-keypair-from-secret-key"
 import EscrowWalletManager from "../../../classes/escrow-wallet-manager"
-import { getFortunaSolanaWalletFromSecretKey } from "../get-fortuna-solana-wallet-from-secret-key"
 import addTokenAccountRecord from "../../db-operations/write/token-account/add-token-account-record"
 
 // eslint-disable-next-line max-lines-per-function
@@ -18,7 +18,7 @@ export default async function assignSPLTokenShares (
 ): Promise<void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const fortunaWallet = await getFortunaSolanaWalletFromSecretKey()
+		const fortunaWallet = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
 		const {
 			FORTUNA_WALLET_PUBLIC_KEY,
 			FORTUNA_SOLANA_WALLET_ID_DB,
