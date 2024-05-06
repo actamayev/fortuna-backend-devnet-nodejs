@@ -64,7 +64,7 @@ async function createTokenMetadata(
 			updateAuthority: keypair.publicKey,
 			data: {
 				name: _.truncate(splName, { length: 32 }),
-				symbol:"", // TODO: Add a symbol?
+				symbol:"", // FUTURE TODO: Add a symbol?
 				uri: _.truncate(metadataJSONUrl, { length: 200 }),
 				sellerFeeBasisPoints: 0,
 				creators: null,

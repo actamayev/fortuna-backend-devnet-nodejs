@@ -15,7 +15,7 @@ export default class AwsS3 {
 				secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 			},
 
-			region: process.env.AWS_REGION,
+			region: "us-east-1",
 		})
 	}
 
@@ -38,7 +38,7 @@ export default class AwsS3 {
 				ContentType: "application/json"
 			})
 			await this.s3.send(command)
-			const url = `https://${s3BucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
+			const url = `https://${s3BucketName}.s3.us-east-1.amazonaws.com/${key}`
 			return url
 		} catch (error) {
 			console.error("Error uploading JSON to S3:", error)
@@ -116,7 +116,7 @@ export default class AwsS3 {
 
 		try {
 			await this.s3.send(command)
-			const url = `https://${s3BucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
+			const url = `https://${s3BucketName}.s3.us-east-1.amazonaws.com/${key}`
 			return url
 		} catch (error) {
 			console.error("Error uploading file to S3:", error)
