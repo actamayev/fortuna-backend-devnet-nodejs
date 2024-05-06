@@ -20,7 +20,7 @@ export default async function login (req: Request, res: Response): Promise<Respo
 		const doPasswordsMatch = await Hash.checkPassword(password, credentialsResult.password as string)
 		if (doPasswordsMatch === false) return res.status(400).json({ message: "Wrong Username or Password!" })
 
-		const accessToken = signJWT({ userId: credentialsResult.user_id, newUser: false })
+		const accessToken = await signJWT({ userId: credentialsResult.user_id, newUser: false })
 
 		await addLoginHistoryRecord(credentialsResult.user_id)
 

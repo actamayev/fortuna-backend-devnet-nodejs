@@ -1,8 +1,10 @@
 import jwt from "jsonwebtoken"
+import SecretsManager from "../../classes/secrets-manager"
 
-export default function getDecodedId(accessToken: string): number {
+export default async function getDecodedId(accessToken: string): Promise<number> {
 	try {
-		const decoded = jwt.verify(accessToken, process.env.JWT_KEY) as JwtPayload
+		const jwtKey = await SecretsManager.getInstance().getSecret("JWT_KEY")
+		const decoded = jwt.verify(accessToken, jwtKey) as JwtPayload
 		return decoded.userId
 	} catch (error) {
 		console.error(error)

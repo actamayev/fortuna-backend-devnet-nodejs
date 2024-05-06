@@ -18,7 +18,7 @@ export default async function requestSolanaAirdrop(req: Request, res: Response):
 			lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
 			signature
 		})
-		const walletBalance = await getWalletBalanceWithUSD(solanaWallet.public_key)
+		const walletBalance = await getWalletBalanceWithUSD(publicKey)
 
 		return res.status(200).json({
 			balanceInSol: walletBalance.balanceInSol,

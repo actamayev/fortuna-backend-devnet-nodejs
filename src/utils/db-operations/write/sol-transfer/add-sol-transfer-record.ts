@@ -1,5 +1,7 @@
+import _ from "lodash"
 import { Currencies } from "@prisma/client"
 import prismaClient from "../../../../prisma-client"
+import SecretsManager from "../../../../classes/secrets-manager"
 import SolPriceManager from "../../../../classes/sol-price-manager"
 
 // eslint-disable-next-line max-params
@@ -12,10 +14,14 @@ export default async function addSolTransferRecord (
 	senderWalletId: number,
 	recipientSolanaWalletId: number | undefined,
 	isSplPurchase: boolean,
-	feePayerSolanaWalletId: number = Number(process.env.FORTUNA_SOLANA_WALLET_ID_DB)
+	feePayerSolanaWalletId?: number
 ): Promise<AddSolTransferToDB> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
+		if (_.isUndefined(feePayerSolanaWalletId)) {
+			const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
+			feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
+		}
 		const solTransfer = await prismaClient.sol_transfer.create({
 			data: {
 				recipient_public_key: recipientPublicKey,

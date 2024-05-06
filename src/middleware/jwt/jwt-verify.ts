@@ -16,7 +16,7 @@ export default async function jwtVerify(req: Request, res: Response, next: NextF
 
 		const accessToken = req.headers.authorization as string
 
-		const userId = getDecodedId(accessToken)
+		const userId = await getDecodedId(accessToken)
 
 		const user = await findUserById(userId)
 

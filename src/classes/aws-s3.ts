@@ -1,18 +1,21 @@
 import _ from "lodash"
 import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
+import SecretsManager from "./secrets-manager"
 
 export default class AwsS3 {
 	private static instance: AwsS3 | null = null
 	private s3: S3Client
+	private secretsManagerInstance: SecretsManager
 
 	private constructor() {
+		this.secretsManagerInstance = SecretsManager.getInstance()
 		this.s3 = new S3Client({
 			credentials: {
 				accessKeyId: process.env.AWS_ACCESS_KEY_ID,
 				secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 			},
 
-			region: process.env.AWS_REGION,
+			region: "us-east-1",
 		})
 	}
 
@@ -24,18 +27,18 @@ export default class AwsS3 {
 	}
 
 	public async uploadJSON(jsonData: SPLDataSavedToS3, key: string): Promise<string> {
-		const jsonBuffer = Buffer.from(JSON.stringify(jsonData))
-
-		const command = new PutObjectCommand({
-			Bucket: process.env.S3_BUCKET,
-			Key: key,
-			Body: jsonBuffer,
-			ContentType: "application/json"
-		})
-
 		try {
+			const jsonBuffer = Buffer.from(JSON.stringify(jsonData))
+			const s3BucketName = await this.secretsManagerInstance.getSecret("S3_BUCKET")
+
+			const command = new PutObjectCommand({
+				Bucket: s3BucketName,
+				Key: key,
+				Body: jsonBuffer,
+				ContentType: "application/json"
+			})
 			await this.s3.send(command)
-			const url = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
+			const url = `https://${s3BucketName}.s3.us-east-1.amazonaws.com/${key}`
 			return url
 		} catch (error) {
 			console.error("Error uploading JSON to S3:", error)
@@ -45,8 +48,10 @@ export default class AwsS3 {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private async getJSONFromS3(key: string): Promise<any> {
+		const s3BucketName = await this.secretsManagerInstance.getSecret("S3_BUCKET")
+
 		const command = new GetObjectCommand({
-			Bucket: process.env.S3_BUCKET,
+			Bucket: s3BucketName,
 			Key: key
 		})
 
@@ -65,9 +70,10 @@ export default class AwsS3 {
 		try {
 			const currentData = await this.getJSONFromS3(key)
 			const updatedData = { ...currentData, ...updates }
+			const s3BucketName = await this.secretsManagerInstance.getSecret("S3_BUCKET")
 
 			const command = new PutObjectCommand({
-				Bucket: process.env.S3_BUCKET,
+				Bucket: s3BucketName,
 				Key: key,
 				Body: JSON.stringify(updatedData),
 				ContentType: "application/json"
@@ -99,8 +105,10 @@ export default class AwsS3 {
 	}
 
 	private async uploadFile(fileBuffer: Buffer, key: string, contentType: string): Promise<string> {
+		const s3BucketName = await this.secretsManagerInstance.getSecret("S3_BUCKET")
+
 		const command = new PutObjectCommand({
-			Bucket: process.env.S3_BUCKET,
+			Bucket: s3BucketName,
 			Key: key,
 			Body: fileBuffer,
 			ContentType: contentType
@@ -108,7 +116,7 @@ export default class AwsS3 {
 
 		try {
 			await this.s3.send(command)
-			const url = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`
+			const url = `https://${s3BucketName}.s3.us-east-1.amazonaws.com/${key}`
 			return url
 		} catch (error) {
 			console.error("Error uploading file to S3:", error)

@@ -1,5 +1,6 @@
 import _ from "lodash"
 import { Request, Response } from "express"
+import SecretsManager from "../../classes/secrets-manager"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
 import createSolanaWallet from "../../utils/solana/create-solana-wallet"
 import createGoogleAuthClient from "../../utils/google/create-google-auth-client"
@@ -10,10 +11,11 @@ import addGoogleUserWithWallet from "../../utils/db-operations/write/simultaneou
 export default async function googleLoginAuthCallback (req: Request, res: Response): Promise<Response> {
 	try {
 		const { idToken } = req.body
-		const client = createGoogleAuthClient()
+		const client = await createGoogleAuthClient()
+		const googleClientId = await SecretsManager.getInstance().getSecret("GOOGLE_CLIENT_ID")
 		const ticket = await client.verifyIdToken({
 			idToken,
-			audience: process.env.GOOGLE_CLIENT_ID
+			audience: googleClientId
 		})
 		const payload = ticket.getPayload()
 		if (_.isUndefined(payload)) return res.status(500).json({ error: "Unable to get payload" })
@@ -21,15 +23,15 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 
 		const googleUser = await retrieveUserByEmail(payload.email)
 		let userId = googleUser?.user_id
-		let accessToken
+		let accessToken: string
 		let isNewUser = false
 		if (_.isUndefined(userId)) {
 			const walletKeypair = await createSolanaWallet()
 			userId = await addGoogleUserWithWallet(payload.email, walletKeypair)
-			accessToken = signJWT({ userId, newUser: true })
+			accessToken = await signJWT({ userId, newUser: true })
 			isNewUser = true
 		} else {
-			accessToken = signJWT({ userId, newUser: false })
+			accessToken = await signJWT({ userId, newUser: false })
 		}
 
 		await addLoginHistoryRecord(userId)
