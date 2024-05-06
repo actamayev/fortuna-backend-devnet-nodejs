@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express"
 
 export default function confirmPublicKeyExists(req: Request, res: Response, next: NextFunction): Response | void {
 	try {
-		const recipientPublicKey = req.recipientPublicKey
+		const { recipientPublicKey } = req
 
 		const isOnSolana = PublicKey.isOnCurve(recipientPublicKey)
 

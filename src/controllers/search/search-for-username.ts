@@ -3,8 +3,8 @@ import getUsernames from "../../utils/db-operations/read/search/get-usernames"
 
 export default async function searchForUsername(req: Request, res: Response): Promise<Response> {
 	try {
-		const user = req.user
-		const username = req.params.username as string
+		const { user } = req
+		const { username } = req.params
 
 		const usernames = await getUsernames(username, user.username)
 

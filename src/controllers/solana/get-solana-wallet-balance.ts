@@ -3,7 +3,7 @@ import { getWalletBalanceWithUSD } from "../../utils/solana/get-wallet-balance"
 
 export default async function getSolanaWalletBalance(req: Request, res: Response): Promise<Response> {
 	try {
-		const solanaWallet = req.solanaWallet
+		const { solanaWallet } = req
 		const walletBalanceInfo = await getWalletBalanceWithUSD(solanaWallet.public_key)
 
 		return res.status(200).json({

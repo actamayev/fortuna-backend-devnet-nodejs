@@ -4,7 +4,7 @@ import retrieveCreatorContentList from "../../utils/db-operations/read/spl/retri
 
 export default async function getCreatorContentList(req: Request, res: Response): Promise<Response> {
 	try {
-		const solanaWallet = req.solanaWallet
+		const { solanaWallet } = req
 
 		const creatorSPLData = await retrieveCreatorContentList(solanaWallet.solana_wallet_id)
 

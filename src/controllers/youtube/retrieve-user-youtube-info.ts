@@ -1,15 +1,24 @@
 import _ from "lodash"
 import { Response, Request } from "express"
+import retrieveYouTubeSubscriberCount from "../../utils/google/retrieve-youtube-subscriber-count"
 
-export default function retrieveUserYouTubeInfo (req: Request, res: Response): Response {
+export default async function retrieveUserYouTubeInfo (req: Request, res: Response): Promise<Response> {
 	try {
-		// TODO: Later add a middleware which refreshes the access token (if necessary)
-		// Then, retrieve user subscriptions, creator stats.
-		const user = req.user
+		const { user, youtubeAccessToken } = req
+		const subscriberCount = await retrieveYouTubeSubscriberCount(youtubeAccessToken)
 
-		return res.status(200).json({ userHasYouTubeAccessTokens: !_.isNull(user.youtube_access_tokens_id) })
+		let isApprovedToBeCreator = false
+		if (!_.isNull(subscriberCount)) {
+			isApprovedToBeCreator = Number(process.env.MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR) <= subscriberCount
+		}
+
+		return res.status(200).json({
+			userHasYouTubeAccessTokens: !_.isNull(user.youtube_access_tokens_id),
+			subscriberCount,
+			isApprovedToBeCreator
+		} as UserYouTubeData)
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to get home page videos" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to retrieve user YouTube info" })
 	}
 }

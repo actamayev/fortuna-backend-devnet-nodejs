@@ -8,8 +8,7 @@ export default async function confirmUserHasEnoughSolToPurchaseTokens(
 	next: NextFunction
 ): Promise<Response | void> {
 	try {
-		const solanaWallet = req.solanaWallet
-		const splDetails = req.splDetails
+		const { solanaWallet, splDetails } = req
 		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchaseSPLTokensData
 		const balanceInSol = await getWalletBalanceSol(solanaWallet.public_key)
 

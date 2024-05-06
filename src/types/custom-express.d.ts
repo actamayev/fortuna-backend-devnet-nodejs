@@ -12,6 +12,8 @@ declare global {
 
 			isRecipientFortunaWallet: boolean
 			recipientSolanaWalletId: number | undefined
+
+			youtubeAccessToken: string
 		}
 	}
 }

@@ -9,9 +9,8 @@ export default async function confirmUserHasEnoughSolToTransfer(
 	next: NextFunction
 ): Promise<Response | void> {
 	try {
-		const solanaWallet = req.solanaWallet
+		const { solanaWallet, isRecipientFortunaWallet } = req
 		const transferData = req.body.transferSolData as TransferSolData
-		const isRecipientFortunaWallet = req.isRecipientFortunaWallet
 		const balanceInSol = await getWalletBalanceSol(solanaWallet.public_key)
 
 		if (transferData.transferCurrency === "sol") {

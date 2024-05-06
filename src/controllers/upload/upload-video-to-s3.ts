@@ -8,13 +8,12 @@ export default async function uploadVideoToS3 (req: Request, res: Response): Pro
 	try {
 		if (_.isUndefined(req.file)) return res.status(400).json({ message: "No video uploaded" })
 
-		const fileBuffer = req.file.buffer
-		const fileName = req.file.originalname
+		const { buffer, originalname } = req.file
 
-		const uploadVideoToS3KeyAndUUID = createS3KeyGenerateUUID("uploaded-videos", fileName)
-		const videoUploadUrl = await AwsS3.getInstance().uploadVideo(fileBuffer, uploadVideoToS3KeyAndUUID.key)
+		const uploadVideoToS3KeyAndUUID = createS3KeyGenerateUUID("uploaded-videos", originalname)
+		const videoUploadUrl = await AwsS3.getInstance().uploadVideo(buffer, uploadVideoToS3KeyAndUUID.key)
 
-		const uploadedVideoId = await addUploadVideoRecord(videoUploadUrl, fileName, uploadVideoToS3KeyAndUUID.uuid)
+		const uploadedVideoId = await addUploadVideoRecord(videoUploadUrl, originalname, uploadVideoToS3KeyAndUUID.uuid)
 
 		return res.status(200).json({
 			videoUploadUrl,

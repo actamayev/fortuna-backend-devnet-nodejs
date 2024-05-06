@@ -7,10 +7,6 @@ import retrieveUserByEmail from "../../utils/db-operations/read/credentials/retr
 import addLoginHistoryRecord from "../../utils/db-operations/write/login-history/add-login-history-record"
 import addGoogleUserWithWallet from "../../utils/db-operations/write/simultaneous-writes/add-google-user-with-wallet"
 
-// TODO: Create 2 endpoints for google auth. one for logging in, and another for importing youtube details
-// https://react-oauth.vercel.app/
-// The one to login will use google's Sign in with google button. (sign in flows)
-// The Youtube sign in button will use a custom button, ask for extra scopes (youtube data)
 export default async function googleLoginAuthCallback (req: Request, res: Response): Promise<Response> {
 	try {
 		const { idToken } = req.body

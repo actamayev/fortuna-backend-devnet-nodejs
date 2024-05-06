@@ -6,7 +6,7 @@ import retrieveCreatorsByUsername from "../../utils/db-operations/read/credentia
 
 export default async function generalSearch(req: Request, res: Response): Promise<Response> {
 	try {
-		const searchTerm = req.params.searchTerm as string
+		const { searchTerm } = req.params
 
 		const videos = await retrieveVideosByTitle(searchTerm)
 		const creators = await retrieveCreatorsByUsername(searchTerm)

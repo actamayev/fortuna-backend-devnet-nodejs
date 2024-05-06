@@ -4,7 +4,7 @@ import getSplOwnershipsByWalletId from "../../utils/db-operations/read/spl-owner
 
 export default async function getMyOwnership(req: Request, res: Response): Promise<Response> {
 	try {
-		const solanaWallet = req.solanaWallet
+		const { solanaWallet } = req
 
 		const myOwnership = await getSplOwnershipsByWalletId(solanaWallet.solana_wallet_id)
 
