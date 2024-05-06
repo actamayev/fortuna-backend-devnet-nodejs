@@ -24,8 +24,7 @@ export default async function assignSPLTokenShares (
 			FORTUNA_ESCROW_WALLET_PUBLIC_KEY,
 			FORTUNA_ESCROW_SOLANA_WALLET_ID_DB
 		} = await SecretsManager.getInstance().getSecrets([
-			"FORTUNA_SOLANA_WALLET_ID_DB",
-			"FORTUNA_ESCROW_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_SOLANA_WALLET_ID_DB"
+			"FORTUNA_SOLANA_WALLET_ID_DB", "FORTUNA_ESCROW_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_SOLANA_WALLET_ID_DB"
 		])
 
 		const initialWalletBalance = await getWalletBalanceWithUSD(fortunaWallet.publicKey)
