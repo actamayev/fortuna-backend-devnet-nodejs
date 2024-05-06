@@ -13,6 +13,25 @@ declare global {
 		"uploaded-videos" |
 		"spl-metadata" |
 		"profile-pictures"
+
+	type SecretKeys =
+		"PORT" |
+		"DATABASE_URL" |
+		"SALT_ROUNDS" |
+		"JWT_KEY" |
+		"GOOGLE_CLIENT_ID" |
+		"GOOGLE_CLIENT_SECRET" |
+		"AWS_ACCESS_KEY_ID" |
+		"AWS_SECRET_ACCESS_KEY" |
+		"AWS_REGION" |
+		"S3_BUCKET" |
+		"FORTUNA_WALLET_PUBLIC_KEY" |
+		"FORTUNA_WALLET_SECRET_KEY" |
+		"FORTUNA_ESCROW_WALLET_PUBLIC_KEY" |
+		"FORTUNA_ESCROW_WALLET_SECRET_KEY" |
+		"FORTUNA_SOLANA_WALLET_ID_DB" |  // Note: Despite being a number, it's stored and handled as a string
+		"FORTUNA_ESCROW_SOLANA_WALLET_ID_DB" |  // Same note as above
+		"MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR"
 }
 
 export {}
