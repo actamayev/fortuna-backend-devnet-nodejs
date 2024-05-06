@@ -1,4 +1,3 @@
-import _ from "lodash"
 import prismaClient from "../../../../prisma-client"
 import SecretsManager from "../../../../classes/secrets-manager"
 import SolPriceManager from "../../../../classes/sol-price-manager"
@@ -8,15 +7,13 @@ export default async function addSplMintWithOwnership(
 	tokenAccountId: number,
 	numberOfShares: number,
 	splMintFeeSol: number,
-	transactionSignature: string,
-	feePayerSolanaWalletId?: number
+	transactionSignature: string
 ): Promise<void> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
-		if (_.isUndefined(feePayerSolanaWalletId)) {
-			const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
-			feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
-		}
+		const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
+		const feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
+
 		await prismaClient.$transaction(async (prisma) => {
 			await prisma.spl_mint.create({
 				data: {
@@ -25,7 +22,7 @@ export default async function addSplMintWithOwnership(
 					number_of_shares: numberOfShares,
 					spl_mint_fee_sol: splMintFeeSol,
 					spl_mint_fee_usd: splMintFeeSol * solPriceDetails.price,
-					fee_payer_solana_wallet_id: feePayerSolanaWalletId as number,
+					fee_payer_solana_wallet_id: feePayerSolanaWalletId,
 					transaction_signature: transactionSignature
 				}
 			})

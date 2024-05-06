@@ -1,4 +1,3 @@
-import _ from "lodash"
 import prismaClient from "../../../../prisma-client"
 import SecretsManager from "../../../../classes/secrets-manager"
 import SolPriceManager from "../../../../classes/sol-price-manager"
@@ -15,15 +14,12 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 	isSecondaryMarketTransaction: boolean,
 	numberSplSharesTransferred: number,
 	transferFeeSol: number,
-	userHasExistingTokenAccount: boolean,
-	feePayerSolanaWalletId?: number
+	userHasExistingTokenAccount: boolean
 ): Promise<number> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
-		if (_.isUndefined(feePayerSolanaWalletId)) {
-			const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
-			feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
-		}
+		const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
+		const feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
 		// eslint-disable-next-line max-lines-per-function
 		const result = await prismaClient.$transaction(async (prisma) => {
 			const transferRecordResult = await prisma.spl_transfer.create({
@@ -39,7 +35,7 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 					number_spl_shares_transferred: numberSplSharesTransferred,
 					transfer_fee_sol: transferFeeSol,
 					transfer_fee_usd: transferFeeSol * solPriceDetails.price,
-					fee_payer_solana_wallet_id: feePayerSolanaWalletId as number
+					fee_payer_solana_wallet_id: feePayerSolanaWalletId
 				}
 			})
 

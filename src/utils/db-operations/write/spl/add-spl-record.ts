@@ -1,4 +1,3 @@
-import _ from "lodash"
 import prismaClient from "../../../../prisma-client"
 import SecretsManager from "../../../../classes/secrets-manager"
 import SolPriceManager from "../../../../classes/sol-price-manager"
@@ -8,15 +7,13 @@ export default async function addSPLRecord (
 	metadataJSONUrl: string,
 	newSPLData: IncomingNewSPLData,
 	createSPLResponse: CreateSPLResponse,
-	creatorWalletId: number,
-	feePayerSolanaWalletId?: number
+	creatorWalletId: number
 ): Promise<number> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
-		if (_.isUndefined(feePayerSolanaWalletId)) {
-			const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
-			feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
-		}
+		const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
+		const feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
+
 		const addSPLResponse = await prismaClient.spl.create({
 			data: {
 				meta_data_url: metadataJSONUrl,
