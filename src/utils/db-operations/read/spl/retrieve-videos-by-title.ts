@@ -1,4 +1,4 @@
-import prismaClient from "../../../../prisma-client"
+import prismaClient from "../../../../classes/prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function retrieveVideosByTitle(videoTitle: string): Promise<RetrievedVideosByTitle[]> {

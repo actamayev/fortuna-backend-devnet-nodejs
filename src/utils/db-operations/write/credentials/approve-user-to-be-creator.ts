@@ -1,4 +1,4 @@
-import prismaClient from "../../../../prisma-client"
+import prismaClient from "../../../../classes/prisma-client"
 
 export default async function approveUserToBeCreator(userId: number): Promise<void> {
 	try {

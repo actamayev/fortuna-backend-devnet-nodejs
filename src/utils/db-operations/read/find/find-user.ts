@@ -1,5 +1,5 @@
 import { credentials } from "@prisma/client"
-import prismaClient from "../../../../prisma-client"
+import prismaClient from "../../../../classes/prisma-client"
 
 export async function findUserById(userId: number): Promise<credentials | null> {
 	try {

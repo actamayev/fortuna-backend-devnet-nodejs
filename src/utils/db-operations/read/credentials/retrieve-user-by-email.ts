@@ -1,5 +1,5 @@
 import { credentials } from "@prisma/client"
-import prismaClient from "../../../../prisma-client"
+import prismaClient from "../../../../classes/prisma-client"
 
 export default async function retrieveUserByEmail(email: string): Promise<credentials | null> {
 	try {

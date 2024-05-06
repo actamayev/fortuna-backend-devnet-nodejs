@@ -1,4 +1,4 @@
-import prismaClient from "../../../../prisma-client"
+import prismaClient from "../../../../classes/prisma-client"
 
 export default async function setUsername(userId: number, username: string): Promise<void> {
 	try {

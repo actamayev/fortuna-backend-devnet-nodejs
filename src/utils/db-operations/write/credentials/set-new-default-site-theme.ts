@@ -1,5 +1,5 @@
 import { SiteThemes } from "@prisma/client"
-import prismaClient from "../../../../prisma-client"
+import prismaClient from "../../../../classes/prisma-client"
 
 export default async function setNewDefaultSiteTheme(userId: number, defaultSiteTheme: SiteThemes): Promise<void> {
 	try {

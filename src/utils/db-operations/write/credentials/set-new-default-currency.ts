@@ -1,5 +1,5 @@
 import { Currencies } from "@prisma/client"
-import prismaClient from "../../../../prisma-client"
+import prismaClient from "../../../../classes/prisma-client"
 
 export default async function setNewDefaultCurrency(userId: number, defaultCurrency: Currencies): Promise<void> {
 	try {

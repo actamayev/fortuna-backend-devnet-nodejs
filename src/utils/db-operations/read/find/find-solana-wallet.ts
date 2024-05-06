@@ -1,5 +1,5 @@
 import { solana_wallet } from "@prisma/client"
-import prismaClient from "../../../../prisma-client"
+import prismaClient from "../../../../classes/prisma-client"
 
 export async function findSolanaWalletByUserId(userId: number): Promise<solana_wallet | null> {
 	try {

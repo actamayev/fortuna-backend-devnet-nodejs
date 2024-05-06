@@ -1,5 +1,5 @@
 import { token_account } from "@prisma/client"
-import prismaClient from "../../../../prisma-client"
+import prismaClient from "../../../../classes/prisma-client"
 
 export default async function retrieveTokenAccountBySplAddress(
 	splAddress: string,

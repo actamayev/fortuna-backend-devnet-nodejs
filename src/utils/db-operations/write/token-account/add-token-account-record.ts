@@ -1,6 +1,6 @@
 import { PublicKey } from "@solana/web3.js"
 import { token_account } from "@prisma/client"
-import prismaClient from "../../../../prisma-client"
+import prismaClient from "../../../../classes/prisma-client"
 import SecretsManager from "../../../../classes/secrets-manager"
 
 export default async function addTokenAccountRecord (

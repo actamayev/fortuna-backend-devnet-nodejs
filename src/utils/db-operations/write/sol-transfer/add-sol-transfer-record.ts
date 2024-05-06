@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { Currencies } from "@prisma/client"
-import prismaClient from "../../../../prisma-client"
+import prismaClient from "../../../../classes/prisma-client"
 import SecretsManager from "../../../../classes/secrets-manager"
 import SolPriceManager from "../../../../classes/sol-price-manager"
 
