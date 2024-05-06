@@ -1,0 +1,24 @@
+import { Credentials } from "google-auth-library"
+import prismaClient from "../../../../prisma-client"
+
+export default async function updateYouTubeAccessToken(
+	youtubeAccessTokensId: number,
+	credentials: Credentials
+): Promise<string> {
+	try {
+		const youtubeAccessTokensData = await prismaClient.youtube_access_tokens.update({
+			where: {
+				youtube_access_tokens_id: youtubeAccessTokensId
+			},
+			data: {
+				access_token: credentials.access_token as string,
+				expiry_date: new Date(credentials.expiry_date as number)
+			}
+		})
+
+		return youtubeAccessTokensData.access_token
+	} catch (error) {
+		console.error(error)
+		throw error
+	}
+}

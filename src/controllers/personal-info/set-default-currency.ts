@@ -4,7 +4,7 @@ import setNewDefaultCurrency from "../../utils/db-operations/write/credentials/s
 
 export default async function setDefaultCurrency(req: Request, res: Response): Promise<Response> {
 	try {
-		const user = req.user
+		const { user } = req
 		const defaultCurrency = req.params.defaultCurrency as Currencies
 		await setNewDefaultCurrency(user.user_id, defaultCurrency)
 

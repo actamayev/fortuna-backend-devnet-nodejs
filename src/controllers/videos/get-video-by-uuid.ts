@@ -6,7 +6,7 @@ import retrieveVideoByUUID from "../../utils/db-operations/read/uploaded-video/r
 
 export default async function getVideoByUUID (req: Request, res: Response): Promise<Response> {
 	try {
-		const videoUUID = req.params.videoUUID as string
+		const { videoUUID } = req.params
 
 		const videoData = await retrieveVideoByUUID(videoUUID)
 		if (_.isNull(videoData)) return res.status(500).json({ error: "Unable to find video for the provided UUID" })

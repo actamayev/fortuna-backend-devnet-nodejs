@@ -3,7 +3,7 @@ import checkIfPublicKeyRegisteredWithFortuna from "../../utils/db-operations/rea
 
 export default async function checkIfPublicKeyExistsWithFortuna(req: Request, res: Response): Promise<Response> {
 	try {
-		const publicKey = req.params.publicKey as string
+		const { publicKey } = req.params
 
 		const exists = await checkIfPublicKeyRegisteredWithFortuna(publicKey)
 

@@ -4,7 +4,7 @@ import { getWalletBalanceWithUSD } from "../../utils/solana/get-wallet-balance"
 
 export default async function requestSolanaAirdrop(req: Request, res: Response): Promise<Response> {
 	try {
-		const solanaWallet = req.solanaWallet
+		const { solanaWallet } = req
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 
 		const publicKey = new PublicKey(solanaWallet.public_key)

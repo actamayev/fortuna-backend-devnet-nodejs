@@ -1,6 +1,6 @@
 import prismaClient from "../../../../prisma-client"
 
-export default async function addYoutubeAccessTokenRecord (
+export default async function addYouTubeAccessTokenRecord (
 	userId: number,
 	accessToken: string,
 	refreshToken: string,

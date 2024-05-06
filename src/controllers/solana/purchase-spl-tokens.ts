@@ -8,9 +8,8 @@ import retrieveCreatorWalletInfoFromSpl from "../../utils/db-operations/read/spl
 
 export default async function purchaseSplTokens(req: Request, res: Response): Promise<Response> {
 	try {
-		const solanaWallet = req.solanaWallet
+		const { solanaWallet, splDetails } = req
 		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchaseSPLTokensData
-		const splDetails = req.splDetails
 		// FUTURE TODO: See if there's a way to simultaneously transfer Spl tokens to user and transfer sol from user to creator
 		// Better for this to be done as one transaction (so that if either one fails, neither go through)
 

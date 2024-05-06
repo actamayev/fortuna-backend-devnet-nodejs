@@ -7,12 +7,12 @@ export default async function confirmEnoughSharesInEscrowToCompletePurchase(
 	next: NextFunction
 ): Promise<Response | void> {
 	try {
-		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchaseSPLTokensData
-		const splDetails = req.splDetails
+		const { splDetails } = req
 		const numberOfTokensRemainingInEscrow = await EscrowWalletManager.getInstance().retrieveTokenAmountByPublicKey(
 			splDetails.publicKeyAddress
 		)
 
+		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchaseSPLTokensData
 		if (numberOfTokensRemainingInEscrow < purchaseSplTokensData.numberOfTokensPurchasing) {
 			return res.status(400).json({
 				// eslint-disable-next-line max-len

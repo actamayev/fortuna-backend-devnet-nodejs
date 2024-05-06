@@ -3,7 +3,7 @@ import retrieveProfilePictureUrlByUserId from "../../utils/db-operations/read/pr
 
 export default async function retrievePersonalInfo(req: Request, res: Response): Promise<Response> {
 	try {
-		const user = req.user
+		const { user } = req
 		const profilePictureUrl = await retrieveProfilePictureUrlByUserId(user.user_id)
 
 		return res.status(200).json({

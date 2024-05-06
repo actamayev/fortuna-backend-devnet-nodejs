@@ -27,5 +27,7 @@ declare namespace NodeJS {
 
 		FORTUNA_SOLANA_WALLET_ID_DB: string // It's actually a number, but when it's read from .env it's converted into a string
 		FORTUNA_ESCROW_SOLANA_WALLET_ID_DB: string // It's actually a number, but when it's read from .env it's converted into a string
+
+		MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR: string
 	}
 }

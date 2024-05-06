@@ -5,7 +5,7 @@ import retrieveVideosByCreatorUsername from "../../utils/db-operations/read/cred
 
 export default async function getVideosByCreatorUsername (req: Request, res: Response): Promise<Response> {
 	try {
-		const creatorUsername = req.params.creatorUsername as string
+		const { creatorUsername } = req.params
 
 		const retrievedVideoData = await retrieveVideosByCreatorUsername(creatorUsername)
 		if (_.isNull(retrievedVideoData)) return res.status(400).json({ message: "Unable to find creator associated with this username" })

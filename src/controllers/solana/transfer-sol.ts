@@ -11,14 +11,10 @@ import addSolTransferRecord from "../../utils/db-operations/write/sol-transfer/a
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
 	try {
-		const user = req.user
-		const solanaWallet = req.solanaWallet
+		const { user, solanaWallet, recipientPublicKey, isRecipientFortunaWallet, recipientSolanaWalletId } = req
 		const transferData = req.body.transferSolData as TransferSolData
-		const recipientPublicKey = req.recipientPublicKey
-		const isRecipientFortunaWallet = req.isRecipientFortunaWallet
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const transaction = new Transaction()
-		const recipientSolanaWalletId = req.recipientSolanaWalletId
 		const transferCurrencyAmounts = { solToTransfer: 0, usdToTransfer: 0, defaultCurrency: transferData.transferCurrency }
 
 		const solPrice = (await SolPriceManager.getInstance().getPrice()).price

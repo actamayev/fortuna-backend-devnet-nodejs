@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 
 export default function retrieveWalletPublicKey(req: Request, res: Response): Response {
 	try {
-		const solanaWallet = req.solanaWallet
+		const { solanaWallet } = req
 
 		return res.status(200).json({ publicKey: solanaWallet.public_key })
 	} catch (error) {
