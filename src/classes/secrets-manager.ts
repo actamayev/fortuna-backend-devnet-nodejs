@@ -111,7 +111,7 @@ export default class SecretsManager {
 	private updateSecretsMap(secretsString: string): void {
 		const secrets = JSON.parse(secretsString)
 		Object.keys(secrets).forEach(key => {
-			const secretKey = key as SecretKeys  // Type assertion
+			const secretKey = key as SecretKeys
 			const value = secrets[key]
 			if (!_.isUndefined(value)) {
 				this.secrets.set(secretKey, value)
