@@ -1,7 +1,8 @@
-import prismaClient from "../../../../prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function checkIfPublicKeyRegisteredWithFortuna(publicKey: string): Promise<boolean> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const wallet = await prismaClient.solana_wallet.findFirst({
 			where: {
 				public_key: {

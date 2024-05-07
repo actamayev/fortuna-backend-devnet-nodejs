@@ -1,7 +1,7 @@
 import { PublicKey } from "@solana/web3.js"
 import { token_account } from "@prisma/client"
-import prismaClient from "../../../../prisma-client"
 import SecretsManager from "../../../../classes/secrets-manager"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function addTokenAccountRecord (
 	splId: number,
@@ -13,6 +13,8 @@ export default async function addTokenAccountRecord (
 	try {
 		const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
 		const feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
+		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const tokenAccountResponse = await prismaClient.token_account.create({
 			data: {
 				spl_id: splId,

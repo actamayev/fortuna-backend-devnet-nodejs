@@ -1,9 +1,10 @@
-import prismaClient from "../../../../prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function retrieveSplDetailsByPublicKey(
 	splPublicKey: string
 ): Promise<RetrievedSplByPublicKeyData | null> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const creatorSPLData = await prismaClient.spl.findFirst({
 			where: {
 				public_key_address: splPublicKey
