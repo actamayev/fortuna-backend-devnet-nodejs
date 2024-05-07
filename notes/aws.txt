@@ -34,3 +34,7 @@ Other:
 	`npx prisma generate` in the src directory
 - If getting this error after a migration: `Unknown field `[field_name]` for select statement on model [model_name]...`
 	Check that the field exists in PGAdmin (remote into the RDS box). If it does, run `npx prisma generate` in the src directory
+- To save the Postgres Url to AWS's configuration, go into `nano ~/.bashrc`, to the end of the file, and add:
+	export DATABASE_URL='your-database-url'.
+	Save, and run `source ~/.bashrc`
+	Run `echo $DATABASE_URL` to make sure the command ran correctly
