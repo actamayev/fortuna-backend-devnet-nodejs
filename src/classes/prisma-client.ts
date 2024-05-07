@@ -3,38 +3,22 @@ import { PrismaClient } from "@prisma/client"
 import SecretsManager from "./secrets-manager"
 
 export default class PrismaClientClass {
-	private static instance: PrismaClientClass | null = null
-	private prismaClient?: PrismaClient
-	private databaseUrl: string | null = null
+	private static prismaClient?: PrismaClient
 
 	private constructor() {
-		void this.initializePrismaClient()
 	}
 
-	public static getInstance(): PrismaClientClass {
-		if (_.isNull(PrismaClientClass.instance)) {
-			PrismaClientClass.instance = new PrismaClientClass()
-		}
-		return PrismaClientClass.instance
-	}
-
-	private async initializePrismaClient(): Promise<void> {
-		if (_.isNull(this.databaseUrl)) {
-			this.databaseUrl = await SecretsManager.getInstance().getSecret("DATABASE_URL")
-		}
-		this.prismaClient = new PrismaClient({
-			datasources: {
-				db: {
-					url: this.databaseUrl
-				}
-			}
-		})
-	}
-
-	public async getPrismaClient(): Promise<PrismaClient> {
+	public static async getPrismaClient(): Promise<PrismaClient> {
 		if (_.isUndefined(this.prismaClient)) {
-			await this.initializePrismaClient()
+			const databaseUrl = await SecretsManager.getInstance().getSecret("DATABASE_URL")
+			this.prismaClient = new PrismaClient({
+				datasources: {
+					db: {
+						url: databaseUrl
+					}
+				}
+			})
 		}
-		return this.prismaClient as PrismaClient
+		return this.prismaClient
 	}
 }

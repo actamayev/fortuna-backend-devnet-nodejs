@@ -1,9 +1,10 @@
-import prismaClient from "../../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export async function findPublicKeyAndSolWalletFromUsername(
 	username: string
 ): Promise<{ solana_wallet_id: number, public_key: string } | null | undefined> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const user = await prismaClient.credentials.findFirst({
 			where: {
 				username: {

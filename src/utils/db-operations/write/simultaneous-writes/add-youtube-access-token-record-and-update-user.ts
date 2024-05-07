@@ -1,4 +1,4 @@
-import prismaClient from "../../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function addYouTubeAccessTokenRecord (
 	userId: number,
@@ -8,6 +8,8 @@ export default async function addYouTubeAccessTokenRecord (
 ): Promise<void> {
 	try {
 		const expiryDateObject = new Date(expiryDate)
+		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		await prismaClient.$transaction(async (prisma) => {
 			const youtubeAccessToken = await prisma.youtube_access_tokens.create({
 				data: {

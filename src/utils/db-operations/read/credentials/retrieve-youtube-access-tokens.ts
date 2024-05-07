@@ -1,8 +1,9 @@
 import _ from "lodash"
-import prismaClient from "../../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function retrieveYouTubeAccessTokens(userId: number): Promise<RetrievedYouTubeAccessTokensData | null> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const accessTokenData = await prismaClient.credentials.findFirst({
 			where: {
 				user_id: userId

@@ -1,8 +1,9 @@
 import { solana_wallet } from "@prisma/client"
-import prismaClient from "../../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export async function findSolanaWalletByUserId(userId: number): Promise<solana_wallet | null> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const solanaWallet = await prismaClient.solana_wallet.findFirst({
 			where: { user_id: userId }
 		})
@@ -15,6 +16,7 @@ export async function findSolanaWalletByUserId(userId: number): Promise<solana_w
 
 export async function findSolanaWalletByPublicKey(publicKey: string): Promise<solana_wallet | null> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const solanaWallet = await prismaClient.solana_wallet.findFirst({
 			where: { public_key: publicKey }
 		})

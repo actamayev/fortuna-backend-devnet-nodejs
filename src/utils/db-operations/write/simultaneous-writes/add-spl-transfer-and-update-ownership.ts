@@ -1,5 +1,5 @@
-import prismaClient from "../../../../classes/prisma-client"
 import SecretsManager from "../../../../classes/secrets-manager"
+import PrismaClientClass from "../../../../classes/prisma-client"
 import SolPriceManager from "../../../../classes/sol-price-manager"
 
 // eslint-disable-next-line max-params, max-lines-per-function
@@ -20,6 +20,7 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
 		const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
 		const feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		// eslint-disable-next-line max-lines-per-function
 		const result = await prismaClient.$transaction(async (prisma) => {

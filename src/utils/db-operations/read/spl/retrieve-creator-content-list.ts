@@ -1,7 +1,8 @@
-import prismaClient from "../../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function retrieveCreatorContentList(solanaWalletId: number): Promise<RetrievedDBSplData[]> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const creatorSPLData = await prismaClient.spl.findMany({
 			where: {
 				creator_wallet_id: solanaWalletId

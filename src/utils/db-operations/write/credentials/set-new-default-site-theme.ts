@@ -1,8 +1,9 @@
 import { SiteThemes } from "@prisma/client"
-import prismaClient from "../../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function setNewDefaultSiteTheme(userId: number, defaultSiteTheme: SiteThemes): Promise<void> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		await prismaClient.credentials.update({
 			where: {
 				user_id: userId

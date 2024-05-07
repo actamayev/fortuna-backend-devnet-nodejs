@@ -1,12 +1,14 @@
 import bs58 from "bs58"
 import { Keypair } from "@solana/web3.js"
-import prismaClient from "../../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function addUserWithWallet(
 	userFields: NewLocalUserFields,
 	keypair: Keypair
 ): Promise<number> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const result = await prismaClient.$transaction(async (prisma) => {
 			const user = await prisma.credentials.create({
 				data: userFields

@@ -1,4 +1,4 @@
-import prismaClient from "../../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function addUploadImageRecord (
 	imageUploadUrl: string,
@@ -6,6 +6,7 @@ export default async function addUploadImageRecord (
 	uuid: string
 ): Promise<number> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const uploadImageResponse = await prismaClient.uploaded_image.create({
 			data: {
 				image_url: imageUploadUrl,

@@ -6,7 +6,7 @@ export default async function updateYouTubeAccessToken(
 	credentials: Credentials
 ): Promise<string> {
 	try {
-		const prismaClient = await PrismaClientClass.getInstance().getPrismaClient()
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const youtubeAccessTokensData = await prismaClient.youtube_access_tokens.update({
 			where: {
 				youtube_access_tokens_id: youtubeAccessTokensId

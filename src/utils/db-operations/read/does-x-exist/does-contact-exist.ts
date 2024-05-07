@@ -1,4 +1,4 @@
-import prismaClient from "../../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function doesContactExist(contact: string, contactType: EmailOrPhone): Promise<boolean> {
 	try {
@@ -15,6 +15,7 @@ export default async function doesContactExist(contact: string, contactType: Ema
 
 async function doesEmailExist(email: string): Promise<boolean> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const user = await prismaClient.credentials.findFirst({
 			where: {
 				email: {
@@ -32,6 +33,7 @@ async function doesEmailExist(email: string): Promise<boolean> {
 
 async function doesPhoneExist(phoneNumber: string): Promise<boolean> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const user = await prismaClient.credentials.findFirst({
 			where: {
 				phone_number: {

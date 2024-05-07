@@ -1,8 +1,9 @@
 import { credentials } from "@prisma/client"
-import prismaClient from "../../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export async function findUserById(userId: number): Promise<credentials | null> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const user = await prismaClient.credentials.findUnique({
 			where: { user_id: userId },
 		})
@@ -20,6 +21,7 @@ export async function findUserByWhereCondition(
 		{ phone_number?: { equals: string, mode: "insensitive" } }
 ): Promise<credentials | null> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const user = await prismaClient.credentials.findFirst({
 			where: whereCondition
 		})

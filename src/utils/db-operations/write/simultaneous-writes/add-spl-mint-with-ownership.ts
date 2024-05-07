@@ -1,5 +1,5 @@
-import prismaClient from "../../../../classes/prisma-client"
 import SecretsManager from "../../../../classes/secrets-manager"
+import PrismaClientClass from "../../../../classes/prisma-client"
 import SolPriceManager from "../../../../classes/sol-price-manager"
 
 export default async function addSplMintWithOwnership(
@@ -13,6 +13,7 @@ export default async function addSplMintWithOwnership(
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
 		const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
 		const feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		await prismaClient.$transaction(async (prisma) => {
 			await prisma.spl_mint.create({
