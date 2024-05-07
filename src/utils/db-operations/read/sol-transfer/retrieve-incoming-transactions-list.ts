@@ -1,8 +1,9 @@
-import prismaClient from "../../../../prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function retrieveIncomingTransactionsList(publicKey: string): Promise<RetrievedDBTransactionListData[]> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const incomingTransactionsList = await prismaClient.sol_transfer.findMany({
 			where: {
 				recipient_public_key: publicKey

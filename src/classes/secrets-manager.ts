@@ -8,7 +8,7 @@ export default class SecretsManager {
 	private secrets: Map<SecretKeys, string> = new Map()
 	private secretsManager?: SecretsManagerClient
 
-	constructor() {
+	private constructor() {
 		if (process.env.NODE_ENV !== "production") {
 			dotenv.config({ path: ".env.local" })
 			return

@@ -1,9 +1,10 @@
-import prismaClient from "../../../../prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function retrieveCreatorWalletInfoFromSpl(
 	splId: number
 ): Promise<{ public_key: string, solana_wallet_id: number } | undefined> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const creatorSPLData = await prismaClient.spl.findFirst({
 			where: {
 				spl_id: splId

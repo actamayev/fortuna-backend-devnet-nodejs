@@ -1,4 +1,4 @@
-import prismaClient from "../../../../../prisma-client"
+import PrismaClientClass from "../../../../../classes/prisma-client"
 
 export default async function addSplPurchaseRecord(
 	splId: number,
@@ -6,6 +6,7 @@ export default async function addSplPurchaseRecord(
 	solTransferId: number
 ): Promise<void> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		await prismaClient.spl_purchase.create({
 			data: {
 				spl_id: splId,

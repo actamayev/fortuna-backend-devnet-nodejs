@@ -1,9 +1,10 @@
-import prismaClient from "../../../../prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function getSplOwnershipsByWalletId(
 	parentSolanaWalletId: number
 ): Promise<RetrievedMyOwnershipData[]> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const splOwnerships = await prismaClient.spl_ownership.findMany({
 			where: {
 				token_account: {

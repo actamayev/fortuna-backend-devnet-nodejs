@@ -1,11 +1,12 @@
 import _ from "lodash"
-import prismaClient from "../../../../prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function getUsernames(
 	username: string,
 	excludeUsername: string | null
 ): Promise<{ username: string }[]> {
 	try {
+		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const usernames = await prismaClient.credentials.findMany({
 			where: {
 				username: {
