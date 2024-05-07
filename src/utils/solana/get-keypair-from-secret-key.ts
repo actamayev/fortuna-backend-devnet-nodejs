@@ -1,14 +1,14 @@
 import bs58 from "bs58"
 import { Keypair } from "@solana/web3.js"
-import Encryptor from "../../classes/encrypt"
 import SecretsManager from "../../classes/secrets-manager"
+import Encryptor from "../../classes/encryptor"
 
 export default class GetKeypairFromSecretKey {
 	public static async getFortunaSolanaWalletFromSecretKey(): Promise<Keypair> {
 		try {
 			const fortunaWalletSecretKey = await SecretsManager.getInstance().getSecret("FORTUNA_WALLET_SECRET_KEY")
 
-			return await this.getGenericKeypairFromSecretKey(fortunaWalletSecretKey)
+			return this.getGenericKeypairFromSecretKey(fortunaWalletSecretKey)
 		} catch (error) {
 			console.error(error)
 			throw error
@@ -19,18 +19,27 @@ export default class GetKeypairFromSecretKey {
 		try {
 			const fortunaEscrowWalletSecretKey = await SecretsManager.getInstance().getSecret("FORTUNA_ESCROW_WALLET_SECRET_KEY")
 
-			return await this.getGenericKeypairFromSecretKey(fortunaEscrowWalletSecretKey)
+			return this.getGenericKeypairFromSecretKey(fortunaEscrowWalletSecretKey)
 		} catch (error) {
 			console.error(error)
 			throw error
 		}
 	}
 
-	public static async getGenericKeypairFromSecretKey(secretKey: string): Promise<Keypair> {
+	public static async getKeypairFromEncryptedSecretKey(secretKey: EncryptedString): Promise<Keypair> {
 		try {
 			const encryptor = new Encryptor()
-			const decryptedSecretKey = await encryptor.decrypt(secretKey)
-			const decodedSecretKey = bs58.decode(decryptedSecretKey)
+			const decryptedSecretKey = await encryptor.decrypt(secretKey, "SECRET_KEY_ENCRYPTION_KEY")
+			return this.getGenericKeypairFromSecretKey(decryptedSecretKey)
+		} catch (error) {
+			console.error(error)
+			throw error
+		}
+	}
+
+	public static getGenericKeypairFromSecretKey(secretKey: string): Keypair {
+		try {
+			const decodedSecretKey = bs58.decode(secretKey)
 			return Keypair.fromSecretKey(decodedSecretKey)
 		} catch (error) {
 			console.error(error)

@@ -1,6 +1,6 @@
 import _ from "lodash"
 import createGoogleAuthClient from "./create-google-auth-client"
-import updateYouTubeAccessToken from "../db-operations/write/youtube-access-tokens/update-youtube-access-token"
+import updateYouTubeAccessToken from "../../db-operations/write/youtube-access-tokens/update-youtube-access-token"
 
 export default async function refreshGoogleAccessToken(youtubeAccessTokensId: number, refreshToken: string): Promise<string> {
 	try {

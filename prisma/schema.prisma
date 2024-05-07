@@ -24,7 +24,8 @@ enum AuthMethods {
 
 model credentials {
 	user_id     									Int      @id @default(autoincrement())
-	username     									String? 	@unique
+	username		     							String? 	@unique
+
 	password     									String?
 	is_active    									Boolean  @default(true)
 	default_currency								Currencies @default(usd)
@@ -33,8 +34,12 @@ model credentials {
 
 	auth_method										AuthMethods
 
-	email        									String?
-	phone_number 									String?
+	email__hashed        							String? 	@unique
+	email__encrypted       							String?
+
+	phone_number__hashed 							String?		@unique
+	phone_number__encrypted							String?
+
   	profile_picture_id 								Int?	@unique
 	youtube_access_tokens_id						Int? 	@unique
 
@@ -64,7 +69,7 @@ model login_history {
 model solana_wallet {
 	solana_wallet_id								Int          @id @default(autoincrement())
 	public_key   									String       @db.VarChar(255)
-	secret_key   									String       @db.VarChar(255) // Consider storing encrypted!
+	secret_key__encrypted  							String
 	user_id      									Int			 @unique
 
 	created_at   									DateTime     @default(now())
@@ -330,7 +335,7 @@ model profile_picture {
 model youtube_access_tokens {
 	youtube_access_tokens_id						Int @id @default(autoincrement())
 	access_token									String
-	refresh_token									String
+	refresh_token__encrypted						String
 	expiry_date										DateTime
 
 	created_at    									DateTime  @default(now())

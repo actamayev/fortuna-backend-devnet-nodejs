@@ -7,7 +7,7 @@ import SolPriceManager from "../../classes/sol-price-manager"
 import calculateTransactionFee from "../../utils/solana/calculate-transaction-fee"
 import GetKeypairFromSecretKey from "../../utils/solana/get-keypair-from-secret-key"
 import { transformTransaction } from "../../utils/transform/transform-transactions-list"
-import addSolTransferRecord from "../../utils/db-operations/write/sol-transfer/add-sol-transfer-record"
+import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
@@ -38,7 +38,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		// Would have to think about wheather or not we want this.
 
 		const keypairs: Keypair[] = []
-		const senderKeypair = await GetKeypairFromSecretKey.getGenericKeypairFromSecretKey(solanaWallet.secret_key)
+		const senderKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(solanaWallet.secret_key__encrypted)
 		keypairs.push(senderKeypair)
 		if (isRecipientFortunaWallet === true) {
 			const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()

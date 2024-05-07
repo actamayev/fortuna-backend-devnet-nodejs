@@ -1,5 +1,4 @@
 import _ from "lodash"
-import { solana_wallet } from "@prisma/client"
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import { getOrCreateAssociatedTokenAccount, transfer } from "@solana/spl-token"
 import SecretsManager from "../../../classes/secrets-manager"
@@ -7,13 +6,13 @@ import { getWalletBalanceWithUSD } from "../get-wallet-balance"
 import calculateTransactionFee from "../calculate-transaction-fee"
 import GetKeypairFromSecretKey from "../get-keypair-from-secret-key"
 import EscrowWalletManager from "../../../classes/escrow-wallet-manager"
-import addTokenAccountRecord from "../../db-operations/write/token-account/add-token-account-record"
-import retrieveTokenAccountBySplAddress from "../../db-operations/read/token-account/retrieve-token-account-by-spl-address"
-import addSplTransferRecordAndUpdateOwnership from "../../db-operations/write/simultaneous-writes/add-spl-transfer-and-update-ownership"
+import addTokenAccountRecord from "../../../db-operations/write/token-account/add-token-account-record"
+import retrieveTokenAccountBySplAddress from "../../../db-operations/read/token-account/retrieve-token-account-by-spl-address"
+import addSplTransferRecordAndUpdateOwnership from "../../../db-operations/write/simultaneous-writes/add-spl-transfer-and-update-ownership"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSplTokensToUser(
-	solanaWallet: solana_wallet,
+	solanaWallet: ExtendedSolanaWallet,
 	purchaseSplTokensData: PurchaseSPLTokensData,
 	splId: number
 ): Promise<number> {

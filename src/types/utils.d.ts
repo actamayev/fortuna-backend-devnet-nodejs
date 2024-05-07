@@ -14,7 +14,14 @@ declare global {
 		"spl-metadata" |
 		"profile-pictures"
 
+	type EncryptionKeys =
+		"SECRET_KEY_ENCRYPTION_KEY" |
+		"EMAIL_ENCRYPTION_KEY" |
+		"PHONE_NUMBER_ENCRYPTION_KEY" |
+		"YT_REFRESH_TOKEN_ENCRYPTION_KEY"
+
 	type SecretKeys =
+		EncryptionKeys |
 		"DATABASE_URL" |
 		"JWT_KEY" |
 		"GOOGLE_CLIENT_ID" |
@@ -28,8 +35,7 @@ declare global {
 		"FORTUNA_ESCROW_WALLET_SECRET_KEY" |
 		"FORTUNA_SOLANA_WALLET_ID_DB" |  // Note: Despite being a number, it's stored and handled as a string
 		"FORTUNA_ESCROW_SOLANA_WALLET_ID_DB" |  // Same note as above
-		"MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR" |
-		"ENCRYPTION_KEY"
+		"MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR"
 
 	type SecretsObject = { [K in SecretKeys]: string }
 }

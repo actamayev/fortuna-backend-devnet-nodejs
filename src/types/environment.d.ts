@@ -25,6 +25,9 @@ declare namespace NodeJS {
 		AWS_ACCESS_KEY_ID: string
 		AWS_SECRET_ACCESS_KEY: string
 
-		ENCRYPTION_KEY: string
+		SECRET_KEY_ENCRYPTION_KEY: string
+		EMAIL_ENCRYPTION_KEY: string
+		PHONE_NUMBER_ENCRYPTION_KEY: string
+		YT_REFRESH_TOKEN_ENCRYPTION_KEY: string
 	}
 }

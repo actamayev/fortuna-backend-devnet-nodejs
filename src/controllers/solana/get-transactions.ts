@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import transformTransactionsList from "../../utils/transform/transform-transactions-list"
-import retrieveOutgoingTransactionsList from "../../utils/db-operations/read/sol-transfer/retrieve-outgoing-transactions-list"
-import retrieveIncomingTransactionsList from "../../utils/db-operations/read/sol-transfer/retrieve-incoming-transactions-list"
+import retrieveOutgoingTransactionsList from "../../db-operations/read/sol-transfer/retrieve-outgoing-transactions-list"
+import retrieveIncomingTransactionsList from "../../db-operations/read/sol-transfer/retrieve-incoming-transactions-list"
 
 export default async function getTransactions(req: Request, res: Response): Promise<Response> {
 	try {

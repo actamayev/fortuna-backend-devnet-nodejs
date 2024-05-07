@@ -1,11 +1,11 @@
 import _ from "lodash"
 import { Response, Request } from "express"
 import transformVideosByCreatorUsername from "../../utils/transform/transform-videos-by-creator-username"
-import retrieveVideosByCreatorUsername from "../../utils/db-operations/read/credentials/retrieve-videos-by-creator-username"
+import retrieveVideosByCreatorUsername from "../../db-operations/read/credentials/retrieve-videos-by-creator-username"
 
 export default async function getVideosByCreatorUsername (req: Request, res: Response): Promise<Response> {
 	try {
-		const { creatorUsername } = req.params
+		const creatorUsername = req.params.creatorUsername as string
 
 		const retrievedVideoData = await retrieveVideosByCreatorUsername(creatorUsername)
 		if (_.isNull(retrievedVideoData)) return res.status(400).json({ message: "Unable to find creator associated with this username" })

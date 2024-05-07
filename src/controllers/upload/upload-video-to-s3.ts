@@ -2,7 +2,7 @@ import _ from "lodash"
 import { Request, Response } from "express"
 import AwsS3 from "../../classes/aws-s3"
 import { createS3KeyGenerateUUID } from "../../utils/s3/create-s3-key"
-import addUploadVideoRecord from "../../utils/db-operations/write/uploaded-video/add-upload-video-record"
+import addUploadVideoRecord from "../../db-operations/write/uploaded-video/add-upload-video-record"
 
 export default async function uploadVideoToS3 (req: Request, res: Response): Promise<Response> {
 	try {

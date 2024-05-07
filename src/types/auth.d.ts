@@ -14,9 +14,14 @@ declare global {
 		username: string
 		password: string
 		auth_method: AuthMethods
-		email?: string
-		phone_number?: string
+		email__hashed?: HashedString
+		email__encrypted?: EncryptedString
+		phone_number__hashed?: HashedString
+		phone_number__encrypted?: EncryptedString
 	}
+
+	type EncryptedString = string & { __encrypted: true }
+	type HashedString = string & { __hashed: true }
 }
 
 export {}

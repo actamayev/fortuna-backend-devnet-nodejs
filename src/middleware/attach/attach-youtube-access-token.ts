@@ -1,7 +1,8 @@
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import Encryptor from "../../classes/encryptor"
 import refreshGoogleAccessToken from "../../utils/google/refresh-google-access-token"
-import retrieveYouTubeAccessTokens from "../../utils/db-operations/read/credentials/retrieve-youtube-access-tokens"
+import retrieveYouTubeAccessTokens from "../../db-operations/read/credentials/retrieve-youtube-access-tokens"
 
 export default async function attachYouTubeAccessToken(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {
@@ -16,8 +17,12 @@ export default async function attachYouTubeAccessToken(req: Request, res: Respon
 		const now = new Date()
 		req.youtubeAccessToken = retrievedYouTubeAccessTokenData.access_token
 		if (retrievedYouTubeAccessTokenData.expiry_date < now) {
+			const decryptedRefreshToken = await (new Encryptor()).decrypt(
+				retrievedYouTubeAccessTokenData.refresh_token__encrypted,
+				"YT_REFRESH_TOKEN_ENCRYPTION_KEY"
+			)
 			req.youtubeAccessToken = await refreshGoogleAccessToken(
-				user.youtube_access_tokens_id, retrievedYouTubeAccessTokenData.refresh_token
+				user.youtube_access_tokens_id, decryptedRefreshToken
 			)
 		}
 

@@ -1,12 +1,15 @@
 import _ from "lodash"
+import bs58 from "bs58"
 import { Request, Response } from "express"
+import Hash from "../../classes/hash"
+import Encryptor from "../../classes/encryptor"
 import SecretsManager from "../../classes/secrets-manager"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
 import createSolanaWallet from "../../utils/solana/create-solana-wallet"
 import createGoogleAuthClient from "../../utils/google/create-google-auth-client"
-import retrieveUserByEmail from "../../utils/db-operations/read/credentials/retrieve-user-by-email"
-import addLoginHistoryRecord from "../../utils/db-operations/write/login-history/add-login-history-record"
-import addGoogleUserWithWallet from "../../utils/db-operations/write/simultaneous-writes/add-google-user-with-wallet"
+import retrieveUserByEmail from "../../db-operations/read/credentials/retrieve-user-by-email"
+import addLoginHistoryRecord from "../../db-operations/write/login-history/add-login-history-record"
+import addGoogleUserWithWallet from "../../db-operations/write/simultaneous-writes/add-google-user-with-wallet"
 
 export default async function googleLoginAuthCallback (req: Request, res: Response): Promise<Response> {
 	try {
@@ -21,17 +24,24 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 		if (_.isUndefined(payload)) return res.status(500).json({ error: "Unable to get payload" })
 		if (_.isUndefined(payload.email)) return res.status(500).json({ error: "Unable to find user email from payload" })
 
-		const googleUser = await retrieveUserByEmail(payload.email)
-		let userId = googleUser?.user_id
+		const hashedEmail = await Hash.hashStringLowercase(payload.email)
+		const googleUserId = await retrieveUserByEmail(hashedEmail)
+		let userId = googleUserId
 		let accessToken: string
 		let isNewUser = false
-		if (_.isUndefined(userId)) {
+		if (!_.isNull(userId)) {
+			accessToken = await signJWT({ userId, newUser: false })
+		} else {
 			const walletKeypair = await createSolanaWallet()
-			userId = await addGoogleUserWithWallet(payload.email, walletKeypair)
+			const encryptor = new Encryptor()
+			const encryptedEmail = await encryptor.encrypt(payload.email, "EMAIL_ENCRYPTION_KEY")
+			const newHashedEmail = await Hash.hashStringLowercase(payload.email)
+			const encryptedSecretKey = await encryptor.encrypt(bs58.encode(
+				Buffer.from(walletKeypair.secretKey)
+			), "SECRET_KEY_ENCRYPTION_KEY")
+			userId = await addGoogleUserWithWallet(encryptedEmail, newHashedEmail, walletKeypair.publicKey, encryptedSecretKey)
 			accessToken = await signJWT({ userId, newUser: true })
 			isNewUser = true
-		} else {
-			accessToken = await signJWT({ userId, newUser: false })
 		}
 
 		await addLoginHistoryRecord(userId)
