@@ -28,7 +28,8 @@ declare global {
 		"FORTUNA_ESCROW_WALLET_SECRET_KEY" |
 		"FORTUNA_SOLANA_WALLET_ID_DB" |  // Note: Despite being a number, it's stored and handled as a string
 		"FORTUNA_ESCROW_SOLANA_WALLET_ID_DB" |  // Same note as above
-		"MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR"
+		"MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR" |
+		"ENCRYPTION_KEY"
 
 	type SecretsObject = { [K in SecretKeys]: string }
 }
