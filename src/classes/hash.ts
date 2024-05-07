@@ -1,11 +1,10 @@
 import { hash, compare } from "bcrypt"
-import SecretsManager from "./secrets-manager"
 
 export default class Hash {
 	public static async hashCredentials(unhashedData: string): Promise<string> {
-		const saltRounds = await SecretsManager.getInstance().getSecret("SALT_ROUNDS")
+		const saltRounds = 10
 		try {
-			const hashedData = await hash(unhashedData, parseInt(saltRounds, 10) || 10)
+			const hashedData = await hash(unhashedData, saltRounds)
 			return hashedData
 		} catch (error) {
 			console.error(error)

@@ -16,7 +16,6 @@ declare global {
 
 	type SecretKeys =
 		"DATABASE_URL" |
-		"SALT_ROUNDS" |
 		"JWT_KEY" |
 		"GOOGLE_CLIENT_ID" |
 		"GOOGLE_CLIENT_SECRET" |
