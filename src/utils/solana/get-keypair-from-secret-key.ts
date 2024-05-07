@@ -1,5 +1,6 @@
 import bs58 from "bs58"
 import { Keypair } from "@solana/web3.js"
+import Encryptor from "../../classes/encrypt"
 import SecretsManager from "../../classes/secrets-manager"
 
 export default class GetKeypairFromSecretKey {
@@ -7,7 +8,7 @@ export default class GetKeypairFromSecretKey {
 		try {
 			const fortunaWalletSecretKey = await SecretsManager.getInstance().getSecret("FORTUNA_WALLET_SECRET_KEY")
 
-			return this.getGenericKeypairFromSecretKey(fortunaWalletSecretKey)
+			return await this.getGenericKeypairFromSecretKey(fortunaWalletSecretKey)
 		} catch (error) {
 			console.error(error)
 			throw error
@@ -18,16 +19,18 @@ export default class GetKeypairFromSecretKey {
 		try {
 			const fortunaEscrowWalletSecretKey = await SecretsManager.getInstance().getSecret("FORTUNA_ESCROW_WALLET_SECRET_KEY")
 
-			return this.getGenericKeypairFromSecretKey(fortunaEscrowWalletSecretKey)
+			return await this.getGenericKeypairFromSecretKey(fortunaEscrowWalletSecretKey)
 		} catch (error) {
 			console.error(error)
 			throw error
 		}
 	}
 
-	public static getGenericKeypairFromSecretKey(secretKey: string): Keypair {
+	public static async getGenericKeypairFromSecretKey(secretKey: string): Promise<Keypair> {
 		try {
-			const decodedSecretKey = bs58.decode(secretKey)
+			const encryptor = new Encryptor()
+			const decryptedSecretKey = await encryptor.decrypt(secretKey)
+			const decodedSecretKey = bs58.decode(decryptedSecretKey)
 			return Keypair.fromSecretKey(decodedSecretKey)
 		} catch (error) {
 			console.error(error)

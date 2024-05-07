@@ -38,7 +38,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		// Would have to think about wheather or not we want this.
 
 		const keypairs: Keypair[] = []
-		const senderKeypair = GetKeypairFromSecretKey.getGenericKeypairFromSecretKey(solanaWallet.secret_key)
+		const senderKeypair = await GetKeypairFromSecretKey.getGenericKeypairFromSecretKey(solanaWallet.secret_key)
 		keypairs.push(senderKeypair)
 		if (isRecipientFortunaWallet === true) {
 			const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
