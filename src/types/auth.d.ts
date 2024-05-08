@@ -12,11 +12,16 @@ declare global {
 
 	interface NewLocalUserFields {
 		username: string
-		password: string
+		password: HashedString
 		auth_method: AuthMethods
-		email?: string
-		phone_number?: string
+		email__encrypted?: DeterministicEncryptedString
+		phone_number__encrypted?: DeterministicEncryptedString
 	}
+
+	type DeterministicEncryptedString = string & { __type: "DeterministicEncryptedString" };
+	type NonDeterministicEncryptedString = string & { __type: "NonDeterministicEncryptedString" };
+
+	type HashedString = string & { __hashed: true }
 }
 
 export {}

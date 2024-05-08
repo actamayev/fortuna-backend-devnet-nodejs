@@ -13,9 +13,11 @@ import uploadRoutes from "./routes/upload-routes"
 import videosRoutes from "./routes/videos-routes"
 import authRoutes from "./routes/auth/auth-routes"
 import youtubeRoutes from "./routes/youtube-routes"
+import encryptionRoutes from "./routes/encryption-routes"
 import personalInfoRoutes from "./routes/personal-info-routes"
 
 dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.local" })
+// dotenv.config({ path: ".env.production" })
 
 const app = express()
 
@@ -51,6 +53,8 @@ app.use("/upload", jwtVerify, uploadRoutes)
 app.use("/videos", videosRoutes)
 app.use("/youtube", jwtVerify, youtubeRoutes)
 
+// Internal use:
+app.use("/encryption", encryptionRoutes)
 app.use("/health", checkHealth)
 
 app.use("*", (req, res) => res.status(404).json({ error: "Route not found"}))

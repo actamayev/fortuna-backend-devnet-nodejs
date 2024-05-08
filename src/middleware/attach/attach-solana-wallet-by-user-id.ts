@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { NextFunction, Request, Response } from "express"
-import { findSolanaWalletByUserId } from "../../utils/db-operations/read/find/find-solana-wallet"
+import { findSolanaWalletByUserId } from "../../db-operations/read/find/find-solana-wallet"
 
 export default async function attachSolanaWalletByUserId(req: Request, res: Response, next: NextFunction) : Promise<Response | void> {
 	try {

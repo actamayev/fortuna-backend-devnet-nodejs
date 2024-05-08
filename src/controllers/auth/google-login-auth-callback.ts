@@ -1,12 +1,14 @@
 import _ from "lodash"
+import bs58 from "bs58"
 import { Request, Response } from "express"
+import Encryptor from "../../classes/encryptor"
 import SecretsManager from "../../classes/secrets-manager"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
 import createSolanaWallet from "../../utils/solana/create-solana-wallet"
 import createGoogleAuthClient from "../../utils/google/create-google-auth-client"
-import retrieveUserByEmail from "../../utils/db-operations/read/credentials/retrieve-user-by-email"
-import addLoginHistoryRecord from "../../utils/db-operations/write/login-history/add-login-history-record"
-import addGoogleUserWithWallet from "../../utils/db-operations/write/simultaneous-writes/add-google-user-with-wallet"
+import retrieveUserByEmail from "../../db-operations/read/credentials/retrieve-user-by-email"
+import addLoginHistoryRecord from "../../db-operations/write/login-history/add-login-history-record"
+import addGoogleUserWithWallet from "../../db-operations/write/simultaneous-writes/add-google-user-with-wallet"
 
 export default async function googleLoginAuthCallback (req: Request, res: Response): Promise<Response> {
 	try {
@@ -21,20 +23,24 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 		if (_.isUndefined(payload)) return res.status(500).json({ error: "Unable to get payload" })
 		if (_.isUndefined(payload.email)) return res.status(500).json({ error: "Unable to find user email from payload" })
 
-		const googleUser = await retrieveUserByEmail(payload.email)
-		let userId = googleUser?.user_id
+		const encryptor = new Encryptor()
+		const encryptedEmail = await encryptor.deterministicEncrypt(payload.email, "EMAIL_ENCRYPTION_KEY")
+		let googleUserId = await retrieveUserByEmail(encryptedEmail)
 		let accessToken: string
 		let isNewUser = false
-		if (_.isUndefined(userId)) {
-			const walletKeypair = await createSolanaWallet()
-			userId = await addGoogleUserWithWallet(payload.email, walletKeypair)
-			accessToken = await signJWT({ userId, newUser: true })
-			isNewUser = true
+		if (!_.isNull(googleUserId)) {
+			accessToken = await signJWT({ userId: googleUserId, newUser: false })
 		} else {
-			accessToken = await signJWT({ userId, newUser: false })
+			const walletKeypair = await createSolanaWallet()
+			const encryptedSecretKey = await encryptor.nonDeterministicEncrypt(bs58.encode(
+				Buffer.from(walletKeypair.secretKey)
+			), "SECRET_KEY_ENCRYPTION_KEY")
+			googleUserId = await addGoogleUserWithWallet(encryptedEmail, walletKeypair.publicKey, encryptedSecretKey)
+			accessToken = await signJWT({ userId: googleUserId, newUser: true })
+			isNewUser = true
 		}
 
-		await addLoginHistoryRecord(userId)
+		await addLoginHistoryRecord(googleUserId)
 
 		return res.status(200).json({ accessToken, isNewUser })
 	} catch (error) {

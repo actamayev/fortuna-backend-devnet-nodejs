@@ -1,20 +1,24 @@
-import { credentials } from "@prisma/client"
-import { findUserByWhereCondition } from "../../db-operations/read/find/find-user"
+import Encryptor from "../../../classes/encryptor"
+import { findUserByWhereCondition } from "../../../db-operations/read/find/find-user"
 
 export default async function retrieveUserFromContact(
 	contact: string,
 	contactType: EmailOrPhoneOrUsername
-): Promise<credentials | null> {
+): Promise<ExtendedCredentials | null> {
 	try {
-		const whereCondition: { [key: string]: unknown } = { }
-		const searchMode = { mode: "insensitive" }
+		const whereCondition: { [key: string]: { equals: DeterministicEncryptedString | string, mode?: "insensitive"  } } = { }
 
 		if (contactType === "Username") {
-			whereCondition.username = { ...searchMode, equals: contact }
-		} else if (contactType === "Email") {
-			whereCondition.email = { ...searchMode, equals: contact }
+			whereCondition.username = { equals: contact, mode: "insensitive" }
 		} else {
-			whereCondition.phone_number = { ...searchMode, equals: contact }
+			const encryptor = new Encryptor()
+			if (contactType === "Email") {
+				const encryptedEmail = await encryptor.deterministicEncrypt(contact, "EMAIL_ENCRYPTION_KEY")
+				whereCondition.email__encrypted = { equals: encryptedEmail }
+			} else {
+				const encryptedPhoneNumber = await encryptor.deterministicEncrypt(contact, "PHONE_NUMBER_ENCRYPTION_KEY")
+				whereCondition.phone_number__encrypted = { equals: encryptedPhoneNumber }
+			}
 		}
 
 		const user = await findUserByWhereCondition(whereCondition)

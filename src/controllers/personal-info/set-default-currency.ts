@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { Currencies } from "@prisma/client"
-import setNewDefaultCurrency from "../../utils/db-operations/write/credentials/set-new-default-currency"
+import setNewDefaultCurrency from "../../db-operations/write/credentials/set-new-default-currency"
 
 export default async function setDefaultCurrency(req: Request, res: Response): Promise<Response> {
 	try {

@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { NextFunction, Request, Response } from "express"
-import retrieveSplDetailsByPublicKey from "../../utils/db-operations/read/spl/retrieve-spl-details-by-public-key"
+import retrieveSplDetailsByPublicKey from "../../db-operations/read/spl/retrieve-spl-details-by-public-key"
 import transformSplDetailsRetrievedByPublicKey from "../../utils/transform/transform-spl-details-retrieved-by-public-key"
 
 export default async function attachSplDetailsByPublicKey(req: Request, res: Response, next: NextFunction): Promise<Response | void> {

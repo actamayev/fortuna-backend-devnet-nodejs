@@ -2,7 +2,7 @@ import _ from "lodash"
 import { Response, Request } from "express"
 import EscrowWalletManager from "../../classes/escrow-wallet-manager"
 import transformVideoAndImageData from "../../utils/transform/transform-video-and-image-data"
-import retrieveVideoByUUID from "../../utils/db-operations/read/uploaded-video/retrieve-video-by-uuid"
+import retrieveVideoByUUID from "../../db-operations/read/uploaded-video/retrieve-video-by-uuid"
 
 export default async function getVideoByUUID (req: Request, res: Response): Promise<Response> {
 	try {

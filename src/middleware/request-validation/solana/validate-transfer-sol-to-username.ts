@@ -4,7 +4,7 @@ import { PublicKey } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
 import usernameValidator from "../../joi/username-validator"
 import currencyValidatorSchema from "../../joi/currency-validator"
-import { findPublicKeyAndSolWalletFromUsername } from "../../../utils/db-operations/read/find/find-public-key-and-sol-wallet-from-username"
+import { findPublicKeyAndSolWalletFromUsername } from "../../../db-operations/read/find/find-public-key-and-sol-wallet-from-username"
 
 const transferSolToUsernameSchema = Joi.object({
 	transferSolData: Joi.object({

@@ -1,8 +1,5 @@
 declare namespace NodeJS {
 	interface ProcessEnv {
-		// Hash:
-		SALT_ROUNDS: string
-
 		// JWT:
 		JWT_KEY: string
 
@@ -22,6 +19,12 @@ declare namespace NodeJS {
 		GOOGLE_CLIENT_SECRET: string
 
 		MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR: string
+
+		// Encryption:
+		SECRET_KEY_ENCRYPTION_KEY: NonDeterministicEncryptionKeys
+		EMAIL_ENCRYPTION_KEY: DeterministicEncryptionKeys
+		PHONE_NUMBER_ENCRYPTION_KEY: DeterministicEncryptionKeys
+		YT_REFRESH_TOKEN_ENCRYPTION_KEY: NonDeterministicEncryptionKeys
 
 		// Production only:
 		DATABASE_URL: string

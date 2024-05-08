@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { SiteThemes } from "@prisma/client"
-import setNewDefaultSiteTheme from "../../utils/db-operations/write/credentials/set-new-default-site-theme"
+import setNewDefaultSiteTheme from "../../db-operations/write/credentials/set-new-default-site-theme"
 
 export default async function setDefaultSiteTheme(req: Request, res: Response): Promise<Response> {
 	try {

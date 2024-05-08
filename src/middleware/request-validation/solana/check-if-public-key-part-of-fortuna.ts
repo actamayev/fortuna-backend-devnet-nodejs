@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
-import { findSolanaWalletByPublicKey } from "../../../utils/db-operations/read/find/find-solana-wallet"
+import { findSolanaWalletByPublicKey } from "../../../db-operations/read/find/find-solana-wallet"
 
 export default async function checkIfPublicKeyPartOfFortuna (req: Request, res: Response, next: NextFunction): Promise<void | Response> {
 	try {

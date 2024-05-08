@@ -14,9 +14,19 @@ declare global {
 		"spl-metadata" |
 		"profile-pictures"
 
+	type DeterministicEncryptionKeys =
+		"EMAIL_ENCRYPTION_KEY" |
+		"PHONE_NUMBER_ENCRYPTION_KEY"
+
+	type NonDeterministicEncryptionKeys =
+		"SECRET_KEY_ENCRYPTION_KEY" |
+		"YT_REFRESH_TOKEN_ENCRYPTION_KEY"
+
+	type EncryptionKeys = DeterministicEncryptionKeys | NonDeterministicEncryptionKeys
+
 	type SecretKeys =
+		EncryptionKeys |
 		"DATABASE_URL" |
-		"SALT_ROUNDS" |
 		"JWT_KEY" |
 		"GOOGLE_CLIENT_ID" |
 		"GOOGLE_CLIENT_SECRET" |

@@ -1,22 +1,19 @@
 import { hash, compare } from "bcrypt"
-import SecretsManager from "./secrets-manager"
 
 export default class Hash {
-	public static async hashCredentials(unhashedData: string): Promise<string> {
-		const saltRounds = await SecretsManager.getInstance().getSecret("SALT_ROUNDS")
+	public static async hashCredentials(unhashedData: string): Promise<HashedString> {
 		try {
-			const hashedData = await hash(unhashedData, parseInt(saltRounds, 10) || 10)
-			return hashedData
+			const saltRounds = 10
+			return await hash(unhashedData, saltRounds) as HashedString
 		} catch (error) {
 			console.error(error)
 			throw error
 		}
 	}
 
-	public static async checkPassword(plaintextPassword: string, hashedPassword: string): Promise<boolean> {
+	public static async checkPassword(plaintextPassword: string, hashedPassword: HashedString): Promise<boolean> {
 		try {
-			const isMatch = await compare(plaintextPassword, hashedPassword)
-			return isMatch
+			return await compare(plaintextPassword, hashedPassword)
 		} catch (error) {
 			console.error(error)
 			throw error
