@@ -7,7 +7,10 @@ export async function findPublicKeyAndSolWalletFromUsername(
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const user = await prismaClient.credentials.findFirst({
 			where: {
-				username
+				username: {
+					equals: username,
+					mode: "insensitive"
+				}
 			},
 			select: {
 				solana_wallet: {

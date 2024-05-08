@@ -15,7 +15,6 @@ export default async function attachYouTubeAccessToken(req: Request, res: Respon
 			return res.status(500).json({ error: "Unable to retrieve YouTube Access Tokens" })
 		}
 		const now = new Date()
-		req.youtubeAccessToken = retrievedYouTubeAccessTokenData.access_token
 		if (retrievedYouTubeAccessTokenData.expiry_date < now) {
 			const encryptor = new Encryptor()
 			const decryptedRefreshToken = await encryptor.nonDeterministicDecrypt(
@@ -25,6 +24,8 @@ export default async function attachYouTubeAccessToken(req: Request, res: Respon
 			req.youtubeAccessToken = await refreshGoogleAccessToken(
 				user.youtube_access_tokens_id, decryptedRefreshToken
 			)
+		} else {
+			req.youtubeAccessToken = retrievedYouTubeAccessTokenData.access_token
 		}
 
 		next()
