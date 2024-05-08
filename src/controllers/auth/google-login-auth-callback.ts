@@ -25,23 +25,22 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 
 		const encryptor = new Encryptor()
 		const encryptedEmail = await encryptor.deterministicEncrypt(payload.email, "EMAIL_ENCRYPTION_KEY")
-		const googleUserId = await retrieveUserByEmail(encryptedEmail)
-		let userId = googleUserId
+		let googleUserId = await retrieveUserByEmail(encryptedEmail)
 		let accessToken: string
 		let isNewUser = false
-		if (!_.isNull(userId)) {
-			accessToken = await signJWT({ userId, newUser: false })
+		if (!_.isNull(googleUserId)) {
+			accessToken = await signJWT({ userId: googleUserId, newUser: false })
 		} else {
 			const walletKeypair = await createSolanaWallet()
 			const encryptedSecretKey = await encryptor.nonDeterministicEncrypt(bs58.encode(
 				Buffer.from(walletKeypair.secretKey)
 			), "SECRET_KEY_ENCRYPTION_KEY")
-			userId = await addGoogleUserWithWallet(encryptedEmail, walletKeypair.publicKey, encryptedSecretKey)
-			accessToken = await signJWT({ userId, newUser: true })
+			googleUserId = await addGoogleUserWithWallet(encryptedEmail, walletKeypair.publicKey, encryptedSecretKey)
+			accessToken = await signJWT({ userId: googleUserId, newUser: true })
 			isNewUser = true
 		}
 
-		await addLoginHistoryRecord(userId)
+		await addLoginHistoryRecord(googleUserId)
 
 		return res.status(200).json({ accessToken, isNewUser })
 	} catch (error) {

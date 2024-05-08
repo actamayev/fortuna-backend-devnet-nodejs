@@ -6,7 +6,7 @@ declare global {
 
 		phone_number__encrypted: DeterministicEncryptedString | null
 
-		password: HashedString
+		password: HashedString | null
 	}
 
 	type ExtendedSolanaWallet = solana_wallet & {
