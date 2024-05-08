@@ -69,7 +69,8 @@ model login_history {
 model solana_wallet {
 	solana_wallet_id								Int          @id @default(autoincrement())
 	public_key   									String       @db.VarChar(255)
-	secret_key__encrypted  							String
+	secret_key										String		@db.VarChar(255)
+	secret_key__encrypted  							String?
 	user_id      									Int			 @unique
 
 	created_at   									DateTime     @default(now())

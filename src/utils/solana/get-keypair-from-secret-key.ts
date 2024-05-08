@@ -1,14 +1,14 @@
 import bs58 from "bs58"
 import { Keypair } from "@solana/web3.js"
-import SecretsManager from "../../classes/secrets-manager"
 import Encryptor from "../../classes/encryptor"
+import SecretsManager from "../../classes/secrets-manager"
 
 export default class GetKeypairFromSecretKey {
 	public static async getFortunaSolanaWalletFromSecretKey(): Promise<Keypair> {
 		try {
-			const fortunaWalletSecretKey = await SecretsManager.getInstance().getSecret("FORTUNA_WALLET_SECRET_KEY")
+			const fortunaWalletSecretKey = (await SecretsManager.getInstance().getSecret("FORTUNA_WALLET_SECRET_KEY")) as EncryptedString
 
-			return this.getGenericKeypairFromSecretKey(fortunaWalletSecretKey)
+			return this.getKeypairFromEncryptedSecretKey(fortunaWalletSecretKey)
 		} catch (error) {
 			console.error(error)
 			throw error
@@ -17,9 +17,10 @@ export default class GetKeypairFromSecretKey {
 
 	public static async getFortunaEscrowSolanaWalletFromSecretKey(): Promise<Keypair> {
 		try {
-			const fortunaEscrowWalletSecretKey = await SecretsManager.getInstance().getSecret("FORTUNA_ESCROW_WALLET_SECRET_KEY")
+			// eslint-disable-next-line max-len
+			const fortunaEscrowWalletSecretKey = await SecretsManager.getInstance().getSecret("FORTUNA_ESCROW_WALLET_SECRET_KEY") as EncryptedString
 
-			return this.getGenericKeypairFromSecretKey(fortunaEscrowWalletSecretKey)
+			return this.getKeypairFromEncryptedSecretKey(fortunaEscrowWalletSecretKey)
 		} catch (error) {
 			console.error(error)
 			throw error
@@ -30,16 +31,7 @@ export default class GetKeypairFromSecretKey {
 		try {
 			const encryptor = new Encryptor()
 			const decryptedSecretKey = await encryptor.decrypt(secretKey, "SECRET_KEY_ENCRYPTION_KEY")
-			return this.getGenericKeypairFromSecretKey(decryptedSecretKey)
-		} catch (error) {
-			console.error(error)
-			throw error
-		}
-	}
-
-	public static getGenericKeypairFromSecretKey(secretKey: string): Keypair {
-		try {
-			const decodedSecretKey = bs58.decode(secretKey)
+			const decodedSecretKey = bs58.decode(decryptedSecretKey)
 			return Keypair.fromSecretKey(decodedSecretKey)
 		} catch (error) {
 			console.error(error)

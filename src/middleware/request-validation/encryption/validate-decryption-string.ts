@@ -3,7 +3,8 @@ import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 
 const decryptionStringSchema = Joi.object({
-	stringToDecrypt: Joi.string().required()
+	stringToDecrypt: Joi.string().required(),
+	encryptionKeyName: Joi.string().required()
 }).required()
 
 export default function validateDecryptionString (req: Request, res: Response, next: NextFunction): Response | void {
