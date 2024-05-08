@@ -14,12 +14,11 @@ export default async function addUserWithWallet(
 				data: userFields
 			})
 
-
 			await prisma.solana_wallet.create({
 				data: {
 					user_id: user.user_id,
 					public_key: publicKey.toBase58(),
-					secret_key__encrypted: encryptedSecretKey,
+					secret_key__encrypted: encryptedSecretKey
 				}
 			})
 

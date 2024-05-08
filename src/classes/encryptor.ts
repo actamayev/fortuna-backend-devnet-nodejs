@@ -28,7 +28,6 @@ export default class Encryptor {
 			const authTag = cipher.getAuthTag().toString("hex")
 
 			return `${iv.toString("hex")}:${salt.toString("hex")}:${encrypted}:${authTag}` as NonDeterministicEncryptedString
-
 		} catch (error) {
 			console.error(error)
 			throw error
@@ -47,12 +46,12 @@ export default class Encryptor {
 			const encryptionKey = await this.secretsManagerInstance.getSecret(encryptionKeyName)
 
 			const key = (await scryptAsync(encryptionKey, salt, 32)) as Buffer
-
 			const decipher = createDecipheriv("aes-256-gcm", key, iv)
-			decipher.setAuthTag(authTag)
 
+			decipher.setAuthTag(authTag)
 			let decrypted = decipher.update(encrypted, "hex", "utf8")
 			decrypted += decipher.final("utf8")
+
 			return decrypted
 		} catch (error) {
 			console.error(error)

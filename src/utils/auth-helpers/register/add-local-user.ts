@@ -2,7 +2,7 @@ import Encryptor from "../../../classes/encryptor"
 
 export default async function addLocalUser(
 	registerInformation: RegisterInformation,
-	hashedPassword: string,
+	hashedPassword: HashedString,
 	contactType: EmailOrPhone
 ): Promise<NewLocalUserFields> {
 	try {

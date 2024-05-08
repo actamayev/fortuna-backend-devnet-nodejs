@@ -17,7 +17,7 @@ export default async function login (req: Request, res: Response): Promise<Respo
 			return res.status(400).json({ message: "Please log in via Google" })
 		}
 
-		const doPasswordsMatch = await Hash.checkPassword(password, credentialsResult.password as HashedString)
+		const doPasswordsMatch = await Hash.checkPassword(password, credentialsResult.password)
 		if (doPasswordsMatch === false) return res.status(400).json({ message: "Wrong Username or Password!" })
 
 		const accessToken = await signJWT({ userId: credentialsResult.user_id, newUser: false })

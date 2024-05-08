@@ -12,7 +12,7 @@ declare global {
 
 	interface NewLocalUserFields {
 		username: string
-		password: string
+		password: HashedString
 		auth_method: AuthMethods
 		email__encrypted?: DeterministicEncryptedString
 		phone_number__encrypted?: DeterministicEncryptedString

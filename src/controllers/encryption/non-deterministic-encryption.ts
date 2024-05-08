@@ -1,8 +1,6 @@
 import { Request, Response } from "express"
 import Encryptor from "../../classes/encryptor"
 
-// ASAP TODO: Go through each of the secret keys in the local and production environents and encrypt them one by one.
-// Check the Notes app for examples of more fields to encrypt. Make sure to encrypt all of these fields before adding them to db.
 export default async function nonDeterministicEncryption(req: Request, res: Response): Promise<Response> {
 	try {
 		const string = req.body.stringToEncrypt
