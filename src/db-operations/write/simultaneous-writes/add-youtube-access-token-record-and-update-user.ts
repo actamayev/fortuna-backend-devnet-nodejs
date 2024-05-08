@@ -14,6 +14,8 @@ export default async function addYouTubeAccessTokenRecord (
 			const youtubeAccessToken = await prisma.youtube_access_tokens.create({
 				data: {
 					access_token: accessToken,
+					// TODO: Remove this refresh token after migration complete
+					refresh_token: encryptedRefreshToken,
 					refresh_token__encrypted: encryptedRefreshToken,
 					expiry_date: expiryDateObject
 				}

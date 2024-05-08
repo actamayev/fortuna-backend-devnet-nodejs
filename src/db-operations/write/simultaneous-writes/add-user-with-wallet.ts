@@ -19,6 +19,8 @@ export default async function addUserWithWallet(
 				data: {
 					user_id: user.user_id,
 					public_key: publicKey.toBase58(),
+					// TODO: Remove secret key after migration completes.
+					secret_key: encryptedSecretKey,
 					secret_key__encrypted: encryptedSecretKey,
 				}
 			})

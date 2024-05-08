@@ -34,9 +34,11 @@ model credentials {
 
 	auth_method										AuthMethods
 
+	email        									String?
 	email__hashed        							String? 	@unique
 	email__encrypted       							String?
 
+	phone_number 									String?
 	phone_number__hashed 							String?		@unique
 	phone_number__encrypted							String?
 
@@ -336,7 +338,8 @@ model profile_picture {
 model youtube_access_tokens {
 	youtube_access_tokens_id						Int @id @default(autoincrement())
 	access_token									String
-	refresh_token__encrypted						String
+	refresh_token									String
+	refresh_token__encrypted						String?
 	expiry_date										DateTime
 
 	created_at    									DateTime  @default(now())

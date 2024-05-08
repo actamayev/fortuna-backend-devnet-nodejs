@@ -23,6 +23,8 @@ export default async function addGoogleUserWithWallet(
 				data: {
 					user_id: user.user_id,
 					public_key: publicKey.toBase58(),
+					// TODO: Remove secret key after finishing migration
+					secret_key: encryptedSecretKey,
 					secret_key__encrypted: encryptedSecretKey,
 				}
 			})

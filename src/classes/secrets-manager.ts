@@ -35,9 +35,11 @@ export default class SecretsManager {
 			let secret: string | undefined
 			if (this.secrets.has(key)) {
 				secret = this.secrets.get(key)
-			} else if (process.env.NODE_ENV !== "production") {
+			}
+			else if (process.env.NODE_ENV !== "production") {
 				secret = process.env[key]
-			} else {
+			}
+			else {
 				secret = await this.fetchSecretFromAWS(key)
 			}
 			if (_.isUndefined(secret)) throw Error("Unable to retrieve secret")

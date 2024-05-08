@@ -29,7 +29,8 @@ export function validateExtendedCredentials(data: credentials): data is Extended
 
 export function validateExtendedSolanaWallet(data: solana_wallet): data is ExtendedSolanaWallet {
 	try {
-		return Encryptor.isEncryptedString(data.secret_key__encrypted)
+		// TODO: Remove this as string after migrations are over
+		return Encryptor.isEncryptedString(data.secret_key__encrypted as string)
 	} catch (error) {
 		console.error(error)
 		throw error
