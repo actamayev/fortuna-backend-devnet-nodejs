@@ -80,7 +80,7 @@ declare global {
 	}
 
 	interface RetrievedCreatorsByUsername {
-		username: EncryptedString
+		username: string
 		profile_picture: {
 			image_url: string
 		} | null

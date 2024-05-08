@@ -22,7 +22,7 @@ export default async function youtubeAuthCallback(req: Request, res: Response): 
 		) return res.status(500).json({ error: "Unable to extract token information" })
 
 		const encryptor = new Encryptor()
-		const encryptedRefreshToken = await encryptor.encrypt(tokens.refresh_token, "YT_REFRESH_TOKEN_ENCRYPTION_KEY")
+		const encryptedRefreshToken = await encryptor.nonDeterministicEncrypt(tokens.refresh_token, "YT_REFRESH_TOKEN_ENCRYPTION_KEY")
 		await addYouTubeAccessTokenRecord(user.user_id, tokens.access_token, encryptedRefreshToken, tokens.expiry_date)
 
 		const subscriberCount = await retrieveYouTubeSubscriberCount(tokens.access_token)

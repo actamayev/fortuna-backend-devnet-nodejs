@@ -4,7 +4,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 export default async function addUserWithWallet(
 	userFields: NewLocalUserFields,
 	publicKey: PublicKey,
-	encryptedSecretKey: EncryptedString
+	encryptedSecretKey: NonDeterministicEncryptedString
 ): Promise<number> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
@@ -19,8 +19,6 @@ export default async function addUserWithWallet(
 				data: {
 					user_id: user.user_id,
 					public_key: publicKey.toBase58(),
-					// TODO: Remove secret key after migration completes.
-					secret_key: encryptedSecretKey,
 					secret_key__encrypted: encryptedSecretKey,
 				}
 			})

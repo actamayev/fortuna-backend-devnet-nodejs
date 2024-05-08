@@ -1,12 +1,12 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function retrieveUserIdByEmail(hashedEmail: HashedString): Promise<number | null> {
+export default async function retrieveUserIdByEmail(encryptedEmail: DeterministicEncryptedString): Promise<number | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const user = await prismaClient.credentials.findFirst({
 			where: {
-				email__hashed: {
-					equals: hashedEmail
+				email__encrypted: {
+					equals: encryptedEmail
 				}
 			}
 		})

@@ -1,7 +1,6 @@
 import _ from "lodash"
 import bs58 from "bs58"
 import { Request, Response } from "express"
-import Hash from "../../classes/hash"
 import Encryptor from "../../classes/encryptor"
 import SecretsManager from "../../classes/secrets-manager"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
@@ -24,8 +23,9 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 		if (_.isUndefined(payload)) return res.status(500).json({ error: "Unable to get payload" })
 		if (_.isUndefined(payload.email)) return res.status(500).json({ error: "Unable to find user email from payload" })
 
-		const hashedEmail = await Hash.hashStringLowercase(payload.email)
-		const googleUserId = await retrieveUserByEmail(hashedEmail)
+		const encryptor = new Encryptor()
+		const encryptedEmail = await encryptor.deterministicEncrypt(payload.email, "EMAIL_ENCRYPTION_KEY")
+		const googleUserId = await retrieveUserByEmail(encryptedEmail)
 		let userId = googleUserId
 		let accessToken: string
 		let isNewUser = false
@@ -33,13 +33,10 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 			accessToken = await signJWT({ userId, newUser: false })
 		} else {
 			const walletKeypair = await createSolanaWallet()
-			const encryptor = new Encryptor()
-			const encryptedEmail = await encryptor.encrypt(payload.email, "EMAIL_ENCRYPTION_KEY")
-			const newHashedEmail = await Hash.hashStringLowercase(payload.email)
-			const encryptedSecretKey = await encryptor.encrypt(bs58.encode(
+			const encryptedSecretKey = await encryptor.nonDeterministicEncrypt(bs58.encode(
 				Buffer.from(walletKeypair.secretKey)
 			), "SECRET_KEY_ENCRYPTION_KEY")
-			userId = await addGoogleUserWithWallet(encryptedEmail, newHashedEmail, walletKeypair.publicKey, encryptedSecretKey)
+			userId = await addGoogleUserWithWallet(encryptedEmail, walletKeypair.publicKey, encryptedSecretKey)
 			accessToken = await signJWT({ userId, newUser: true })
 			isNewUser = true
 		}

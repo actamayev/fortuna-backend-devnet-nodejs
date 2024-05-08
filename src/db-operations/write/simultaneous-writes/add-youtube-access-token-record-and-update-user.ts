@@ -3,7 +3,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 export default async function addYouTubeAccessTokenRecord (
 	userId: number,
 	accessToken: string,
-	encryptedRefreshToken: EncryptedString,
+	encryptedRefreshToken: NonDeterministicEncryptedString,
 	expiryDate: number
 ): Promise<void> {
 	try {
@@ -14,8 +14,6 @@ export default async function addYouTubeAccessTokenRecord (
 			const youtubeAccessToken = await prisma.youtube_access_tokens.create({
 				data: {
 					access_token: accessToken,
-					// TODO: Remove this refresh token after migration complete
-					refresh_token: encryptedRefreshToken,
 					refresh_token__encrypted: encryptedRefreshToken,
 					expiry_date: expiryDateObject
 				}

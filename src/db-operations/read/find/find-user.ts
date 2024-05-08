@@ -19,8 +19,8 @@ export async function findUserById(userId: number): Promise<ExtendedCredentials 
 export async function findUserByWhereCondition(
 	whereCondition:
 		{ username?: { equals: string, mode: "insensitive" } } |
-		{ email__hashed?: { equals: HashedString } } |
-		{ phone_number__hashed?: { equals: HashedString } }
+		{ email__encrypted?: { equals: DeterministicEncryptedString } } |
+		{ phone_number__encrypted?: { equals: DeterministicEncryptedString } }
 ): Promise<ExtendedCredentials | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()

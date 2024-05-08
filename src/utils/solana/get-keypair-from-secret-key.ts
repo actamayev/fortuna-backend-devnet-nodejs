@@ -6,7 +6,9 @@ import SecretsManager from "../../classes/secrets-manager"
 export default class GetKeypairFromSecretKey {
 	public static async getFortunaSolanaWalletFromSecretKey(): Promise<Keypair> {
 		try {
-			const fortunaWalletSecretKey = (await SecretsManager.getInstance().getSecret("FORTUNA_WALLET_SECRET_KEY")) as EncryptedString
+			const fortunaWalletSecretKey = (
+				await SecretsManager.getInstance().getSecret("FORTUNA_WALLET_SECRET_KEY")
+			) as NonDeterministicEncryptedString
 
 			return this.getKeypairFromEncryptedSecretKey(fortunaWalletSecretKey)
 		} catch (error) {
@@ -18,7 +20,7 @@ export default class GetKeypairFromSecretKey {
 	public static async getFortunaEscrowSolanaWalletFromSecretKey(): Promise<Keypair> {
 		try {
 			// eslint-disable-next-line max-len
-			const fortunaEscrowWalletSecretKey = await SecretsManager.getInstance().getSecret("FORTUNA_ESCROW_WALLET_SECRET_KEY") as EncryptedString
+			const fortunaEscrowWalletSecretKey = await SecretsManager.getInstance().getSecret("FORTUNA_ESCROW_WALLET_SECRET_KEY") as NonDeterministicEncryptedString
 
 			return this.getKeypairFromEncryptedSecretKey(fortunaEscrowWalletSecretKey)
 		} catch (error) {
@@ -27,10 +29,10 @@ export default class GetKeypairFromSecretKey {
 		}
 	}
 
-	public static async getKeypairFromEncryptedSecretKey(secretKey: EncryptedString): Promise<Keypair> {
+	public static async getKeypairFromEncryptedSecretKey(secretKey: NonDeterministicEncryptedString): Promise<Keypair> {
 		try {
 			const encryptor = new Encryptor()
-			const decryptedSecretKey = await encryptor.decrypt(secretKey, "SECRET_KEY_ENCRYPTION_KEY")
+			const decryptedSecretKey = await encryptor.nonDeterministicDecrypt(secretKey, "SECRET_KEY_ENCRYPTION_KEY")
 			const decodedSecretKey = bs58.decode(decryptedSecretKey)
 			return Keypair.fromSecretKey(decodedSecretKey)
 		} catch (error) {

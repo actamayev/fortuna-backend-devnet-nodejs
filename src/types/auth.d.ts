@@ -14,13 +14,13 @@ declare global {
 		username: string
 		password: string
 		auth_method: AuthMethods
-		email__hashed?: HashedString
-		email__encrypted?: EncryptedString
-		phone_number__hashed?: HashedString
-		phone_number__encrypted?: EncryptedString
+		email__encrypted?: DeterministicEncryptedString
+		phone_number__encrypted?: DeterministicEncryptedString
 	}
 
-	type EncryptedString = string & { __encrypted: true }
+	type DeterministicEncryptedString = string & { __type: "DeterministicEncryptedString" };
+	type NonDeterministicEncryptedString = string & { __type: "NonDeterministicEncryptedString" };
+
 	type HashedString = string & { __hashed: true }
 }
 

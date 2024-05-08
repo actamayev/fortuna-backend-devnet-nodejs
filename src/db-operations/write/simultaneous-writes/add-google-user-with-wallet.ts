@@ -2,10 +2,9 @@ import { PublicKey } from "@solana/web3.js"
 import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function addGoogleUserWithWallet(
-	encryptedEmail: EncryptedString,
-	hashedEmail: HashedString,
+	encryptedEmail: DeterministicEncryptedString,
 	publicKey: PublicKey,
-	encryptedSecretKey: EncryptedString
+	encryptedSecretKey: NonDeterministicEncryptedString
 ): Promise<number> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
@@ -14,7 +13,6 @@ export default async function addGoogleUserWithWallet(
 			const user = await prisma.credentials.create({
 				data: {
 					email__encrypted: encryptedEmail,
-					email__hashed: hashedEmail,
 					auth_method: "google"
 				}
 			})
@@ -23,8 +21,6 @@ export default async function addGoogleUserWithWallet(
 				data: {
 					user_id: user.user_id,
 					public_key: publicKey.toBase58(),
-					// TODO: Remove secret key after finishing migration
-					secret_key: encryptedSecretKey,
 					secret_key__encrypted: encryptedSecretKey,
 				}
 			})

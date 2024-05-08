@@ -1,4 +1,4 @@
-import Hash from "../../../classes/hash"
+import Encryptor from "../../../classes/encryptor"
 import { findUserByWhereCondition } from "../../../db-operations/read/find/find-user"
 
 export default async function retrieveUserFromContact(
@@ -6,16 +6,19 @@ export default async function retrieveUserFromContact(
 	contactType: EmailOrPhoneOrUsername
 ): Promise<ExtendedCredentials | null> {
 	try {
-		const whereCondition: { [key: string]: { equals: HashedString  | string, mode?: "insensitive"  } } = { }
+		const whereCondition: { [key: string]: { equals: HashedString | string, mode?: "insensitive"  } } = { }
 
 		if (contactType === "Username") {
 			whereCondition.username = { equals: contact, mode: "insensitive" }
-		} else if (contactType === "Email") {
-			const hashedEmail = await Hash.hashStringLowercase(contact)
-			whereCondition.email__hashed = { equals: hashedEmail }
 		} else {
-			const hashedPhoneNumber = await Hash.hashStringLowercase(contact)
-			whereCondition.phone_number__hashed = { equals: hashedPhoneNumber }
+			const encryptor = new Encryptor()
+			if (contactType === "Email") {
+				const encryptedEmail = await encryptor.deterministicEncrypt(contact, "EMAIL_ENCRYPTION_KEY")
+				whereCondition.email__encrypted = { equals: encryptedEmail }
+			} else {
+				const encryptedPhoneNumber = await encryptor.deterministicEncrypt(contact, "PHONE_NUMBER_ENCRYPTION_KEY")
+				whereCondition.phone_number__encrypted = { equals: encryptedPhoneNumber }
+			}
 		}
 
 		const user = await findUserByWhereCondition(whereCondition)

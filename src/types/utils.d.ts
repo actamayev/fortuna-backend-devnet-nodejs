@@ -14,10 +14,12 @@ declare global {
 		"spl-metadata" |
 		"profile-pictures"
 
-	type EncryptionKeys =
-		"SECRET_KEY_ENCRYPTION_KEY" |
+	type DeterministicEncryptionKeys =
 		"EMAIL_ENCRYPTION_KEY" |
-		"PHONE_NUMBER_ENCRYPTION_KEY" |
+		"PHONE_NUMBER_ENCRYPTION_KEY"
+
+	type NonDeterministicEncryptionKeys =
+		"SECRET_KEY_ENCRYPTION_KEY" |
 		"YT_REFRESH_TOKEN_ENCRYPTION_KEY"
 
 	type SecretKeys =

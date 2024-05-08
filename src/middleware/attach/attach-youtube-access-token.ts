@@ -17,7 +17,8 @@ export default async function attachYouTubeAccessToken(req: Request, res: Respon
 		const now = new Date()
 		req.youtubeAccessToken = retrievedYouTubeAccessTokenData.access_token
 		if (retrievedYouTubeAccessTokenData.expiry_date < now) {
-			const decryptedRefreshToken = await (new Encryptor()).decrypt(
+			const encryptor = new Encryptor()
+			const decryptedRefreshToken = await encryptor.nonDeterministicDecrypt(
 				retrievedYouTubeAccessTokenData.refresh_token__encrypted,
 				"YT_REFRESH_TOKEN_ENCRYPTION_KEY"
 			)

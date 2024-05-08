@@ -5,7 +5,10 @@ export default async function doesUsernameExist(username: string): Promise<boole
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const user = await prismaClient.credentials.findFirst({
 			where: {
-				username
+				username: {
+					equals: username,
+					mode: "insensitive"
+				}
 			}
 		})
 		return user !== null

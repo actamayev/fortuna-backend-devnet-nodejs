@@ -18,8 +18,14 @@ export default async function register (req: Request, res: Response): Promise<Re
 
 		if (contactType === "Username") return res.status(400).json({ message: "Please enter a valid Email or Phone Number" })
 
-		const hashedContact = await Hash.hashStringLowercase(registerInformation.contact)
-		const contactExists = await doesContactExist(hashedContact, contactType)
+		const encryptor = new Encryptor()
+		let encryptedContact
+		if (contactType === "Email") {
+			encryptedContact = await encryptor.deterministicEncrypt(registerInformation.contact, "EMAIL_ENCRYPTION_KEY")
+		} else {
+			encryptedContact = await encryptor.deterministicEncrypt(registerInformation.contact, "PHONE_NUMBER_ENCRYPTION_KEY")
+		}
+		const contactExists = await doesContactExist(encryptedContact, contactType)
 		if (contactExists === true) return res.status(400).json({ message: `${contactType} already exists` })
 
 		const usernameExists = await doesUsernameExist(registerInformation.username)
@@ -29,9 +35,8 @@ export default async function register (req: Request, res: Response): Promise<Re
 
 		const userData = await addLocalUser(registerInformation, hashedPassword, contactType)
 		const walletKeypair = await createSolanaWallet()
-		const encryptor = new Encryptor()
 
-		const encryptedSecretKey = await encryptor.encrypt(bs58.encode(
+		const encryptedSecretKey = await encryptor.nonDeterministicEncrypt(bs58.encode(
 			Buffer.from(walletKeypair.secretKey)
 		), "SECRET_KEY_ENCRYPTION_KEY")
 

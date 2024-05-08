@@ -1,10 +1,13 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function doesContactExist(hashedContact: HashedString, contactType: EmailOrPhone): Promise<boolean> {
+export default async function doesContactExist(
+	encryptedContact: DeterministicEncryptedString,
+	contactType: EmailOrPhone
+): Promise<boolean> {
 	try {
 		let exists: boolean
-		if (contactType === "Email") exists = await doesEmailExist(hashedContact)
-		else exists = await doesPhoneExist(hashedContact)
+		if (contactType === "Email") exists = await doesEmailExist(encryptedContact)
+		else exists = await doesPhoneExist(encryptedContact)
 
 		return exists
 	} catch (error) {
@@ -13,12 +16,12 @@ export default async function doesContactExist(hashedContact: HashedString, cont
 	}
 }
 
-async function doesEmailExist(hashedEmail: HashedString): Promise<boolean> {
+async function doesEmailExist(encryptedEmail: DeterministicEncryptedString): Promise<boolean> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const user = await prismaClient.credentials.findFirst({
 			where: {
-				email__hashed: hashedEmail
+				email__encrypted: encryptedEmail
 			}
 		})
 		return user !== null
@@ -28,12 +31,12 @@ async function doesEmailExist(hashedEmail: HashedString): Promise<boolean> {
 	}
 }
 
-async function doesPhoneExist(hashedPhoneNumber: HashedString): Promise<boolean> {
+async function doesPhoneExist(encryptedPhoneNumber: DeterministicEncryptedString): Promise<boolean> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const user = await prismaClient.credentials.findFirst({
 			where: {
-				phone_number__hashed: hashedPhoneNumber
+				phone_number__encrypted: encryptedPhoneNumber
 			}
 		})
 		return user !== null

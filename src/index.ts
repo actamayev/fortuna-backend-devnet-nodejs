@@ -16,7 +16,8 @@ import youtubeRoutes from "./routes/youtube-routes"
 import encryptionRoutes from "./routes/encryption-routes"
 import personalInfoRoutes from "./routes/personal-info-routes"
 
-dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.local" })
+// dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.local" })
+dotenv.config({ path: ".env.production" })
 
 const app = express()
 

@@ -11,7 +11,10 @@ export default class Encryptor {
 		this.secretsManagerInstance = SecretsManager.getInstance()
 	}
 
-	public async encrypt(data: string, encryptionKeyName: EncryptionKeys): Promise<EncryptedString> {
+	public async nonDeterministicEncrypt(
+		data: string,
+		encryptionKeyName: NonDeterministicEncryptionKeys
+	): Promise<NonDeterministicEncryptedString> {
 		try {
 			const iv = randomBytes(16) // Generate a new IV for each encryption
 			const salt = randomBytes(16) // Generate a new salt for each encryption
@@ -24,7 +27,7 @@ export default class Encryptor {
 			encrypted += cipher.final("hex")
 			const authTag = cipher.getAuthTag().toString("hex")
 
-			return `${iv.toString("hex")}:${salt.toString("hex")}:${encrypted}:${authTag}` as EncryptedString
+			return `${iv.toString("hex")}:${salt.toString("hex")}:${encrypted}:${authTag}` as NonDeterministicEncryptedString
 
 		} catch (error) {
 			console.error(error)
@@ -32,7 +35,10 @@ export default class Encryptor {
 		}
 	}
 
-	public async decrypt(encryptedData: EncryptedString, encryptionKeyName: EncryptionKeys): Promise<string> {
+	public async nonDeterministicDecrypt(
+		encryptedData: NonDeterministicEncryptedString,
+		encryptionKeyName: NonDeterministicEncryptionKeys
+	): Promise<string> {
 		try {
 			const [ivHex, saltHex, encrypted, authTagHex] = encryptedData.split(":")
 			const iv = Buffer.from(ivHex, "hex")
@@ -54,8 +60,39 @@ export default class Encryptor {
 		}
 	}
 
-	public static isEncryptedString(data: string): data is EncryptedString {
+	public static isNonDeterminsticEncryptedString(data: string): data is NonDeterministicEncryptedString {
 		const regex = /^[a-f0-9]{32}:[a-f0-9]{32}:[a-f0-9]+:[a-f0-9]{32}$/i
+		return regex.test(data)
+	}
+
+	public async deterministicEncrypt(data: string, encryptionKeyName: DeterministicEncryptionKeys): Promise<DeterministicEncryptedString> {
+		const iv = Buffer.alloc(16, 0) // Fixed IV (not recommended for production)
+		const encryptionKey = await this.secretsManagerInstance.getSecret(encryptionKeyName)
+
+		const cipher = createCipheriv("aes-256-cbc", Buffer.from(encryptionKey, "base64"), iv)
+		let encrypted = cipher.update(data, "utf8", "base64")
+		encrypted += cipher.final("base64")
+		return encrypted as DeterministicEncryptedString
+	}
+
+	public async deterministicDecrypt(
+		encrypted: DeterministicEncryptedString,
+		encryptionKeyName: DeterministicEncryptionKeys
+	): Promise<string> {
+		const iv = Buffer.alloc(16, 0) // Fixed IV (not recommended for production)
+		const encryptionKey = await this.secretsManagerInstance.getSecret(encryptionKeyName)
+
+		const decipher = createDecipheriv("aes-256-cbc", Buffer.from(encryptionKey, "base64"), iv)
+		let decrypted = decipher.update(encrypted, "base64", "utf8")
+		decrypted += decipher.final("utf8")
+		return decrypted
+	}
+
+	public static isDeterministicEncryptedString(data: string): data is DeterministicEncryptedString {
+		// Check if the data is a valid Base64 string
+		// Base64 regex pattern: ^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$
+		// eslint-disable-next-line security/detect-unsafe-regex, no-useless-escape
+		const regex = /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/
 		return regex.test(data)
 	}
 }

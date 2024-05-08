@@ -2,19 +2,17 @@ import { credentials, solana_wallet, youtube_access_tokens } from "@prisma/clien
 
 declare global {
 	type ExtendedCredentials = credentials & {
-		email__hashed: HashedString | null
-		email__encrypted: EncryptedString | null
+		email__encrypted: DeterministicEncryptedString | null
 
-		phone_number__hashed: HashedString | null
-		phone_number__encrypted: EncryptedString | null
+		phone_number__encrypted: DeterministicEncryptedString | null
 	}
 
 	type ExtendedSolanaWallet = solana_wallet & {
-		secret_key__encrypted: EncryptedString
+		secret_key__encrypted: NonDeterministicEncryptedString
 	}
 
 	type ExtendedYouTubeAccessTokens = youtube_access_tokens & {
-		refresh_token__encrypted: EncryptedString
+		refresh_token__encrypted: NonDeterministicEncryptedString
 	}
 }
 
