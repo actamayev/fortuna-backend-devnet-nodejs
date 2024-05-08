@@ -1,8 +1,7 @@
 import { credentials, solana_wallet } from "@prisma/client"
 import Encryptor from "../../classes/encryptor"
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function validateYouTubeTokenData(data: any): data is RetrievedYouTubeAccessTokensData {
+export function validateYouTubeTokenData(data: RetrievedYouTubeAccessTokensData): data is TypedRetrievedYouTubeAccessTokensData {
 	try {
 		return Encryptor.isNonDeterminsticEncryptedString(data.refresh_token__encrypted)
 	} catch (error) {

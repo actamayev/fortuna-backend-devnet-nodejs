@@ -2,7 +2,7 @@ import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
 import { validateYouTubeTokenData } from "../../../utils/types/type-guards"
 
-export default async function retrieveYouTubeAccessTokens(userId: number): Promise<RetrievedYouTubeAccessTokensData | null> {
+export default async function retrieveYouTubeAccessTokens(userId: number): Promise<TypedRetrievedYouTubeAccessTokensData | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const accessTokenData = await prismaClient.credentials.findFirst({
