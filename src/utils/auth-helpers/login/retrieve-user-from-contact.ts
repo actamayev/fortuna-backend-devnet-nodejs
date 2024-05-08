@@ -6,7 +6,7 @@ export default async function retrieveUserFromContact(
 	contactType: EmailOrPhoneOrUsername
 ): Promise<ExtendedCredentials | null> {
 	try {
-		const whereCondition: { [key: string]: { equals: HashedString | string, mode?: "insensitive"  } } = { }
+		const whereCondition: { [key: string]: { equals: DeterministicEncryptedString | string, mode?: "insensitive"  } } = { }
 
 		if (contactType === "Username") {
 			whereCondition.username = { equals: contact, mode: "insensitive" }

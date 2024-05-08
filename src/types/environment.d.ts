@@ -20,14 +20,15 @@ declare namespace NodeJS {
 
 		MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR: string
 
+		// Encryption:
+		SECRET_KEY_ENCRYPTION_KEY: NonDeterministicEncryptionKeys
+		EMAIL_ENCRYPTION_KEY: DeterministicEncryptionKeys
+		PHONE_NUMBER_ENCRYPTION_KEY: DeterministicEncryptionKeys
+		YT_REFRESH_TOKEN_ENCRYPTION_KEY: NonDeterministicEncryptionKeys
+
 		// Production only:
 		DATABASE_URL: string
 		AWS_ACCESS_KEY_ID: string
 		AWS_SECRET_ACCESS_KEY: string
-
-		SECRET_KEY_ENCRYPTION_KEY: string
-		EMAIL_ENCRYPTION_KEY: string
-		PHONE_NUMBER_ENCRYPTION_KEY: string
-		YT_REFRESH_TOKEN_ENCRYPTION_KEY: string
 	}
 }
