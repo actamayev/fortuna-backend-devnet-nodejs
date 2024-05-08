@@ -22,6 +22,8 @@ declare global {
 		"SECRET_KEY_ENCRYPTION_KEY" |
 		"YT_REFRESH_TOKEN_ENCRYPTION_KEY"
 
+	type EncryptionKeys = DeterministicEncryptionKeys | NonDeterministicEncryptionKeys
+
 	type SecretKeys =
 		EncryptionKeys |
 		"DATABASE_URL" |
