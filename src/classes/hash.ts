@@ -2,10 +2,9 @@ import { hash, compare } from "bcrypt"
 
 export default class Hash {
 	public static async hashCredentials(unhashedData: string): Promise<HashedString> {
-		const saltRounds = 10
 		try {
-			const hashedData = await hash(unhashedData, saltRounds) as HashedString
-			return hashedData
+			const saltRounds = 10
+			return await hash(unhashedData, saltRounds) as HashedString
 		} catch (error) {
 			console.error(error)
 			throw error
@@ -14,8 +13,7 @@ export default class Hash {
 
 	public static async checkPassword(plaintextPassword: string, hashedPassword: HashedString): Promise<boolean> {
 		try {
-			const isMatch = await compare(plaintextPassword, hashedPassword)
-			return isMatch
+			return await compare(plaintextPassword, hashedPassword)
 		} catch (error) {
 			console.error(error)
 			throw error
