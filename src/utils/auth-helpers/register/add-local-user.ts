@@ -1,8 +1,10 @@
-export function addLocalUser(
+import Encryptor from "../../../classes/encryptor"
+
+export default async function addLocalUser(
 	registerInformation: RegisterInformation,
-	hashedPassword: string,
+	hashedPassword: HashedString,
 	contactType: EmailOrPhone
-): NewLocalUserFields {
+): Promise<NewLocalUserFields> {
 	try {
 		const userFields: NewLocalUserFields = {
 			username: registerInformation.username,
@@ -10,10 +12,13 @@ export function addLocalUser(
 			auth_method: "fortuna"
 		}
 
+		const encryptor = new Encryptor()
 		if (contactType === "Email") {
-			userFields.email = registerInformation.contact
+			const encryptedEmail = await encryptor.deterministicEncrypt(registerInformation.contact, "EMAIL_ENCRYPTION_KEY")
+			userFields.email__encrypted = encryptedEmail
 		} else {
-			userFields.phone_number = registerInformation.contact
+			const encryptedPhoneNumber = await encryptor.deterministicEncrypt(registerInformation.contact, "PHONE_NUMBER_ENCRYPTION_KEY")
+			userFields.phone_number__encrypted = encryptedPhoneNumber
 		}
 
 		return userFields

@@ -6,7 +6,7 @@ import SecretsManager from "../../../classes/secrets-manager"
 import { getWalletBalanceWithUSD } from "../get-wallet-balance"
 import GetKeypairFromSecretKey from "../get-keypair-from-secret-key"
 import EscrowWalletManager from "../../../classes/escrow-wallet-manager"
-import addTokenAccountRecord from "../../db-operations/write/token-account/add-token-account-record"
+import addTokenAccountRecord from "../../../db-operations/write/token-account/add-token-account-record"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function assignSPLTokenShares (

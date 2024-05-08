@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
 import AwsS3 from "../../classes/aws-s3"
 import { createS3Key } from "../../utils/s3/create-s3-key"
-import addSPLRecord from "../../utils/db-operations/write/spl/add-spl-record"
+import addSPLRecord from "../../db-operations/write/spl/add-spl-record"
 import createSPLToken from "../../utils/solana/create-and-mint-spl/create-spl-token"
 import assignSPLTokenShares from "../../utils/solana/create-and-mint-spl/assign-spl-token-shares"
 

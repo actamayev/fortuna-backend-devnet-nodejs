@@ -2,7 +2,6 @@ import _ from "lodash"
 import dotenv from "dotenv"
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager"
 
-// TODO: Save the Database url as a secret too (only used in the prisma file - figure out how to configure with AWS secrets manager)
 export default class SecretsManager {
 	private static instance: SecretsManager | null = null
 	private secrets: Map<SecretKeys, string> = new Map()
@@ -35,9 +34,11 @@ export default class SecretsManager {
 			let secret: string | undefined
 			if (this.secrets.has(key)) {
 				secret = this.secrets.get(key)
-			} else if (process.env.NODE_ENV !== "production") {
+			}
+			else if (process.env.NODE_ENV !== "production") {
 				secret = process.env[key]
-			} else {
+			}
+			else {
 				secret = await this.fetchSecretFromAWS(key)
 			}
 			if (_.isUndefined(secret)) throw Error("Unable to retrieve secret")

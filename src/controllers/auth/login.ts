@@ -4,7 +4,7 @@ import Hash from "../../classes/hash"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
 import determineContactType from "../../utils/auth-helpers/login/determine-contact-type"
 import retrieveUserFromContact from "../../utils/auth-helpers/login/retrieve-user-from-contact"
-import addLoginHistoryRecord from "../../utils/db-operations/write/login-history/add-login-history-record"
+import addLoginHistoryRecord from "../../db-operations/write/login-history/add-login-history-record"
 
 export default async function login (req: Request, res: Response): Promise<Response> {
 	try {
@@ -17,7 +17,7 @@ export default async function login (req: Request, res: Response): Promise<Respo
 			return res.status(400).json({ message: "Please log in via Google" })
 		}
 
-		const doPasswordsMatch = await Hash.checkPassword(password, credentialsResult.password as string)
+		const doPasswordsMatch = await Hash.checkPassword(password, credentialsResult.password as HashedString)
 		if (doPasswordsMatch === false) return res.status(400).json({ message: "Wrong Username or Password!" })
 
 		const accessToken = await signJWT({ userId: credentialsResult.user_id, newUser: false })

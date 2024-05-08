@@ -2,9 +2,9 @@ import _ from "lodash"
 import { Request, Response } from "express"
 import SolPriceManager from "../../classes/sol-price-manager"
 import transferSplTokensToUser from "../../utils/solana/purchase-spl-tokens/transfer-spl-tokens-to-user"
-import addSplPurchaseRecord from "../../utils/db-operations/write/spl/spl-purchase/add-spl-purchase-record"
+import addSplPurchaseRecord from "../../db-operations/write/spl/spl-purchase/add-spl-purchase-record"
 import transferSolFromUserToCreator from "../../utils/solana/purchase-spl-tokens/transfer-sol-from-user-to-creator"
-import retrieveCreatorWalletInfoFromSpl from "../../utils/db-operations/read/spl/retrieve-creator-wallet-info-from-spl"
+import retrieveCreatorWalletInfoFromSpl from "../../db-operations/read/spl/retrieve-creator-wallet-info-from-spl"
 
 export default async function purchaseSplTokens(req: Request, res: Response): Promise<Response> {
 	try {

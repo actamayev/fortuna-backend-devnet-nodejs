@@ -2,7 +2,7 @@ import _ from "lodash"
 import { Request, Response } from "express"
 import AwsS3 from "../../classes/aws-s3"
 import { createS3KeyGenerateUUID } from "../../utils/s3/create-s3-key"
-import addProfilePictureRecord from "../../utils/db-operations/write/simultaneous-writes/add-profile-picture-and-update-user"
+import addProfilePictureRecord from "../../db-operations/write/simultaneous-writes/add-profile-picture-and-update-user"
 
 export default async function uploadProfilePicture (req: Request, res: Response): Promise<Response> {
 	try {

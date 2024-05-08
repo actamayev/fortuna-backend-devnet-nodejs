@@ -1,13 +1,13 @@
 import _ from "lodash"
-import { Currencies, solana_wallet } from "@prisma/client"
+import { Currencies } from "@prisma/client"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram,
 	Transaction, clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
 import calculateTransactionFee from "../calculate-transaction-fee"
 import GetKeypairFromSecretKey from "../get-keypair-from-secret-key"
-import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
+import addSolTransferRecord from "../../../db-operations/write/sol-transfer/add-sol-transfer-record"
 
 export default async function transferSolFromUserToCreator(
-	senderSolanaWallet: solana_wallet,
+	senderSolanaWallet: ExtendedSolanaWallet,
 	recipientPublicKeyAndWalletId: { public_key: string, solana_wallet_id: number },
 	transferDetails: { solToTransfer: number, usdToTransfer: number, defaultCurrency: Currencies },
 ): Promise<number> {
@@ -26,7 +26,7 @@ export default async function transferSolFromUserToCreator(
 		// May be possible to fix by making Fortuna a co-signer, if all Fortuna wallets are made to be multi-signature accounts.
 		// Would have to think about wheather or not we want this.
 
-		const senderKeypair = GetKeypairFromSecretKey.getGenericKeypairFromSecretKey(senderSolanaWallet.secret_key)
+		const senderKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(senderSolanaWallet.secret_key__encrypted)
 		const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
 		const keypairs: Keypair[] = [fortunaWalletKeypair, senderKeypair]
 

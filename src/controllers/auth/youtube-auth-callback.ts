@@ -1,11 +1,12 @@
 import _ from "lodash"
 import { Request, Response } from "express"
+import Encryptor from "../../classes/encryptor"
 import SecretsManager from "../../classes/secrets-manager"
 import createGoogleAuthClient from "../../utils/google/create-google-auth-client"
 import retrieveYouTubeSubscriberCount from "../../utils/google/retrieve-youtube-subscriber-count"
-import approveUserToBeCreator from "../../utils/db-operations/write/credentials/approve-user-to-be-creator"
+import approveUserToBeCreator from "../../db-operations/write/credentials/approve-user-to-be-creator"
 import addYouTubeAccessTokenRecord
-	from "../../utils/db-operations/write/simultaneous-writes/add-youtube-access-token-record-and-update-user"
+	from "../../db-operations/write/simultaneous-writes/add-youtube-access-token-record-and-update-user"
 
 export default async function youtubeAuthCallback(req: Request, res: Response): Promise<Response> {
 	try {
@@ -20,7 +21,9 @@ export default async function youtubeAuthCallback(req: Request, res: Response): 
 			_.isNil(tokens.expiry_date)
 		) return res.status(500).json({ error: "Unable to extract token information" })
 
-		await addYouTubeAccessTokenRecord(user.user_id, tokens.access_token, tokens.refresh_token, tokens.expiry_date)
+		const encryptor = new Encryptor()
+		const encryptedRefreshToken = await encryptor.nonDeterministicEncrypt(tokens.refresh_token, "YT_REFRESH_TOKEN_ENCRYPTION_KEY")
+		await addYouTubeAccessTokenRecord(user.user_id, tokens.access_token, encryptedRefreshToken, tokens.expiry_date)
 
 		const subscriberCount = await retrieveYouTubeSubscriberCount(tokens.access_token)
 		let isApprovedToBeCreator = false
