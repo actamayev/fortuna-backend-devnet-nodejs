@@ -48,7 +48,6 @@ app.use(express.json())
 
 app.use("/auth", authRoutes)
 app.use("/exchange", jwtVerify, exchangeRoutes)
-
 app.use("/personal-info", jwtVerify, personalInfoRoutes)
 app.use("/search", searchRoutes)
 app.use("/solana", solanaRoutes)
