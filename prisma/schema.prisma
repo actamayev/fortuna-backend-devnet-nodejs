@@ -380,7 +380,7 @@ model secondary_market_ask {
 	solana_wallet									solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
 	secondary_market_transaction					secondary_market_transaction[]
 
-	is_active										Boolean @default(true)
+	is_active										Boolean @default(true)  // Set to false if user manually cancels the bid
 	created_at    									DateTime  @default(now())
 	updated_at    									DateTime  @default(now()) @updatedAt
 

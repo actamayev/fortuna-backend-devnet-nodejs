@@ -15,6 +15,14 @@ declare global {
 		numberOfSharesAskingFor: number
 		askPricePerShareUsd: number
 	}
+
+	interface RetrievedAsksBelowCertainPrice {
+		secondary_market_ask_id: number
+		spl_id: number
+		remaining_number_of_shares_for_sale: number
+		ask_price_per_share_usd: number
+		solana_wallet: ExtendedSolanaWallet
+	}
 }
 
 export {}

@@ -4,10 +4,10 @@ export default async function addSecondaryMarketBid(
 	splId: number,
 	solanaWalletId: number,
 	createSplBid: CreateSplBidData
-): Promise<void> {
+): Promise<number> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
-		await prismaClient.secondary_market_bid.create({
+		const marketBid = await prismaClient.secondary_market_bid.create({
 			data: {
 				spl_id: splId,
 				solana_wallet_id: solanaWalletId,
@@ -16,6 +16,8 @@ export default async function addSecondaryMarketBid(
 				bid_price_per_share_usd: createSplBid.bidPricePerShareUsd
 			}
 		})
+
+		return marketBid.secondary_market_bid_id
 	} catch (error) {
 		console.error("Error adding login record:", error)
 		throw error

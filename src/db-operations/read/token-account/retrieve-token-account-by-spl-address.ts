@@ -1,6 +1,7 @@
 import { token_account } from "@prisma/client"
 import PrismaClientClass from "../../../classes/prisma-client"
 
+//TODO: Go through all db-operations files. any place that accepts a publicKey as a parameter should be of type PublicKey
 export default async function retrieveTokenAccountBySplAddress(
 	splAddress: string,
 	userPublicKey: string
