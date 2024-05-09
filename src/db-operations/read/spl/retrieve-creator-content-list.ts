@@ -15,6 +15,7 @@ export default async function retrieveCreatorContentList(solanaWalletId: number)
 				spl_name: true,
 				total_number_of_shares: true,
 				listing_price_per_share_usd: true,
+				spl_listing_status: true,
 				description: true,
 				initial_creator_ownership_percentage: true,
 				public_key_address: true,

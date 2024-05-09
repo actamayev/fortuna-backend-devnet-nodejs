@@ -15,6 +15,7 @@ export default async function retrieveSplDetailsByPublicKey(
 				public_key_address: true,
 				total_number_of_shares: true,
 				listing_price_per_share_usd: true,
+				spl_listing_status: true,
 				creator_wallet_id: true,
 				uploaded_image: {
 					select: {

@@ -1,3 +1,5 @@
+import { SPLListingStatus } from "@prisma/client"
+
 declare global {
 	interface HomePageVideoRetrievedFromDB {
 		video_url: string
@@ -6,6 +8,7 @@ declare global {
 		spl: {
 			spl_name: string
 			listing_price_per_share_usd: number
+			spl_listing_status: SPLListingStatus
 			description: string
 			total_number_of_shares: number
 			public_key_address: string
@@ -28,6 +31,7 @@ declare global {
 		spl_name: string
 		public_key_address: string
 		listing_price_per_share_usd: number
+		spl_listing_status: SPLListingStatus
 		total_number_of_shares: number
 		description: string
 		original_content_url: string
@@ -55,6 +59,7 @@ declare global {
 				spl_name: string
 				public_key_address: string
 				listing_price_per_share_usd: number
+				spl_listing_status:SPLListingStatus
 				total_number_of_shares: number
 				original_content_url: string
 				description: string
@@ -85,6 +90,7 @@ declare global {
 		splName: string
 		splPublicKey: string
 		listingSharePriceUsd: number
+		splListingStatus: SPLListingStatus
 		description: string
 		imageUrl: string
 		videoUrl: string

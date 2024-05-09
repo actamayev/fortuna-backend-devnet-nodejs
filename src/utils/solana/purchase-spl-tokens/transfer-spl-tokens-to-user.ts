@@ -6,6 +6,7 @@ import { getWalletBalanceWithUSD } from "../get-wallet-balance"
 import calculateTransactionFee from "../calculate-transaction-fee"
 import GetKeypairFromSecretKey from "../get-keypair-from-secret-key"
 import EscrowWalletManager from "../../../classes/escrow-wallet-manager"
+import updateSplListingStatus from "../../../db-operations/write/spl/update-spl-listing-status"
 import addTokenAccountRecord from "../../../db-operations/write/token-account/add-token-account-record"
 import retrieveTokenAccountBySplAddress from "../../../db-operations/read/token-account/retrieve-token-account-by-spl-address"
 import addSplTransferRecordAndUpdateOwnership from "../../../db-operations/write/simultaneous-writes/add-spl-transfer-and-update-ownership"
@@ -23,9 +24,6 @@ export default async function transferSplTokensToUser(
 		// Check if the user has a token account with the db.
 		let userHasExistingTokenAccount = true
 		let userTokenAccount = await retrieveTokenAccountBySplAddress(purchaseSplTokensData.splPublicKey, solanaWallet.public_key)
-		const { FORTUNA_ESCROW_WALLET_PUBLIC_KEY, FORTUNA_ESCROW_SOLANA_WALLET_ID_DB } = await SecretsManager.getInstance().getSecrets(
-			["FORTUNA_ESCROW_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_SOLANA_WALLET_ID_DB"]
-		)
 
 		if (_.isNull(userTokenAccount)) {
 			userHasExistingTokenAccount = false
@@ -48,6 +46,9 @@ export default async function transferSplTokensToUser(
 			userTokenAccount = tokenAccount
 		}
 
+		const { FORTUNA_ESCROW_WALLET_PUBLIC_KEY, FORTUNA_ESCROW_SOLANA_WALLET_ID_DB } = await SecretsManager.getInstance().getSecrets(
+			["FORTUNA_ESCROW_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_SOLANA_WALLET_ID_DB"]
+		)
 		const fortunaEscrowTokenAccount = await retrieveTokenAccountBySplAddress(
 			purchaseSplTokensData.splPublicKey,
 			FORTUNA_ESCROW_WALLET_PUBLIC_KEY
@@ -81,10 +82,12 @@ export default async function transferSplTokensToUser(
 			userHasExistingTokenAccount
 		)
 
-		await EscrowWalletManager.getInstance().decrementTokenAmount(
+		const tokensRemaining = await EscrowWalletManager.getInstance().decrementTokenAmount(
 			purchaseSplTokensData.splPublicKey,
 			purchaseSplTokensData.numberOfTokensPurchasing
 		)
+
+		if (tokensRemaining === 0) await updateSplListingStatus(splId, "SOLDOUT")
 
 		return splTransferId
 	} catch (error) {

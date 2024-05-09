@@ -8,6 +8,11 @@ export default async function confirmEnoughSharesInEscrowToCompletePurchase(
 ): Promise<Response | void> {
 	try {
 		const { splDetails } = req
+
+		if (splDetails.splListingStatus === "SOLDOUT") {
+			return res.status(400).json({ message: "No more shares available for purchase" })
+		}
+		// TODO: If splDetails.listing status is sold out, then default to reject the purchase
 		const numberOfTokensRemainingInEscrow = await EscrowWalletManager.getInstance().retrieveTokenAmountByPublicKey(
 			splDetails.publicKeyAddress
 		)
