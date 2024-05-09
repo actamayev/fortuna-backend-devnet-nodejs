@@ -82,12 +82,12 @@ export default async function transferSplTokensToUser(
 			userHasExistingTokenAccount
 		)
 
-		const tokensRemaining = await EscrowWalletManager.getInstance().decrementTokenAmount(
+		const tokensRemainingInEscrow = await EscrowWalletManager.getInstance().decrementTokenAmount(
 			purchaseSplTokensData.splPublicKey,
 			purchaseSplTokensData.numberOfTokensPurchasing
 		)
 
-		if (tokensRemaining === 0) await updateSplListingStatus(splId, "SOLDOUT")
+		if (tokensRemainingInEscrow === 0) await updateSplListingStatus(splId, "SOLDOUT")
 
 		return splTransferId
 	} catch (error) {

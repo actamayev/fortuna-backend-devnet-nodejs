@@ -59,7 +59,7 @@ declare global {
 				spl_name: string
 				public_key_address: string
 				listing_price_per_share_usd: number
-				spl_listing_status:SPLListingStatus
+				spl_listing_status: SPLListingStatus
 				total_number_of_shares: number
 				original_content_url: string
 				description: string
