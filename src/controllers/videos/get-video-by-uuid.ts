@@ -11,9 +11,12 @@ export default async function getVideoByUUID (req: Request, res: Response): Prom
 		const videoData = await retrieveVideoByUUID(videoUUID)
 		if (_.isNull(videoData)) return res.status(500).json({ error: "Unable to find video for the provided UUID" })
 
-		const remainingSharesForSale = await EscrowWalletManager.getInstance().retrieveTokenAmountByPublicKey(
-			videoData.spl.public_key_address
-		)
+		let remainingSharesForSale = 0
+		if (videoData.spl.spl_listing_status !== "SOLDOUT") {
+			remainingSharesForSale = await EscrowWalletManager.getInstance().retrieveTokenAmountByPublicKey(
+				videoData.spl.public_key_address
+			)
+		}
 
 		const transformedVideoData = transformVideoAndImageData(videoData, remainingSharesForSale)
 

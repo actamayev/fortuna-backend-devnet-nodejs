@@ -23,6 +23,7 @@ export default async function transformVideosByCreatorUsername(
 				splName: wallet.spl_name,
 				splPublicKey: wallet.public_key_address,
 				listingSharePriceUsd: wallet.listing_price_per_share_usd,
+				splListingStatus: wallet.spl_listing_status,
 				description: wallet.description,
 				imageUrl: wallet.uploaded_image.image_url,
 				videoUrl: wallet.uploaded_video.video_url,

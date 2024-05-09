@@ -12,6 +12,7 @@ export default async function transformVideoSearchData(input: RetrievedVideosByT
 				splName: item.spl_name,
 				splPublicKey: item.public_key_address,
 				listingSharePriceUsd: item.listing_price_per_share_usd,
+				splListingStatus: item.spl_listing_status,
 				description: item.description,
 				imageUrl: item.uploaded_image.image_url,
 				videoUrl: item.uploaded_video.video_url,

@@ -4,6 +4,7 @@ export default function transformCreatorContentList(input: RetrievedDBSplData[])
 			splId: item.spl_id,
 			numberOfShares: item.total_number_of_shares,
 			listingSharePriceUsd: item.listing_price_per_share_usd,
+			splListingStatus: item.spl_listing_status,
 			description: item.description,
 			creatorOwnershipPercentage: item.initial_creator_ownership_percentage,
 			imageUrl: item.uploaded_image.image_url,

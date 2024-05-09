@@ -13,10 +13,11 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 			},
 			select: {
 				spl_name: true,
+				public_key_address: true,
 				listing_price_per_share_usd: true,
+				spl_listing_status: true,
 				description: true,
 				total_number_of_shares: true,
-				public_key_address: true,
 				original_content_url: true,
 				uploaded_image: {
 					select: {

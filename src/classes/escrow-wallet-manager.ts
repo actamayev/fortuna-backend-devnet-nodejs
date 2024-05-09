@@ -97,7 +97,7 @@ export default class EscrowWalletManager {
 		}
 	}
 
-	public async decrementTokenAmount(publicKey: string, decrementAmount: number): Promise<void> {
+	public async decrementTokenAmount(publicKey: string, decrementAmount: number): Promise<number> {
 		try {
 			let currentAmount = this.tokenAccountMap.get(publicKey)
 			if (_.isUndefined(currentAmount)) {
@@ -109,6 +109,7 @@ export default class EscrowWalletManager {
 			}
 			const newAmount = Math.max(0, currentAmount - decrementAmount)
 			this.tokenAccountMap.set(publicKey, newAmount)
+			return newAmount
 		} catch (error) {
 			console.error(error)
 			throw error
