@@ -133,8 +133,7 @@ model spl {
 	spl_name      									String  // Name of the SPL
 	meta_data_address 								String  // On-chain Address of the SPL metadata
 	public_key_address								String 	// The SPL's public key address
-	listing_price_per_share							Float
-	listing_currency_peg							Currencies
+	listing_price_per_share_usd						Float
 
 	initial_creator_ownership_percentage			Float
 	total_number_of_shares							Int

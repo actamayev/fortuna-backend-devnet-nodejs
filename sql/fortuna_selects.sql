@@ -1,4 +1,4 @@
-select * from credentials;
+-- select * from credentials;
 -- select * from login_history;
 -- select * from solana_wallet;
 -- select * from spl;
@@ -11,11 +11,9 @@ select * from credentials;
 -- select * from uploaded_video;
 -- select * from sol_transfer;
 -- select * from spl_purchase;
--- select * from _prisma_migrations;
 -- select * from spl_transfer;
 -- select * from youtube_access_tokens;
-
--- select * from _prisma_migrations;
+-- SELECT * FROM "_prisma_migrations" ORDER BY "finished_at" ASC;
 
 -- To delete an spl:
 -- delete from spl_ownership;
@@ -37,3 +35,4 @@ select * from credentials;
 -- delete from sol_transfer;
 -- delete from spl_transfer;
 -- delete from spl_purchase
+
