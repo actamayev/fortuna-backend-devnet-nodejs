@@ -23,6 +23,14 @@ declare global {
 		ask_price_per_share_usd: number
 		solana_wallet: ExtendedSolanaWallet
 	}
+
+	interface RetrievedBidsAboveCertainPrice {
+		secondary_market_bid_id: number
+		spl_id: number
+		remaining_number_of_shares_bidding_for: number
+		bid_price_per_share_usd: number
+		solana_wallet: ExtendedSolanaWallet
+	}
 }
 
 export {}

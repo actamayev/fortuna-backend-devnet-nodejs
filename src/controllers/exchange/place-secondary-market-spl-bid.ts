@@ -2,14 +2,14 @@
 import _ from "lodash"
 import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
+import SolPriceManager from "../../classes/sol-price-manager"
 import addSecondaryMarketBid from "../../db-operations/write/secondary-market/add-secondary-market-bid"
+import transferSolFunction from "../../utils/exchange/purchase-primary-spl-tokens/transfer-sol-function"
+import { updateSecondaryMarketBidSet } from "../../db-operations/write/secondary-market/update-secondary-market-bid"
+import addSecondaryMarketTransaction from "../../db-operations/write/secondary-market/add-secondary-market-transaction"
 import retrieveAsksBelowCertainPrice from "../../db-operations/read/secondary-market/retrieve-asks-below-certain-price"
 import secondarySplTokenTransfer from "../../utils/exchange/purchase-secondary-spl-tokens/secondary-spl-token-transfer"
-import transferSolFunction from "../../utils/exchange/purchase-primary-spl-tokens/transfer-sol-function"
-import SolPriceManager from "../../classes/sol-price-manager"
-import updateSecondaryMarketAsk from "../../db-operations/write/secondary-market/update-secondary-market-ask"
-import addSecondaryMarketTransaction from "../../db-operations/write/secondary-market/add-secondary-market-transaction"
-import updateSecondaryMarketBid from "../../db-operations/write/secondary-market/update-secondary-market-bid"
+import { updateSecondaryMarketAskDecrement } from "../../db-operations/write/secondary-market/update-secondary-market-ask"
 
 // TODO: To make sure that the user has enough funds to make a bid, will need to have a hook in the front-end that runs anytime there is a change in wallet balance
 export default async function placeSecondaryMarketSplBid(req: Request, res: Response): Promise<Response> {
@@ -23,7 +23,6 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 
 		if (_.isEmpty(retrievedAsks)) return res.status(200).json({ success: "Added bid, no asks yet" })
 
-		// eslint-disable-next-line prefer-const
 		let numberOfRemainingSharesToBuy = createSplBidData.numberOfSharesBiddingFor
 		for (const ask of retrievedAsks) {
 			if (numberOfRemainingSharesToBuy === 0) break
@@ -46,15 +45,17 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 				}
 			)
 			// update the ask records
-			await updateSecondaryMarketAsk(ask.secondary_market_ask_id, amountToBuy)
+			await updateSecondaryMarketAskDecrement(ask.secondary_market_ask_id, amountToBuy)
 			// add a record to the secondary_transaction_table.
 			await addSecondaryMarketTransaction(bidId, ask.secondary_market_ask_id, solTransferId, splTransferId)
 			numberOfRemainingSharesToBuy -= amountToBuy
 		}
 
 		// update the bid record (update for the number of available shares.)
-		await updateSecondaryMarketBid(bidId, numberOfRemainingSharesToBuy)
+		await updateSecondaryMarketBidSet(bidId, numberOfRemainingSharesToBuy)
 
+		// TODO: If the user has other bids open, need to close all bids whose value is greater than the wallet balance
+		// Will also need to do this in the place-secondary-market-spl-ask.ts, inside the inner loop (as a bidders orders get filled, his balance decreases)
 		return res.status(200).json({ success: "Added bid" })
 	} catch (error) {
 		console.error(error)

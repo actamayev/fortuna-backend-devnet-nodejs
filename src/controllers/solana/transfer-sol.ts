@@ -54,7 +54,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		}
 
 		const solTransferRecord = await addSolTransferRecord(
-			recipientPublicKey.toString(),
+			recipientPublicKey,
 			isRecipientFortunaWallet,
 			transactionSignature,
 			transferCurrencyAmounts,
