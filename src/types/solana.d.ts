@@ -1,5 +1,5 @@
-import { Currencies } from "@prisma/client"
 import { PublicKey } from "@solana/web3.js"
+import { Currencies, SPLListingStatus } from "@prisma/client"
 
 declare global {
 	interface CreateSPLResponse {
@@ -30,6 +30,7 @@ declare global {
 		spl_name: string
 		total_number_of_shares: number
 		listing_price_per_share_usd: number
+		spl_listing_status: SPLListingStatus
 		description: string
 		initial_creator_ownership_percentage: number
 		uploaded_image: { image_url: string }
@@ -42,6 +43,7 @@ declare global {
 		splName: string
 		numberOfShares: number
 		listingSharePriceUsd: number
+		splListingStatus: SPLListingStatus
 		description: string
 		creatorOwnershipPercentage: number
 		imageUrl: string
@@ -113,6 +115,7 @@ declare global {
 		public_key_address: string
 		total_number_of_shares: number
 		listing_price_per_share_usd: number
+		spl_listing_status: SPLListingStatus
 		creator_wallet_id: number
 		uploaded_image: {
 			uuid: string
@@ -125,6 +128,7 @@ declare global {
 		splId: number
 		publicKeyAddress: string
 		listingSharePriceUsd: number
+		splListingStatus: SPLListingStatus
 		totalNumberOfShares: number
 		creatorWalletId: number
 		imageUrl: string

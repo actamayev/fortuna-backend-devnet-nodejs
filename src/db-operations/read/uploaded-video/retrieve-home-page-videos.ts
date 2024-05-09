@@ -13,6 +13,7 @@ export default async function retrieveHomePageVideos(): Promise<HomePageVideoRet
 					select: {
 						spl_name: true,
 						listing_price_per_share_usd: true,
+						spl_listing_status: true,
 						description: true,
 						total_number_of_shares: true,
 						public_key_address: true,
