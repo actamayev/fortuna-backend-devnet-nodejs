@@ -1,5 +1,3 @@
-import { Currencies } from "@prisma/client"
-
 declare global {
 	interface HomePageVideoRetrievedFromDB {
 		video_url: string
@@ -7,8 +5,7 @@ declare global {
 		uuid: string
 		spl: {
 			spl_name: string
-			listing_price_per_share: number
-			listing_currency_peg: Currencies
+			listing_price_per_share_usd: number
 			description: string
 			total_number_of_shares: number
 			public_key_address: string
@@ -30,8 +27,7 @@ declare global {
 	interface RetrievedVideosByTitle {
 		spl_name: string
 		public_key_address: string
-		listing_price_per_share: number
-		listing_currency_peg: Currencies
+		listing_price_per_share_usd: number
 		total_number_of_shares: number
 		description: string
 		original_content_url: string
@@ -58,8 +54,7 @@ declare global {
 			spl_creator_wallet: {
 				spl_name: string
 				public_key_address: string
-				listing_price_per_share: number
-				listing_currency_peg: Currencies
+				listing_price_per_share_usd: number
 				total_number_of_shares: number
 				original_content_url: string
 				description: string
@@ -89,8 +84,7 @@ declare global {
 	interface VideoDataSendingToFrontend {
 		splName: string
 		splPublicKey: string
-		listingSharePrice: number
-		listingDefaultCurrency: Currencies
+		listingSharePriceUsd: number
 		description: string
 		imageUrl: string
 		videoUrl: string

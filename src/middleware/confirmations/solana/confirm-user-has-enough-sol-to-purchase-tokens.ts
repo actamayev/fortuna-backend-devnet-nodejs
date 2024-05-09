@@ -14,16 +14,12 @@ export default async function confirmUserHasEnoughSolToPurchaseTokens(
 		const publicKey = new PublicKey(solanaWallet.public_key)
 		const balanceInSol = await getWalletBalanceSol(publicKey)
 
-		if (splDetails.listingDefaultCurrency === "sol") {
-			if (balanceInSol < splDetails.listingSharePrice * purchaseSplTokensData.numberOfTokensPurchasing) {
-				return res.status(400).json({ message: "User does not have enough Sol to complete the purchase" })
-			}
-		} else {
-			const solPriceInUSD = (await SolPriceManager.getInstance().getPrice()).price
-			const balanceInUsd = balanceInSol * solPriceInUSD
-			if (balanceInUsd < splDetails.listingSharePrice * purchaseSplTokensData.numberOfTokensPurchasing) {
-				return res.status(400).json({ message: "User does not have enough Sol to complete the purchase" })
-			}
+		const solPriceInUSD = (await SolPriceManager.getInstance().getPrice()).price
+		const balanceInUsd = balanceInSol * solPriceInUSD
+		const totalPurchasePriceInUsd = splDetails.listingSharePriceUsd * purchaseSplTokensData.numberOfTokensPurchasing
+
+		if (balanceInUsd < totalPurchasePriceInUsd) {
+			return res.status(400).json({ message: "User does not have enough Sol to complete the purchase" })
 		}
 
 		next()

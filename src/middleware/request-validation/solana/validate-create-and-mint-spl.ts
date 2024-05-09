@@ -1,15 +1,13 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
-import currencyValidatorSchema from "../../joi/currency-validator"
 
 const createAndMintSPLSchema = Joi.object({
 	newSPLData: Joi.object({
 		splName: Joi.string().required(),
 		numberOfShares: Joi.number().strict().min(10).max(1000).required(),
 		creatorOwnershipPercentage: Joi.number().strict().min(50).max(90).required(),
-		listingSharePrice: Joi.number().strict().required(),
-		listingDefaultCurrency: currencyValidatorSchema,
+		listingSharePriceUsd: Joi.number().strict().required(),
 		imageUrl: Joi.string().required(),
 		videoUrl: Joi.string().required(),
 		uuid: Joi.string().uuid({ version: "uuidv4" }).required(),

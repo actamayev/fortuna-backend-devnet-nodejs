@@ -21,16 +21,10 @@ export default async function purchaseSplTokens(req: Request, res: Response): Pr
 		const creatorWalletInfo = await retrieveCreatorWalletInfoFromSpl(splDetails.splId)
 		if (_.isUndefined(creatorWalletInfo)) return res.status(500).json({ error: "Unable to find creator's public key" })
 
-		const transferCurrencyAmounts = { solPriceToTransferAt: 0, usdPriceToTransferAt: 0 }
+		const transferCurrencyAmounts = { solPriceToTransferAt: 0, usdPriceToTransferAt: splDetails.listingSharePriceUsd }
 
 		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
-		if (splDetails.listingDefaultCurrency === "sol") {
-			transferCurrencyAmounts.solPriceToTransferAt = splDetails.listingSharePrice
-			transferCurrencyAmounts.usdPriceToTransferAt = splDetails.listingSharePrice * solPrice
-		} else {
-			transferCurrencyAmounts.solPriceToTransferAt = splDetails.listingSharePrice / solPrice
-			transferCurrencyAmounts.usdPriceToTransferAt = splDetails.listingSharePrice
-		}
+		transferCurrencyAmounts.solPriceToTransferAt = splDetails.listingSharePriceUsd / solPrice
 		// 2) Transfer sol from user to creator (fortuna wallet should cover transaction)
 		// Record the transaction (save to sol_transfer table)
 		const solTransferId = await transferSolFromUserToCreator(
@@ -39,7 +33,7 @@ export default async function purchaseSplTokens(req: Request, res: Response): Pr
 			{
 				solToTransfer: purchaseSplTokensData.numberOfTokensPurchasing * transferCurrencyAmounts.solPriceToTransferAt,
 				usdToTransfer: purchaseSplTokensData.numberOfTokensPurchasing * transferCurrencyAmounts.usdPriceToTransferAt,
-				defaultCurrency: splDetails.listingDefaultCurrency
+				defaultCurrency: "usd"
 			}
 		)
 
