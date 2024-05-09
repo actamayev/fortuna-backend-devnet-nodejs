@@ -14,7 +14,7 @@ import addSplTransferRecordAndUpdateOwnership from "../../../db-operations/write
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSplTokensToUser(
 	solanaWallet: ExtendedSolanaWallet,
-	purchaseSplTokensData: PurchaseSPLTokensData,
+	purchaseSplTokensData: PurchasePrimarySPLTokensData,
 	splId: number
 ): Promise<number> {
 	try {

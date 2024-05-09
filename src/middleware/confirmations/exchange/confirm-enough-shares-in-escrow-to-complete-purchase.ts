@@ -16,7 +16,7 @@ export default async function confirmEnoughSharesInEscrowToCompletePurchase(
 			splDetails.publicKeyAddress
 		)
 
-		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchaseSPLTokensData
+		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchasePrimarySPLTokensData
 		if (numberOfTokensRemainingInEscrow < purchaseSplTokensData.numberOfTokensPurchasing) {
 			return res.status(400).json({
 				// eslint-disable-next-line max-len

@@ -89,6 +89,8 @@ model solana_wallet {
 	spl_transfer_sender_solana_wallet				spl_transfer[] @relation("sender_solana_wallet")
 	spl_transfer_fee_payer_solana_wallet			spl_transfer[] @relation("fee_payer_solana_wallet")
 
+	secondary_market_bid							secondary_market_bid[]
+	secondary_market_ask							secondary_market_ask[]
 	@@index([user_id], name: "solana_wallet__user_id_idx")
 }
 
@@ -168,6 +170,8 @@ model spl {
 	spl_mint										spl_mint[]
 	spl_purchase									spl_purchase[]
 	spl_transfer									spl_transfer[]
+	secondary_market_bid							secondary_market_bid[]
+	secondary_market_ask							secondary_market_ask[]
 
 	@@index([create_spl_fee_payer_solana_wallet_id], name: "spl__create_spl_fee_payer_solana_wallet_id_idx")
 	@@index([create_spl_metadata_fee_payer_solana_wallet_id], name: "spl__create_spl_metadata_fee_payer_solana_wallet_id_idx")
@@ -261,10 +265,12 @@ model sol_transfer {
 	fee_payer_solana_wallet							solana_wallet @relation(name: "fee_payer_solana_wallet", fields: [fee_payer_solana_wallet_id], references: [solana_wallet_id])
 
 	spl_purchase_sol_transfer						spl_purchase?
+	secondary_market_transaction					secondary_market_transaction[]
 
 	@@index([sender_solana_wallet_id], name: "sol_transfer__sender_solana_wallet_id_idx")
 	@@index([recipient_solana_wallet_id], name: "sol_transfer__recipient_solana_wallet_id_idx")
 	@@index([fee_payer_solana_wallet_id], name: "sol_transfer__fee_payer_solana_wallet_id_idx")
+
 }
 
 model spl_transfer {
@@ -296,6 +302,7 @@ model spl_transfer {
 	sender_token_account							token_account @relation(name: "sender_token_account", fields: [sender_token_account_id], references: [token_account_id])
 
 	spl_purchase									spl_purchase?
+	secondary_market_transaction					secondary_market_transaction[]
 }
 
 model spl_purchase {
@@ -338,4 +345,66 @@ model youtube_access_tokens {
 	updated_at    									DateTime  @default(now()) @updatedAt
 
   	user											credentials?
+}
+
+model secondary_market_bid {
+	secondary_market_bid_id							Int @id @default(autoincrement())
+	spl_id											Int
+	solana_wallet_id								Int
+	number_of_shares_bidding_for					Int
+	remaining_number_of_shares_bidding_for			Int
+	bid_price_per_share_usd							Float
+	was_bid_cancelled_due_to_fund_requirements		Boolean @default(false) // This is changed to true when the value in a user's wallet goes below the value of their bid
+
+	spl         									spl @relation(fields: [spl_id], references: [spl_id])
+	solana_wallet									solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
+	secondary_market_transaction					secondary_market_transaction[]
+
+	is_active										Boolean @default(true) // Set to false if user manually cancels the bid
+	created_at    									DateTime  @default(now())
+	updated_at    									DateTime  @default(now()) @updatedAt
+
+	@@index([spl_id], name: "secondary_market_bid__spl_id_idx")
+	@@index([solana_wallet_id], name: "secondary_market_bid__solana_wallet_id_idx")
+}
+
+model secondary_market_ask {
+	secondary_market_ask_id							Int @id @default(autoincrement())
+	spl_id											Int
+	solana_wallet_id								Int
+	number_of_shares_for_sale						Int
+	remaining_number_of_shares_for_sale				Int
+	ask_price_per_share_usd							Float
+
+	spl         									spl @relation(fields: [spl_id], references: [spl_id])
+	solana_wallet									solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
+	secondary_market_transaction					secondary_market_transaction[]
+
+	is_active										Boolean @default(true)
+	created_at    									DateTime  @default(now())
+	updated_at    									DateTime  @default(now()) @updatedAt
+
+	@@index([spl_id], name: "secondary_market_ask__spl_id_idx")
+	@@index([solana_wallet_id], name: "secondary_market_ask__solana_wallet_id_idx")
+}
+
+model secondary_market_transaction {
+	secondary_market_transaction_id					Int @id @default(autoincrement())
+	secondary_market_bid_id							Int
+	secondary_market_ask_id							Int
+	sol_transfer_id									Int
+	spl_transfer_id									Int
+
+	secondary_market_bid							secondary_market_bid @relation(fields: [secondary_market_bid_id], references: [secondary_market_bid_id])
+	secondary_market_ask							secondary_market_ask @relation(fields: [secondary_market_ask_id], references: [secondary_market_ask_id])
+	sol_transfer									sol_transfer @relation(fields: [sol_transfer_id], references: [sol_transfer_id])
+	spl_transfer									spl_transfer @relation(fields: [spl_transfer_id], references: [spl_transfer_id])
+
+	created_at    									DateTime  @default(now())
+	updated_at    									DateTime  @default(now()) @updatedAt
+
+	@@index([secondary_market_bid_id], name: "secondary_market_purchase__secondary_market_bid_id_idx")
+	@@index([secondary_market_ask_id], name: "secondary_market_purchase__secondary_market_ask_id_idx")
+	@@index([sol_transfer_id], name: "secondary_market_purchase__sol_transfer_id_idx")
+	@@index([spl_transfer_id], name: "secondary_market_purchase__spl_transfer_id_idx")
 }

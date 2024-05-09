@@ -6,10 +6,10 @@ import transferSplTokensToUser from "../../utils/solana/purchase-spl-tokens/tran
 import retrieveCreatorWalletInfoFromSpl from "../../db-operations/read/spl/retrieve-creator-wallet-info-from-spl"
 import transferSolFromUserToCreator from "../../utils/solana/purchase-spl-tokens/transfer-sol-from-user-to-creator"
 
-export default async function purchaseSplTokens(req: Request, res: Response): Promise<Response> {
+export default async function primarySplTokenPurchase(req: Request, res: Response): Promise<Response> {
 	try {
 		const { solanaWallet, splDetails } = req
-		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchaseSPLTokensData
+		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchasePrimarySPLTokensData
 		// FUTURE TODO: See if there's a way to simultaneously transfer Spl tokens to user and transfer sol from user to creator
 		// Better for this to be done as one transaction (so that if either one fails, neither go through)
 
