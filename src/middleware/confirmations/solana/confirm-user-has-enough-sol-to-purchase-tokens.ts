@@ -16,9 +16,9 @@ export default async function confirmUserHasEnoughSolToPurchaseTokens(
 
 		const solPriceInUSD = (await SolPriceManager.getInstance().getPrice()).price
 		const balanceInUsd = balanceInSol * solPriceInUSD
-		const purchasePriceInUsd = splDetails.listingSharePriceUsd * purchaseSplTokensData.numberOfTokensPurchasing
+		const totalPurchasePriceInUsd = splDetails.listingSharePriceUsd * purchaseSplTokensData.numberOfTokensPurchasing
 
-		if (balanceInUsd < purchasePriceInUsd) {
+		if (balanceInUsd < totalPurchasePriceInUsd) {
 			return res.status(400).json({ message: "User does not have enough Sol to complete the purchase" })
 		}
 
