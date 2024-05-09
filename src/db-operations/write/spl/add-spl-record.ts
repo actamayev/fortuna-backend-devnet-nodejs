@@ -21,8 +21,7 @@ export default async function addSPLRecord (
 				spl_name: newSPLData.splName,
 				meta_data_address: createSPLResponse.metadataTransactionSignature,
 				public_key_address: createSPLResponse.mint.toString(),
-				listing_price_per_share: newSPLData.listingSharePrice,
-				listing_currency_peg: newSPLData.listingDefaultCurrency,
+				listing_price_per_share_usd: newSPLData.listingSharePriceUsd,
 				initial_creator_ownership_percentage: newSPLData.creatorOwnershipPercentage,
 
 				total_number_of_shares: newSPLData.numberOfShares,

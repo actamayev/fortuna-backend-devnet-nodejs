@@ -12,8 +12,7 @@ declare global {
 		splName: string
 		numberOfShares: number
 		creatorOwnershipPercentage: number
-		listingSharePrice: number
-		listingDefaultCurrency: Currencies
+		listingSharePriceUsd: number
 		imageUrl: string
 		videoUrl: string
 		description: string
@@ -30,8 +29,7 @@ declare global {
 		spl_id: number
 		spl_name: string
 		total_number_of_shares: number
-		listing_price_per_share: number
-		listing_currency_peg: Currencies
+		listing_price_per_share_usd: number
 		description: string
 		initial_creator_ownership_percentage: number
 		uploaded_image: { image_url: string }
@@ -43,8 +41,7 @@ declare global {
 		splId: number
 		splName: string
 		numberOfShares: number
-		listingSharePrice: number
-		listingDefaultCurrency: Currencies
+		listingSharePriceUsd: number
 		description: string
 		creatorOwnershipPercentage: number
 		imageUrl: string
@@ -115,8 +112,7 @@ declare global {
 		spl_id: number
 		public_key_address: string
 		total_number_of_shares: number
-		listing_price_per_share: number
-		listing_currency_peg: Currencies
+		listing_price_per_share_usd: number
 		creator_wallet_id: number
 		uploaded_image: {
 			uuid: string
@@ -128,8 +124,7 @@ declare global {
 		splName: string
 		splId: number
 		publicKeyAddress: string
-		listingSharePrice: number
-		listingDefaultCurrency: Currencies
+		listingSharePriceUsd: number
 		totalNumberOfShares: number
 		creatorWalletId: number
 		imageUrl: string
