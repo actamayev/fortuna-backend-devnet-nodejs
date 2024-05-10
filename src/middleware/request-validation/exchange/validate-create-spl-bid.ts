@@ -6,8 +6,8 @@ import publicKeyValidator from "../../joi/public-key-validator"
 const createSplBidSchema = Joi.object({
 	createSplBid: Joi.object({
 		splPublicKey: publicKeyValidator.required().trim(),
-		numberOfSharesBiddingFor: Joi.string().strict().required(),
-		bidPricePerShareUsd: Joi.number().strict().required()
+		numberOfSharesBiddingFor: Joi.number().strict().integer().min(1).required(),
+		bidPricePerShareUsd: Joi.number().greater(0).strict().required()
 	}).required()
 }).required()
 
