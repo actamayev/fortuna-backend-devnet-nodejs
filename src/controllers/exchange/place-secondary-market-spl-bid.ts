@@ -6,17 +6,17 @@ import SolPriceManager from "../../classes/sol-price-manager"
 import transferSolFunction from "../../utils/exchange/transfer-sol-function"
 import calculateAverageFillPrice from "../../utils/exchange/calculate-average-fill-price"
 import addSecondaryMarketBid from "../../db-operations/write/secondary-market/add-secondary-market-bid"
+import updateBidStatusOnWalletBalanceChange from "../../utils/exchange/update-bid-status-on-wallet-balance-change"
 import { updateSecondaryMarketBidSet } from "../../db-operations/write/secondary-market/update-secondary-market-bid"
 import addSecondaryMarketTransaction from "../../db-operations/write/secondary-market/add-secondary-market-transaction"
 import retrieveAsksBelowCertainPrice from "../../db-operations/read/secondary-market/retrieve-asks-below-certain-price"
 import secondarySplTokenTransfer from "../../utils/exchange/purchase-secondary-spl-tokens/secondary-spl-token-transfer"
 import { updateSecondaryMarketAskDecrement } from "../../db-operations/write/secondary-market/update-secondary-market-ask"
 
-// TODO: To make sure that the user has enough funds to make a bid, will need to have a hook in the front-end that runs anytime there is a change in wallet balance
 // eslint-disable-next-line max-lines-per-function
 export default async function placeSecondaryMarketSplBid(req: Request, res: Response): Promise<Response> {
 	try {
-		const { splDetails, solanaWallet} = req
+		const { splDetails, solanaWallet } = req
 		const createSplBidData = req.body.createSplBid as CreateSplBidData
 
 		const bidId = await addSecondaryMarketBid(splDetails.splId, solanaWallet.solana_wallet_id, createSplBidData)
@@ -58,8 +58,7 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 		// update the bid record (update for the number of available shares.)
 		await updateSecondaryMarketBidSet(bidId, numberOfRemainingSharesToBuy)
 
-		// TODO: If the user has other bids open, need to close all bids whose value is greater than the wallet balance
-		// Will also need to do this in the place-secondary-market-spl-ask.ts, inside the inner loop (as a bidders orders get filled, his balance decreases)
+		await updateBidStatusOnWalletBalanceChange(solanaWallet)
 		const sharesPurchased = createSplBidData.numberOfSharesBiddingFor - numberOfRemainingSharesToBuy
 		const averageFillPrice = calculateAverageFillPrice(transactionsMap)
 		return res.status(200).json({

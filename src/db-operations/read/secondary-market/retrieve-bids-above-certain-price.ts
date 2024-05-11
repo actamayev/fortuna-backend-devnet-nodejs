@@ -15,7 +15,8 @@ export default async function retrieveBidsAboveCertainPrice(
 				},
 				bid_price_per_share_usd: {
 					gte: askPrice
-				}
+				},
+				was_bid_cancelled_due_to_fund_requirements: false
 			},
 			orderBy: {
 				bid_price_per_share_usd: "desc"

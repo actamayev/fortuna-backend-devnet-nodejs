@@ -4,8 +4,10 @@ import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
 import SolPriceManager from "../../classes/sol-price-manager"
 import transferSolFunction from "../../utils/exchange/transfer-sol-function"
+import { getWalletBalanceWithUSD } from "../../utils/solana/get-wallet-balance"
 import calculateAverageFillPrice from "../../utils/exchange/calculate-average-fill-price"
 import addSecondaryMarketAsk from "../../db-operations/write/secondary-market/add-secondary-market-ask"
+import updateBidStatusOnWalletBalanceChange from "../../utils/exchange/update-bid-status-on-wallet-balance-change"
 import { updateSecondaryMarketAskSet } from "../../db-operations/write/secondary-market/update-secondary-market-ask"
 import secondarySplTokenTransfer from "../../utils/exchange/purchase-secondary-spl-tokens/secondary-spl-token-transfer"
 import addSecondaryMarketTransaction from "../../db-operations/write/secondary-market/add-secondary-market-transaction"
@@ -32,6 +34,11 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 			if (numberOfRemainingSharesToSell > bid.remaining_number_of_shares_bidding_for) {
 				numberSharesToSell = bid.remaining_number_of_shares_bidding_for
 			}
+			const bidderWalletBalanceUsd = await getWalletBalanceWithUSD(new PublicKey(solanaWallet.public_key))
+			const sharesBidderAbleToBuy = bidderWalletBalanceUsd.balanceInUsd / bid.bid_price_per_share_usd
+			numberSharesToSell = Math.min(numberSharesToSell, sharesBidderAbleToBuy)
+
+			if (numberSharesToSell === 0) break
 			// Transfer SPL tokens:
 			const splTransferId = await secondarySplTokenTransfer(solanaWallet, bid.solana_wallet, numberSharesToSell, splDetails)
 
@@ -47,11 +54,12 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 				}
 			)
 			// update the bid records
-			await updateSecondaryMarketBidDecrement(bid.secondary_market_bid_id, numberSharesToSell)
+			await updateSecondaryMarketBidDecrement(bid, numberSharesToSell)
 
 			// add a record to the secondary_transaction_table.
 			await addSecondaryMarketTransaction(bid.secondary_market_bid_id, askId, solTransferId, splTransferId),
-			transactionsMap.push({ fillPriceUsd: bid.bid_price_per_share_usd, numberOfShares: numberSharesToSell})
+			transactionsMap.push({ fillPriceUsd: bid.bid_price_per_share_usd, numberOfShares: numberSharesToSell })
+			await updateBidStatusOnWalletBalanceChange(bid.solana_wallet)
 			numberOfRemainingSharesToSell -= numberSharesToSell
 		}
 

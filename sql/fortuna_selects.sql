@@ -19,3 +19,14 @@
 -- SELECT * FROM secondary_market_ask;
 -- SELECT * FROM secondary_market_transaction;
 
+-- select
+-- 	secondary_market_transaction_id,
+-- 	secondary_market_bid_id,
+-- 	secondary_market_ask_id,
+-- 	sol_transfer.usd_amount_transferred,
+-- 	spl_transfer.number_spl_shares_transferred,
+-- 	secondary_market_transaction.created_at
+-- 	from 
+-- 	secondary_market_transaction
+-- 	join sol_transfer on secondary_market_transaction.sol_transfer_id = sol_transfer.sol_transfer_id
+-- 	join spl_transfer on secondary_market_transaction.spl_transfer_id = spl_transfer.spl_transfer_id;

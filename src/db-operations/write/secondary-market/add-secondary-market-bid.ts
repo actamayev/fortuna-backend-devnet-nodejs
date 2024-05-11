@@ -13,7 +13,7 @@ export default async function addSecondaryMarketBid(
 				solana_wallet_id: solanaWalletId,
 				number_of_shares_bidding_for: createSplBid.numberOfSharesBiddingFor,
 				remaining_number_of_shares_bidding_for: createSplBid.numberOfSharesBiddingFor,
-				bid_price_per_share_usd: createSplBid.bidPricePerShareUsd
+				bid_price_per_share_usd: createSplBid.bidPricePerShareUsd,
 			}
 		})
 

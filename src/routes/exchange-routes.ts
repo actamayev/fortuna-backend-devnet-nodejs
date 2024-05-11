@@ -38,10 +38,6 @@ exchangeRoutes.post(
 	primarySplTokenPurchase
 )
 
-// TODO: The user can have multiple bids that exceed their wallet balance.
-// However, as soon as a bid is filled, all the other orders over the wallet balance must be cleaered
-// For example, if the user has $100, they can have 3 orders for $99, and 1 for $0.5.
-// But as soon as one of the $99 is filled, all of the other ones must close
 exchangeRoutes.post(
 	"/create-spl-bid",
 	validateCreateSplBid,
@@ -60,4 +56,6 @@ exchangeRoutes.post(
 	placeSecondaryMarketSplAsk
 )
 
+// FUTURE TODO: Add routes to cancel an order
+// FUTURE TODO: Add routes to edit an order.
 export default exchangeRoutes

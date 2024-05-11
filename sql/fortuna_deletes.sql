@@ -18,3 +18,8 @@
 -- delete from sol_transfer;
 -- delete from spl_transfer;
 -- delete from spl_purchase;
+
+-- delete FROM secondary_market_transaction;
+-- delete FROM secondary_market_bid;
+-- delete FROM secondary_market_ask;
+
