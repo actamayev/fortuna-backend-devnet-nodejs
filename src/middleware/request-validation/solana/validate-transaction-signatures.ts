@@ -1,8 +1,9 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import publicKeyValidator from "../../joi/public-key-validator"
 
-const transactionFeeSchema = Joi.array().items(Joi.string().required()).required()
+const transactionFeeSchema = Joi.array().items(publicKeyValidator).required()
 
 export default function validateTransactionSignatures (req: Request, res: Response, next: NextFunction): Response | void {
 	try {

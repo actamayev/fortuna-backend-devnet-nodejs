@@ -1,9 +1,10 @@
 import _ from "lodash"
 import Joi from "joi"
 import { Request, Response, NextFunction } from "express"
+import uuidValidator from "../../joi/uuid-validator"
 
 const videoUUIDSchema = Joi.object({
-	videoUUID: Joi.string().uuid({ version: "uuidv4" }).required().trim()
+	videoUUID: uuidValidator.required()
 }).required()
 
 export default function validateVideoUUID (req: Request, res: Response, next: NextFunction): Response | void {

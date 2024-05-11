@@ -97,7 +97,7 @@ solanaRoutes.get(
 solanaRoutes.get("/get-sol-price", getSolPrice)
 
 // Internal use
-solanaRoutes.get("/get-number-tokens-in-token-account/:publicKey", jwtVerify, getNumberOfTokensInTokenAccount)
+solanaRoutes.get("/get-token-counts-in-wallet/:publicKey", jwtVerify, getNumberOfTokensInTokenAccount)
 solanaRoutes.post(
 	"/get-transaction-fees",
 	jwtVerify,
