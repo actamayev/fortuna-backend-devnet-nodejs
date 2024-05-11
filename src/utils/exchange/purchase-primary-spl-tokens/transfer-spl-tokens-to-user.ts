@@ -19,7 +19,7 @@ export default async function transferSplTokensToUser(
 ): Promise<number> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const fortunaWallet = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
+		const fortunaWallet = await GetKeypairFromSecretKey.getFortunaWalletKeypair()
 
 		// Check if the user has a token account with the db.
 		let userHasExistingTokenAccount = true
@@ -46,7 +46,7 @@ export default async function transferSplTokensToUser(
 			userTokenAccount = tokenAccount
 		}
 
-		const fortunaEscrowWallet = await GetKeypairFromSecretKey.getFortunaEscrowSolanaWalletFromSecretKey()
+		const fortunaEscrowWallet = await GetKeypairFromSecretKey.getFortunaEscrowKeypair()
 		const fortunaEscrowTokenAccount = await retrieveTokenAccountBySplAddress(
 			purchaseSplTokensData.splPublicKey,
 			fortunaEscrowWallet.publicKey.toString()

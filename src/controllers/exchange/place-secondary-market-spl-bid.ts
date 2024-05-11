@@ -3,8 +3,8 @@ import _ from "lodash"
 import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
 import SolPriceManager from "../../classes/sol-price-manager"
+import transferSolFunction from "../../utils/exchange/transfer-sol-function"
 import addSecondaryMarketBid from "../../db-operations/write/secondary-market/add-secondary-market-bid"
-import transferSolFunction from "../../utils/exchange/purchase-primary-spl-tokens/transfer-sol-function"
 import { updateSecondaryMarketBidSet } from "../../db-operations/write/secondary-market/update-secondary-market-bid"
 import addSecondaryMarketTransaction from "../../db-operations/write/secondary-market/add-secondary-market-transaction"
 import retrieveAsksBelowCertainPrice from "../../db-operations/read/secondary-market/retrieve-asks-below-certain-price"
@@ -31,7 +31,7 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 				amountToBuy = ask.remaining_number_of_shares_for_sale
 			}
 			// Transfer SPL tokens:
-			const splTransferId = await secondarySplTokenTransfer(ask.solana_wallet, solanaWallet, amountToBuy, new PublicKey(splDetails.publicKeyAddress), splDetails.splId)
+			const splTransferId = await secondarySplTokenTransfer(ask.solana_wallet, solanaWallet, amountToBuy, splDetails)
 
 			// Transfer Sol:
 			const solPrice = (await SolPriceManager.getInstance().getPrice()).price

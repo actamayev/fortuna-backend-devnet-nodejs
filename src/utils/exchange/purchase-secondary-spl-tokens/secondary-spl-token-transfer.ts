@@ -1,6 +1,6 @@
 import _ from "lodash"
-import { getOrCreateAssociatedTokenAccount, transfer } from "@solana/spl-token"
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js"
+import { getOrCreateAssociatedTokenAccount, transfer } from "@solana/spl-token"
 import { getWalletBalanceWithUSD } from "../../solana/get-wallet-balance"
 import calculateTransactionFee from "../../solana/calculate-transaction-fee"
 import GetKeypairFromSecretKey from "../../solana/get-keypair-from-secret-key"
@@ -13,15 +13,14 @@ export default async function secondarySplTokenTransfer(
 	transferFromWallet: ExtendedSolanaWallet,
 	transferToWallet: ExtendedSolanaWallet,
 	numberOfTokensPurchasing: number,
-	splPublicKey: PublicKey,
-	splId: number
+	splDetails: SplByPublicKeyData
 ): Promise<number> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const fortunaWallet = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
+		const fortunaWallet = await GetKeypairFromSecretKey.getFortunaWalletKeypair()
 
 		let userHasExistingTokenAccount = true
-		let userTokenAccount = await retrieveTokenAccountBySplAddress(splPublicKey.toString(), transferToWallet.public_key)
+		let userTokenAccount = await retrieveTokenAccountBySplAddress(splDetails.publicKeyAddress, transferToWallet.public_key)
 
 		if (_.isNull(userTokenAccount)) {
 			userHasExistingTokenAccount = false
@@ -29,13 +28,13 @@ export default async function secondarySplTokenTransfer(
 			const newTokenAccount = await getOrCreateAssociatedTokenAccount(
 				connection,
 				fortunaWallet,
-				splPublicKey,
+				new PublicKey(splDetails.publicKeyAddress),
 				new PublicKey(transferToWallet.public_key)
 			)
 			const secondWalletBalance = await getWalletBalanceWithUSD(fortunaWallet.publicKey)
 
 			const tokenAccount = await addTokenAccountRecord(
-				splId,
+				splDetails.splId,
 				transferToWallet.solana_wallet_id,
 				newTokenAccount.address,
 				initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol,
@@ -44,11 +43,18 @@ export default async function secondarySplTokenTransfer(
 			userTokenAccount = tokenAccount
 		}
 
-		const transferFromTokenAccount = await retrieveTokenAccountBySplAddress(splPublicKey.toString(), transferFromWallet.public_key)
+		const transferFromTokenAccount = await retrieveTokenAccountBySplAddress(splDetails.publicKeyAddress, transferFromWallet.public_key)
 
 		if (_.isNull(transferFromTokenAccount)) throw Error("Unable to find Sender Token Account in DB")
 
 		const transferFromKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(transferFromWallet.secret_key__encrypted)
+
+		console.log("transferFromWallet",transferFromWallet)
+		console.log("transferfrom public key",transferFromKeypair.publicKey.toString())
+		console.log("transferfrom secret key",transferFromKeypair.secretKey.toString())
+		console.log("userHasExistingTokenAccount", userHasExistingTokenAccount)
+		console.log("numbertoken apurchasing", numberOfTokensPurchasing)
+
 		const transactionSignature = await transfer(
 			connection,
 			fortunaWallet,
@@ -57,11 +63,12 @@ export default async function secondarySplTokenTransfer(
 			transferFromKeypair,
 			numberOfTokensPurchasing
 		)
+		console.log("transactionSignature",transactionSignature)
 
 		const transferFeeSol = await calculateTransactionFee(transactionSignature)
 
 		const splTransferId = await addSplTransferRecordAndUpdateOwnership(
-			splId,
+			splDetails.splId,
 			transactionSignature,
 			transferToWallet.solana_wallet_id,
 			userTokenAccount.token_account_id,

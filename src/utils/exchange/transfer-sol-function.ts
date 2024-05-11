@@ -2,9 +2,9 @@ import _ from "lodash"
 import { Currencies } from "@prisma/client"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram,
 	Transaction, clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
-import calculateTransactionFee from "../../solana/calculate-transaction-fee"
-import GetKeypairFromSecretKey from "../../solana/get-keypair-from-secret-key"
-import addSolTransferRecord from "../../../db-operations/write/sol-transfer/add-sol-transfer-record"
+import calculateTransactionFee from "../solana/calculate-transaction-fee"
+import GetKeypairFromSecretKey from "../solana/get-keypair-from-secret-key"
+import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
 
 export default async function transferSolFunction(
 	senderSolanaWallet: ExtendedSolanaWallet,
@@ -15,10 +15,12 @@ export default async function transferSolFunction(
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const transaction = new Transaction()
 
+		console.log("sender public key", senderSolanaWallet.public_key)
+		console.log("rec public key", recipientPublicKeyAndWalletId.public_key)
 		transaction.add(
 			SystemProgram.transfer({
 				fromPubkey: new PublicKey(senderSolanaWallet.public_key),
-				toPubkey: new PublicKey(recipientPublicKeyAndWalletId.public_key),
+				toPubkey: recipientPublicKeyAndWalletId.public_key,
 				lamports: _.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL)
 			})
 		)
@@ -27,10 +29,12 @@ export default async function transferSolFunction(
 		// Would have to think about wheather or not we want this.
 
 		const senderKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(senderSolanaWallet.secret_key__encrypted)
-		const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
+		const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaWalletKeypair()
 		const keypairs: Keypair[] = [fortunaWalletKeypair, senderKeypair]
 
+		console.log("here", keypairs)
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
+		console.log(transactionSignature)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
 		const solTransferRecord = await addSolTransferRecord(

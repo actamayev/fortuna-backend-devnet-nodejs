@@ -41,7 +41,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const senderKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(solanaWallet.secret_key__encrypted)
 		keypairs.push(senderKeypair)
 		if (isRecipientFortunaWallet === true) {
-			const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
+			const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaWalletKeypair()
 			keypairs.unshift(fortunaWalletKeypair)
 		}
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
