@@ -19,7 +19,7 @@ export default async function addSecondaryMarketBid(
 
 		return marketBid.secondary_market_bid_id
 	} catch (error) {
-		console.error("Error adding login record:", error)
+		console.error("Error adding secondary market bid record:", error)
 		throw error
 	}
 }

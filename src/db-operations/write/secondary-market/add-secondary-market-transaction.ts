@@ -17,7 +17,7 @@ export default async function addSecondaryMarketTransaction(
 			}
 		})
 	} catch (error) {
-		console.error("Error adding login record:", error)
+		console.error("Error secondary market transaction record:", error)
 		throw error
 	}
 }

@@ -19,7 +19,7 @@ export default async function addSecondaryMarketAsk(
 
 		return marketAsk.secondary_market_ask_id
 	} catch (error) {
-		console.error("Error adding login record:", error)
+		console.error("Error adding secondary market ask:", error)
 		throw error
 	}
 }

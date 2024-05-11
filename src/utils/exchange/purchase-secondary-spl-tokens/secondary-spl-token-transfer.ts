@@ -49,21 +49,14 @@ export default async function secondarySplTokenTransfer(
 
 		const transferFromKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(transferFromWallet.secret_key__encrypted)
 
-		console.log("transferFromWallet",transferFromWallet)
-		console.log("transferfrom public key",transferFromKeypair.publicKey.toString())
-		console.log("transferfrom secret key",transferFromKeypair.secretKey.toString())
-		console.log("userHasExistingTokenAccount", userHasExistingTokenAccount)
-		console.log("numbertoken apurchasing", numberOfTokensPurchasing)
-
 		const transactionSignature = await transfer(
 			connection,
 			fortunaWallet,
-			new PublicKey(transferFromWallet.public_key),
+			new PublicKey(transferFromTokenAccount.public_key), // change  this to transfer from token account
 			new PublicKey(userTokenAccount.public_key),
 			transferFromKeypair,
 			numberOfTokensPurchasing
 		)
-		console.log("transactionSignature",transactionSignature)
 
 		const transferFeeSol = await calculateTransactionFee(transactionSignature)
 
