@@ -15,8 +15,6 @@ export default async function transferSolFunction(
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const transaction = new Transaction()
 
-		console.log("sender public key", senderSolanaWallet.public_key)
-		console.log("rec public key", recipientPublicKeyAndWalletId.public_key)
 		transaction.add(
 			SystemProgram.transfer({
 				fromPubkey: new PublicKey(senderSolanaWallet.public_key),
@@ -32,9 +30,7 @@ export default async function transferSolFunction(
 		const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaWalletKeypair()
 		const keypairs: Keypair[] = [fortunaWalletKeypair, senderKeypair]
 
-		console.log("here", keypairs)
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
-		console.log(transactionSignature)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
 		const solTransferRecord = await addSolTransferRecord(

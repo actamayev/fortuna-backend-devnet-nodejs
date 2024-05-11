@@ -47,7 +47,7 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 			await updateSecondaryMarketBidDecrement(bid.secondary_market_bid_id, numberSharesToSell)
 
 			// add a record to the secondary_transaction_table.
-			await addSecondaryMarketTransaction(askId, bid.secondary_market_bid_id, solTransferId, splTransferId)
+			await addSecondaryMarketTransaction(bid.secondary_market_bid_id, askId, solTransferId, splTransferId)
 			numberOfRemainingSharesToSell -= numberSharesToSell
 		}
 
