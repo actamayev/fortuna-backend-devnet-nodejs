@@ -4,7 +4,6 @@ import primarySplTokenPurchase from "../controllers/exchange/primary-spl-token-p
 import placeSecondaryMarketSplAsk from "../controllers/exchange/place-secondary-market-spl-ask"
 import placeSecondaryMarketSplBid from "../controllers/exchange/place-secondary-market-spl-bid"
 
-import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
 import {
 	attachSplDetailsByPublicKeyForPrimarySplPurchase,
 	attachSplDetailsByPublicKeyForSecondarySplBid,
@@ -14,6 +13,7 @@ import {
 	confirmUserHasEnoughSolToBidForSecondaryTokens,
 	confirmUserHasEnoughSolToPurchasePrimaryTokens
 } from "../middleware/confirmations/exchange/confirm-user-has-enough-sol-to-purchase-tokens"
+import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
 import confirmEnoughSharesInEscrowToCompletePurchase
 	from "../middleware/confirmations/exchange/confirm-enough-shares-in-escrow-to-complete-purchase"
 import validateCreateSplBid from "../middleware/request-validation/exchange/validate-create-spl-bid"
