@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import _ from "lodash"
 import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"

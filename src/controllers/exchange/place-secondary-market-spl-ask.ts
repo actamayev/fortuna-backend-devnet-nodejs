@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import _ from "lodash"
 import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
@@ -54,7 +53,7 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 				}
 			)
 			// update the bid records
-			await updateSecondaryMarketBidDecrement(bid, numberSharesToSell)
+			await updateSecondaryMarketBidDecrement(bid.secondary_market_bid_id, numberSharesToSell)
 
 			// add a record to the secondary_transaction_table.
 			await addSecondaryMarketTransaction(bid.secondary_market_bid_id, askId, solTransferId, splTransferId),

@@ -9,14 +9,14 @@ export default async function retrieveBidsAboveCertainPrice(
 		const asks = await prismaClient.secondary_market_bid.findMany({
 			where: {
 				is_active: true,
+				was_bid_cancelled_due_to_fund_requirements: false,
 				spl_id: splId,
 				remaining_number_of_shares_bidding_for: {
 					gt: 0
 				},
 				bid_price_per_share_usd: {
 					gte: askPrice
-				},
-				was_bid_cancelled_due_to_fund_requirements: false
+				}
 			},
 			orderBy: {
 				bid_price_per_share_usd: "desc"
@@ -26,7 +26,7 @@ export default async function retrieveBidsAboveCertainPrice(
 				spl_id: true,
 				remaining_number_of_shares_bidding_for: true,
 				bid_price_per_share_usd: true,
-				solana_wallet: true,
+				solana_wallet: true
 			}
 		})
 
