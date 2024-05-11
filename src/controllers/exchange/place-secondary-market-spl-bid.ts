@@ -4,6 +4,7 @@ import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
 import SolPriceManager from "../../classes/sol-price-manager"
 import transferSolFunction from "../../utils/exchange/transfer-sol-function"
+import calculateAverageFillPrice from "../../utils/exchange/calculate-average-fill-price"
 import addSecondaryMarketBid from "../../db-operations/write/secondary-market/add-secondary-market-bid"
 import { updateSecondaryMarketBidSet } from "../../db-operations/write/secondary-market/update-secondary-market-bid"
 import addSecondaryMarketTransaction from "../../db-operations/write/secondary-market/add-secondary-market-transaction"
@@ -12,6 +13,7 @@ import secondarySplTokenTransfer from "../../utils/exchange/purchase-secondary-s
 import { updateSecondaryMarketAskDecrement } from "../../db-operations/write/secondary-market/update-secondary-market-ask"
 
 // TODO: To make sure that the user has enough funds to make a bid, will need to have a hook in the front-end that runs anytime there is a change in wallet balance
+// eslint-disable-next-line max-lines-per-function
 export default async function placeSecondaryMarketSplBid(req: Request, res: Response): Promise<Response> {
 	try {
 		const { splDetails, solanaWallet} = req
@@ -24,6 +26,7 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 		if (_.isEmpty(retrievedAsks)) return res.status(200).json({ success: "Added bid, no asks yet" })
 
 		let numberOfRemainingSharesToBuy = createSplBidData.numberOfSharesBiddingFor
+		const transactionsMap: TransactionsMap[] = []
 		for (const ask of retrievedAsks) {
 			if (numberOfRemainingSharesToBuy === 0) break
 			let amountToBuy: number = numberOfRemainingSharesToBuy
@@ -48,6 +51,7 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 			await updateSecondaryMarketAskDecrement(ask.secondary_market_ask_id, amountToBuy)
 			// add a record to the secondary_transaction_table.
 			await addSecondaryMarketTransaction(bidId, ask.secondary_market_ask_id, solTransferId, splTransferId)
+			transactionsMap.push({ fillPriceUsd: ask.ask_price_per_share_usd, numberOfShares: amountToBuy})
 			numberOfRemainingSharesToBuy -= amountToBuy
 		}
 
@@ -56,7 +60,13 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 
 		// TODO: If the user has other bids open, need to close all bids whose value is greater than the wallet balance
 		// Will also need to do this in the place-secondary-market-spl-ask.ts, inside the inner loop (as a bidders orders get filled, his balance decreases)
-		return res.status(200).json({ success: "Added bid" })
+		const sharesPurchased = createSplBidData.numberOfSharesBiddingFor - numberOfRemainingSharesToBuy
+		const averageFillPrice = calculateAverageFillPrice(transactionsMap)
+		return res.status(200).json({
+			sharesPurchased,
+			averageFillPrice,
+			transactionsMap
+		})
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to create Spl Bid" })

@@ -4,6 +4,7 @@ import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
 import SolPriceManager from "../../classes/sol-price-manager"
 import transferSolFunction from "../../utils/exchange/transfer-sol-function"
+import calculateAverageFillPrice from "../../utils/exchange/calculate-average-fill-price"
 import addSecondaryMarketAsk from "../../db-operations/write/secondary-market/add-secondary-market-ask"
 import { updateSecondaryMarketAskSet } from "../../db-operations/write/secondary-market/update-secondary-market-ask"
 import secondarySplTokenTransfer from "../../utils/exchange/purchase-secondary-spl-tokens/secondary-spl-token-transfer"
@@ -11,6 +12,7 @@ import addSecondaryMarketTransaction from "../../db-operations/write/secondary-m
 import retrieveBidsAboveCertainPrice from "../../db-operations/read/secondary-market/retrieve-bids-above-certain-price"
 import { updateSecondaryMarketBidDecrement } from "../../db-operations/write/secondary-market/update-secondary-market-bid"
 
+// eslint-disable-next-line max-lines-per-function
 export default async function placeSecondaryMarketSplAsk(req: Request, res: Response): Promise<Response> {
 	try {
 		const { splDetails, solanaWallet} = req
@@ -23,6 +25,7 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 		if (_.isEmpty(retrievedBids)) return res.status(200).json({ success: "Added bid, no asks yet" })
 
 		let numberOfRemainingSharesToSell = createSplAskData.numberOfSharesAskingFor
+		const transactionsMap: TransactionsMap[] = []
 		for (const bid of retrievedBids) {
 			if (numberOfRemainingSharesToSell === 0) break
 			let numberSharesToSell: number = numberOfRemainingSharesToSell
@@ -47,14 +50,21 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 			await updateSecondaryMarketBidDecrement(bid.secondary_market_bid_id, numberSharesToSell)
 
 			// add a record to the secondary_transaction_table.
-			await addSecondaryMarketTransaction(bid.secondary_market_bid_id, askId, solTransferId, splTransferId)
+			await addSecondaryMarketTransaction(bid.secondary_market_bid_id, askId, solTransferId, splTransferId),
+			transactionsMap.push({ fillPriceUsd: bid.bid_price_per_share_usd, numberOfShares: numberSharesToSell})
 			numberOfRemainingSharesToSell -= numberSharesToSell
 		}
 
 		// update the bid record (update for the number of available shares.)
 		await updateSecondaryMarketAskSet(askId, numberOfRemainingSharesToSell)
 
-		return res.status(200).json({ success: "" })
+		const sharesSold = createSplAskData.numberOfSharesAskingFor - numberOfRemainingSharesToSell
+		const averageFillPrice = calculateAverageFillPrice(transactionsMap)
+		return res.status(200).json({
+			sharesSold,
+			averageFillPrice,
+			transactionsMap
+		})
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to create Spl Ask" })

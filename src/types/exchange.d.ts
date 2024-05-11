@@ -31,6 +31,11 @@ declare global {
 		bid_price_per_share_usd: number
 		solana_wallet: ExtendedSolanaWallet
 	}
+
+	interface TransactionsMap {
+		fillPriceUsd: number
+		numberOfShares: number
+	}
 }
 
 export {}
