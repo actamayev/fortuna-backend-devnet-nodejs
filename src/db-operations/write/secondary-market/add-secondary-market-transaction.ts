@@ -13,7 +13,7 @@ export default async function addSecondaryMarketTransaction(
 				secondary_market_bid_id: bidId,
 				secondary_market_ask_id: askId,
 				sol_transfer_id: solTransferId,
-				spl_transfer_id: splTransferId,
+				spl_transfer_id: splTransferId
 			}
 		})
 	} catch (error) {
