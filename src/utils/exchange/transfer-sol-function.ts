@@ -2,13 +2,13 @@ import _ from "lodash"
 import { Currencies } from "@prisma/client"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram,
 	Transaction, clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
-import calculateTransactionFee from "../calculate-transaction-fee"
-import GetKeypairFromSecretKey from "../get-keypair-from-secret-key"
-import addSolTransferRecord from "../../../db-operations/write/sol-transfer/add-sol-transfer-record"
+import calculateTransactionFee from "../solana/calculate-transaction-fee"
+import GetKeypairFromSecretKey from "../solana/get-keypair-from-secret-key"
+import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
 
-export default async function transferSolFromUserToCreator(
+export default async function transferSolFunction(
 	senderSolanaWallet: ExtendedSolanaWallet,
-	recipientPublicKeyAndWalletId: { public_key: string, solana_wallet_id: number },
+	recipientPublicKeyAndWalletId: { public_key: PublicKey, solana_wallet_id: number },
 	transferDetails: { solToTransfer: number, usdToTransfer: number, defaultCurrency: Currencies },
 ): Promise<number> {
 	try {
@@ -18,7 +18,7 @@ export default async function transferSolFromUserToCreator(
 		transaction.add(
 			SystemProgram.transfer({
 				fromPubkey: new PublicKey(senderSolanaWallet.public_key),
-				toPubkey: new PublicKey(recipientPublicKeyAndWalletId.public_key),
+				toPubkey: recipientPublicKeyAndWalletId.public_key,
 				lamports: _.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL)
 			})
 		)
@@ -27,7 +27,7 @@ export default async function transferSolFromUserToCreator(
 		// Would have to think about wheather or not we want this.
 
 		const senderKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(senderSolanaWallet.secret_key__encrypted)
-		const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
+		const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaWalletKeypair()
 		const keypairs: Keypair[] = [fortunaWalletKeypair, senderKeypair]
 
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)

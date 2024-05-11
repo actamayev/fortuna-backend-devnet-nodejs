@@ -1,4 +1,5 @@
 import _ from "lodash"
+import { PublicKey } from "@solana/web3.js"
 import { Currencies } from "@prisma/client"
 import SecretsManager from "../../../classes/secrets-manager"
 import PrismaClientClass from "../../../classes/prisma-client"
@@ -6,7 +7,7 @@ import SolPriceManager from "../../../classes/sol-price-manager"
 
 // eslint-disable-next-line max-params
 export default async function addSolTransferRecord (
-	recipientPublicKey: string,
+	recipientPublicKey: PublicKey,
 	isRecipientFortunaWallet: boolean,
 	transactionSignature: string,
 	transferDetails: { solToTransfer: number, usdToTransfer: number, defaultCurrency: Currencies },
@@ -26,7 +27,7 @@ export default async function addSolTransferRecord (
 
 		const solTransfer = await prismaClient.sol_transfer.create({
 			data: {
-				recipient_public_key: recipientPublicKey,
+				recipient_public_key: recipientPublicKey.toString(),
 				is_recipient_fortuna_wallet: isRecipientFortunaWallet,
 				recipient_solana_wallet_id: recipientSolanaWalletId,
 				transaction_signature: transactionSignature,

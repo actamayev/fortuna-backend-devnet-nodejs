@@ -8,6 +8,7 @@ import calculateTransactionFee from "../../utils/solana/calculate-transaction-fe
 import GetKeypairFromSecretKey from "../../utils/solana/get-keypair-from-secret-key"
 import { transformTransaction } from "../../utils/transform/transform-transactions-list"
 import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
+import updateBidStatusOnWalletBalanceChange from "../../utils/exchange/update-bid-status-on-wallet-balance-change"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
@@ -41,7 +42,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const senderKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(solanaWallet.secret_key__encrypted)
 		keypairs.push(senderKeypair)
 		if (isRecipientFortunaWallet === true) {
-			const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
+			const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaWalletKeypair()
 			keypairs.unshift(fortunaWalletKeypair)
 		}
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
@@ -54,7 +55,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		}
 
 		const solTransferRecord = await addSolTransferRecord(
-			recipientPublicKey.toString(),
+			recipientPublicKey,
 			isRecipientFortunaWallet,
 			transactionSignature,
 			transferCurrencyAmounts,
@@ -62,7 +63,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			solanaWallet.solana_wallet_id,
 			recipientSolanaWalletId,
 			false,
-			feePayerSolanaWalletId,
+			feePayerSolanaWalletId
 		)
 
 		const transactionToTransform: RetrievedDBTransactionListData = {
@@ -72,6 +73,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		}
 
 		const solTransferData = transformTransaction(transactionToTransform, solanaWallet.public_key)
+		await updateBidStatusOnWalletBalanceChange(solanaWallet)
 		return res.status(200).json({ solTransferData })
 	} catch (error) {
 		console.error(error)

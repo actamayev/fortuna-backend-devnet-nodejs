@@ -1,15 +1,16 @@
 import _ from "lodash"
 import { Request, Response } from "express"
 import SolPriceManager from "../../classes/sol-price-manager"
+import transferSolFunction from "../../utils/exchange/transfer-sol-function"
 import addSplPurchaseRecord from "../../db-operations/write/spl/spl-purchase/add-spl-purchase-record"
-import transferSplTokensToUser from "../../utils/solana/purchase-spl-tokens/transfer-spl-tokens-to-user"
 import retrieveCreatorWalletInfoFromSpl from "../../db-operations/read/spl/retrieve-creator-wallet-info-from-spl"
-import transferSolFromUserToCreator from "../../utils/solana/purchase-spl-tokens/transfer-sol-from-user-to-creator"
+import transferSplTokensToUser from "../../utils/exchange/purchase-primary-spl-tokens/transfer-spl-tokens-to-user"
+import updateBidStatusOnWalletBalanceChange from "../../utils/exchange/update-bid-status-on-wallet-balance-change"
 
-export default async function purchaseSplTokens(req: Request, res: Response): Promise<Response> {
+export default async function primarySplTokenPurchase(req: Request, res: Response): Promise<Response> {
 	try {
 		const { solanaWallet, splDetails } = req
-		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchaseSPLTokensData
+		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchasePrimarySPLTokensData
 		// FUTURE TODO: See if there's a way to simultaneously transfer Spl tokens to user and transfer sol from user to creator
 		// Better for this to be done as one transaction (so that if either one fails, neither go through)
 
@@ -19,7 +20,7 @@ export default async function purchaseSplTokens(req: Request, res: Response): Pr
 		const splTransferId = await transferSplTokensToUser(solanaWallet, purchaseSplTokensData, splDetails.splId)
 
 		const creatorWalletInfo = await retrieveCreatorWalletInfoFromSpl(splDetails.splId)
-		if (_.isUndefined(creatorWalletInfo)) return res.status(500).json({ error: "Unable to find creator's public key" })
+		if (_.isNull(creatorWalletInfo)) return res.status(500).json({ error: "Unable to find creator's public key" })
 
 		const transferCurrencyAmounts = { solPriceToTransferAt: 0, usdPriceToTransferAt: splDetails.listingSharePriceUsd }
 
@@ -27,7 +28,7 @@ export default async function purchaseSplTokens(req: Request, res: Response): Pr
 		transferCurrencyAmounts.solPriceToTransferAt = splDetails.listingSharePriceUsd / solPrice
 		// 2) Transfer sol from user to creator (fortuna wallet should cover transaction)
 		// Record the transaction (save to sol_transfer table)
-		const solTransferId = await transferSolFromUserToCreator(
+		const solTransferId = await transferSolFunction(
 			solanaWallet,
 			creatorWalletInfo,
 			{
@@ -40,6 +41,7 @@ export default async function purchaseSplTokens(req: Request, res: Response): Pr
 		// 3) Record to spl_purchase table:
 		await addSplPurchaseRecord(splDetails.splId, splTransferId, solTransferId)
 
+		await updateBidStatusOnWalletBalanceChange(solanaWallet)
 		return res.status(200).json({
 			splName: splDetails.splName,
 			splPublicKey: splDetails.publicKeyAddress,

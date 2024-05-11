@@ -1,6 +1,7 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import uuidValidator from "../../joi/uuid-validator"
 
 const createAndMintSPLSchema = Joi.object({
 	newSPLData: Joi.object({
@@ -10,7 +11,7 @@ const createAndMintSPLSchema = Joi.object({
 		listingSharePriceUsd: Joi.number().strict().required(),
 		imageUrl: Joi.string().required(),
 		videoUrl: Joi.string().required(),
-		uuid: Joi.string().uuid({ version: "uuidv4" }).required(),
+		uuid: uuidValidator.required(),
 		uploadedImageId: Joi.number().strict().required(),
 		uploadedVideoId: Joi.number().strict().required(),
 		description: Joi.string().required(),

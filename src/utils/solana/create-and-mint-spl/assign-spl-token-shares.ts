@@ -18,7 +18,7 @@ export default async function assignSPLTokenShares (
 ): Promise<void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const fortunaWallet = await GetKeypairFromSecretKey.getFortunaSolanaWalletFromSecretKey()
+		const fortunaWallet = await GetKeypairFromSecretKey.getFortunaWalletKeypair()
 		const {
 			FORTUNA_SOLANA_WALLET_ID_DB,
 			FORTUNA_ESCROW_WALLET_PUBLIC_KEY,
