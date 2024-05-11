@@ -29,6 +29,8 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 		const transactionsMap: TransactionsMap[] = []
 		for (const bid of retrievedBids) {
 			if (numberOfRemainingSharesToSell === 0) break
+			if (_.isEqual(solanaWallet.solana_wallet_id, bid.solana_wallet.solana_wallet_id)) continue
+
 			let numberSharesToSell: number = numberOfRemainingSharesToSell
 			if (numberOfRemainingSharesToSell > bid.remaining_number_of_shares_bidding_for) {
 				numberSharesToSell = bid.remaining_number_of_shares_bidding_for

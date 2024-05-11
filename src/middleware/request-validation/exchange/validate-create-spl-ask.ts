@@ -3,7 +3,7 @@ import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 import publicKeyValidator from "../../joi/public-key-validator"
 
-const createSplBidSchema = Joi.object({
+const createSplAskSchema = Joi.object({
 	createSplAsk: Joi.object({
 		splPublicKey: publicKeyValidator.required().trim(),
 		numberOfSharesAskingFor: Joi.number().strict().integer().min(1).required(),
@@ -13,7 +13,7 @@ const createSplBidSchema = Joi.object({
 
 export default function validateCreateSplAsk (req: Request, res: Response, next: NextFunction): Response | void {
 	try {
-		const { error } = createSplBidSchema.validate(req.body)
+		const { error } = createSplAskSchema.validate(req.body)
 
 		if (!_.isUndefined(error)) return res.status(400).json({ validationError: error.details[0].message })
 
