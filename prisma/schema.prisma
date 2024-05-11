@@ -355,6 +355,7 @@ model secondary_market_bid {
 	remaining_number_of_shares_bidding_for			Int
 	bid_price_per_share_usd							Float
 	was_bid_cancelled_due_to_fund_requirements		Boolean @default(false) // This is changed to true when the value in a user's wallet goes below the value of their bid
+	value_of_remaining_bid_usd						Float
 
 	spl         									spl @relation(fields: [spl_id], references: [spl_id])
 	solana_wallet									solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
