@@ -1,9 +1,10 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import uuidValidator from "../../joi/uuid-validator"
 
 const uploadImageToS3Schema = Joi.object({
-	uuid: Joi.string().uuid({ version: "uuidv4" }).required(),
+	uuid: uuidValidator.required(),
 }).required()
 
 export default function validateUploadImageToS3 (req: Request, res: Response, next: NextFunction): Response | void {

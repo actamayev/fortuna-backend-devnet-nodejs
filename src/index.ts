@@ -13,6 +13,7 @@ import uploadRoutes from "./routes/upload-routes"
 import videosRoutes from "./routes/videos-routes"
 import authRoutes from "./routes/auth/auth-routes"
 import youtubeRoutes from "./routes/youtube-routes"
+import exchangeRoutes from "./routes/exchange-routes"
 import encryptionRoutes from "./routes/encryption-routes"
 import personalInfoRoutes from "./routes/personal-info-routes"
 
@@ -46,6 +47,7 @@ app.use(cookieParser())
 app.use(express.json())
 
 app.use("/auth", authRoutes)
+app.use("/exchange", jwtVerify, exchangeRoutes)
 app.use("/personal-info", jwtVerify, personalInfoRoutes)
 app.use("/search", searchRoutes)
 app.use("/solana", solanaRoutes)

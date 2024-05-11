@@ -5,7 +5,7 @@ import { findSolanaWalletByPublicKey } from "../../../db-operations/read/find/fi
 export default async function checkIfPublicKeyPartOfFortuna (req: Request, res: Response, next: NextFunction): Promise<void | Response> {
 	try {
 		const { recipientPublicKey } = req
-		const receipientSolanaWallet = await findSolanaWalletByPublicKey(recipientPublicKey.toString())
+		const receipientSolanaWallet = await findSolanaWalletByPublicKey(recipientPublicKey)
 
 		req.isRecipientFortunaWallet = !_.isNull(receipientSolanaWallet)
 		req.recipientSolanaWalletId = receipientSolanaWallet?.solana_wallet_id

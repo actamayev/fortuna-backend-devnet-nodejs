@@ -135,11 +135,6 @@ declare global {
 		uuid: string
 	}
 
-	interface PurchaseSPLTokensData {
-		numberOfTokensPurchasing: number
-		splPublicKey: string
-	}
-
 	interface RetrievedMyOwnershipData {
 		number_of_shares: number
 		spl: {
