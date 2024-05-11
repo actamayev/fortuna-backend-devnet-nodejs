@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 import retrieveSplOwnershipByWalletIdAndSplId
-	from "../../../db-operations/read/spl-ownership.ts/retrieve-spl-ownership-by-wallet-id-and-spl-id"
+	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-id"
 
 export default async function confirmUserHasEnoughTokensToCreateSplAsk(
 	req: Request,
