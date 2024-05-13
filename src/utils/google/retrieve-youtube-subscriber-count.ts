@@ -18,6 +18,7 @@ export default async function retrieveYouTubeSubscriberCount(
 
 		const subscribers = creatorYouTubeData.data.items[0].statistics?.subscriberCount
 
+		if (_.isEqual(subscribers, 0)) return 0
 		if (_.isNil(subscribers)) return null
 
 		return parseInt(subscribers, 10)
