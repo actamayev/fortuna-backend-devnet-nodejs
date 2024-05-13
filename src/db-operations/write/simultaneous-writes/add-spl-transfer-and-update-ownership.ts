@@ -45,7 +45,6 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 				}
 			})
 
-
 			// Updates the sender's ownership record:
 			await prisma.spl_ownership.update({
 				where: {

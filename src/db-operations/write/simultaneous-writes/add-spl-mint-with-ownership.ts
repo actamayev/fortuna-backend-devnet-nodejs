@@ -12,8 +12,7 @@ export default async function addSplMintWithOwnership(
 ): Promise<void> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
-		const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_FEE_PAYER_WALLET_ID_DB")
-		const feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
+		const fortunaFeePayerSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_FEE_PAYER_WALLET_ID_DB")
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		await prismaClient.$transaction(async (prisma) => {
@@ -24,7 +23,7 @@ export default async function addSplMintWithOwnership(
 					number_of_shares: numberOfShares,
 					spl_mint_fee_sol: splMintFeeSol,
 					spl_mint_fee_usd: splMintFeeSol * solPriceDetails.price,
-					fee_payer_solana_wallet_id: feePayerSolanaWalletId,
+					fee_payer_solana_wallet_id: parseInt(fortunaFeePayerSolanaWalletIdDb, 10),
 					transaction_signature: transactionSignature
 				}
 			})

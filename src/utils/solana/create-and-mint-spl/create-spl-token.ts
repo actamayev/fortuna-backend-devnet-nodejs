@@ -12,22 +12,22 @@ import GetKeypairFromSecretKey from "../get-keypair-from-secret-key"
 export default async function createSPLToken (metadataJSONUrl: string, splName: string): Promise<CreateSPLResponse> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const fortunaWallet = await GetKeypairFromSecretKey.getFortunaFeePayerWalletKeypair()
+		const fortunaFeePayerWallet = await GetKeypairFromSecretKey.getFortunaFeePayerWalletKeypair()
 
-		const initialWalletBalanceSol = await getWalletBalanceSol(fortunaWallet.publicKey)
+		const initialWalletBalanceSol = await getWalletBalanceSol(fortunaFeePayerWallet.publicKey)
 
 		const mint = await createMint(
 			connection,
-			fortunaWallet,
-			fortunaWallet.publicKey,
+			fortunaFeePayerWallet,
+			fortunaFeePayerWallet.publicKey,
 			null,
 			0
 		)
-		const secondWalletBalanceSol = await getWalletBalanceSol(fortunaWallet.publicKey)
+		const secondWalletBalanceSol = await getWalletBalanceSol(fortunaFeePayerWallet.publicKey)
 
 		const feeInSol = initialWalletBalanceSol - secondWalletBalanceSol
 
-		const metadataTransactionSignature = await createTokenMetadata(mint, metadataJSONUrl, splName, fortunaWallet)
+		const metadataTransactionSignature = await createTokenMetadata(mint, metadataJSONUrl, splName, fortunaFeePayerWallet)
 
 		return {
 			mint,
@@ -45,10 +45,10 @@ async function createTokenMetadata(
 	mint: PublicKey,
 	metadataJSONUrl: string,
 	splName: string,
-	fortunaWallet: Keypair
+	fortunaFeePayerWallet: Keypair
 ): Promise<string> {
 	try {
-		const umiKeypair = fromWeb3JsKeypair(fortunaWallet)
+		const umiKeypair = fromWeb3JsKeypair(fortunaFeePayerWallet)
 
 		const umi = createUmi(clusterApiUrl("devnet"), "confirmed")
 		const signer = createSignerFromKeypair(umi, umiKeypair)
