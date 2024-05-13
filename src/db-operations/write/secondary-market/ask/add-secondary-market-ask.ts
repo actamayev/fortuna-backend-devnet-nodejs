@@ -1,4 +1,4 @@
-import PrismaClientClass from "../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function addSecondaryMarketAsk(
 	splId: number,

@@ -1,23 +1,29 @@
 import express from "express"
 
+import cancelSplAsk from "../controllers/exchange/ask/cancel-spl-ask"
+import cancelSplBid from "../controllers/exchange/bid/cancel-spl-bid"
 import primarySplTokenPurchase from "../controllers/exchange/primary-spl-token-purchase"
-import placeSecondaryMarketSplAsk from "../controllers/exchange/place-secondary-market-spl-ask"
-import placeSecondaryMarketSplBid from "../controllers/exchange/place-secondary-market-spl-bid"
+import placeSecondaryMarketSplAsk from "../controllers/exchange/ask/place-secondary-market-spl-ask"
+import placeSecondaryMarketSplBid from "../controllers/exchange/bid/place-secondary-market-spl-bid"
 
 import {
 	attachSplDetailsByPublicKeyForPrimarySplPurchase,
 	attachSplDetailsByPublicKeyForSecondarySplBid,
 	attachSplDetailsByPublicKeyForSecondarySplAsk
 } from "../middleware/attach/attach-spl-details-by-public-key"
+import confirmBidCreator from "../middleware/confirmations/exchange/confirm-bid-creator"
+import confirmAskCreator from "../middleware/confirmations/exchange/confirm-ask-creator"
 import {
 	confirmUserHasEnoughSolToBidForSecondaryTokens,
 	confirmUserHasEnoughSolToPurchasePrimaryTokens
 } from "../middleware/confirmations/exchange/confirm-user-has-enough-sol-to-purchase-tokens"
 import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
+import validateCancelSplBid from "../middleware/request-validation/exchange/bid/validate-cancel-bid"
+import validateCancelSplAsk from "../middleware/request-validation/exchange/ask/validate-cancel-ask"
 import confirmEnoughSharesInEscrowToCompletePurchase
 	from "../middleware/confirmations/exchange/confirm-enough-shares-in-escrow-to-complete-purchase"
-import validateCreateSplBid from "../middleware/request-validation/exchange/validate-create-spl-bid"
-import validateCreateSplAsk from "../middleware/request-validation/exchange/validate-create-spl-ask"
+import validateCreateSplBid from "../middleware/request-validation/exchange/bid/validate-create-spl-bid"
+import validateCreateSplAsk from "../middleware/request-validation/exchange/ask/validate-create-spl-ask"
 import validatePurchaseSplTokens from "../middleware/request-validation/exchange/validate-purchase-spl-tokens"
 import confirmCreatorNotBuyingOwnShares from "../middleware/confirmations/exchange/confirm-creator-not-buying-own-shares"
 import confirmUserHasEnoughTokensToCreateSplAsk from "../middleware/confirmations/exchange/confirm-user-has-enough-tokens-to-create-spl-ask"
@@ -56,6 +62,19 @@ exchangeRoutes.post(
 	placeSecondaryMarketSplAsk
 )
 
-// FUTURE TODO: Add routes to cancel an order
+exchangeRoutes.post(
+	"/cancel-spl-bid/:splBidId",
+	validateCancelSplBid,
+	confirmBidCreator,
+	cancelSplBid
+)
+
+exchangeRoutes.post(
+	"/cancel-spl-ask/:splAskId",
+	validateCancelSplAsk,
+	confirmAskCreator,
+	cancelSplAsk
+)
+
 // FUTURE TODO: Add routes to edit an order.
 export default exchangeRoutes
