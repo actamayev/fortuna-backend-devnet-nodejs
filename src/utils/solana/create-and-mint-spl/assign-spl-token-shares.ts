@@ -76,7 +76,7 @@ export default async function assignSPLTokenShares (
 			creatorSolanaWalletId
 		)
 
-		EscrowWalletManager.getInstance().addSplToMap(splTokenPublicKey.toString(), escrowSharesToMint)
+		EscrowWalletManager.getInstance().addSplToMap(splTokenPublicKey, escrowSharesToMint)
 	} catch (error) {
 		console.error(error)
 		throw error

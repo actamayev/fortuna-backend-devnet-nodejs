@@ -1,4 +1,5 @@
 import _ from "lodash"
+import { PublicKey } from "@solana/web3.js"
 import SecretsManager from "./secrets-manager"
 import retrieveSplOwnershipForEscrowMap from "../db-operations/read/spl-ownership/retrieve-spl-ownership-for-escrow-map"
 
@@ -107,11 +108,11 @@ export default class EscrowWalletManager {
 		}
 	}
 
-	public addSplToMap(publicKey: string, numberShares: number): void {
+	public addSplToMap(publicKey: PublicKey, numberShares: number): void {
 		try {
-			const currentAmount = this.splMap.get(publicKey)
+			const currentAmount = this.splMap.get(publicKey.toString())
 			if (!_.isUndefined(currentAmount)) throw Error("Public Key already exists in map")
-			this.splMap.set(publicKey, numberShares)
+			this.splMap.set(publicKey.toString(), numberShares)
 		} catch (error) {
 			console.error(error)
 			throw error
