@@ -1,5 +1,4 @@
 import { Request, Response } from "express"
-import { PublicKey } from "@solana/web3.js"
 import AwsS3 from "../../classes/aws-s3"
 import { createS3Key } from "../../utils/s3/create-s3-key"
 import addSPLRecord from "../../db-operations/write/spl/add-spl-record"
@@ -27,10 +26,8 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 
 		await AwsS3.getInstance().updateJSONInS3(uploadJSONS3Key, { splTokenPublicKey: createSPLResponse.mint.toString()})
 
-		const creatorPublicKey = new PublicKey(creatorSolanaWallet.public_key)
 		await assignSPLTokenShares(
 			createSPLResponse.mint,
-			creatorPublicKey,
 			newSPLData,
 			newSPLId,
 			creatorSolanaWallet.solana_wallet_id

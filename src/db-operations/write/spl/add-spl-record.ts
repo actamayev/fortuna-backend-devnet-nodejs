@@ -11,7 +11,7 @@ export default async function addSPLRecord (
 ): Promise<number> {
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
-		const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
+		const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_FEE_PAYER_WALLET_ID_DB")
 		const feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 

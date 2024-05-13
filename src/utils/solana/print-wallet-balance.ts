@@ -6,7 +6,7 @@ import SecretsManager from "../../classes/secrets-manager"
 export default async function printWalletBalance(initialLogMessage: string): Promise<void> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const fortunaWalletPublicKey = await SecretsManager.getInstance().getSecret("FORTUNA_WALLET_PUBLIC_KEY")
+		const fortunaWalletPublicKey = await SecretsManager.getInstance().getSecret("FORTUNA_FEE_PAYER_PUBLIC_KEY")
 		const publicKey = new PublicKey(fortunaWalletPublicKey)
 
 		const balanceInLamports = await connection.getBalance(publicKey)

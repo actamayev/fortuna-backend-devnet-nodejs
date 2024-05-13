@@ -12,7 +12,7 @@ import GetKeypairFromSecretKey from "../get-keypair-from-secret-key"
 export default async function createSPLToken (metadataJSONUrl: string, splName: string): Promise<CreateSPLResponse> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const fortunaWallet = await GetKeypairFromSecretKey.getFortunaWalletKeypair()
+		const fortunaWallet = await GetKeypairFromSecretKey.getFortunaFeePayerWalletKeypair()
 
 		const initialWalletBalanceSol = await getWalletBalanceSol(fortunaWallet.publicKey)
 

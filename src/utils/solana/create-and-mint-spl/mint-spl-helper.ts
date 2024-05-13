@@ -1,21 +1,23 @@
 import { mintTo } from "@solana/spl-token"
-import { Connection, Keypair, PublicKey } from "@solana/web3.js"
+import { Connection, Keypair, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import calculateTransactionFee from "../calculate-transaction-fee"
 import addSplMintWithOwnership from "../../../db-operations/write/simultaneous-writes/add-spl-mint-with-ownership"
 
 // This function is responsible for minting to an account, adding a mint record to DB, and adding a mint ownership record to DB
 // eslint-disable-next-line max-params
 export default async function mintSPLHelper(
-	connection: Connection,
 	payerWallet: Keypair,
 	splTokenPublicKey: PublicKey,
 	splId: number,
 	mintAuthority: PublicKey,
 	destinationAddress: PublicKey,
 	sharesToMint: number,
-	tokenAccountId: number
+	tokenAccountId: number,
+	solanaWalletId: number
 ): Promise<void> {
 	try {
+		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
+
 		const mintTransactionSignature = await mintTo(
 			connection,
 			payerWallet,
@@ -32,8 +34,8 @@ export default async function mintSPLHelper(
 			tokenAccountId,
 			sharesToMint,
 			feeInSol,
-			mintTransactionSignature
-
+			mintTransactionSignature,
+			solanaWalletId
 		)
 	} catch (error) {
 		console.error(error)

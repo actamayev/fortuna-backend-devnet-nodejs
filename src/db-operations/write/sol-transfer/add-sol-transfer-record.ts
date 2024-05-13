@@ -20,7 +20,7 @@ export default async function addSolTransferRecord (
 	try {
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
 		if (_.isUndefined(feePayerSolanaWalletId)) {
-			const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
+			const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_FEE_PAYER_WALLET_ID_DB")
 			feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
 		}
 		const prismaClient = await PrismaClientClass.getPrismaClient()
