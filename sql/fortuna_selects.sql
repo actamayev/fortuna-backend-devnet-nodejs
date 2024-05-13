@@ -7,9 +7,9 @@
 -- 	solana_wallet.solana_wallet_id, username, solana_wallet.secret_key__encrypted from credentials join solana_wallet on credentials.user_id = solana_wallet.user_id;
 
 -- select * from spl_ownership;
-select spl_id, number_of_shares, credentials.username from spl_ownership
-	join solana_wallet on spl_ownership.solana_wallet_id = solana_wallet.solana_wallet_id
-	join credentials on solana_wallet.user_id = credentials.user_id;
+-- select spl_id, number_of_shares, credentials.username from spl_ownership
+-- 	join solana_wallet on spl_ownership.solana_wallet_id = solana_wallet.solana_wallet_id
+-- 	join credentials on solana_wallet.user_id = credentials.user_id;
 
 -- select * from token_account;
 -- select * from uploaded_image;
