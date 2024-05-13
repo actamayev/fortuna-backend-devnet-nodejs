@@ -8,10 +8,10 @@ import calculateAverageFillPrice from "../../utils/exchange/calculate-average-fi
 import addSecondaryMarketAsk from "../../db-operations/write/secondary-market/add-secondary-market-ask"
 import updateBidStatusOnWalletBalanceChange from "../../utils/exchange/update-bid-status-on-wallet-balance-change"
 import { updateSecondaryMarketAskSet } from "../../db-operations/write/secondary-market/update-secondary-market-ask"
-import secondarySplTokenTransfer from "../../utils/exchange/purchase-secondary-spl-tokens/secondary-spl-token-transfer"
 import addSecondaryMarketTransaction from "../../db-operations/write/secondary-market/add-secondary-market-transaction"
 import retrieveBidsAboveCertainPrice from "../../db-operations/read/secondary-market/retrieve-bids-above-certain-price"
 import { updateSecondaryMarketBidDecrement } from "../../db-operations/write/secondary-market/update-secondary-market-bid"
+import addSplTransferRecordAndUpdateOwnership from "../../db-operations/write/simultaneous-writes/add-spl-transfer-and-update-ownership"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function placeSecondaryMarketSplAsk(req: Request, res: Response): Promise<Response> {
@@ -41,7 +41,14 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 
 			if (numberSharesToSell === 0) break
 			// Transfer SPL tokens:
-			const splTransferId = await secondarySplTokenTransfer(solanaWallet, bid.solana_wallet, numberSharesToSell, splDetails)
+			const splTransferId = await addSplTransferRecordAndUpdateOwnership(
+				splDetails.splId,
+				bid.solana_wallet.solana_wallet_id,
+				solanaWallet.solana_wallet_id,
+				true,
+				true,
+				numberSharesToSell
+			)
 
 			// Transfer Sol:
 			const solPrice = (await SolPriceManager.getInstance().getPrice()).price

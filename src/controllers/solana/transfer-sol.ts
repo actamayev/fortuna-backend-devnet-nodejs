@@ -42,16 +42,16 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const senderKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(solanaWallet.secret_key__encrypted)
 		keypairs.push(senderKeypair)
 		if (isRecipientFortunaWallet === true) {
-			const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaWalletKeypair()
-			keypairs.unshift(fortunaWalletKeypair)
+			const fortunaFeePayerWalletKeypair = await GetKeypairFromSecretKey.getFortunaFeePayerWalletKeypair()
+			keypairs.unshift(fortunaFeePayerWalletKeypair)
 		}
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
 		let feePayerSolanaWalletId = solanaWallet.solana_wallet_id
 		if (isRecipientFortunaWallet === true) {
-			const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
-			feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
+			const fortunaFeePayerSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_FEE_PAYER_WALLET_ID_DB")
+			feePayerSolanaWalletId = parseInt(fortunaFeePayerSolanaWalletIdDb, 10)
 		}
 
 		const solTransferRecord = await addSolTransferRecord(

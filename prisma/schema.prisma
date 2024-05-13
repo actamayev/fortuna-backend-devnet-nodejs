@@ -87,39 +87,11 @@ model solana_wallet {
 
 	spl_transfer_recipient_solana_wallet			spl_transfer[] @relation("recipient_solana_wallet")
 	spl_transfer_sender_solana_wallet				spl_transfer[] @relation("sender_solana_wallet")
-	spl_transfer_fee_payer_solana_wallet			spl_transfer[] @relation("fee_payer_solana_wallet")
+	spl_ownership									spl_ownership[]
 
 	secondary_market_bid							secondary_market_bid[]
 	secondary_market_ask							secondary_market_ask[]
 	@@index([user_id], name: "solana_wallet__user_id_idx")
-}
-
-model token_account {
-	token_account_id 								Int  @id @default(autoincrement())
-	spl_id											Int
-	parent_solana_wallet_id							Int
-	public_key										String       @db.VarChar(255)
-	token_account_creation_fee_sol 					Float
-	token_account_creation_fee_usd 					Float
-	fee_payer_solana_wallet_id						Int
-
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
-
-	spl       										spl @relation(fields: [spl_id], references: [spl_id])
-	fee_payer_solana_wallet							solana_wallet @relation(name: "fee_payer_solana_wallet", fields: [fee_payer_solana_wallet_id], references: [solana_wallet_id])
-	parent_solana_wallet							solana_wallet @relation(name: "parent_solana_wallet", fields: [parent_solana_wallet_id], references: [solana_wallet_id])
-
-	spl_transfer_recipient_token_account			spl_transfer[] @relation("recipient_token_account")
-	spl_transfer_sender_token_account				spl_transfer[] @relation("sender_token_account")
-
-	spl_ownership									spl_ownership[]
-	spl_mint										spl_mint[]
-
-  	@@index([spl_id], name: "token_account__spl_id_idx")
-	@@index([parent_solana_wallet_id], name: "token_account__parent_solana_wallet_id_idx")
-	@@index([fee_payer_solana_wallet_id], name: "token_account__fee_payer_solana_wallet_id_idx")
-	@@unique([spl_id, parent_solana_wallet_id])
 }
 
 enum SPLListingStatus {
@@ -179,6 +151,28 @@ model spl {
 	@@index([uploaded_image_id], name: "spl__uploaded_image_id_idx")
 }
 
+model token_account {
+	token_account_id 								Int  @id @default(autoincrement())
+	spl_id											Int
+	public_key										String       @db.VarChar(255) // Public Key of the token account
+	token_account_creation_fee_sol 					Float
+	token_account_creation_fee_usd 					Float
+	fee_payer_solana_wallet_id						Int
+	parent_solana_wallet_id							Int
+
+	created_at    									DateTime  @default(now())
+	updated_at    									DateTime  @default(now()) @updatedAt
+
+	spl       										spl @relation(fields: [spl_id], references: [spl_id])
+	fee_payer_solana_wallet							solana_wallet @relation(name: "fee_payer_solana_wallet", fields: [fee_payer_solana_wallet_id], references: [solana_wallet_id])
+	parent_solana_wallet							solana_wallet @relation(name: "parent_solana_wallet", fields: [parent_solana_wallet_id], references: [solana_wallet_id])
+
+	spl_mint										spl_mint[]
+
+  	@@index([spl_id], name: "token_account__spl_id_idx")
+	@@index([fee_payer_solana_wallet_id], name: "token_account__fee_payer_solana_wallet_id_idx")
+}
+
 model spl_mint {
 	spl_mint_id										Int @id @default(autoincrement())
 	spl_id											Int
@@ -201,18 +195,18 @@ model spl_mint {
 model spl_ownership {
 	spl_ownership_id								Int @id @default(autoincrement())
 	spl_id 											Int
-  	token_account_id    							Int
+  	solana_wallet_id    							Int
 	number_of_shares								Int
 
 	created_at    									DateTime  @default(now())
 	updated_at    									DateTime  @default(now()) @updatedAt
 
 	spl         									spl @relation(fields: [spl_id], references: [spl_id])
-	token_account       							token_account @relation(fields: [token_account_id], references: [token_account_id])
+	solana_wallet       							solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
 
   	@@index([spl_id], name: "spl_ownership__spl_id_idx")
-  	@@index([token_account_id], name: "spl_ownership__token_account_id_idx")
-	@@unique([spl_id, token_account_id])
+  	@@index([solana_wallet_id], name: "spl_ownership__solana_wallet_id_idx")
+	@@unique([spl_id, solana_wallet_id])
 }
 
 model uploaded_image {
@@ -277,19 +271,11 @@ model spl_transfer {
 	spl_transfer_id									Int @id @default(autoincrement())
 	spl_id											Int
 	recipient_solana_wallet_id						Int
-	recipient_token_account_id						Int
-	transaction_signature							String
-
 	sender_solana_wallet_id							Int // for spl purchases, this is fortuna's escrow wallet id. for peer-peer spl transfers, this would be a different id.
-	sender_token_account_id							Int
 
 	is_spl_purchase									Boolean // True for spl purchases (transferring from escrow to user), but not for peer-peer transfers.
 	number_spl_shares_transferred					Int
 	is_secondary_market_transaction					Boolean
-
-	transfer_fee_sol								Float
-	transfer_fee_usd								Float
-	fee_payer_solana_wallet_id						Int
 
 	created_at    									DateTime  @default(now())
 	updated_at    									DateTime  @default(now()) @updatedAt
@@ -297,9 +283,6 @@ model spl_transfer {
 	spl												spl @relation(fields: [spl_id], references: [spl_id])
 	recipient_solana_wallet							solana_wallet @relation(name: "recipient_solana_wallet", fields: [recipient_solana_wallet_id], references: [solana_wallet_id])
 	sender_solana_wallet							solana_wallet @relation(name: "sender_solana_wallet", fields: [sender_solana_wallet_id], references: [solana_wallet_id])
-	fee_payer_solana_wallet							solana_wallet @relation(name: "fee_payer_solana_wallet", fields: [fee_payer_solana_wallet_id], references: [solana_wallet_id])
-	recipient_token_account							token_account @relation(name: "recipient_token_account", fields: [recipient_token_account_id], references: [token_account_id])
-	sender_token_account							token_account @relation(name: "sender_token_account", fields: [sender_token_account_id], references: [token_account_id])
 
 	spl_purchase									spl_purchase?
 	secondary_market_transaction					secondary_market_transaction[]

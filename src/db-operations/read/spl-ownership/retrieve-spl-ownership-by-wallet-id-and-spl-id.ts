@@ -8,9 +8,7 @@ export default async function retrieveSplOwnershipByWalletIdAndSplId(
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const splOwnership = await prismaClient.spl_ownership.findFirst({
 			where: {
-				token_account: {
-					parent_solana_wallet_id: solanaWalletId
-				},
+				solana_wallet_id: solanaWalletId,
 				spl: {
 					public_key_address: splPublicKey
 				}

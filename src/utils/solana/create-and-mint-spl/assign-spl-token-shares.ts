@@ -1,126 +1,82 @@
 import _ from "lodash"
-import { getOrCreateAssociatedTokenAccount } from "@solana/spl-token"
-import { Connection, clusterApiUrl, PublicKey } from "@solana/web3.js"
+import { PublicKey } from "@solana/web3.js"
 import mintSPLHelper from "./mint-spl-helper"
 import SecretsManager from "../../../classes/secrets-manager"
-import { getWalletBalanceWithUSD } from "../get-wallet-balance"
+import createTokenAccountHelper from "./create-token-account-helper"
 import GetKeypairFromSecretKey from "../get-keypair-from-secret-key"
 import EscrowWalletManager from "../../../classes/escrow-wallet-manager"
-import addTokenAccountRecord from "../../../db-operations/write/token-account/add-token-account-record"
+import addSplOwnership from "../../../db-operations/write/spl-ownership/add-spl-ownership"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function assignSPLTokenShares (
 	splTokenPublicKey: PublicKey,
-	creatorPublicKey: PublicKey,
 	uploadSplData: IncomingNewSPLData,
 	splId: number,
-	creatorWalletId: number
+	creatorSolanaWalletId: number
 ): Promise<void> {
 	try {
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const fortunaWallet = await GetKeypairFromSecretKey.getFortunaWalletKeypair()
+		const fortunaFeePayerWallet = await GetKeypairFromSecretKey.getFortunaFeePayerWalletKeypair()
 		const {
-			FORTUNA_SOLANA_WALLET_ID_DB,
-			FORTUNA_ESCROW_WALLET_PUBLIC_KEY,
-			FORTUNA_ESCROW_SOLANA_WALLET_ID_DB
+			FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_PUBLIC_KEY,
+			FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_ID_DB,
+			FORTUNA_TOKENS_WALLET_PUBLIC_KEY,
+			FORTUNA_TOKENS_WALLET_ID_DB
 		} = await SecretsManager.getInstance().getSecrets([
-			"FORTUNA_SOLANA_WALLET_ID_DB", "FORTUNA_ESCROW_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_SOLANA_WALLET_ID_DB"
+			"FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_ID_DB",
+			"FORTUNA_TOKENS_WALLET_PUBLIC_KEY", "FORTUNA_TOKENS_WALLET_ID_DB"
 		])
 
-		const initialWalletBalance = await getWalletBalanceWithUSD(fortunaWallet.publicKey)
-		// Get or Create Token Accounts:
-		const fortunaTokenAccount = await getOrCreateAssociatedTokenAccount(
-			connection,
-			fortunaWallet,
-			splTokenPublicKey,
-			fortunaWallet.publicKey
-		)
-
-		const secondWalletBalance = await getWalletBalanceWithUSD(fortunaWallet.publicKey)
-
-		// FUTURE TODO: Combine the addtokenAccountRecord with the mint spl helper (addsplmintwithownership)
-		const fortunaTokenAccountDB = await addTokenAccountRecord(
+		const escrowTokenAccountData = await createTokenAccountHelper(
+			fortunaFeePayerWallet,
 			splId,
-			parseInt(FORTUNA_SOLANA_WALLET_ID_DB, 10),
-			fortunaTokenAccount.address,
-			initialWalletBalance.balanceInSol - secondWalletBalance.balanceInSol,
-			initialWalletBalance.balanceInUsd - secondWalletBalance.balanceInUsd
-		)
-
-		const creatorTokenAccount = await getOrCreateAssociatedTokenAccount(
-			connection,
-			fortunaWallet,
 			splTokenPublicKey,
-			creatorPublicKey
+			new PublicKey(FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_PUBLIC_KEY),
+			parseInt(FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_ID_DB, 10)
 		)
-		const thirdWalletBalance = await getWalletBalanceWithUSD(fortunaWallet.publicKey)
 
-		const creatorTokenAccountDB = await addTokenAccountRecord(
+		const fortunaTokensTokenAccountData = await createTokenAccountHelper(
+			fortunaFeePayerWallet,
 			splId,
-			creatorWalletId,
-			creatorTokenAccount.address,
-			secondWalletBalance.balanceInSol - thirdWalletBalance.balanceInSol,
-			secondWalletBalance.balanceInUsd - thirdWalletBalance.balanceInUsd
-		)
-
-		const fortunaEscrowPublicKey = new PublicKey(FORTUNA_ESCROW_WALLET_PUBLIC_KEY)
-		const fortunaEscrowTokenAccount = await getOrCreateAssociatedTokenAccount(
-			connection,
-			fortunaWallet,
 			splTokenPublicKey,
-			fortunaEscrowPublicKey
-		)
-		const fourthWalletBalance = await getWalletBalanceWithUSD(fortunaWallet.publicKey)
-
-		const fortunaEscrowTokenAccountDB = await addTokenAccountRecord(
-			splId,
-			parseInt(FORTUNA_ESCROW_SOLANA_WALLET_ID_DB, 10),
-			fortunaEscrowTokenAccount.address,
-			thirdWalletBalance.balanceInSol - fourthWalletBalance.balanceInSol,
-			thirdWalletBalance.balanceInUsd - fourthWalletBalance.balanceInUsd
-		)
-
-		const fortunaShares = _.ceil(uploadSplData.numberOfShares * (0.01))
-
-		// Mint SPLs:
-		await mintSPLHelper(
-			connection,
-			fortunaWallet,
-			splTokenPublicKey,
-			splId,
-			fortunaWallet.publicKey,
-			fortunaTokenAccount.address,
-			fortunaShares,
-			fortunaTokenAccountDB.token_account_id
+			new PublicKey(FORTUNA_TOKENS_WALLET_PUBLIC_KEY),
+			parseInt(FORTUNA_TOKENS_WALLET_ID_DB, 10)
 		)
 
 		const creatorShares = _.floor(uploadSplData.creatorOwnershipPercentage * uploadSplData.numberOfShares * 0.01)
+		const fortunaSharesToMint = _.ceil(uploadSplData.numberOfShares * (0.01)) // 1% of the share count goes to Fortuna as a fee
+		const escrowSharesToMint = uploadSplData.numberOfShares - creatorShares - fortunaSharesToMint
 
+		// Mint SPLs:
+		// To the Escrow TA
 		await mintSPLHelper(
-			connection,
-			fortunaWallet,
+			fortunaFeePayerWallet,
 			splTokenPublicKey,
 			splId,
-			fortunaWallet.publicKey,
-			creatorTokenAccount.address,
+			fortunaFeePayerWallet.publicKey,
+			escrowTokenAccountData.escrowTokenAccountAddress,
+			escrowSharesToMint,
+			escrowTokenAccountData.fortunaTokenAccountIdDb,
+			parseInt(FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_ID_DB, 10)
+		)
+
+		await mintSPLHelper(
+			fortunaFeePayerWallet,
+			splTokenPublicKey,
+			splId,
+			fortunaFeePayerWallet.publicKey,
+			fortunaTokensTokenAccountData.escrowTokenAccountAddress,
+			fortunaSharesToMint,
+			fortunaTokensTokenAccountData.fortunaTokenAccountIdDb,
+			parseInt(FORTUNA_TOKENS_WALLET_ID_DB, 10)
+		)
+
+		await addSplOwnership(
+			splId,
 			creatorShares,
-			creatorTokenAccountDB.token_account_id
+			creatorSolanaWalletId
 		)
 
-		const escrowShares = uploadSplData.numberOfShares - creatorShares - fortunaShares
-
-		await mintSPLHelper(
-			connection,
-			fortunaWallet,
-			splTokenPublicKey,
-			splId,
-			fortunaWallet.publicKey,
-			fortunaEscrowTokenAccount.address,
-			escrowShares,
-			fortunaEscrowTokenAccountDB.token_account_id
-		)
-
-		EscrowWalletManager.getInstance().addSplToMap(splTokenPublicKey.toString(), escrowShares)
+		EscrowWalletManager.getInstance().addSplToMap(splTokenPublicKey, escrowSharesToMint)
 	} catch (error) {
 		console.error(error)
 		throw error

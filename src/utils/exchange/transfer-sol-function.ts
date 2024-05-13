@@ -12,7 +12,6 @@ export default async function transferSolFunction(
 	transferDetails: { solToTransfer: number, usdToTransfer: number, defaultCurrency: Currencies },
 ): Promise<number> {
 	try {
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const transaction = new Transaction()
 
 		transaction.add(
@@ -27,8 +26,10 @@ export default async function transferSolFunction(
 		// Would have to think about wheather or not we want this.
 
 		const senderKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(senderSolanaWallet.secret_key__encrypted)
-		const fortunaWalletKeypair = await GetKeypairFromSecretKey.getFortunaWalletKeypair()
-		const keypairs: Keypair[] = [fortunaWalletKeypair, senderKeypair]
+		const fortunaFeePayerWalletKeypair = await GetKeypairFromSecretKey.getFortunaFeePayerWalletKeypair()
+		const keypairs: Keypair[] = [fortunaFeePayerWalletKeypair, senderKeypair]
+
+		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
