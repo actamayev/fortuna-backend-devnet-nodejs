@@ -1,6 +1,6 @@
 import PrismaClientClass from "../../../../classes/prisma-client"
 
-export default async function retrieveUserAsks(userId: number): Promise<RetrievedAsks[]> {
+export default async function retrieveUserAsks(userId: number): Promise<RetrievedUserAskData[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const asks = await prismaClient.secondary_market_ask.findMany({

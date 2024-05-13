@@ -19,10 +19,12 @@ import {
 	confirmUserHasEnoughSolToPurchasePrimaryTokens
 } from "../middleware/confirmations/exchange/confirm-user-has-enough-sol-to-purchase-tokens"
 import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
+import confirmSplExistsById from "../middleware/confirmations/exchange/confirm-spl-exists-by-id"
 import validateCancelSplBid from "../middleware/request-validation/exchange/bid/validate-cancel-bid"
 import validateCancelSplAsk from "../middleware/request-validation/exchange/ask/validate-cancel-ask"
 import confirmEnoughSharesInEscrowToCompletePurchase
 	from "../middleware/confirmations/exchange/confirm-enough-shares-in-escrow-to-complete-purchase"
+import validateSplIdInParams from "../middleware/request-validation/exchange/validate-spl-id-in-params"
 import validateCreateSplBid from "../middleware/request-validation/exchange/bid/validate-create-spl-bid"
 import validateCreateSplAsk from "../middleware/request-validation/exchange/ask/validate-create-spl-ask"
 import validatePurchaseSplTokens from "../middleware/request-validation/exchange/validate-purchase-spl-tokens"
@@ -82,5 +84,10 @@ exchangeRoutes.get(
 	retrieveUserOrders
 )
 
+exchangeRoutes.get(
+	"/retrieve-open-orders-by-spl-id/:splId",
+	validateSplIdInParams,
+	confirmSplExistsById,
+)
 // FUTURE TODO: Add routes to edit an order.
 export default exchangeRoutes
