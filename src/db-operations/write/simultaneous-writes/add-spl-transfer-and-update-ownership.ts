@@ -1,25 +1,15 @@
-import SecretsManager from "../../../classes/secrets-manager"
 import PrismaClientClass from "../../../classes/prisma-client"
-import SolPriceManager from "../../../classes/sol-price-manager"
 
-// eslint-disable-next-line max-params, max-lines-per-function
+// eslint-disable-next-line max-lines-per-function
 export default async function addSplTransferRecordAndUpdateOwnership(
 	splId: number,
-	transactionSignature: string,
 	recipientSolanaWalletId: number,
-	recipientTokenAccountId: number,
 	senderSolanaWalletId: number,
-	senderTokenAccountId: number,
 	isSplPurchase: boolean,
 	isSecondaryMarketTransaction: boolean,
 	numberSplSharesTransferred: number,
-	transferFeeSol: number,
-	userHasExistingTokenAccount: boolean
 ): Promise<number> {
 	try {
-		const solPriceDetails = await SolPriceManager.getInstance().getPrice()
-		const fortunaSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_SOLANA_WALLET_ID_DB")
-		const feePayerSolanaWalletId = parseInt(fortunaSolanaWalletIdDb, 10)
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		// eslint-disable-next-line max-lines-per-function
@@ -27,51 +17,40 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 			const transferRecordResult = await prisma.spl_transfer.create({
 				data: {
 					spl_id: splId,
-					transaction_signature: transactionSignature,
 					recipient_solana_wallet_id: recipientSolanaWalletId,
-					recipient_token_account_id: recipientTokenAccountId,
 					sender_solana_wallet_id: senderSolanaWalletId,
-					sender_token_account_id: senderTokenAccountId,
 					is_spl_purchase: isSplPurchase,
 					is_secondary_market_transaction: isSecondaryMarketTransaction,
 					number_spl_shares_transferred: numberSplSharesTransferred,
-					transfer_fee_sol: transferFeeSol,
-					transfer_fee_usd: transferFeeSol * solPriceDetails.price,
-					fee_payer_solana_wallet_id: feePayerSolanaWalletId
 				}
 			})
 
 			// Adds/updates an ownership record for the user:
-			if (userHasExistingTokenAccount === false) {
-				await prisma.spl_ownership.create({
-					data: {
+			await prisma.spl_ownership.upsert({
+				where: {
+					spl_id_solana_wallet_id: {  // This matches the unique constraint
 						spl_id: splId,
-						token_account_id: recipientTokenAccountId,
-						number_of_shares: numberSplSharesTransferred
+						solana_wallet_id: recipientSolanaWalletId
 					}
-				})
-			} else {
-				await prisma.spl_ownership.update({
-					where: {
-						spl_id_token_account_id: {
-							spl_id: splId,
-							token_account_id: recipientTokenAccountId
-						}
-					},
-					data: {
-						number_of_shares: {
-							increment: numberSplSharesTransferred
-						}
+				},
+				update: {
+					number_of_shares: {
+						increment: numberSplSharesTransferred
 					}
-				})
-			}
+				},
+				create: {
+					spl_id: splId,
+					solana_wallet_id: recipientSolanaWalletId,
+					number_of_shares: numberSplSharesTransferred
+				}
+			})
 
 			// Updates the sender's ownership record:
 			await prisma.spl_ownership.update({
 				where: {
-					spl_id_token_account_id: {
+					spl_id_solana_wallet_id: {
 						spl_id: splId,
-						token_account_id: senderTokenAccountId
+						solana_wallet_id: senderSolanaWalletId
 					}
 				},
 				data: {
