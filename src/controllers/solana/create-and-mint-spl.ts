@@ -36,6 +36,6 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		return res.status(200).json({ newSPLId, mintAddress: createSPLResponse.mint })
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Create and Mint NFT" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to Create and Mint SPL" })
 	}
 }

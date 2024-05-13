@@ -1,6 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-// eslint-disable-next-line max-params, max-lines-per-function
+// eslint-disable-next-line max-lines-per-function
 export default async function addSplTransferRecordAndUpdateOwnership(
 	splId: number,
 	recipientSolanaWalletId: number,
