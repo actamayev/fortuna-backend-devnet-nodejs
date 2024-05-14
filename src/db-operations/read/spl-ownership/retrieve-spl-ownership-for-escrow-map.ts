@@ -1,6 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function retrieveSplOwnershipForEscrowMap(solanaWalletId: number): Promise<RetrievedSplOwnershipMapData[]> {
+export default async function retrieveSplOwnershipForEscrowMap(solanaWalletId: number): Promise<Map<string, number>> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const splOwnerships = await prismaClient.spl_ownership.findMany({
@@ -17,7 +17,15 @@ export default async function retrieveSplOwnershipForEscrowMap(solanaWalletId: n
 			}
 		})
 
-		return splOwnerships
+		const sharesMap = new Map<string, number>()
+
+		splOwnerships.forEach(splOwnership => {
+			const publicKey = splOwnership.spl.public_key_address
+			const currentShares = sharesMap.get(publicKey) || 0
+			sharesMap.set(publicKey, currentShares + splOwnership.number_of_shares)
+		})
+
+		return sharesMap
 	} catch (error) {
 		console.error(error)
 		throw error

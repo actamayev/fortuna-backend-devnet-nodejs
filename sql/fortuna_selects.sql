@@ -11,7 +11,7 @@
 -- 	join solana_wallet on spl_ownership.solana_wallet_id = solana_wallet.solana_wallet_id
 -- 	join credentials on solana_wallet.user_id = credentials.user_id;
 
-select * from token_account;
+-- select * from token_account;
 -- select * from uploaded_image;
 -- select * from uploaded_video;
 -- select * from sol_transfer;

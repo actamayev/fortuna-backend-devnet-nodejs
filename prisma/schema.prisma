@@ -197,6 +197,7 @@ model spl_ownership {
 	spl_id 											Int
   	solana_wallet_id    							Int
 	number_of_shares								Int
+	purchase_price_per_share_usd					Float
 
 	created_at    									DateTime  @default(now())
 	updated_at    									DateTime  @default(now()) @updatedAt
@@ -206,7 +207,6 @@ model spl_ownership {
 
   	@@index([spl_id], name: "spl_ownership__spl_id_idx")
   	@@index([solana_wallet_id], name: "spl_ownership__solana_wallet_id_idx")
-	@@unique([spl_id, solana_wallet_id])
 }
 
 model uploaded_image {
@@ -276,6 +276,7 @@ model spl_transfer {
 	is_spl_purchase									Boolean // True for spl purchases (transferring from escrow to user), but not for peer-peer transfers.
 	number_spl_shares_transferred					Int
 	is_secondary_market_transaction					Boolean
+	secondary_market_transaction_id					Int?
 
 	created_at    									DateTime  @default(now())
 	updated_at    									DateTime  @default(now()) @updatedAt
@@ -283,9 +284,9 @@ model spl_transfer {
 	spl												spl @relation(fields: [spl_id], references: [spl_id])
 	recipient_solana_wallet							solana_wallet @relation(name: "recipient_solana_wallet", fields: [recipient_solana_wallet_id], references: [solana_wallet_id])
 	sender_solana_wallet							solana_wallet @relation(name: "sender_solana_wallet", fields: [sender_solana_wallet_id], references: [solana_wallet_id])
+	secondary_market_transaction					secondary_market_transaction? @relation(fields: [secondary_market_transaction_id], references: [secondary_market_transaction_id])
 
 	spl_purchase									spl_purchase?
-	secondary_market_transaction					secondary_market_transaction[]
 }
 
 model spl_purchase {
@@ -376,12 +377,10 @@ model secondary_market_transaction {
 	secondary_market_bid_id							Int
 	secondary_market_ask_id							Int
 	sol_transfer_id									Int
-	spl_transfer_id									Int
 
 	secondary_market_bid							secondary_market_bid @relation(fields: [secondary_market_bid_id], references: [secondary_market_bid_id])
 	secondary_market_ask							secondary_market_ask @relation(fields: [secondary_market_ask_id], references: [secondary_market_ask_id])
 	sol_transfer									sol_transfer @relation(fields: [sol_transfer_id], references: [sol_transfer_id])
-	spl_transfer									spl_transfer @relation(fields: [spl_transfer_id], references: [spl_transfer_id])
 
 	created_at    									DateTime  @default(now())
 	updated_at    									DateTime  @default(now()) @updatedAt
@@ -389,5 +388,6 @@ model secondary_market_transaction {
 	@@index([secondary_market_bid_id], name: "secondary_market_purchase__secondary_market_bid_id_idx")
 	@@index([secondary_market_ask_id], name: "secondary_market_purchase__secondary_market_ask_id_idx")
 	@@index([sol_transfer_id], name: "secondary_market_purchase__sol_transfer_id_idx")
-	@@index([spl_transfer_id], name: "secondary_market_purchase__spl_transfer_id_idx")
+
+	spl_transfer									spl_transfer[]
 }

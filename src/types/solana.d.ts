@@ -144,9 +144,11 @@ declare global {
 			uploaded_image: {
 				image_url: string
 				uuid: string
-			},
+			}
 		}
 	}
+
+	type RetrievedMyOwnershipDataMap = Map<string, RetrievedMyOwnershipData>
 
 	interface MyOwnershipData {
 		splPublicKey: string

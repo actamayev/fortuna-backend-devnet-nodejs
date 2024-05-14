@@ -1,6 +1,6 @@
-export default function transformOwnershipList(input: RetrievedMyOwnershipData[], userWalletId: number): MyOwnershipData[] {
+export default function transformOwnershipList(ownershipMap: RetrievedMyOwnershipDataMap, userWalletId: number): MyOwnershipData[] {
 	try {
-		return input.map(item => ({
+		return Array.from(ownershipMap.values()).map(item => ({
 			splName: item.spl.spl_name,
 			splPublicKey: item.spl.public_key_address,
 			numberOfShares: item.number_of_shares,

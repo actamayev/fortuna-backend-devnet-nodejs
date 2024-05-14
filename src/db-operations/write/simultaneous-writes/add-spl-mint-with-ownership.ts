@@ -32,7 +32,8 @@ export default async function addSplMintWithOwnership(
 				data: {
 					spl_id: splId,
 					solana_wallet_id: solanaWalletId,
-					number_of_shares: numberOfShares
+					number_of_shares: numberOfShares,
+					purchase_price_per_share_usd: 0
 				}
 			})
 		})

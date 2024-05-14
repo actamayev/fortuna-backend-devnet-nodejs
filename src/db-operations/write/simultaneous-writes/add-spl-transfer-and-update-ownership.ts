@@ -1,6 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-// eslint-disable-next-line max-lines-per-function
+// eslint-disable-next-line max-lines-per-function, max-params
 export default async function addSplTransferRecordAndUpdateOwnership(
 	splId: number,
 	recipientSolanaWalletId: number,
@@ -8,6 +8,8 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 	isSplPurchase: boolean,
 	isSecondaryMarketTransaction: boolean,
 	numberSplSharesTransferred: number,
+	transferPricePerShareUsd: number,
+	splOwnershipIdToDecrementFrom: number
 ): Promise<number> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
@@ -26,32 +28,19 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 			})
 
 			// Adds/updates an ownership record for the user:
-			await prisma.spl_ownership.upsert({
-				where: {
-					spl_id_solana_wallet_id: {  // This matches the unique constraint
-						spl_id: splId,
-						solana_wallet_id: recipientSolanaWalletId
-					}
-				},
-				update: {
-					number_of_shares: {
-						increment: numberSplSharesTransferred
-					}
-				},
-				create: {
+			await prisma.spl_ownership.create({
+				data: {
 					spl_id: splId,
 					solana_wallet_id: recipientSolanaWalletId,
-					number_of_shares: numberSplSharesTransferred
+					number_of_shares: numberSplSharesTransferred,
+					purchase_price_per_share_usd: transferPricePerShareUsd
 				}
 			})
 
 			// Updates the sender's ownership record:
 			await prisma.spl_ownership.update({
 				where: {
-					spl_id_solana_wallet_id: {
-						spl_id: splId,
-						solana_wallet_id: senderSolanaWalletId
-					}
+					spl_ownership_id: splOwnershipIdToDecrementFrom
 				},
 				data: {
 					number_of_shares: {

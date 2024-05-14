@@ -17,7 +17,7 @@ export default async function primarySplTokenPurchase(req: Request, res: Respons
 		// 1) Transfer spl from escrow to user (fortuna wallet should cover transaction)
 		// As part of the transfer to user, may need to create a token account for the user.
 		// record the transaction (save to spl_transfer table)
-		const splTransferId = await transferSplTokensToUser(solanaWallet, purchaseSplTokensData, splDetails.splId)
+		const splTransferId = await transferSplTokensToUser(solanaWallet, purchaseSplTokensData, splDetails)
 
 		const creatorWalletInfo = await retrieveCreatorWalletInfoFromSpl(splDetails.splId)
 		if (_.isNull(creatorWalletInfo)) return res.status(500).json({ error: "Unable to find creator's public key" })

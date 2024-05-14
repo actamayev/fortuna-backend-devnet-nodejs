@@ -1,9 +1,14 @@
+/* eslint-disable max-depth */
 import _ from "lodash"
 import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
 import SolPriceManager from "../../../classes/sol-price-manager"
 import transferSolFunction from "../../../utils/exchange/transfer-sol-function"
 import calculateAverageFillPrice from "../../../utils/exchange/calculate-average-fill-price"
+import retrieveSplOwnershipByWalletIdAndSplId
+	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-id"
+import updateSplTransferRecordWithTransactionId
+	from "../../../db-operations/write/spl/spl-transfer/update-spl-transfer-record-with-transaction-id"
 import addSecondaryMarketBid from "../../../db-operations/write/secondary-market/bid/add-secondary-market-bid"
 import updateBidStatusOnWalletBalanceChange from "../../../utils/exchange/update-bid-status-on-wallet-balance-change"
 import { updateSecondaryMarketBidSet } from "../../../db-operations/write/secondary-market/bid/update-secondary-market-bid"
@@ -34,15 +39,32 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 			if (numberOfRemainingSharesToBuy > ask.remaining_number_of_shares_for_sale) {
 				amountToBuy = ask.remaining_number_of_shares_for_sale
 			}
+
 			// Transfer SPL tokens:
-			const splTransferId = await addSplTransferRecordAndUpdateOwnership(
-				splDetails.splId,
-				solanaWallet.solana_wallet_id,
+			const askerOwnershipData = await retrieveSplOwnershipByWalletIdAndSplId(
 				ask.solana_wallet.solana_wallet_id,
-				true,
-				true,
-				amountToBuy
+				splDetails.publicKeyAddress
 			)
+			let sharesTransferred = 0
+			const splTransferIds = []
+			for (const singleAskerOwnershipData of askerOwnershipData) {
+				// TODO: Make sure the sharesToTransfer is greater than 0. do a logic check
+				const sharesToTransfer = Math.min(amountToBuy - sharesTransferred, singleAskerOwnershipData.number_of_shares)
+				if (sharesToTransfer === 0) break
+				// eslint-disable-next-line max-len
+				const splTransferId = await addSplTransferRecordAndUpdateOwnership(
+					splDetails.splId,
+					solanaWallet.solana_wallet_id,
+					ask.solana_wallet.solana_wallet_id,
+					true,
+					true,
+					sharesToTransfer,
+					ask.ask_price_per_share_usd,
+					singleAskerOwnershipData.spl_ownership_id
+				)
+				sharesTransferred += sharesToTransfer
+				splTransferIds.push(splTransferId)
+			}
 
 			// Transfer Sol:
 			const solPrice = (await SolPriceManager.getInstance().getPrice()).price
@@ -58,7 +80,12 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 			// update the ask records
 			await updateSecondaryMarketAskDecrement(ask.secondary_market_ask_id, amountToBuy)
 			// add a record to the secondary_transaction_table.
-			await addSecondaryMarketTransaction(bidId, ask.secondary_market_ask_id, solTransferId, splTransferId)
+			const secondaryMarketTransactionId = await addSecondaryMarketTransaction(
+				bidId,
+				ask.secondary_market_ask_id,
+				solTransferId,
+			)
+			await updateSplTransferRecordWithTransactionId(splTransferIds, secondaryMarketTransactionId)
 			transactionsMap.push({ fillPriceUsd: ask.ask_price_per_share_usd, numberOfShares: amountToBuy})
 			numberOfRemainingSharesToBuy -= amountToBuy
 		}
