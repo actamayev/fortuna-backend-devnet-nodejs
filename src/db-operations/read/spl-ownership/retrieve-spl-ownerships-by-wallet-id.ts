@@ -7,10 +7,14 @@ export default async function getSplOwnershipsByWalletId(
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const splOwnerships = await prismaClient.spl_ownership.findMany({
 			where: {
-				solana_wallet_id: solanaWalletId
+				solana_wallet_id: solanaWalletId,
+				number_of_shares: {
+					gt: 0
+				}
 			},
 			select: {
 				number_of_shares: true,
+				purchase_price_per_share_usd: true,
 				spl: {
 					select: {
 						creator_wallet_id: true,

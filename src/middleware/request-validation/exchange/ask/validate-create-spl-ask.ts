@@ -1,7 +1,7 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
-import publicKeyValidator from "../../joi/public-key-validator"
+import publicKeyValidator from "../../../joi/public-key-validator"
 
 const createSplAskSchema = Joi.object({
 	createSplAsk: Joi.object({

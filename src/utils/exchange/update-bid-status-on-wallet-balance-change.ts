@@ -1,6 +1,7 @@
 import { PublicKey } from "@solana/web3.js"
 import { getWalletBalanceWithUSD } from "../solana/get-wallet-balance"
-import updateExistingBidsToAdjustToFundReqs from "../../db-operations/write/secondary-market/update-existing-bids-to-adjust-to-fund-reqs"
+import updateExistingBidsToAdjustToFundReqs
+	from "../../db-operations/write/secondary-market/bid/update-existing-bids-to-adjust-to-fund-reqs"
 
 export default async function updateBidStatusOnWalletBalanceChange(solanaWallet: ExtendedSolanaWallet): Promise<void> {
 	try {

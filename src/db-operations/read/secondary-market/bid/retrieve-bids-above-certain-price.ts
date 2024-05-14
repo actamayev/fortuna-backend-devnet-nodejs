@@ -1,9 +1,10 @@
-import PrismaClientClass from "../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function retrieveBidsAboveCertainPrice(
 	splId: number,
-	askPrice: number
-): Promise<RetrievedBidsAboveCertainPrice[]> {
+	askPrice: number,
+	solanaWalletIdToNotInclude: number
+): Promise<RetrievedUserBidDataAboveCertainPrice[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const asks = await prismaClient.secondary_market_bid.findMany({
@@ -16,6 +17,9 @@ export default async function retrieveBidsAboveCertainPrice(
 				},
 				bid_price_per_share_usd: {
 					gte: askPrice
+				},
+				solana_wallet_id: {
+					not: solanaWalletIdToNotInclude
 				}
 			},
 			orderBy: {
@@ -30,7 +34,7 @@ export default async function retrieveBidsAboveCertainPrice(
 			}
 		})
 
-		return asks as RetrievedBidsAboveCertainPrice[]
+		return asks as RetrievedUserBidDataAboveCertainPrice[]
 	} catch (error) {
 		console.error(error)
 		throw error

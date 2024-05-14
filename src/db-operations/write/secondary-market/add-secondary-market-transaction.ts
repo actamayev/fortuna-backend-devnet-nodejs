@@ -4,18 +4,18 @@ export default async function addSecondaryMarketTransaction(
 	bidId: number,
 	askId: number,
 	solTransferId: number,
-	splTransferId: number
-): Promise<void> {
+): Promise<number> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
-		await prismaClient.secondary_market_transaction.create({
+		const secondaryMarketTransaction = await prismaClient.secondary_market_transaction.create({
 			data: {
 				secondary_market_bid_id: bidId,
 				secondary_market_ask_id: askId,
 				sol_transfer_id: solTransferId,
-				spl_transfer_id: splTransferId
 			}
 		})
+
+		return secondaryMarketTransaction.secondary_market_transaction_id
 	} catch (error) {
 		console.error("Error secondary market transaction record:", error)
 		throw error
