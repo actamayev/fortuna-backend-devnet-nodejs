@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
-import checkIfActiveAskByIdExists from "../../../db-operations/read/secondary-market/ask/check-if-active-ask-by-user-exists"
+import checkIfActiveAskByIdExists from "../../../db-operations/read/secondary-market/ask/check-if-active-ask-by-id-exists"
 
 export default async function confirmAskCreator(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {
