@@ -1,3 +1,4 @@
+/* eslint-disable max-depth */
 import _ from "lodash"
 import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
@@ -45,10 +46,10 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 			const bidPricePerShare  = retrievedBids[0].bid_price_per_share_usd
 			const sharesOwnedByAsker = askerOwnershipData[0].number_of_shares
 
-			// Calculate the minimum shares to transfer
 			const bidderWalletBalanceUsd = await getWalletBalanceWithUSD(new PublicKey(solanaWallet.public_key))
 			const sharesBidderAbleToBuy = bidderWalletBalanceUsd.balanceInUsd / bidPricePerShare
 
+			// Calculate the minimum shares to transfer
 			let sharesToTransfer = Math.min(remainingSharesInBid, sharesOwnedByAsker, numberOfRemainingSharesToSell)
 
 			sharesToTransfer = Math.min(sharesToTransfer, sharesBidderAbleToBuy)
@@ -89,11 +90,18 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 			transactionsMap.push({ fillPriceUsd: bidPricePerShare, numberOfShares: sharesToTransfer })
 			await updateBidStatusOnWalletBalanceChange(retrievedBids[0].solana_wallet)
 			numberOfRemainingSharesToSell -= sharesToTransfer
-			if (_.isEqual(sharesToTransfer, remainingSharesInBid)) {
-				retrievedBids.shift()
-			}
-			if (_.isEqual(sharesToTransfer, sharesOwnedByAsker)) {
-				askerOwnershipData.shift()
+			if (_.isEqual(sharesToTransfer, remainingSharesInBid) || _.isEqual(sharesToTransfer, sharesOwnedByAsker)) {
+				if (_.isEqual(sharesToTransfer, remainingSharesInBid)) {
+					retrievedBids.shift()
+				}
+				if (_.isEqual(sharesToTransfer, sharesOwnedByAsker)) {
+					askerOwnershipData.shift()
+				}
+			} else {
+				// eslint-disable-next-line max-len
+				retrievedBids[0].remaining_number_of_shares_bidding_for = retrievedBids[0].remaining_number_of_shares_bidding_for - sharesToTransfer
+				// eslint-disable-next-line max-len
+				askerOwnershipData[0].number_of_shares = askerOwnershipData[0].number_of_shares - sharesToTransfer
 			}
 		}
 

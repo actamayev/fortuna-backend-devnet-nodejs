@@ -15,7 +15,7 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		// eslint-disable-next-line max-lines-per-function
-		const result = await prismaClient.$transaction(async (prisma) => {
+		const splTransferId = await prismaClient.$transaction(async (prisma) => {
 			const transferRecordResult = await prisma.spl_transfer.create({
 				data: {
 					spl_id: splId,
@@ -49,10 +49,10 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 				}
 			})
 
-			return { splTransferId: transferRecordResult.spl_transfer_id }
+			return transferRecordResult.spl_transfer_id
 		})
 
-		return result.splTransferId
+		return splTransferId
 	} catch (error) {
 		console.error(error)
 		throw error
