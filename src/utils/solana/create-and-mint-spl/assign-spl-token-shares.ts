@@ -5,7 +5,7 @@ import SecretsManager from "../../../classes/secrets-manager"
 import createTokenAccountHelper from "./create-token-account-helper"
 import GetKeypairFromSecretKey from "../get-keypair-from-secret-key"
 import EscrowWalletManager from "../../../classes/escrow-wallet-manager"
-import addSplOwnership from "../../../db-operations/write/spl-ownership/add-spl-ownership"
+import addSplOwnership from "../../../db-operations/write/spl/spl-ownership/add-spl-ownership"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function assignSPLTokenShares (
@@ -73,7 +73,8 @@ export default async function assignSPLTokenShares (
 		await addSplOwnership(
 			splId,
 			creatorShares,
-			creatorSolanaWalletId
+			creatorSolanaWalletId,
+			0
 		)
 
 		EscrowWalletManager.getInstance().addSplToMap(splTokenPublicKey, escrowSharesToMint)

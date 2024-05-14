@@ -29,14 +29,13 @@ export default class EscrowWalletManager {
 		return this.splMap.get(publicKey)
 	}
 
-	private async refreshsplMap(): Promise<void> {
+	private async refreshSplMap(): Promise<void> {
 		try {
 			const escrowSolanaWalletId = await this.secretsManagerInstance.getSecret("FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_ID_DB")
-			const splOwnerships = await retrieveSplOwnershipForEscrowMap(parseInt(escrowSolanaWalletId, 10))
+			const sharesMap = await retrieveSplOwnershipForEscrowMap(parseInt(escrowSolanaWalletId, 10))
 
-			splOwnerships.forEach(splOwnership => {
-				this.splMap.set(splOwnership.spl.public_key_address, splOwnership.number_of_shares)
-			})
+			this.splMap.clear()
+			sharesMap.forEach((shares, publicKey) => this.splMap.set(publicKey, shares))
 
 			this.lastFetchedTime = Date.now()
 		} catch (error) {
@@ -51,7 +50,7 @@ export default class EscrowWalletManager {
 				this.doessplMapNeedRefresh ||
 				_.isUndefined(this.getTokenQuantityByPublicKey(publicKey))
 			) {
-				await this.refreshsplMap()
+				await this.refreshSplMap()
 			}
 			return this.getTokenQuantityByPublicKey(publicKey) || 0
 		} catch (error) {
@@ -76,7 +75,7 @@ export default class EscrowWalletManager {
 			}
 
 			if (needsRefresh === true) {
-				await this.refreshsplMap()
+				await this.refreshSplMap()
 				publicKeys.forEach(publicKey => {
 					result[publicKey] = this.getTokenQuantityByPublicKey(publicKey) || 0
 				})
@@ -93,7 +92,7 @@ export default class EscrowWalletManager {
 		try {
 			let currentAmount = this.splMap.get(publicKey)
 			if (_.isUndefined(currentAmount)) {
-				await this.refreshsplMap()
+				await this.refreshSplMap()
 				currentAmount = this.splMap.get(publicKey)
 				if (_.isUndefined(currentAmount)) {
 					throw Error("Unable to find Token amount")

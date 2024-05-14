@@ -1,4 +1,4 @@
-import PrismaClientClass from "../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 export async function updateSecondaryMarketAskSet(askId: number, newRemainingShareQuantity: number): Promise<void> {
 	try {
