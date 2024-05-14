@@ -5,7 +5,7 @@ import { PublicKey } from "@solana/web3.js"
 import SolPriceManager from "../../../classes/sol-price-manager"
 import transferSolFunction from "../../../utils/exchange/transfer-sol-function"
 import { getWalletBalanceWithUSD } from "../../../utils/solana/get-wallet-balance"
-import calculateAverageFillPrice from "../../../utils/exchange/calculate-average-fill-price"
+import calculateTransactionData from "../../../utils/exchange/calculate-transaction-data"
 import retrieveSplOwnershipByWalletIdAndSplId
 	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-id"
 import { updateSplTransferRecordWithTransactionId }
@@ -105,11 +105,10 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 		// update the bid record (update for the number of available shares.)
 		await updateSecondaryMarketAskSet(askId, numberOfRemainingSharesToSell)
 
-		const sharesSold = createSplAskData.numberOfSharesAskingFor - numberOfRemainingSharesToSell
-		const averageFillPrice = calculateAverageFillPrice(transactionsMap)
+		const transactionData = calculateTransactionData(transactionsMap)
 		return res.status(200).json({
-			sharesSold,
-			averageFillPrice,
+			sharesSold: transactionData.sharesTransacted,
+			averageFillPrice: transactionData.averageFillPrice,
 			transactionsMap
 		})
 	} catch (error) {
