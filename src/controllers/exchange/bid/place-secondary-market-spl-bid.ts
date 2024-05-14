@@ -87,7 +87,7 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 				solTransferId,
 			)
 			await updateSplTransferRecordsWithTransactionId(splTransferIds, secondaryMarketTransactionId)
-			transactionsMap.push({ fillPriceUsd: ask.ask_price_per_share_usd, numberOfShares: amountToBuy})
+			transactionsMap.push({ fillPriceUsd: ask.ask_price_per_share_usd, numberOfShares: amountToBuy })
 			numberOfRemainingSharesToBuy -= amountToBuy
 		}
 

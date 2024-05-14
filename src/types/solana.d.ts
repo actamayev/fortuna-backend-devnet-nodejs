@@ -177,13 +177,6 @@ declare global {
 		isMyContent: boolean
 		splName: string
 	}
-
-	interface RetrievedSplOwnershipMapData {
-		spl: {
-			public_key_address: string
-		}
-		number_of_shares: number
-	}
 }
 
 export {}
