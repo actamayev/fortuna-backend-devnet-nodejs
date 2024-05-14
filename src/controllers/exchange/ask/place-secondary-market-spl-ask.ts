@@ -89,20 +89,17 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 
 			transactionsMap.push({ fillPriceUsd: bidPricePerShare, numberOfShares: sharesToTransfer })
 			await updateBidStatusOnWalletBalanceChange(retrievedBids[0].solana_wallet)
-			numberOfRemainingSharesToSell -= sharesToTransfer
-			if (_.isEqual(sharesToTransfer, remainingSharesInBid) || _.isEqual(sharesToTransfer, sharesOwnedByAsker)) {
-				if (_.isEqual(sharesToTransfer, remainingSharesInBid)) {
-					retrievedBids.shift()
-				}
-				if (_.isEqual(sharesToTransfer, sharesOwnedByAsker)) {
-					askerOwnershipData.shift()
-				}
-			} else {
-				// eslint-disable-next-line max-len
-				retrievedBids[0].remaining_number_of_shares_bidding_for = retrievedBids[0].remaining_number_of_shares_bidding_for - sharesToTransfer
-				// eslint-disable-next-line max-len
-				askerOwnershipData[0].number_of_shares = askerOwnershipData[0].number_of_shares - sharesToTransfer
+
+			retrievedBids[0].remaining_number_of_shares_bidding_for -= sharesToTransfer
+			// eslint-disable-next-line max-len
+			askerOwnershipData[0].number_of_shares -= sharesToTransfer
+			if (_.isEqual(retrievedBids[0].remaining_number_of_shares_bidding_for, 0)) {
+				retrievedBids.shift()
 			}
+			if (_.isEqual(askerOwnershipData[0].number_of_shares, 0)) {
+				askerOwnershipData.shift()
+			}
+			numberOfRemainingSharesToSell -= sharesToTransfer
 		}
 
 		// update the bid record (update for the number of available shares.)
