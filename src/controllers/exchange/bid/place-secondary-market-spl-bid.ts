@@ -1,4 +1,3 @@
-/* eslint-disable max-depth */
 import _ from "lodash"
 import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
@@ -7,12 +6,12 @@ import transferSolFunction from "../../../utils/exchange/transfer-sol-function"
 import calculateAverageFillPrice from "../../../utils/exchange/calculate-average-fill-price"
 import retrieveSplOwnershipByWalletIdAndSplId
 	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-id"
-import updateSplTransferRecordWithTransactionId
+import { updateSplTransferRecordsWithTransactionId }
 	from "../../../db-operations/write/spl/spl-transfer/update-spl-transfer-record-with-transaction-id"
 import addSecondaryMarketBid from "../../../db-operations/write/secondary-market/bid/add-secondary-market-bid"
 import updateBidStatusOnWalletBalanceChange from "../../../utils/exchange/update-bid-status-on-wallet-balance-change"
-import { updateSecondaryMarketBidSet } from "../../../db-operations/write/secondary-market/bid/update-secondary-market-bid"
 import addSecondaryMarketTransaction from "../../../db-operations/write/secondary-market/add-secondary-market-transaction"
+import { updateSecondaryMarketBidSet } from "../../../db-operations/write/secondary-market/bid/update-secondary-market-bid"
 import retrieveAsksBelowCertainPrice from "../../../db-operations/read/secondary-market/ask/retrieve-asks-below-certain-price"
 import { updateSecondaryMarketAskDecrement } from "../../../db-operations/write/secondary-market/ask/update-secondary-market-ask"
 import addSplTransferRecordAndUpdateOwnership from "../../../db-operations/write/simultaneous-writes/add-spl-transfer-and-update-ownership"
@@ -25,7 +24,11 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 
 		const bidId = await addSecondaryMarketBid(splDetails.splId, solanaWallet.solana_wallet_id, createSplBidData)
 
-		const retrievedAsks = await retrieveAsksBelowCertainPrice(splDetails.splId, createSplBidData.bidPricePerShareUsd)
+		const retrievedAsks = await retrieveAsksBelowCertainPrice(
+			splDetails.splId,
+			createSplBidData.bidPricePerShareUsd,
+			solanaWallet.solana_wallet_id
+		)
 
 		if (_.isEmpty(retrievedAsks)) return res.status(200).json({ success: "Added bid, no asks yet" })
 
@@ -33,7 +36,6 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 		const transactionsMap: TransactionsMap[] = []
 		for (const ask of retrievedAsks) {
 			if (numberOfRemainingSharesToBuy === 0) break
-			if (_.isEqual(solanaWallet.solana_wallet_id, ask.solana_wallet.solana_wallet_id)) continue
 
 			let amountToBuy: number = numberOfRemainingSharesToBuy
 			if (numberOfRemainingSharesToBuy > ask.remaining_number_of_shares_for_sale) {
@@ -48,10 +50,9 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 			let sharesTransferred = 0
 			const splTransferIds = []
 			for (const singleAskerOwnershipData of askerOwnershipData) {
-				// TODO: Make sure the sharesToTransfer is greater than 0. do a logic check
 				const sharesToTransfer = Math.min(amountToBuy - sharesTransferred, singleAskerOwnershipData.number_of_shares)
+				// eslint-disable-next-line max-depth
 				if (sharesToTransfer === 0) break
-				// eslint-disable-next-line max-len
 				const splTransferId = await addSplTransferRecordAndUpdateOwnership(
 					splDetails.splId,
 					solanaWallet.solana_wallet_id,
@@ -85,7 +86,7 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 				ask.secondary_market_ask_id,
 				solTransferId,
 			)
-			await updateSplTransferRecordWithTransactionId(splTransferIds, secondaryMarketTransactionId)
+			await updateSplTransferRecordsWithTransactionId(splTransferIds, secondaryMarketTransactionId)
 			transactionsMap.push({ fillPriceUsd: ask.ask_price_per_share_usd, numberOfShares: amountToBuy})
 			numberOfRemainingSharesToBuy -= amountToBuy
 		}

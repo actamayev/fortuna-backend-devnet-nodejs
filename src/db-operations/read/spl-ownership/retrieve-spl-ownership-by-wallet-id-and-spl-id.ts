@@ -14,6 +14,9 @@ export default async function retrieveSplOwnershipByWalletIdAndSplId(
 				solana_wallet_id: solanaWalletId,
 				spl: {
 					public_key_address: splPublicKey
+				},
+				number_of_shares: {
+					gt: 0
 				}
 			},
 			orderBy: {

@@ -2,7 +2,8 @@ import PrismaClientClass from "../../../../classes/prisma-client"
 
 export default async function retrieveBidsAboveCertainPrice(
 	splId: number,
-	askPrice: number
+	askPrice: number,
+	solanaWalletIdToNotInclude: number
 ): Promise<RetrievedUserBidDataAboveCertainPrice[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
@@ -16,6 +17,9 @@ export default async function retrieveBidsAboveCertainPrice(
 				},
 				bid_price_per_share_usd: {
 					gte: askPrice
+				},
+				solana_wallet_id: {
+					not: solanaWalletIdToNotInclude
 				}
 			},
 			orderBy: {

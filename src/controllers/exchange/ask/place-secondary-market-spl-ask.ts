@@ -1,4 +1,3 @@
-/* eslint-disable max-depth */
 import _ from "lodash"
 import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
@@ -8,7 +7,7 @@ import { getWalletBalanceWithUSD } from "../../../utils/solana/get-wallet-balanc
 import calculateAverageFillPrice from "../../../utils/exchange/calculate-average-fill-price"
 import retrieveSplOwnershipByWalletIdAndSplId
 	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-id"
-import updateSplTransferRecordWithTransactionId
+import { updateSplTransferRecordWithTransactionId }
 	from "../../../db-operations/write/spl/spl-transfer/update-spl-transfer-record-with-transaction-id"
 import addSecondaryMarketAsk from "../../../db-operations/write/secondary-market/ask/add-secondary-market-ask"
 import updateBidStatusOnWalletBalanceChange from "../../../utils/exchange/update-bid-status-on-wallet-balance-change"
@@ -26,72 +25,76 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 
 		const askId = await addSecondaryMarketAsk(splDetails.splId, solanaWallet.solana_wallet_id, createSplAskData)
 
-		const retrievedBids = await retrieveBidsAboveCertainPrice(splDetails.splId, createSplAskData.askPricePerShareUsd)
+		const retrievedBids = await retrieveBidsAboveCertainPrice(
+			splDetails.splId,
+			createSplAskData.askPricePerShareUsd,
+			solanaWallet.solana_wallet_id
+		)
 
-		if (_.isEmpty(retrievedBids)) return res.status(200).json({ success: "Added bid, no asks yet" })
+		if (_.isEmpty(retrievedBids)) return res.status(200).json({ success: "Added ask, no bids yet" })
 
 		let numberOfRemainingSharesToSell = createSplAskData.numberOfSharesAskingFor
 		const transactionsMap: TransactionsMap[] = []
-		for (const bid of retrievedBids) {
-			if (numberOfRemainingSharesToSell === 0) break
-			if (_.isEqual(solanaWallet.solana_wallet_id, bid.solana_wallet.solana_wallet_id)) continue
+		const askerOwnershipData = await retrieveSplOwnershipByWalletIdAndSplId(
+			solanaWallet.solana_wallet_id,
+			splDetails.publicKeyAddress
+		)
 
-			let numberSharesToSell: number = numberOfRemainingSharesToSell
-			if (numberOfRemainingSharesToSell > bid.remaining_number_of_shares_bidding_for) {
-				numberSharesToSell = bid.remaining_number_of_shares_bidding_for
-			}
+		while (numberOfRemainingSharesToSell > 0 && !_.isEmpty(retrievedBids) && !_.isEmpty(askerOwnershipData)) {
+			const remainingSharesInBid = retrievedBids[0].remaining_number_of_shares_bidding_for
+			const bidPricePerShare  = retrievedBids[0].bid_price_per_share_usd
+			const sharesOwnedByAsker = askerOwnershipData[0].number_of_shares
+
+			// Calculate the minimum shares to transfer
 			const bidderWalletBalanceUsd = await getWalletBalanceWithUSD(new PublicKey(solanaWallet.public_key))
-			const sharesBidderAbleToBuy = bidderWalletBalanceUsd.balanceInUsd / bid.bid_price_per_share_usd
-			numberSharesToSell = Math.min(numberSharesToSell, sharesBidderAbleToBuy)
+			const sharesBidderAbleToBuy = bidderWalletBalanceUsd.balanceInUsd / bidPricePerShare
 
-			if (numberSharesToSell === 0) break
-			// Transfer SPL tokens:
+			let sharesToTransfer = Math.min(remainingSharesInBid, sharesOwnedByAsker, numberOfRemainingSharesToSell)
 
-			const bidderOwnershipData = await retrieveSplOwnershipByWalletIdAndSplId(
-				bid.solana_wallet.solana_wallet_id,
-				splDetails.publicKeyAddress
+			sharesToTransfer = Math.min(sharesToTransfer, sharesBidderAbleToBuy)
+			if (sharesToTransfer === 0) break
+
+			const splTransferId = await addSplTransferRecordAndUpdateOwnership(
+				splDetails.splId,
+				retrievedBids[0].solana_wallet.solana_wallet_id,
+				solanaWallet.solana_wallet_id,
+				true,
+				true,
+				sharesToTransfer,
+				bidPricePerShare,
+				askerOwnershipData[0].spl_ownership_id
 			)
-			let sharesTransferred = 0
-			const splTransferIds = []
-			for (const singleBidderOwnershipData of bidderOwnershipData) {
-				const sharesToTransfer = Math.min(numberSharesToSell - sharesTransferred, singleBidderOwnershipData.number_of_shares)
-				if (sharesToTransfer === 0) break
 
-				const splTransferId = await addSplTransferRecordAndUpdateOwnership(
-					splDetails.splId,
-					bid.solana_wallet.solana_wallet_id,
-					solanaWallet.solana_wallet_id,
-					true,
-					true,
-					numberSharesToSell,
-					bid.bid_price_per_share_usd,
-					singleBidderOwnershipData.spl_ownership_id
-				)
-				sharesTransferred += sharesToTransfer
-				splTransferIds.push(splTransferId)
-			}
-
-			// Transfer Sol:
 			const solPrice = (await SolPriceManager.getInstance().getPrice()).price
 			const solTransferId = await transferSolFunction(
-				bid.solana_wallet,
+				retrievedBids[0].solana_wallet,
 				{ public_key: new PublicKey(solanaWallet.public_key), solana_wallet_id: solanaWallet.solana_wallet_id},
 				{
-					solToTransfer: numberSharesToSell * bid.bid_price_per_share_usd / solPrice,
-					usdToTransfer: numberSharesToSell * bid.bid_price_per_share_usd,
+					solToTransfer: sharesToTransfer * bidPricePerShare / solPrice,
+					usdToTransfer: sharesToTransfer * bidPricePerShare,
 					defaultCurrency: "usd"
 				}
 			)
-			// update the bid records
-			await updateSecondaryMarketBidDecrement(bid.secondary_market_bid_id, numberSharesToSell)
+
+			await updateSecondaryMarketBidDecrement(retrievedBids[0].secondary_market_bid_id, sharesToTransfer)
 
 			// add a record to the secondary_transaction_table.
-			const secondaryMarketTransactionId = await addSecondaryMarketTransaction(bid.secondary_market_bid_id, askId, solTransferId)
-			await updateSplTransferRecordWithTransactionId(splTransferIds, secondaryMarketTransactionId)
+			const secondaryMarketTransactionId = await addSecondaryMarketTransaction(
+				retrievedBids[0].secondary_market_bid_id,
+				askId,
+				solTransferId
+			)
+			await updateSplTransferRecordWithTransactionId(splTransferId, secondaryMarketTransactionId)
 
-			transactionsMap.push({ fillPriceUsd: bid.bid_price_per_share_usd, numberOfShares: numberSharesToSell })
-			await updateBidStatusOnWalletBalanceChange(bid.solana_wallet)
-			numberOfRemainingSharesToSell -= numberSharesToSell
+			transactionsMap.push({ fillPriceUsd: bidPricePerShare, numberOfShares: sharesToTransfer })
+			await updateBidStatusOnWalletBalanceChange(retrievedBids[0].solana_wallet)
+			numberOfRemainingSharesToSell -= sharesToTransfer
+			if (_.isEqual(sharesToTransfer, remainingSharesInBid)) {
+				retrievedBids.shift()
+			}
+			if (_.isEqual(sharesToTransfer, sharesOwnedByAsker)) {
+				askerOwnershipData.shift()
+			}
 		}
 
 		// update the bid record (update for the number of available shares.)
