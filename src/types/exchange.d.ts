@@ -40,8 +40,6 @@ declare global {
 	interface RetrievedOpenAskOrdersData {
 		secondary_market_ask_id: number
 		spl_id: number
-		number_of_shares_for_sale: number
-		remaining_number_of_shares_for_sale: number
 		ask_price_per_share_usd: number
 	}
 
@@ -52,7 +50,6 @@ declare global {
 	interface RetrievedOpenBidOrdersData {
 		secondary_market_bid_id: number
 		spl_id: number
-		number_of_shares_bidding_for: number
 		bid_price_per_share_usd: number
 	}
 

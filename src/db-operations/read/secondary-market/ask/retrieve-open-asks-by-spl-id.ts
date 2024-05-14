@@ -14,8 +14,6 @@ export default async function retrieveOpenAsksBySplId(splId: number): Promise<Re
 			select: {
 				secondary_market_ask_id: true,
 				spl_id: true,
-				number_of_shares_for_sale: true,
-				remaining_number_of_shares_for_sale: true,
 				ask_price_per_share_usd: true
 			}
 		})
