@@ -137,6 +137,7 @@ declare global {
 
 	interface RetrievedMyOwnershipData {
 		number_of_shares: number
+		purchase_price_per_share_usd: number
 		spl: {
 			public_key_address: string
 			creator_wallet_id: number
@@ -148,11 +149,29 @@ declare global {
 		}
 	}
 
-	type RetrievedMyOwnershipDataMap = Map<string, RetrievedMyOwnershipData>
+	interface PurchaseData {
+		number_of_shares: number
+		purchase_price_per_share_usd: number
+	}
+
+	interface MyOwnershipDataInMap {
+		purchaseData: PurchaseData[]
+		spl: {
+			public_key_address: string
+			creator_wallet_id: number
+			spl_name: string
+			uploaded_image: {
+				image_url: string
+				uuid: string
+			}
+		}
+	}
+
+	type RetrievedMyOwnershipDataMap = Map<string, MyOwnershipDataInMap>
 
 	interface MyOwnershipData {
 		splPublicKey: string
-		numberOfShares: number
+		purchaseData: PurchaseData[]
 		imageUrl: string
 		uuid: string
 		isMyContent: boolean

@@ -11,7 +11,6 @@ export default async function getMyOwnership(req: Request, res: Response): Promi
 
 		const aggregatedOwnership = aggregateOwnershipList(myOwnership)
 		const myOwnershipList = transformOwnershipList(aggregatedOwnership, solanaWallet.solana_wallet_id)
-		aggregatedOwnership
 		return res.status(200).json({ myOwnershipList })
 	} catch (error) {
 		console.error(error)
