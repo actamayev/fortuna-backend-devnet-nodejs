@@ -1,3 +1,4 @@
+import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 import checkIfAskByUserExists from "../../../db-operations/read/secondary-market/ask/check-if-active-ask-by-user-exists"
 
@@ -5,9 +6,11 @@ export default async function confirmAskCreator(req: Request, res: Response, nex
 	try {
 		const { user } = req
 		const { splAskId } = req.params
-		const askByUserExists = await checkIfAskByUserExists(parseInt(splAskId, 10), user.user_id)
+		const askData = await checkIfAskByUserExists(parseInt(splAskId, 10))
 
-		if (askByUserExists === false) {
+		if (_.isNull(askData)) return res.status(400).json({ message: "Ask doesn't exist" })
+
+		if (!_.isEqual(askData.solana_wallet_id, user.user_id)) {
 			return res.status(400).json({ message: "Ask doesn't belong to the user making the request." })
 		}
 		next()

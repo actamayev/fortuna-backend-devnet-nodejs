@@ -1,3 +1,4 @@
+import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 import checkIfActiveBidByUserExists from "../../../db-operations/read/secondary-market/bid/check-if-active-bid-by-user-exists"
 
@@ -5,9 +6,11 @@ export default async function confirmBidCreator(req: Request, res: Response, nex
 	try {
 		const { user } = req
 		const { splBidId } = req.params
-		const bidByUserExists = await checkIfActiveBidByUserExists(parseInt(splBidId, 10), user.user_id)
+		const bidData = await checkIfActiveBidByUserExists(parseInt(splBidId, 10))
 
-		if (bidByUserExists === false) {
+		if (_.isNull(bidData)) return res.status(400).json({ message: "Bid doesn't exist" })
+
+		if (!_.isEqual(bidData.solana_wallet_id, user.user_id)) {
 			return res.status(400).json({ message: "Bid doesn't belong to the user making the request." })
 		}
 		next()

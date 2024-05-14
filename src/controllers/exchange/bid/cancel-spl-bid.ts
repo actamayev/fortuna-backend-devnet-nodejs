@@ -7,9 +7,9 @@ export default async function cancelSplBid(req: Request, res: Response): Promise
 
 		await cancelSecondaryMarketBid(parseInt(splBidId, 10))
 
-		return res.status(200).json({ })
+		return res.status(200).json({ success: "Bid cancelled" })
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to cancel Bid"})
+		return res.status(500).json({ error: "Internal Server Error: Unable to cancel Bid" })
 	}
 }

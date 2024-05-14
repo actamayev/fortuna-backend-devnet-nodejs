@@ -7,9 +7,9 @@ export default async function cancelSplAsk(req: Request, res: Response): Promise
 
 		await cancelSecondaryMarketAsk(parseInt(splAskId, 10))
 
-		return res.status(200).json({ })
+		return res.status(200).json({ success: "Ask cancelled" })
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to cancel Ask"})
+		return res.status(500).json({ error: "Internal Server Error: Unable to cancel Ask" })
 	}
 }
