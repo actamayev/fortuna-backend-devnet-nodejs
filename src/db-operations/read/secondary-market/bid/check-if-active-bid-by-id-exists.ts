@@ -1,7 +1,7 @@
 import { secondary_market_bid } from "@prisma/client"
 import PrismaClientClass from "../../../../classes/prisma-client"
 
-export default async function checkIfActiveBidByUserExists(bidId: number): Promise<secondary_market_bid | null> {
+export default async function checkIfActiveBidByIdExists(bidId: number): Promise<secondary_market_bid | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const bid = await prismaClient.secondary_market_bid.findFirst({

@@ -1,12 +1,12 @@
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
-import checkIfActiveBidByUserExists from "../../../db-operations/read/secondary-market/bid/check-if-active-bid-by-user-exists"
+import checkIfActiveBidByIdExists from "../../../db-operations/read/secondary-market/bid/check-if-active-bid-by-id-exists"
 
 export default async function confirmBidCreator(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {
 		const { user } = req
 		const { splBidId } = req.params
-		const bidData = await checkIfActiveBidByUserExists(parseInt(splBidId, 10))
+		const bidData = await checkIfActiveBidByIdExists(parseInt(splBidId, 10))
 
 		if (_.isNull(bidData)) return res.status(400).json({ message: "Bid doesn't exist" })
 

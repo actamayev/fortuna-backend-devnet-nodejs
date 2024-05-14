@@ -1,12 +1,12 @@
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
-import checkIfAskByUserExists from "../../../db-operations/read/secondary-market/ask/check-if-active-ask-by-user-exists"
+import checkIfActiveAskByIdExists from "../../../db-operations/read/secondary-market/ask/check-if-active-ask-by-user-exists"
 
 export default async function confirmAskCreator(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {
 		const { user } = req
 		const { splAskId } = req.params
-		const askData = await checkIfAskByUserExists(parseInt(splAskId, 10))
+		const askData = await checkIfActiveAskByIdExists(parseInt(splAskId, 10))
 
 		if (_.isNull(askData)) return res.status(400).json({ message: "Ask doesn't exist" })
 
