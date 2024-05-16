@@ -59,6 +59,8 @@ exchangeRoutes.post(
 	placeSecondaryMarketSplBid
 )
 
+// eslint-disable-next-line max-len
+// TODO: Add a middleware that checks the the amount that the user is asking for is less the number of shares the user currently has minus the sum of the number of shares in open asks
 exchangeRoutes.post(
 	"/create-spl-ask",
 	validateCreateSplAsk,
