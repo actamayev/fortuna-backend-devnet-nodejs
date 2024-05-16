@@ -9,9 +9,9 @@ import placeSecondaryMarketSplAsk from "../controllers/exchange/ask/place-second
 import placeSecondaryMarketSplBid from "../controllers/exchange/bid/place-secondary-market-spl-bid"
 
 import {
-	attachSplDetailsByPublicKeyForPrimarySplPurchase,
 	attachSplDetailsByPublicKeyForSecondarySplBid,
-	attachSplDetailsByPublicKeyForSecondarySplAsk
+	attachSplDetailsByPublicKeyForSecondarySplAsk,
+	attachSplDetailsByPublicKeyForPrimarySplPurchase
 } from "../middleware/attach/attach-spl-details-by-public-key"
 import confirmBidCreator from "../middleware/confirmations/exchange/confirm-bid-creator"
 import confirmAskCreator from "../middleware/confirmations/exchange/confirm-ask-creator"
@@ -29,6 +29,7 @@ import validateSplIdInParams from "../middleware/request-validation/exchange/val
 import validateCreateSplBid from "../middleware/request-validation/exchange/bid/validate-create-spl-bid"
 import validateCreateSplAsk from "../middleware/request-validation/exchange/ask/validate-create-spl-ask"
 import validatePurchaseSplTokens from "../middleware/request-validation/exchange/validate-purchase-spl-tokens"
+import confirmPrimarySplSharesSoldOut from "../middleware/confirmations/exchange/confirm-primary-spl-shares-sold-out"
 import confirmCreatorNotBuyingOwnShares from "../middleware/confirmations/exchange/confirm-creator-not-buying-own-shares"
 import confirmUserHasEnoughTokensToCreateSplAsk from "../middleware/confirmations/exchange/confirm-user-has-enough-tokens-to-create-spl-ask"
 
@@ -51,8 +52,9 @@ exchangeRoutes.post(
 exchangeRoutes.post(
 	"/create-spl-bid",
 	validateCreateSplBid,
-	attachSolanaWalletByUserId,
 	attachSplDetailsByPublicKeyForSecondarySplBid,
+	confirmPrimarySplSharesSoldOut,
+	attachSolanaWalletByUserId,
 	confirmUserHasEnoughSolToBidForSecondaryTokens,
 	placeSecondaryMarketSplBid
 )
@@ -60,8 +62,9 @@ exchangeRoutes.post(
 exchangeRoutes.post(
 	"/create-spl-ask",
 	validateCreateSplAsk,
-	attachSolanaWalletByUserId,
 	attachSplDetailsByPublicKeyForSecondarySplAsk,
+	confirmPrimarySplSharesSoldOut,
+	attachSolanaWalletByUserId,
 	confirmUserHasEnoughTokensToCreateSplAsk,
 	placeSecondaryMarketSplAsk
 )

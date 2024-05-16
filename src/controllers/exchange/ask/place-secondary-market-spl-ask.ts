@@ -106,7 +106,7 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 		await updateSecondaryMarketAskSet(askId, numberOfRemainingSharesToSell)
 
 		const transactionData = calculateTransactionData(transactionsMap)
-		return res.status(200).json({
+		return res.status(201).json({
 			sharesSold: transactionData.sharesTransacted,
 			averageFillPrice: transactionData.averageFillPrice,
 			transactionsMap

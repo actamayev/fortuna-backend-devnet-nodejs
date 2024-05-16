@@ -96,7 +96,7 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 
 		await updateBidStatusOnWalletBalanceChange(solanaWallet)
 		const averageFillPrice = calculateTransactionData(transactionsMap)
-		return res.status(200).json({
+		return res.status(201).json({
 			sharesPurchased: averageFillPrice.sharesTransacted,
 			averageFillPrice: averageFillPrice.averageFillPrice,
 			transactionsMap
