@@ -19,7 +19,7 @@ import { updateSecondaryMarketBidDecrement } from "../../../db-operations/write/
 import addSplTransferRecordAndUpdateOwnership from "../../../db-operations/write/simultaneous-writes/add-spl-transfer-and-update-ownership"
 
 // eslint-disable-next-line max-lines-per-function, complexity
-export default async function placeSecondaryMarketSplAsk(req: Request, res: Response): Promise<Response> {
+export default async function placeSplAsk(req: Request, res: Response): Promise<Response> {
 	try {
 		const { splDetails, solanaWallet} = req
 		const createSplAskData = req.body.createSplAsk as CreateSplAskData

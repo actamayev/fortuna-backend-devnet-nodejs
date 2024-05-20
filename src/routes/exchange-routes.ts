@@ -1,12 +1,12 @@
 import express from "express"
 
+import placeSplAsk from "../controllers/exchange/ask/place-spl-ask"
+import placeSplBid from "../controllers/exchange/bid/place-spl-bid"
 import cancelSplAsk from "../controllers/exchange/ask/cancel-spl-ask"
 import cancelSplBid from "../controllers/exchange/bid/cancel-spl-bid"
 import retrieveUserOrders from "../controllers/exchange/retrieve-user-orders"
 import primarySplTokenPurchase from "../controllers/exchange/primary-spl-token-purchase"
 import retrieveOpenOrdersBySplId from "../controllers/exchange/retrieve-open-orders-by-spl-id"
-import placeSecondaryMarketSplAsk from "../controllers/exchange/ask/place-secondary-market-spl-ask"
-import placeSecondaryMarketSplBid from "../controllers/exchange/bid/place-secondary-market-spl-bid"
 
 import {
 	attachSplDetailsByPublicKeyForSecondarySplBid,
@@ -57,7 +57,7 @@ exchangeRoutes.post(
 	confirmPrimarySplSharesSoldOut,
 	attachSolanaWalletByUserId,
 	confirmUserHasEnoughSolToBidForSecondaryTokens,
-	placeSecondaryMarketSplBid
+	placeSplBid
 )
 
 // eslint-disable-next-line max-len
@@ -69,7 +69,7 @@ exchangeRoutes.post(
 	confirmPrimarySplSharesSoldOut,
 	attachSolanaWalletByUserId,
 	confirmUserHasEnoughTokensToCreateSplAsk,
-	placeSecondaryMarketSplAsk
+	placeSplAsk
 )
 
 exchangeRoutes.post(
