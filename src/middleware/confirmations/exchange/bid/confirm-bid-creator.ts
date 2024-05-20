@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
-import checkIfActiveBidByIdExists from "../../../db-operations/read/secondary-market/bid/check-if-active-bid-by-id-exists"
+import checkIfActiveBidByIdExists from "../../../../db-operations/read/secondary-market/bid/check-if-active-bid-by-id-exists"
 
 export default async function confirmBidCreator(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {

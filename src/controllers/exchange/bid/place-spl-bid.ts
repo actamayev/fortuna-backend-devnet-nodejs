@@ -17,7 +17,7 @@ import { updateSecondaryMarketAskDecrement } from "../../../db-operations/write/
 import addSplTransferRecordAndUpdateOwnership from "../../../db-operations/write/simultaneous-writes/add-spl-transfer-and-update-ownership"
 
 // eslint-disable-next-line max-lines-per-function
-export default async function placeSecondaryMarketSplBid(req: Request, res: Response): Promise<Response> {
+export default async function placeSplBid(req: Request, res: Response): Promise<Response> {
 	try {
 		const { splDetails, solanaWallet } = req
 		const createSplBidData = req.body.createSplBid as CreateSplBidData
@@ -34,6 +34,7 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 
 		let numberOfRemainingSharesToBuy = createSplBidData.numberOfSharesBiddingFor
 		const transactionsMap: TransactionsMap[] = []
+
 		for (const ask of retrievedAsks) {
 			if (numberOfRemainingSharesToBuy === 0) break
 
@@ -96,7 +97,7 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 
 		await updateBidStatusOnWalletBalanceChange(solanaWallet)
 		const averageFillPrice = calculateTransactionData(transactionsMap)
-		return res.status(200).json({
+		return res.status(201).json({
 			sharesPurchased: averageFillPrice.sharesTransacted,
 			averageFillPrice: averageFillPrice.averageFillPrice,
 			transactionsMap

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import EscrowWalletManager from "../../../classes/escrow-wallet-manager"
+import EscrowWalletManager from "../../../../classes/escrow-wallet-manager"
 
 export default async function confirmEnoughSharesInEscrowToCompletePurchase(
 	req: Request,
