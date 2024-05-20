@@ -13,8 +13,8 @@ import {
 	attachSplDetailsByPublicKeyForSecondarySplAsk,
 	attachSplDetailsByPublicKeyForPrimarySplPurchase
 } from "../middleware/attach/attach-spl-details-by-public-key"
-import confirmBidCreator from "../middleware/confirmations/exchange/confirm-bid-creator"
-import confirmAskCreator from "../middleware/confirmations/exchange/confirm-ask-creator"
+import confirmBidCreator from "../middleware/confirmations/exchange/bid/confirm-bid-creator"
+import confirmAskCreator from "../middleware/confirmations/exchange/ask/confirm-ask-creator"
 import {
 	confirmUserHasEnoughSolToBidForSecondaryTokens,
 	confirmUserHasEnoughSolToPurchasePrimaryTokens
@@ -23,15 +23,16 @@ import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-walle
 import confirmSplExistsById from "../middleware/confirmations/exchange/confirm-spl-exists-by-id"
 import validateCancelSplBid from "../middleware/request-validation/exchange/bid/validate-cancel-bid"
 import validateCancelSplAsk from "../middleware/request-validation/exchange/ask/validate-cancel-ask"
-import confirmEnoughSharesInEscrowToCompletePurchase
-	from "../middleware/confirmations/exchange/confirm-enough-shares-in-escrow-to-complete-purchase"
+import confirmUserHasEnoughTokensToCreateSplAsk
+	from "../middleware/confirmations/exchange/ask/confirm-user-has-enough-tokens-to-create-spl-ask"
 import validateSplIdInParams from "../middleware/request-validation/exchange/validate-spl-id-in-params"
 import validateCreateSplBid from "../middleware/request-validation/exchange/bid/validate-create-spl-bid"
 import validateCreateSplAsk from "../middleware/request-validation/exchange/ask/validate-create-spl-ask"
+import confirmEnoughSharesInEscrowToCompletePurchase
+	from "../middleware/confirmations/exchange/primary/confirm-enough-shares-in-escrow-to-complete-purchase"
 import validatePurchaseSplTokens from "../middleware/request-validation/exchange/validate-purchase-spl-tokens"
 import confirmPrimarySplSharesSoldOut from "../middleware/confirmations/exchange/confirm-primary-spl-shares-sold-out"
-import confirmCreatorNotBuyingOwnShares from "../middleware/confirmations/exchange/confirm-creator-not-buying-own-shares"
-import confirmUserHasEnoughTokensToCreateSplAsk from "../middleware/confirmations/exchange/confirm-user-has-enough-tokens-to-create-spl-ask"
+import confirmCreatorNotBuyingOwnShares from "../middleware/confirmations/exchange/primary/confirm-creator-not-buying-own-shares"
 
 const exchangeRoutes = express.Router()
 

@@ -50,9 +50,13 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 			const sharesBidderAbleToBuy = bidderWalletBalanceUsd.balanceInUsd / bidPricePerShare
 
 			// Calculate the minimum shares to transfer
-			let sharesToTransfer = Math.min(remainingSharesInBid, sharesOwnedByAsker, numberOfRemainingSharesToSell)
+			const sharesToTransfer = Math.min(
+				remainingSharesInBid,
+				sharesOwnedByAsker,
+				numberOfRemainingSharesToSell,
+				sharesBidderAbleToBuy
+			)
 
-			sharesToTransfer = Math.min(sharesToTransfer, sharesBidderAbleToBuy)
 			if (sharesToTransfer === 0) break
 
 			const splTransferId = await addSplTransferRecordAndUpdateOwnership(

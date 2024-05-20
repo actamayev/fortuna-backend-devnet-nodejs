@@ -34,6 +34,7 @@ export default async function placeSecondaryMarketSplBid(req: Request, res: Resp
 
 		let numberOfRemainingSharesToBuy = createSplBidData.numberOfSharesBiddingFor
 		const transactionsMap: TransactionsMap[] = []
+
 		for (const ask of retrievedAsks) {
 			if (numberOfRemainingSharesToBuy === 0) break
 
