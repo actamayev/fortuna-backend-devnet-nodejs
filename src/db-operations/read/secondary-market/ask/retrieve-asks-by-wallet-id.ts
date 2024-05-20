@@ -1,13 +1,11 @@
 import PrismaClientClass from "../../../../classes/prisma-client"
 
-export default async function retrieveUserAsks(userId: number): Promise<RetrievedUserAskData[]> {
+export default async function retrieveAsksByWalletId(solanaWalletId: number): Promise<RetrievedUserAskData[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const asks = await prismaClient.secondary_market_ask.findMany({
 			where: {
-				solana_wallet: {
-					user_id: userId
-				}
+				solana_wallet_id: solanaWalletId
 			},
 			select: {
 				secondary_market_ask_id: true,

@@ -1,13 +1,13 @@
 import { Request, Response } from "express"
-import retrieveUserAsks from "../../db-operations/read/secondary-market/ask/retrieve-user-asks"
-import retrieveUserBids from "../../db-operations/read/secondary-market/bid/retrieve-user-bids"
+import retrieveAsksByWalletId from "../../db-operations/read/secondary-market/ask/retrieve-asks-by-wallet-id"
+import retrieveBidsByWalletId from "../../db-operations/read/secondary-market/bid/retrieve-bids-by-wallet-id"
 
 export default async function retrieveUserOrders(req: Request, res: Response): Promise<Response> {
 	try {
-		const { user } = req
+		const { solanaWallet } = req
 
-		const asks = await retrieveUserAsks(user.user_id)
-		const bids = await retrieveUserBids(user.user_id)
+		const asks = await retrieveAsksByWalletId(solanaWallet.solana_wallet_id)
+		const bids = await retrieveBidsByWalletId(solanaWallet.solana_wallet_id)
 
 		const combinedOrders = [...asks, ...bids]
 

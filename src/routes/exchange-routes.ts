@@ -84,7 +84,7 @@ exchangeRoutes.post(
 	cancelSplAsk
 )
 
-exchangeRoutes.get("/retrieve-my-orders", retrieveUserOrders)
+exchangeRoutes.get("/retrieve-my-orders", attachSolanaWalletByUserId, retrieveUserOrders)
 
 exchangeRoutes.get(
 	"/retrieve-open-orders-by-spl-id/:splId",
