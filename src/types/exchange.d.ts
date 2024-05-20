@@ -55,6 +55,12 @@ declare global {
 		askPricePerShareUsd: number
 	}
 
+	interface TransformedUserAskData extends TransformedAskOrderData {
+		numberOfsharesForSale: number
+		remainingNumberOfSharesForSale: number
+		createdAt: Date
+	}
+
 	interface RetrievedOpenBidOrdersData {
 		secondary_market_bid_id: number
 		spl_id: number
@@ -74,9 +80,21 @@ declare global {
 		bidPricePerShareUsd: number
 	}
 
+	interface TransformedUserBidData extends TransformedBidOrderData {
+		wasBidCancelledDueToFundRequirements: boolean
+		nuberOfSharesBiddingFor: number
+		remainingNumberOfSharesBiddingFor: umber
+		createdAt: Date
+	}
+
 	interface OpenOrders {
 		bids: TransformedBidOrderData[]
 		asks: TransformedAskOrderData[]
+	}
+
+	interface UserOrders {
+		asks: TransformedUserAskData[]
+		bids: TransformedUserBidData[]
 	}
 }
 
