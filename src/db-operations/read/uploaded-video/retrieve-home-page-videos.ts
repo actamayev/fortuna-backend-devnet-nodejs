@@ -5,6 +5,13 @@ export default async function retrieveHomePageVideos(): Promise<HomePageVideoRet
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const mediaDetails = await prismaClient.uploaded_video.findMany({
+			where: {
+				spl: {
+					spl_listing_status: {
+						notIn: ["PRELISTING", "REMOVED"]
+					}
+				}
+			},
 			select: {
 				video_url: true,
 				created_at: true,

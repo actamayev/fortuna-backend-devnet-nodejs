@@ -1,4 +1,3 @@
-/* eslint-disable max-depth */
 import _ from "lodash"
 import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
@@ -18,8 +17,8 @@ import retrieveBidsAboveCertainPrice from "../../../db-operations/read/secondary
 import { updateSecondaryMarketBidDecrement } from "../../../db-operations/write/secondary-market/bid/update-secondary-market-bid"
 import addSplTransferRecordAndUpdateOwnership from "../../../db-operations/write/simultaneous-writes/add-spl-transfer-and-update-ownership"
 
-// eslint-disable-next-line max-lines-per-function, complexity
-export default async function placeSecondaryMarketSplAsk(req: Request, res: Response): Promise<Response> {
+// eslint-disable-next-line max-lines-per-function
+export default async function placeSplAsk(req: Request, res: Response): Promise<Response> {
 	try {
 		const { splDetails, solanaWallet} = req
 		const createSplAskData = req.body.createSplAsk as CreateSplAskData
@@ -50,9 +49,13 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 			const sharesBidderAbleToBuy = bidderWalletBalanceUsd.balanceInUsd / bidPricePerShare
 
 			// Calculate the minimum shares to transfer
-			let sharesToTransfer = Math.min(remainingSharesInBid, sharesOwnedByAsker, numberOfRemainingSharesToSell)
+			const sharesToTransfer = Math.min(
+				remainingSharesInBid,
+				sharesOwnedByAsker,
+				numberOfRemainingSharesToSell,
+				sharesBidderAbleToBuy
+			)
 
-			sharesToTransfer = Math.min(sharesToTransfer, sharesBidderAbleToBuy)
 			if (sharesToTransfer === 0) break
 
 			const splTransferId = await addSplTransferRecordAndUpdateOwnership(
@@ -106,7 +109,7 @@ export default async function placeSecondaryMarketSplAsk(req: Request, res: Resp
 		await updateSecondaryMarketAskSet(askId, numberOfRemainingSharesToSell)
 
 		const transactionData = calculateTransactionData(transactionsMap)
-		return res.status(200).json({
+		return res.status(201).json({
 			sharesSold: transactionData.sharesTransacted,
 			averageFillPrice: transactionData.averageFillPrice,
 			transactionsMap
