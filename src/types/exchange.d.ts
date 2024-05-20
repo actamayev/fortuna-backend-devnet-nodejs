@@ -62,10 +62,10 @@ declare global {
 	}
 
 	interface RetrievedUserBidData extends RetrievedOpenBidOrdersData {
-		created_at: Date
 		was_bid_cancelled_due_to_fund_requirements: boolean
 		number_of_shares_bidding_for: number
 		remaining_number_of_shares_bidding_for: umber
+		created_at: Date
 	}
 
 	interface TransformedBidOrderData {

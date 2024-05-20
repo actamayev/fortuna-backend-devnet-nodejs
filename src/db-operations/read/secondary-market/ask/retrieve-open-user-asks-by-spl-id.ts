@@ -3,7 +3,7 @@ import PrismaClientClass from "../../../../classes/prisma-client"
 export default async function retrieveOpenUserAsksBySplId(
 	userId: number,
 	splId: number
-): Promise<{ number_of_shares_for_sale: number }[]> {
+): Promise<{ remaining_number_of_shares_for_sale: number }[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const asks = await prismaClient.secondary_market_ask.findMany({
@@ -18,7 +18,7 @@ export default async function retrieveOpenUserAsksBySplId(
 				}
 			},
 			select: {
-				number_of_shares_for_sale: true,
+				remaining_number_of_shares_for_sale: true
 			}
 		})
 

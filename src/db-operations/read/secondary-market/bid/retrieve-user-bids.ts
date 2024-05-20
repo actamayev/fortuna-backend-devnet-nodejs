@@ -12,10 +12,10 @@ export default async function retrieveUserBids(userId: number): Promise<Retrieve
 			select: {
 				secondary_market_bid_id: true,
 				spl_id: true,
-				number_of_shares_bidding_for: true,
-				remaining_number_of_shares_bidding_for: true,
 				bid_price_per_share_usd: true,
 				was_bid_cancelled_due_to_fund_requirements: true,
+				number_of_shares_bidding_for: true,
+				remaining_number_of_shares_bidding_for: true,
 				created_at: true
 			}
 		})

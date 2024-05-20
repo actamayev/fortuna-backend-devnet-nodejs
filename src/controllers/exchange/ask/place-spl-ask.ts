@@ -1,4 +1,3 @@
-/* eslint-disable max-depth */
 import _ from "lodash"
 import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
@@ -18,7 +17,7 @@ import retrieveBidsAboveCertainPrice from "../../../db-operations/read/secondary
 import { updateSecondaryMarketBidDecrement } from "../../../db-operations/write/secondary-market/bid/update-secondary-market-bid"
 import addSplTransferRecordAndUpdateOwnership from "../../../db-operations/write/simultaneous-writes/add-spl-transfer-and-update-ownership"
 
-// eslint-disable-next-line max-lines-per-function, complexity
+// eslint-disable-next-line max-lines-per-function
 export default async function placeSplAsk(req: Request, res: Response): Promise<Response> {
 	try {
 		const { splDetails, solanaWallet} = req
