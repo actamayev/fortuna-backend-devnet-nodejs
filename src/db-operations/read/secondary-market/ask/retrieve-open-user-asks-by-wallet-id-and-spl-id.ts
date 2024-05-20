@@ -1,7 +1,7 @@
 import PrismaClientClass from "../../../../classes/prisma-client"
 
-export default async function retrieveOpenUserAsksBySplId(
-	userId: number,
+export default async function retrieveOpenUserAsksByWalletIdAndSplId(
+	solanaWalletId: number,
 	splId: number
 ): Promise<{ remaining_number_of_shares_for_sale: number }[]> {
 	try {
@@ -9,9 +9,7 @@ export default async function retrieveOpenUserAsksBySplId(
 		const asks = await prismaClient.secondary_market_ask.findMany({
 			where: {
 				spl_id: splId,
-				solana_wallet: {
-					user_id: userId
-				},
+				solana_wallet_id: solanaWalletId,
 				is_active: true,
 				remaining_number_of_shares_for_sale: {
 					gt: 0

@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express"
 import retrieveSplOwnershipByWalletIdAndSplId
 	from "../../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-id"
-import retrieveOpenUserAsksBySplId from "../../../../db-operations/read/secondary-market/ask/retrieve-open-user-asks-by-spl-id"
+import retrieveOpenUserAsksByWalletIdAndSplId
+	from "../../../../db-operations/read/secondary-market/ask/retrieve-open-user-asks-by-wallet-id-and-spl-id"
 
 // First, this middleware ensures that the user holds more tokens than the ask amount.
 // Then, This middleware ensures that the quantity of the ask amount if less than or equal to:
@@ -12,7 +13,7 @@ export default async function confirmUserHasEnoughTokensToCreateSplAsk(
 	next: NextFunction
 ): Promise<Response | void> {
 	try {
-		const { user, solanaWallet, splDetails } = req
+		const { solanaWallet, splDetails } = req
 		const createSplAsk = req.body.createSplAsk as CreateSplAskData
 		const splOwnerships = await retrieveSplOwnershipByWalletIdAndSplId(solanaWallet.solana_wallet_id, createSplAsk.splPublicKey)
 
@@ -23,7 +24,7 @@ export default async function confirmUserHasEnoughTokensToCreateSplAsk(
 			return res.status(400).json({ message: "User does not hold enough shares to create this ask order" })
 		}
 
-		const openAsks = await retrieveOpenUserAsksBySplId(user.user_id, splDetails.splId)
+		const openAsks = await retrieveOpenUserAsksByWalletIdAndSplId(solanaWallet.solana_wallet_id, splDetails.splId)
 		let outstandingAskQuantity = 0
 		openAsks.map(ask => outstandingAskQuantity += ask.remaining_number_of_shares_for_sale)
 
