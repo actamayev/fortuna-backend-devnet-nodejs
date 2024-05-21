@@ -6,7 +6,9 @@ export function transformUserAsks(asks: RetrievedUserAskData[]): TransformedUser
 			askPricePerShareUsd: ask.ask_price_per_share_usd,
 			numberOfsharesForSale: ask.number_of_shares_for_sale,
 			remainingNumberOfSharesForSale: ask.remaining_number_of_shares_for_sale,
-			createdAt: ask.created_at
+			createdAt: ask.created_at,
+			splName: ask.spl.spl_name,
+			uuid: ask.spl.uploaded_video.uuid
 		}))
 
 		return transformedAsks
@@ -26,7 +28,9 @@ export function transformUserBids(bids: RetrievedUserBidData[]): TransformedUser
 			wasBidCancelledDueToFundRequirements: bid.was_bid_cancelled_due_to_fund_requirements,
 			nuberOfSharesBiddingFor: bid.number_of_shares_bidding_for,
 			remainingNumberOfSharesBiddingFor: bid.remaining_number_of_shares_bidding_for,
-			createdAt: bid.created_at
+			createdAt: bid.created_at,
+			splName: bid.spl.spl_name,
+			uuid: bid.spl.uploaded_video.uuid
 		}))
 
 		return transformedBids

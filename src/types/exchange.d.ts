@@ -47,6 +47,12 @@ declare global {
 		number_of_shares_for_sale: number
 		remaining_number_of_shares_for_sale: number
 		created_at: Date
+		spl: {
+			spl_name: string
+			uploaded_video: {
+				uuid: string
+			}
+		}
 	}
 
 	interface TransformedAskOrderData {
@@ -59,6 +65,8 @@ declare global {
 		numberOfsharesForSale: number
 		remainingNumberOfSharesForSale: number
 		createdAt: Date
+		splName: string
+		uuid: string
 	}
 
 	interface RetrievedOpenBidOrdersData {
@@ -72,6 +80,12 @@ declare global {
 		number_of_shares_bidding_for: number
 		remaining_number_of_shares_bidding_for: umber
 		created_at: Date
+		spl: {
+			spl_name: string
+			uploaded_video: {
+				uuid: string
+			}
+		}
 	}
 
 	interface TransformedBidOrderData {
@@ -85,6 +99,8 @@ declare global {
 		nuberOfSharesBiddingFor: number
 		remainingNumberOfSharesBiddingFor: umber
 		createdAt: Date
+		splName: string
+		uuid: string
 	}
 
 	interface OpenOrders {
