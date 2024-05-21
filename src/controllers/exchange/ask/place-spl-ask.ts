@@ -5,6 +5,7 @@ import SolPriceManager from "../../../classes/sol-price-manager"
 import transferSolFunction from "../../../utils/exchange/transfer-sol-function"
 import { getWalletBalanceWithUSD } from "../../../utils/solana/get-wallet-balance"
 import calculateTransactionData from "../../../utils/exchange/calculate-transaction-data"
+import createAskOrderDataToReturn from "../../../utils/exchange/create-ask-order-data-to-return"
 import retrieveSplOwnershipByWalletIdAndSplId
 	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-id"
 import { updateSplTransferRecordWithTransactionId }
@@ -31,7 +32,10 @@ export default async function placeSplAsk(req: Request, res: Response): Promise<
 			solanaWallet.solana_wallet_id
 		)
 
-		if (_.isEmpty(retrievedBids)) return res.status(200).json({ success: "Added ask, no bids yet" })
+		if (_.isEmpty(retrievedBids)) {
+			const askOrderData = createAskOrderDataToReturn(askId, splDetails, createSplAskData, createSplAskData.numberOfSharesAskingFor)
+			return res.status(200).json({ askOrderData, averageFillPrice: { sharesTransacted: 0, averageFillPrice: 0 }})
+		}
 
 		let numberOfRemainingSharesToSell = createSplAskData.numberOfSharesAskingFor
 		const transactionsMap: TransactionsMap[] = []
@@ -109,11 +113,8 @@ export default async function placeSplAsk(req: Request, res: Response): Promise<
 		await updateSecondaryMarketAskSet(askId, numberOfRemainingSharesToSell)
 
 		const transactionData = calculateTransactionData(transactionsMap)
-		return res.status(201).json({
-			sharesSold: transactionData.sharesTransacted,
-			averageFillPrice: transactionData.averageFillPrice,
-			transactionsMap
-		})
+		const askOrderData = createAskOrderDataToReturn(askId, splDetails, createSplAskData, numberOfRemainingSharesToSell)
+		return res.status(200).json({ askOrderData, transactionData })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to create Spl Ask" })

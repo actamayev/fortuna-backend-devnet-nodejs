@@ -96,7 +96,7 @@ declare global {
 
 	interface TransformedUserBidData extends TransformedBidOrderData {
 		wasBidCancelledDueToFundRequirements: boolean
-		nuberOfSharesBiddingFor: number
+		numberOfSharesBiddingFor: number
 		remainingNumberOfSharesBiddingFor: umber
 		createdAt: Date
 		splName: string

@@ -4,6 +4,7 @@ import { PublicKey } from "@solana/web3.js"
 import SolPriceManager from "../../../classes/sol-price-manager"
 import transferSolFunction from "../../../utils/exchange/transfer-sol-function"
 import calculateTransactionData from "../../../utils/exchange/calculate-transaction-data"
+import createBidOrderDataToReturn from "../../../utils/exchange/create-bid-order-data-to-return"
 import retrieveSplOwnershipByWalletIdAndSplId
 	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-id"
 import { updateSplTransferRecordsWithTransactionId }
@@ -30,7 +31,10 @@ export default async function placeSplBid(req: Request, res: Response): Promise<
 			solanaWallet.solana_wallet_id
 		)
 
-		if (_.isEmpty(retrievedAsks)) return res.status(200).json({ success: "Added bid, no asks yet" })
+		if (_.isEmpty(retrievedAsks)) {
+			const bidOrderData = createBidOrderDataToReturn(bidId, splDetails, createSplBidData, createSplBidData.numberOfSharesBiddingFor)
+			return res.status(200).json({ bidOrderData, averageFillPrice: { sharesTransacted: 0, averageFillPrice: 0 } })
+		}
 
 		let numberOfRemainingSharesToBuy = createSplBidData.numberOfSharesBiddingFor
 		const transactionsMap: TransactionsMap[] = []
@@ -97,11 +101,8 @@ export default async function placeSplBid(req: Request, res: Response): Promise<
 
 		await updateBidStatusOnWalletBalanceChange(solanaWallet)
 		const averageFillPrice = calculateTransactionData(transactionsMap)
-		return res.status(201).json({
-			sharesPurchased: averageFillPrice.sharesTransacted,
-			averageFillPrice: averageFillPrice.averageFillPrice,
-			transactionsMap
-		})
+		const bidOrderData = createBidOrderDataToReturn(bidId, splDetails, createSplBidData, numberOfRemainingSharesToBuy)
+		return res.status(200).json({ bidOrderData, averageFillPrice })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to create Spl Bid" })

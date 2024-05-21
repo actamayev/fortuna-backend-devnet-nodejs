@@ -26,7 +26,7 @@ export function transformUserBids(bids: RetrievedUserBidData[]): TransformedUser
 			splId: bid.spl_id,
 			bidPricePerShareUsd: bid.bid_price_per_share_usd,
 			wasBidCancelledDueToFundRequirements: bid.was_bid_cancelled_due_to_fund_requirements,
-			nuberOfSharesBiddingFor: bid.number_of_shares_bidding_for,
+			numberOfSharesBiddingFor: bid.number_of_shares_bidding_for,
 			remainingNumberOfSharesBiddingFor: bid.remaining_number_of_shares_bidding_for,
 			createdAt: bid.created_at,
 			splName: bid.spl.spl_name,
