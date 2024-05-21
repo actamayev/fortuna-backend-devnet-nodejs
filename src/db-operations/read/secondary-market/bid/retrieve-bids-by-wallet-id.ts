@@ -14,7 +14,17 @@ export default async function retrieveBidsByWalletId(solanaWalletId: number): Pr
 				was_bid_cancelled_due_to_fund_requirements: true,
 				number_of_shares_bidding_for: true,
 				remaining_number_of_shares_bidding_for: true,
-				created_at: true
+				created_at: true,
+				spl: {
+					select: {
+						spl_name: true,
+						uploaded_video: {
+							select: {
+								uuid: true
+							}
+						}
+					}
+				}
 			}
 		})
 

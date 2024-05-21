@@ -9,8 +9,8 @@ export default function aggregateOwnershipList(splOwnerships: RetrievedMyOwnersh
 			const existingEntry = sharesMap.get(publicKey)
 
 			const newPurchaseData: PurchaseData = {
-				number_of_shares: splOwnership.number_of_shares,
-				purchase_price_per_share_usd: splOwnership.purchase_price_per_share_usd
+				numberOfShares: splOwnership.number_of_shares,
+				purchasePricePerShareUsd: splOwnership.purchase_price_per_share_usd
 			}
 
 			if (!_.isUndefined(existingEntry)) {
