@@ -93,7 +93,6 @@ export default async function placeSplAsk(req: Request, res: Response): Promise<
 			)
 			await updateSplTransferRecordWithTransactionId(splTransferId, secondaryMarketTransactionId)
 
-			transactionsMap.push({ fillPriceUsd: bidPricePerShare, numberOfShares: sharesToTransfer })
 			await updateBidStatusOnWalletBalanceChange(retrievedBids[0].solana_wallet)
 
 			retrievedBids[0].remaining_number_of_shares_bidding_for -= sharesToTransfer
@@ -105,6 +104,7 @@ export default async function placeSplAsk(req: Request, res: Response): Promise<
 			if (_.isEqual(askerOwnershipData[0].number_of_shares, 0)) {
 				askerOwnershipData.shift()
 			}
+			transactionsMap.push({ fillPriceUsd: bidPricePerShare, numberOfShares: sharesToTransfer })
 			numberOfRemainingSharesToSell -= sharesToTransfer
 		}
 
