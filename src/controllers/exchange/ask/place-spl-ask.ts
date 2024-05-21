@@ -4,7 +4,6 @@ import { PublicKey } from "@solana/web3.js"
 import SolPriceManager from "../../../classes/sol-price-manager"
 import transferSolFunction from "../../../utils/exchange/transfer-sol-function"
 import { getWalletBalanceWithUSD } from "../../../utils/solana/get-wallet-balance"
-import calculateTransactionData from "../../../utils/exchange/calculate-transaction-data"
 import createAskOrderDataToReturn from "../../../utils/exchange/create-ask-order-data-to-return"
 import retrieveSplOwnershipByWalletIdAndSplId
 	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-id"
@@ -112,9 +111,8 @@ export default async function placeSplAsk(req: Request, res: Response): Promise<
 		// update the bid record (update for the number of available shares.)
 		await updateSecondaryMarketAskSet(askId, numberOfRemainingSharesToSell)
 
-		const transactionData = calculateTransactionData(transactionsMap)
 		const askOrderData = createAskOrderDataToReturn(askId, splDetails, createSplAskData, numberOfRemainingSharesToSell)
-		return res.status(200).json({ askOrderData, transactionData })
+		return res.status(200).json({ askOrderData, transactionsMap })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to create Spl Ask" })

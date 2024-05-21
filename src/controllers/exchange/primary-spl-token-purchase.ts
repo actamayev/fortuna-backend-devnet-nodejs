@@ -45,7 +45,10 @@ export default async function primarySplTokenPurchase(req: Request, res: Respons
 		return res.status(200).json({
 			splName: splDetails.splName,
 			splPublicKey: splDetails.publicKeyAddress,
-			numberOfShares: purchaseSplTokensData.numberOfTokensPurchasing,
+			purchaseData: [{
+				numberOfShares: purchaseSplTokensData.numberOfTokensPurchasing,
+				purchasePricePerShareUsd: splDetails.listingSharePriceUsd
+			}],
 			imageUrl: splDetails.imageUrl,
 			uuid: splDetails.uuid,
 			isMyContent: splDetails.creatorWalletId === solanaWallet.solana_wallet_id

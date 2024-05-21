@@ -3,7 +3,6 @@ import { Request, Response } from "express"
 import { PublicKey } from "@solana/web3.js"
 import SolPriceManager from "../../../classes/sol-price-manager"
 import transferSolFunction from "../../../utils/exchange/transfer-sol-function"
-import calculateTransactionData from "../../../utils/exchange/calculate-transaction-data"
 import createBidOrderDataToReturn from "../../../utils/exchange/create-bid-order-data-to-return"
 import retrieveSplOwnershipByWalletIdAndSplId
 	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-id"
@@ -100,9 +99,8 @@ export default async function placeSplBid(req: Request, res: Response): Promise<
 		await updateSecondaryMarketBidSet(bidId, numberOfRemainingSharesToBuy)
 
 		await updateBidStatusOnWalletBalanceChange(solanaWallet)
-		const averageFillPrice = calculateTransactionData(transactionsMap)
 		const bidOrderData = createBidOrderDataToReturn(bidId, splDetails, createSplBidData, numberOfRemainingSharesToBuy)
-		return res.status(200).json({ bidOrderData, averageFillPrice })
+		return res.status(200).json({ bidOrderData, transactionsMap })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to create Spl Bid" })
