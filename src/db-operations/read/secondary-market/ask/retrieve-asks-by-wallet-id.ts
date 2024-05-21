@@ -13,7 +13,17 @@ export default async function retrieveAsksByWalletId(solanaWalletId: number): Pr
 				number_of_shares_for_sale: true,
 				remaining_number_of_shares_for_sale: true,
 				ask_price_per_share_usd: true,
-				created_at: true
+				created_at: true,
+				spl: {
+					select: {
+						spl_name: true,
+						uploaded_video: {
+							select: {
+								uuid: true
+							}
+						}
+					}
+				}
 			}
 		})
 
