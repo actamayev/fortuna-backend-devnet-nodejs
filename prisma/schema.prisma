@@ -125,7 +125,7 @@ model spl {
 	spl_metadata_creation_fee_usd								Float?
 	create_spl_metadata_fee_payer_solana_wallet_id				Int?
 
-	is_spl_exclusive											Boolean @default(false)
+	is_spl_exclusive											Boolean
 	value_needed_to_access_exclusive_content_usd				Float?
 	listing_price_to_access_exclusive_content_usd				Float?
 	allow_value_from_same_creator_tokens_for_exclusive_content 	Boolean?
