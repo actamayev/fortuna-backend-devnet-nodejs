@@ -17,14 +17,27 @@ export default async function assignSPLTokenShares (
 	try {
 		const fortunaFeePayerWallet = await GetKeypairFromSecretKey.getFortunaFeePayerWalletKeypair()
 		const {
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
+			FORTUNA_FEE_PAYER_PUBLIC_KEY,
+			// eslint-disable-next-line @typescript-eslint/naming-convention
+			FORTUNA_FEE_PAYER_WALLET_ID_DB,
 			FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_PUBLIC_KEY,
 			FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_ID_DB,
 			FORTUNA_TOKENS_WALLET_PUBLIC_KEY,
 			FORTUNA_TOKENS_WALLET_ID_DB
 		} = await SecretsManager.getInstance().getSecrets([
 			"FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_PUBLIC_KEY", "FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_ID_DB",
-			"FORTUNA_TOKENS_WALLET_PUBLIC_KEY", "FORTUNA_TOKENS_WALLET_ID_DB"
+			"FORTUNA_TOKENS_WALLET_PUBLIC_KEY", "FORTUNA_TOKENS_WALLET_ID_DB", "FORTUNA_FEE_PAYER_PUBLIC_KEY",
+			"FORTUNA_FEE_PAYER_WALLET_ID_DB"
 		])
+
+		await createTokenAccountHelper(
+			fortunaFeePayerWallet,
+			splId,
+			splTokenPublicKey,
+			new PublicKey(FORTUNA_FEE_PAYER_PUBLIC_KEY),
+			parseInt(FORTUNA_FEE_PAYER_WALLET_ID_DB, 10)
+		)
 
 		const escrowTokenAccountData = await createTokenAccountHelper(
 			fortunaFeePayerWallet,
@@ -53,9 +66,9 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			splId,
 			fortunaFeePayerWallet.publicKey,
-			escrowTokenAccountData.escrowTokenAccountAddress,
+			escrowTokenAccountData.accountAddress,
 			escrowSharesToMint,
-			escrowTokenAccountData.fortunaTokenAccountIdDb,
+			escrowTokenAccountData.tokenAccountIdDb,
 			parseInt(FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_ID_DB, 10)
 		)
 
@@ -64,9 +77,9 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			splId,
 			fortunaFeePayerWallet.publicKey,
-			fortunaTokensTokenAccountData.escrowTokenAccountAddress,
+			fortunaTokensTokenAccountData.accountAddress,
 			fortunaSharesToMint,
-			fortunaTokensTokenAccountData.fortunaTokenAccountIdDb,
+			fortunaTokensTokenAccountData.tokenAccountIdDb,
 			parseInt(FORTUNA_TOKENS_WALLET_ID_DB, 10)
 		)
 
