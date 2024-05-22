@@ -53,9 +53,9 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			splId,
 			fortunaFeePayerWallet.publicKey,
-			escrowTokenAccountData.escrowTokenAccountAddress,
+			escrowTokenAccountData.accountAddress,
 			escrowSharesToMint,
-			escrowTokenAccountData.fortunaTokenAccountIdDb,
+			escrowTokenAccountData.tokenAccountIdDb,
 			parseInt(FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_ID_DB, 10)
 		)
 
@@ -64,9 +64,9 @@ export default async function assignSPLTokenShares (
 			splTokenPublicKey,
 			splId,
 			fortunaFeePayerWallet.publicKey,
-			fortunaTokensTokenAccountData.escrowTokenAccountAddress,
+			fortunaTokensTokenAccountData.accountAddress,
 			fortunaSharesToMint,
-			fortunaTokensTokenAccountData.fortunaTokenAccountIdDb,
+			fortunaTokensTokenAccountData.tokenAccountIdDb,
 			parseInt(FORTUNA_TOKENS_WALLET_ID_DB, 10)
 		)
 

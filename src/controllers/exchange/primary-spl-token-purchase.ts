@@ -14,11 +14,8 @@ export default async function primarySplTokenPurchase(req: Request, res: Respons
 		// FUTURE TODO: See if there's a way to simultaneously transfer Spl tokens to user and transfer sol from user to creator
 		// Better for this to be done as one transaction (so that if either one fails, neither go through)
 
-		// 1) Transfer spl from escrow to user (fortuna wallet should cover transaction)
-		// As part of the transfer to user, may need to create a token account for the user.
-		// record the transaction (save to spl_transfer table)
-		const splTransferId = await transferSplTokensToUser(solanaWallet, purchaseSplTokensData, splDetails)
-
+		// 1) Transfer sol from user to creator (fortuna wallet should cover transaction)
+		// Record the transaction (save to sol_transfer table)
 		const creatorWalletInfo = await retrieveCreatorWalletInfoFromSpl(splDetails.splId)
 		if (_.isNull(creatorWalletInfo)) return res.status(500).json({ error: "Unable to find creator's public key" })
 
@@ -26,8 +23,6 @@ export default async function primarySplTokenPurchase(req: Request, res: Respons
 
 		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
 		transferCurrencyAmounts.solPriceToTransferAt = splDetails.listingSharePriceUsd / solPrice
-		// 2) Transfer sol from user to creator (fortuna wallet should cover transaction)
-		// Record the transaction (save to sol_transfer table)
 		const solTransferId = await transferSolFunction(
 			solanaWallet,
 			creatorWalletInfo,
@@ -37,6 +32,12 @@ export default async function primarySplTokenPurchase(req: Request, res: Respons
 				defaultCurrency: "usd"
 			}
 		)
+
+		// 2) Transfer spl from escrow to user (fortuna wallet should cover transaction)
+		// As part of the transfer to user, may need to create a token account for the user.
+		// record the transaction (save to spl_transfer table)
+
+		const splTransferId = await transferSplTokensToUser(solanaWallet, purchaseSplTokensData, splDetails)
 
 		// 3) Record to spl_purchase table:
 		await addSplPurchaseRecord(splDetails.splId, splTransferId, solTransferId)
