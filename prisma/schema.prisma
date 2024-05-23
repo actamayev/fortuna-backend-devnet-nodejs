@@ -243,7 +243,6 @@ model uploaded_image {
 
 model uploaded_video {			
 	uploaded_video_id 											Int @id @default(autoincrement())
-	video_url													String
 	file_name													String
 	uuid														String
 
