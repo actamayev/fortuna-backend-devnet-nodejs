@@ -17,6 +17,10 @@ declare global {
 		videoUrl: string
 		description: string
 		originalContentUrl: string
+		isContentExclusive: boolean
+		valueNeededToAccessExclusiveContentUsd?: number
+		listingPriceToAccessExclusiveContentUsd?: number
+		allowValueFromSameCreatorTokensForExclusiveContent?: boolean
 	}
 
 	interface IncomingNewSPLData extends SPLDataSavedToS3 {

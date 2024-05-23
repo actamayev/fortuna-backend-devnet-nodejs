@@ -23,74 +23,75 @@ enum AuthMethods {
 }
 
 model credentials {
-	user_id     									Int      @id @default(autoincrement())
-	username		     							String? 	@unique
-
-	password     									String?
-	is_active    									Boolean  @default(true)
-	default_currency								Currencies @default(usd)
-	default_site_theme								SiteThemes @default(light)
-	is_approved_to_be_creator						Boolean @default(false)
-
-	auth_method										AuthMethods
-
-	email__encrypted       							String?
-	phone_number__encrypted							String?
-
-  	profile_picture_id 								Int?	@unique
-	youtube_access_tokens_id						Int? 	@unique
-
-	created_at   									DateTime @default(now())
-	updated_at   									DateTime @default(now()) @updatedAt
-
-	login_history 									login_history[]
-	solana_wallet   								solana_wallet?
-
-  	profile_picture    								profile_picture? @relation(fields: [profile_picture_id], references: [profile_picture_id])
-  	youtube_access_tokens							youtube_access_tokens? @relation(fields: [youtube_access_tokens_id], references: [youtube_access_tokens_id])
+	user_id     												Int      @id @default(autoincrement())
+	username		     										String? 	@unique
+			
+	password     												String?
+	is_active    												Boolean  @default(true)
+	default_currency											Currencies @default(usd)
+	default_site_theme											SiteThemes @default(light)
+	is_approved_to_be_creator									Boolean @default(false)
+			
+	auth_method													AuthMethods
+			
+	email__encrypted       										String?
+	phone_number__encrypted										String?
+			
+  	profile_picture_id 											Int?	@unique
+	youtube_access_tokens_id									Int? 	@unique
+			
+	created_at   												DateTime @default(now())
+	updated_at   												DateTime @default(now()) @updatedAt
+			
+	login_history 												login_history[]
+	solana_wallet   											solana_wallet?
+			
+  	profile_picture    											profile_picture? @relation(fields: [profile_picture_id], references: [profile_picture_id])
+  	youtube_access_tokens										youtube_access_tokens? @relation(fields: [youtube_access_tokens_id], references: [youtube_access_tokens_id])
 
 	@@index([profile_picture_id], name:"credentials__profile_picture_id_idx")
 	@@index([youtube_access_tokens_id], name:"credentials__youtube_access_tokens_id_idx")
 }
 
 model login_history {
-	login_history_id 								Int       @id @default(autoincrement())
-	user_id          								Int
-	login_time       								DateTime  @default(now())
+	login_history_id 											Int       @id @default(autoincrement())
+	user_id          											Int
+	login_time       											DateTime  @default(now())
 
-	user             								credentials @relation(fields: [user_id], references: [user_id])
+	user             											credentials @relation(fields: [user_id], references: [user_id])
 
 	@@index([user_id], name: "login_history__user_id_idx")
 }
 
 model solana_wallet {
-	solana_wallet_id								Int          @id @default(autoincrement())
-	public_key   									String       @db.VarChar(255)
-	secret_key__encrypted  							String
-	user_id      									Int			 @unique
+	solana_wallet_id											Int          @id @default(autoincrement())
+	public_key   												String       @db.VarChar(255)
+	secret_key__encrypted  										String
+	user_id      												Int			 @unique
 
-	created_at   									DateTime     @default(now())
-	updated_at   									DateTime     @default(now()) @updatedAt
+	created_at   												DateTime     @default(now())
+	updated_at   												DateTime     @default(now()) @updatedAt
 
-	user        									credentials @relation(fields: [user_id], references: [user_id])
+	user        												credentials @relation(fields: [user_id], references: [user_id])
 
-	create_spl_fee_payer_wallet						spl[] @relation("create_spl_fee_payer_wallet")
-	create_spl_metadata_fee_payer_wallet			spl[] @relation("create_spl_metadata_fee_payer_wallet")
-	spl_creator_wallet								spl[] @relation("spl_creator_wallet")
-	spl_mint_fee_payer_wallet						spl_mint[] @relation("spl_mint_fee_payer_wallet")
-	token_account_fee_payer_solana_wallet			token_account[] @relation("fee_payer_solana_wallet")
-	token_account_parent_solana_wallet				token_account[] @relation("parent_solana_wallet")
+	create_spl_fee_payer_wallet									spl[] @relation("create_spl_fee_payer_wallet")
+	create_spl_metadata_fee_payer_wallet						spl[] @relation("create_spl_metadata_fee_payer_wallet")
+	spl_creator_wallet											spl[] @relation("spl_creator_wallet")
+	exclusive_spl_purchase										exclusive_spl_purchase[]
+	spl_mint_fee_payer_wallet									spl_mint[] @relation("spl_mint_fee_payer_wallet")
+	token_account_fee_payer_solana_wallet						token_account[] @relation("fee_payer_solana_wallet")
+	token_account_parent_solana_wallet							token_account[] @relation("parent_solana_wallet")
 
-	sol_transfer_sender_solana_wallet				sol_transfer[] @relation("sender_solana_wallet")
-	sol_transfer_fee_payer_solana_wallet			sol_transfer[] @relation("fee_payer_solana_wallet")
-	sol_transfer_recipient_solana_wallet			sol_transfer[] @relation("recipient_solana_wallet")
+	sol_transfer_sender_solana_wallet							sol_transfer[] @relation("sender_solana_wallet")
+	sol_transfer_fee_payer_solana_wallet						sol_transfer[] @relation("fee_payer_solana_wallet")
+	sol_transfer_recipient_solana_wallet						sol_transfer[] @relation("recipient_solana_wallet")
 
-	spl_transfer_recipient_solana_wallet			spl_transfer[] @relation("recipient_solana_wallet")
-	spl_transfer_sender_solana_wallet				spl_transfer[] @relation("sender_solana_wallet")
-	spl_ownership									spl_ownership[]
+	spl_transfer_recipient_solana_wallet						spl_transfer[] @relation("recipient_solana_wallet")
+	spl_transfer_sender_solana_wallet							spl_transfer[] @relation("sender_solana_wallet")
+	spl_ownership												spl_ownership[]
 
-	secondary_market_bid							secondary_market_bid[]
-	secondary_market_ask							secondary_market_ask[]
+	secondary_market_bid										secondary_market_bid[]
+	secondary_market_ask										secondary_market_ask[]
 	@@index([user_id], name: "solana_wallet__user_id_idx")
 }
 
@@ -102,48 +103,54 @@ enum SPLListingStatus {
 }
 
 model spl {
-	spl_id           								Int       @id @default(autoincrement())
-	meta_data_url  									String
-	spl_name      									String  // Name of the SPL
-	meta_data_address 								String  // On-chain Address of the SPL metadata
-	public_key_address								String 	// The SPL's public key address
-	listing_price_per_share_usd						Float
+	spl_id           											Int       @id @default(autoincrement())
+	meta_data_url  												String
+	spl_name      												String  // Name of the SPL
+	meta_data_address 											String  // On-chain Address of the SPL metadata
+	public_key_address											String 	// The SPL's public key address
+	listing_price_per_share_usd									Float
 
-	initial_creator_ownership_percentage			Float
-	total_number_of_shares							Int
-	creator_wallet_id								Int
-	uploaded_image_id								Int		@unique
-	uploaded_video_id								Int		@unique
-	original_content_url							String
+	initial_creator_ownership_percentage						Float
+	total_number_of_shares										Int
+	creator_wallet_id											Int
+	uploaded_image_id											Int		@unique
+	uploaded_video_id											Int		@unique
+	original_content_url										String
 
-	spl_creation_fee_sol							Float
-	spl_creation_fee_usd							Float
-	create_spl_fee_payer_solana_wallet_id			Int
+	spl_creation_fee_sol										Float
+	spl_creation_fee_usd										Float
+	create_spl_fee_payer_solana_wallet_id						Int
 
-	spl_metadata_creation_fee_sol					Float?
-	spl_metadata_creation_fee_usd					Float?
-	create_spl_metadata_fee_payer_solana_wallet_id	Int?
+	spl_metadata_creation_fee_sol								Float?
+	spl_metadata_creation_fee_usd								Float?
+	create_spl_metadata_fee_payer_solana_wallet_id				Int?
 
-	spl_listing_status 								SPLListingStatus
-	description  									String   // Description of the SPL
-	is_active    									Boolean  @default(true)
+	is_spl_exclusive											Boolean
+	value_needed_to_access_exclusive_content_usd				Float?
+	listing_price_to_access_exclusive_content_usd				Float?
+	allow_value_from_same_creator_tokens_for_exclusive_content 	Boolean?
 
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
+	spl_listing_status 											SPLListingStatus
+	description  												String   // Description of the SPL
+	is_active    												Boolean  @default(true)
 
-	create_spl_fee_payer_wallet						solana_wallet @relation(name: "create_spl_fee_payer_wallet", fields: [create_spl_fee_payer_solana_wallet_id], references: [solana_wallet_id])
-	create_spl_metadata_fee_payer_wallet			solana_wallet? @relation(name: "create_spl_metadata_fee_payer_wallet", fields: [create_spl_metadata_fee_payer_solana_wallet_id], references: [solana_wallet_id])
-	spl_creator_wallet								solana_wallet @relation(name: "spl_creator_wallet", fields: [creator_wallet_id], references: [solana_wallet_id])
-	uploaded_image                              	uploaded_image @relation(fields: [uploaded_image_id], references: [uploaded_image_id])
-    uploaded_video                              	uploaded_video @relation(fields: [uploaded_video_id], references: [uploaded_video_id])
+	created_at    												DateTime  @default(now())
+	updated_at    												DateTime  @default(now()) @updatedAt
 
-	spl_ownership 									spl_ownership[]
-	token_account									token_account[]
-	spl_mint										spl_mint[]
-	spl_purchase									spl_purchase[]
-	spl_transfer									spl_transfer[]
-	secondary_market_bid							secondary_market_bid[]
-	secondary_market_ask							secondary_market_ask[]
+	create_spl_fee_payer_wallet									solana_wallet @relation(name: "create_spl_fee_payer_wallet", fields: [create_spl_fee_payer_solana_wallet_id], references: [solana_wallet_id])
+	create_spl_metadata_fee_payer_wallet						solana_wallet? @relation(name: "create_spl_metadata_fee_payer_wallet", fields: [create_spl_metadata_fee_payer_solana_wallet_id], references: [solana_wallet_id])
+	spl_creator_wallet											solana_wallet @relation(name: "spl_creator_wallet", fields: [creator_wallet_id], references: [solana_wallet_id])
+	uploaded_image                              				uploaded_image @relation(fields: [uploaded_image_id], references: [uploaded_image_id])
+    uploaded_video                              				uploaded_video @relation(fields: [uploaded_video_id], references: [uploaded_video_id])
+
+	spl_ownership 												spl_ownership[]
+	token_account												token_account[]
+	spl_mint													spl_mint[]
+	spl_purchase												spl_purchase[]
+	spl_transfer												spl_transfer[]
+	secondary_market_bid										secondary_market_bid[]
+	secondary_market_ask										secondary_market_ask[]
+	exclusive_spl_purchase										exclusive_spl_purchase[]
 
 	@@index([create_spl_fee_payer_solana_wallet_id], name: "spl__create_spl_fee_payer_solana_wallet_id_idx")
 	@@index([create_spl_metadata_fee_payer_solana_wallet_id], name: "spl__create_spl_metadata_fee_payer_solana_wallet_id_idx")
@@ -151,41 +158,54 @@ model spl {
 	@@index([uploaded_image_id], name: "spl__uploaded_image_id_idx")
 }
 
+model exclusive_spl_purchase {
+	exclusive_spl_purchase_id									Int  @id @default(autoincrement())
+	spl_id														Int
+	solana_wallet_id											Int
+
+	spl       													spl @relation(fields: [spl_id], references: [spl_id])
+	solana_wallet												solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
+
+  	@@index([spl_id], name: "exclusive_spl_purchase__spl_id_idx")
+	@@index([solana_wallet_id], name: "exclusive_spl_purchase__solana_wallet_id_idx")
+	@@unique([spl_id, solana_wallet_id])
+}
+
 model token_account {
-	token_account_id 								Int  @id @default(autoincrement())
-	spl_id											Int
-	public_key										String       @db.VarChar(255) // Public Key of the token account
-	token_account_creation_fee_sol 					Float
-	token_account_creation_fee_usd 					Float
-	fee_payer_solana_wallet_id						Int
-	parent_solana_wallet_id							Int
+	token_account_id 											Int  @id @default(autoincrement())
+	spl_id														Int
+	public_key													String       @db.VarChar(255) // Public Key of the token account
+	token_account_creation_fee_sol 								Float
+	token_account_creation_fee_usd 								Float
+	fee_payer_solana_wallet_id									Int
+	parent_solana_wallet_id										Int
 
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
+	created_at    												DateTime  @default(now())
+	updated_at    												DateTime  @default(now()) @updatedAt
 
-	spl       										spl @relation(fields: [spl_id], references: [spl_id])
-	fee_payer_solana_wallet							solana_wallet @relation(name: "fee_payer_solana_wallet", fields: [fee_payer_solana_wallet_id], references: [solana_wallet_id])
-	parent_solana_wallet							solana_wallet @relation(name: "parent_solana_wallet", fields: [parent_solana_wallet_id], references: [solana_wallet_id])
+	spl       													spl @relation(fields: [spl_id], references: [spl_id])
+	fee_payer_solana_wallet										solana_wallet @relation(name: "fee_payer_solana_wallet", fields: [fee_payer_solana_wallet_id], references: [solana_wallet_id])
+	parent_solana_wallet										solana_wallet @relation(name: "parent_solana_wallet", fields: [parent_solana_wallet_id], references: [solana_wallet_id])
 
-	spl_mint										spl_mint[]
+	spl_mint													spl_mint[]
 
   	@@index([spl_id], name: "token_account__spl_id_idx")
 	@@index([fee_payer_solana_wallet_id], name: "token_account__fee_payer_solana_wallet_id_idx")
 }
 
 model spl_mint {
-	spl_mint_id										Int @id @default(autoincrement())
-	spl_id											Int
-  	token_account_id    							Int
-	number_of_shares								Int
-	spl_mint_fee_sol								Float
-	spl_mint_fee_usd								Float
-	fee_payer_solana_wallet_id						Int
-	transaction_signature							String
+	spl_mint_id													Int @id @default(autoincrement())
+	spl_id														Int
+  	token_account_id    										Int
+	number_of_shares											Int
+	spl_mint_fee_sol											Float
+	spl_mint_fee_usd											Float
+	fee_payer_solana_wallet_id									Int
+	transaction_signature										String
 
-	spl         									spl @relation(fields: [spl_id], references: [spl_id])
-	token_account       							token_account @relation(fields: [token_account_id], references: [token_account_id])
-	spl_mint_fee_payer_wallet						solana_wallet @relation(name: "spl_mint_fee_payer_wallet", fields: [fee_payer_solana_wallet_id], references: [solana_wallet_id])
+	spl         												spl @relation(fields: [spl_id], references: [spl_id])
+	token_account       										token_account @relation(fields: [token_account_id], references: [token_account_id])
+	spl_mint_fee_payer_wallet									solana_wallet @relation(name: "spl_mint_fee_payer_wallet", fields: [fee_payer_solana_wallet_id], references: [solana_wallet_id])
 
   	@@index([spl_id], name: "spl_mint__spl_id_idx")
   	@@index([token_account_id], name: "spl_mint__token_account_id_idx")
@@ -193,73 +213,73 @@ model spl_mint {
 }
 
 model spl_ownership {
-	spl_ownership_id								Int @id @default(autoincrement())
-	spl_id 											Int
-  	solana_wallet_id    							Int
-	number_of_shares								Int
-	purchase_price_per_share_usd					Float
+	spl_ownership_id											Int @id @default(autoincrement())
+	spl_id 														Int
+  	solana_wallet_id    										Int
+	number_of_shares											Int
+	purchase_price_per_share_usd								Float
 
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
+	created_at    												DateTime  @default(now())
+	updated_at    												DateTime  @default(now()) @updatedAt
 
-	spl         									spl @relation(fields: [spl_id], references: [spl_id])
-	solana_wallet       							solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
+	spl         												spl @relation(fields: [spl_id], references: [spl_id])
+	solana_wallet       										solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
 
   	@@index([spl_id], name: "spl_ownership__spl_id_idx")
   	@@index([solana_wallet_id], name: "spl_ownership__solana_wallet_id_idx")
-}
+}			
 
-model uploaded_image {
-	uploaded_image_id 								Int @id @default(autoincrement())
-	image_url										String
-	file_name										String
-	uuid											String
+model uploaded_image {			
+	uploaded_image_id 											Int @id @default(autoincrement())
+	image_url													String
+	file_name													String
+	uuid														String
 
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
+	created_at    												DateTime  @default(now())
+	updated_at    												DateTime  @default(now()) @updatedAt
 
-    spl                                         	spl?
-}
+    spl                                         				spl?
+}			
 
-model uploaded_video {
-	uploaded_video_id 								Int @id @default(autoincrement())
-	video_url										String
-	file_name										String
-	uuid											String
+model uploaded_video {			
+	uploaded_video_id 											Int @id @default(autoincrement())
+	video_url													String
+	file_name													String
+	uuid														String
 
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
+	created_at    												DateTime  @default(now())
+	updated_at    												DateTime  @default(now()) @updatedAt
 
-    spl                                         	spl?
-}
+    spl                                         				spl?
+}			
 
-model sol_transfer {
-	sol_transfer_id									Int @id @default(autoincrement())
-	recipient_public_key							String       @db.VarChar(255)
-	recipient_solana_wallet_id						Int?
-	is_recipient_fortuna_wallet						Boolean
-	transaction_signature							String
-	is_spl_purchase									Boolean
+model sol_transfer {			
+	sol_transfer_id												Int @id @default(autoincrement())
+	recipient_public_key										String       @db.VarChar(255)
+	recipient_solana_wallet_id									Int?
+	is_recipient_fortuna_wallet									Boolean
+	transaction_signature										String
+	is_spl_purchase												Boolean
 
-	sol_amount_transferred							Float
-	usd_amount_transferred							Float
-	transfer_by_currency							Currencies
+	sol_amount_transferred										Float
+	usd_amount_transferred										Float
+	transfer_by_currency										Currencies
 
-	transfer_fee_sol								Float
-	transfer_fee_usd								Float
+	transfer_fee_sol											Float
+	transfer_fee_usd											Float
 
-	sender_solana_wallet_id							Int
-	fee_payer_solana_wallet_id						Int
+	sender_solana_wallet_id										Int
+	fee_payer_solana_wallet_id									Int
 
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
+	created_at    												DateTime  @default(now())
+	updated_at    												DateTime  @default(now()) @updatedAt
 
-	sender_solana_wallet							solana_wallet @relation(name: "sender_solana_wallet", fields: [sender_solana_wallet_id], references: [solana_wallet_id])
-	recipient_solana_wallet							solana_wallet? @relation(name: "recipient_solana_wallet", fields: [recipient_solana_wallet_id], references: [solana_wallet_id])
-	fee_payer_solana_wallet							solana_wallet @relation(name: "fee_payer_solana_wallet", fields: [fee_payer_solana_wallet_id], references: [solana_wallet_id])
+	sender_solana_wallet										solana_wallet @relation(name: "sender_solana_wallet", fields: [sender_solana_wallet_id], references: [solana_wallet_id])
+	recipient_solana_wallet										solana_wallet? @relation(name: "recipient_solana_wallet", fields: [recipient_solana_wallet_id], references: [solana_wallet_id])
+	fee_payer_solana_wallet										solana_wallet @relation(name: "fee_payer_solana_wallet", fields: [fee_payer_solana_wallet_id], references: [solana_wallet_id])
 
-	spl_purchase_sol_transfer						spl_purchase?
-	secondary_market_transaction					secondary_market_transaction[]
+	spl_purchase_sol_transfer									spl_purchase?
+	secondary_market_transaction								secondary_market_transaction[]
 
 	@@index([sender_solana_wallet_id], name: "sol_transfer__sender_solana_wallet_id_idx")
 	@@index([recipient_solana_wallet_id], name: "sol_transfer__recipient_solana_wallet_id_idx")
@@ -268,39 +288,39 @@ model sol_transfer {
 }
 
 model spl_transfer {
-	spl_transfer_id									Int @id @default(autoincrement())
-	spl_id											Int
-	recipient_solana_wallet_id						Int
-	sender_solana_wallet_id							Int // for spl purchases, this is fortuna's escrow wallet id. for peer-peer spl transfers, this would be a different id.
+	spl_transfer_id												Int @id @default(autoincrement())
+	spl_id														Int
+	recipient_solana_wallet_id									Int
+	sender_solana_wallet_id										Int // for spl purchases, this is fortuna's escrow wallet id. for peer-peer spl transfers, this would be a different id.
 
-	is_spl_purchase									Boolean // True for spl purchases (transferring from escrow to user), but not for peer-peer transfers.
-	number_spl_shares_transferred					Int
-	is_secondary_market_transaction					Boolean
-	secondary_market_transaction_id					Int?
+	is_spl_purchase												Boolean // True for spl purchases (transferring from escrow to user), but not for peer-peer transfers.
+	number_spl_shares_transferred								Int
+	is_secondary_market_transaction								Boolean
+	secondary_market_transaction_id								Int?
 
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
+	created_at    												DateTime  @default(now())
+	updated_at    												DateTime  @default(now()) @updatedAt
 
-	spl												spl @relation(fields: [spl_id], references: [spl_id])
-	recipient_solana_wallet							solana_wallet @relation(name: "recipient_solana_wallet", fields: [recipient_solana_wallet_id], references: [solana_wallet_id])
-	sender_solana_wallet							solana_wallet @relation(name: "sender_solana_wallet", fields: [sender_solana_wallet_id], references: [solana_wallet_id])
-	secondary_market_transaction					secondary_market_transaction? @relation(fields: [secondary_market_transaction_id], references: [secondary_market_transaction_id])
+	spl															spl @relation(fields: [spl_id], references: [spl_id])
+	recipient_solana_wallet										solana_wallet @relation(name: "recipient_solana_wallet", fields: [recipient_solana_wallet_id], references: [solana_wallet_id])
+	sender_solana_wallet										solana_wallet @relation(name: "sender_solana_wallet", fields: [sender_solana_wallet_id], references: [solana_wallet_id])
+	secondary_market_transaction								secondary_market_transaction? @relation(fields: [secondary_market_transaction_id], references: [secondary_market_transaction_id])
 
-	spl_purchase									spl_purchase?
-}
+	spl_purchase												spl_purchase?
+}			
 
-model spl_purchase {
-	spl_purchase_id									Int @id @default(autoincrement())
-	spl_id											Int
-	spl_transfer_id									Int		@unique
-	sol_transfer_id									Int		@unique
+model spl_purchase {			
+	spl_purchase_id												Int @id @default(autoincrement())
+	spl_id														Int
+	spl_transfer_id												Int		@unique
+	sol_transfer_id												Int		@unique
 
-	spl         									spl @relation(fields: [spl_id], references: [spl_id])
-	spl_transfer									spl_transfer   @relation(fields: [spl_transfer_id], references: [spl_transfer_id])
-	sol_transfer									sol_transfer   @relation(fields: [sol_transfer_id], references: [sol_transfer_id])
+	spl         												spl @relation(fields: [spl_id], references: [spl_id])
+	spl_transfer												spl_transfer   @relation(fields: [spl_transfer_id], references: [spl_transfer_id])
+	sol_transfer												sol_transfer   @relation(fields: [sol_transfer_id], references: [sol_transfer_id])
 
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
+	created_at    												DateTime  @default(now())
+	updated_at    												DateTime  @default(now()) @updatedAt
 
 	@@index([spl_id], name: "spl_purchase__spl_id_idx")
 	@@index([spl_transfer_id], name: "spl_purchase__spl_transfer_id_idx")
@@ -308,86 +328,86 @@ model spl_purchase {
 }
 
 model profile_picture {
-	profile_picture_id								Int @id @default(autoincrement())
-	image_url										String
-	file_name										String
-	uuid											String
+	profile_picture_id											Int @id @default(autoincrement())
+	image_url													String
+	file_name													String
+	uuid														String
 
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
+	created_at    												DateTime  @default(now())
+	updated_at    												DateTime  @default(now()) @updatedAt
 
-  	user											credentials?
-}
+  	user														credentials?
+}			
 
-model youtube_access_tokens {
-	youtube_access_tokens_id						Int @id @default(autoincrement())
-	access_token									String
-	refresh_token__encrypted						String
-	expiry_date										DateTime
+model youtube_access_tokens {			
+	youtube_access_tokens_id									Int @id @default(autoincrement())
+	access_token												String
+	refresh_token__encrypted									String
+	expiry_date													DateTime
 
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
+	created_at    												DateTime  @default(now())
+	updated_at    												DateTime  @default(now()) @updatedAt
 
-  	user											credentials?
-}
+  	user														credentials?
+}			
 
-model secondary_market_bid {
-	secondary_market_bid_id							Int @id @default(autoincrement())
-	spl_id											Int
-	solana_wallet_id								Int
-	number_of_shares_bidding_for					Int
-	remaining_number_of_shares_bidding_for			Int
-	bid_price_per_share_usd							Float
-	was_bid_cancelled_due_to_fund_requirements		Boolean @default(false) // This is changed to true when the value in a user's wallet goes below the value of their bid
+model secondary_market_bid {			
+	secondary_market_bid_id										Int @id @default(autoincrement())
+	spl_id														Int
+	solana_wallet_id											Int
+	number_of_shares_bidding_for								Int
+	remaining_number_of_shares_bidding_for						Int
+	bid_price_per_share_usd										Float
+	was_bid_cancelled_due_to_fund_requirements					Boolean @default(false) // This is changed to true when the value in a user's wallet goes below the value of their bid
 
-	spl         									spl @relation(fields: [spl_id], references: [spl_id])
-	solana_wallet									solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
-	secondary_market_transaction					secondary_market_transaction[]
+	spl         												spl @relation(fields: [spl_id], references: [spl_id])
+	solana_wallet												solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
+	secondary_market_transaction								secondary_market_transaction[]
 
-	is_active										Boolean @default(true) // Set to false if user manually cancels the bid
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
+	is_active													Boolean @default(true) // Set to false if user manually cancels the bid
+	created_at    												DateTime  @default(now())
+	updated_at    												DateTime  @default(now()) @updatedAt
 
 	@@index([spl_id], name: "secondary_market_bid__spl_id_idx")
 	@@index([solana_wallet_id], name: "secondary_market_bid__solana_wallet_id_idx")
 }
 
 model secondary_market_ask {
-	secondary_market_ask_id							Int @id @default(autoincrement())
-	spl_id											Int
-	solana_wallet_id								Int
-	number_of_shares_for_sale						Int
-	remaining_number_of_shares_for_sale				Int
-	ask_price_per_share_usd							Float
+	secondary_market_ask_id										Int @id @default(autoincrement())
+	spl_id														Int
+	solana_wallet_id											Int
+	number_of_shares_for_sale									Int
+	remaining_number_of_shares_for_sale							Int
+	ask_price_per_share_usd										Float
 
-	spl         									spl @relation(fields: [spl_id], references: [spl_id])
-	solana_wallet									solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
-	secondary_market_transaction					secondary_market_transaction[]
+	spl         												spl @relation(fields: [spl_id], references: [spl_id])
+	solana_wallet												solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
+	secondary_market_transaction								secondary_market_transaction[]
 
-	is_active										Boolean @default(true)  // Set to false if user manually cancels the ask
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
+	is_active													Boolean @default(true)  // Set to false if user manually cancels the ask
+	created_at    												DateTime  @default(now())
+	updated_at    												DateTime  @default(now()) @updatedAt
 
 	@@index([spl_id], name: "secondary_market_ask__spl_id_idx")
 	@@index([solana_wallet_id], name: "secondary_market_ask__solana_wallet_id_idx")
 }
 
 model secondary_market_transaction {
-	secondary_market_transaction_id					Int @id @default(autoincrement())
-	secondary_market_bid_id							Int
-	secondary_market_ask_id							Int
-	sol_transfer_id									Int
+	secondary_market_transaction_id								Int @id @default(autoincrement())
+	secondary_market_bid_id										Int
+	secondary_market_ask_id										Int
+	sol_transfer_id												Int
 
-	secondary_market_bid							secondary_market_bid @relation(fields: [secondary_market_bid_id], references: [secondary_market_bid_id])
-	secondary_market_ask							secondary_market_ask @relation(fields: [secondary_market_ask_id], references: [secondary_market_ask_id])
-	sol_transfer									sol_transfer @relation(fields: [sol_transfer_id], references: [sol_transfer_id])
+	secondary_market_bid										secondary_market_bid @relation(fields: [secondary_market_bid_id], references: [secondary_market_bid_id])
+	secondary_market_ask										secondary_market_ask @relation(fields: [secondary_market_ask_id], references: [secondary_market_ask_id])
+	sol_transfer												sol_transfer @relation(fields: [sol_transfer_id], references: [sol_transfer_id])
 
-	created_at    									DateTime  @default(now())
-	updated_at    									DateTime  @default(now()) @updatedAt
+	created_at    												DateTime  @default(now())
+	updated_at    												DateTime  @default(now()) @updatedAt
 
 	@@index([secondary_market_bid_id], name: "secondary_market_purchase__secondary_market_bid_id_idx")
 	@@index([secondary_market_ask_id], name: "secondary_market_purchase__secondary_market_ask_id_idx")
 	@@index([sol_transfer_id], name: "secondary_market_purchase__sol_transfer_id_idx")
 
-	spl_transfer									spl_transfer[]
+	spl_transfer												spl_transfer[]
 }
