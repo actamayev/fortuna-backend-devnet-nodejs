@@ -15,7 +15,11 @@ const createAndMintSPLSchema = Joi.object({
 		uploadedImageId: Joi.number().strict().required(),
 		uploadedVideoId: Joi.number().strict().required(),
 		description: Joi.string().required(),
-		originalContentUrl: Joi.string().required().allow("")
+		originalContentUrl: Joi.string().required().allow(""),
+		isContentExclusive: Joi.boolean().required(),
+		valueNeededToAccessExclusiveContentUsd: Joi.number().optional(),
+		listingPriceToAccessExclusiveContentUsd: Joi.number().optional(),
+		allowValueFromSameCreatorTokensForExclusiveContent: Joi.boolean().optional(),
 	}).required()
 }).required()
 
