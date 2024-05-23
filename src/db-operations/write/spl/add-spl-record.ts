@@ -41,6 +41,11 @@ export default async function addSPLRecord (
 				spl_metadata_creation_fee_usd: 0,
 				create_spl_metadata_fee_payer_solana_wallet_id: feePayerSolanaWalletId,
 
+				is_spl_exclusive: newSPLData.isContentExclusive,
+				value_needed_to_access_exclusive_content_usd: newSPLData.valueNeededToAccessExclusiveContentUsd,
+				listing_price_to_access_exclusive_content_usd: newSPLData.listingPriceToAccessExclusiveContentUsd,
+				allow_value_from_same_creator_tokens_for_exclusive_content: newSPLData.allowValueFromSameCreatorTokensForExclusiveContent,
+
 				spl_listing_status: "LISTED",
 				description: newSPLData.description,
 				original_content_url: newSPLData.originalContentUrl
