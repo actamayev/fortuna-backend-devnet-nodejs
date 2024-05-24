@@ -1,15 +1,16 @@
+import _ from "lodash"
+
 export default function transformVideoAndImageData(
 	videoData: HomePageVideoRetrievedFromDB,
 	sharesRemainingForSale: number
 ): VideoDataSendingToFrontendWithVideoUrl {
-	return {
+	const videoDataSendingToFrontEnd: VideoDataSendingToFrontendWithVideoUrl = {
 		splName: videoData.spl.spl_name,
 		splPublicKey: videoData.spl.public_key_address,
 		listingSharePriceUsd: videoData.spl.listing_price_per_share_usd,
 		splListingStatus: videoData.spl.spl_listing_status,
 		description: videoData.spl.description,
 		imageUrl: videoData.spl.uploaded_image.image_url,
-		videoUrl: videoData.videoUrl,
 		uuid: videoData.uuid,
 		totalNumberShares: videoData.spl.total_number_of_shares,
 		sharesRemainingForSale,
@@ -18,4 +19,10 @@ export default function transformVideoAndImageData(
 		creatorUsername: videoData.spl.spl_creator_wallet.user.username,
 		creatorProfilePictureUrl: videoData.spl.spl_creator_wallet.user.profile_picture?.image_url || null
 	}
+
+	if (!_.isUndefined(videoData.videoUrl)) {
+		videoDataSendingToFrontEnd.videoUrl = videoData.videoUrl
+	}
+
+	return videoDataSendingToFrontEnd
 }

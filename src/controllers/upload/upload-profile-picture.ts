@@ -11,7 +11,7 @@ export default async function uploadProfilePicture (req: Request, res: Response)
 
 		const { buffer, originalname } = req.file
 
-		const uploadImageToS3Key = createS3KeyGenerateUUID("profile-pictures", originalname)
+		const uploadImageToS3Key = createS3KeyGenerateUUID("profile-pictures")
 		const profilePictureUrl = await AwsS3.getInstance().uploadImage(buffer, uploadImageToS3Key.key)
 
 		await addProfilePictureRecord(profilePictureUrl, originalname, uploadImageToS3Key.uuid, user.user_id)

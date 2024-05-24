@@ -117,7 +117,7 @@ declare global {
 	}
 
 	interface VideoDataSendingToFrontendWithVideoUrl extends VideoDataSendingToFrontendLessVideoUrl {
-		videoUrl: string | undefined
+		videoUrl?: string
 	}
 
 	interface CreatorSearchDataSendingToFrontend {

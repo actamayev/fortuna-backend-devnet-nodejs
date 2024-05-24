@@ -139,7 +139,7 @@ export default class AwsS3 {
 			const privateS3Bucket = await this.secretsManagerInstance.getSecret("PRIVATE_S3_BUCKET")
 			const params = {
 				Bucket: privateS3Bucket,
-				Key: key,
+				Key: `uploaded-videos/${key}`,
 				Expires: 7200 // 7200 seconds (2 hours)
 			}
 			const command = new GetObjectCommand(params)
