@@ -1,6 +1,6 @@
 import EscrowWalletManager from "../../classes/escrow-wallet-manager"
 
-export default async function transformVideoSearchData(input: RetrievedVideosByTitle[]): Promise<VideoDataSendingToFrontend[]> {
+export default async function transformVideoSearchData(input: RetrievedVideosByTitle[]): Promise<VideoDataSendingToFrontendLessVideoUrl[]> {
 	try {
 		const publicKeys = input.map(item => item.public_key_address)
 
@@ -15,7 +15,6 @@ export default async function transformVideoSearchData(input: RetrievedVideosByT
 				splListingStatus: item.spl_listing_status,
 				description: item.description,
 				imageUrl: item.uploaded_image.image_url,
-				videoUrl: item.uploaded_video.video_url,
 				uuid: item.uploaded_video.uuid,
 				totalNumberShares: item.total_number_of_shares,
 				sharesRemainingForSale,

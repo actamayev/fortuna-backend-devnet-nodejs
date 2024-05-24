@@ -13,7 +13,6 @@ export default async function retrieveHomePageVideos(): Promise<HomePageVideoRet
 				}
 			},
 			select: {
-				video_url: true,
 				created_at: true,
 				uuid: true,
 				spl: {

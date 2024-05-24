@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express"
-import retrieveSplOwnershipByWalletIdAndSplId
-	from "../../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-id"
+import retrieveSplOwnershipByWalletIdAndSplPublicKey
+	from "../../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-public-key"
 import retrieveOpenUserAsksByWalletIdAndSplId
 	from "../../../../db-operations/read/secondary-market/ask/retrieve-open-user-asks-by-wallet-id-and-spl-id"
 
@@ -15,7 +15,7 @@ export default async function confirmUserHasEnoughTokensToCreateSplAsk(
 	try {
 		const { solanaWallet, splDetails } = req
 		const createSplAsk = req.body.createSplAsk as CreateSplAskData
-		const splOwnerships = await retrieveSplOwnershipByWalletIdAndSplId(solanaWallet.solana_wallet_id, createSplAsk.splPublicKey)
+		const splOwnerships = await retrieveSplOwnershipByWalletIdAndSplPublicKey(solanaWallet.solana_wallet_id, createSplAsk.splPublicKey)
 
 		let numberOfSharesOwned = 0
 		splOwnerships.map(ownership => numberOfSharesOwned += ownership.number_of_shares)

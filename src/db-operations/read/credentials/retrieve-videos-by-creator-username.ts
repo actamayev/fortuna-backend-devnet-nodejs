@@ -28,6 +28,11 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 								total_number_of_shares: true,
 								public_key_address: true,
 								original_content_url: true,
+								is_spl_exclusive: true,
+								creator_wallet_id: true,
+								spl_id: true,
+								value_needed_to_access_exclusive_content_usd: true,
+								allow_value_from_same_creator_tokens_for_exclusive_content: true,
 								uploaded_image: {
 									select: {
 										image_url: true
@@ -35,7 +40,6 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 								},
 								uploaded_video: {
 									select: {
-										video_url: true,
 										created_at: true,
 										uuid: true
 									}

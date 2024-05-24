@@ -1,8 +1,8 @@
 import SecretsManager from "../../../classes/secrets-manager"
 import EscrowWalletManager from "../../../classes/escrow-wallet-manager"
 import updateSplListingStatus from "../../../db-operations/write/spl/update-spl-listing-status"
-import retrieveSplOwnershipByWalletIdAndSplId
-	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-id"
+import retrieveSplOwnershipByWalletIdAndSplPublicKey
+	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-public-key"
 import addSplTransferRecordAndUpdateOwnership from "../../../db-operations/write/simultaneous-writes/add-spl-transfer-and-update-ownership"
 
 export default async function transferSplTokensToUser(
@@ -12,7 +12,7 @@ export default async function transferSplTokensToUser(
 ): Promise<number> {
 	try {
 		const fortunaEscrowSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_ID_DB")
-		const splOwnerships = await retrieveSplOwnershipByWalletIdAndSplId(
+		const splOwnerships = await retrieveSplOwnershipByWalletIdAndSplPublicKey(
 			parseInt(fortunaEscrowSolanaWalletIdDb, 10),
 			splDetails.publicKeyAddress
 		)

@@ -1,7 +1,7 @@
 export default function transformVideoAndImageData(
 	videoData: HomePageVideoRetrievedFromDB,
 	sharesRemainingForSale: number
-): VideoDataSendingToFrontend {
+): VideoDataSendingToFrontendWithVideoUrl {
 	return {
 		splName: videoData.spl.spl_name,
 		splPublicKey: videoData.spl.public_key_address,
@@ -9,7 +9,7 @@ export default function transformVideoAndImageData(
 		splListingStatus: videoData.spl.spl_listing_status,
 		description: videoData.spl.description,
 		imageUrl: videoData.spl.uploaded_image.image_url,
-		videoUrl: videoData.video_url,
+		videoUrl: videoData.videoUrl,
 		uuid: videoData.uuid,
 		totalNumberShares: videoData.spl.total_number_of_shares,
 		sharesRemainingForSale,

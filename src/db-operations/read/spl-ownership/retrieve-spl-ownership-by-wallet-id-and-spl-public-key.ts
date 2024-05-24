@@ -1,6 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function retrieveSplOwnershipByWalletIdAndSplId(
+export default async function retrieveSplOwnershipByWalletIdAndSplPublicKey(
 	solanaWalletId: number,
 	splPublicKey: string
 ): Promise<{

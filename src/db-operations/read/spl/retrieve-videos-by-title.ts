@@ -28,7 +28,6 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 					select: {
 						uuid: true,
 						created_at: true,
-						video_url: true
 					}
 				},
 				spl_creator_wallet: {

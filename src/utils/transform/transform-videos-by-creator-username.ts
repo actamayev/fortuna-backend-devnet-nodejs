@@ -3,7 +3,7 @@ import EscrowWalletManager from "../../classes/escrow-wallet-manager"
 
 export default async function transformVideosByCreatorUsername(
 	input: RetrievedVideosByCreatorUsername
-): Promise<{ videoData: VideoDataSendingToFrontend[], creatorData: CreatorSearchDataSendingToFrontend } | null> {
+): Promise<{ videoData: VideoDataSendingToFrontendLessVideoUrl[], creatorData: CreatorSearchDataSendingToFrontend } | null> {
 	try {
 		if (_.isNull(input.solana_wallet)) return null
 
@@ -26,7 +26,7 @@ export default async function transformVideosByCreatorUsername(
 				splListingStatus: wallet.spl_listing_status,
 				description: wallet.description,
 				imageUrl: wallet.uploaded_image.image_url,
-				videoUrl: wallet.uploaded_video.video_url,
+				videoUrl: wallet.uploaded_video.videoUrl,
 				uuid: wallet.uploaded_video.uuid,
 				totalNumberShares: wallet.total_number_of_shares,
 				sharesRemainingForSale,

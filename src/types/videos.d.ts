@@ -2,9 +2,9 @@ import { SPLListingStatus } from "@prisma/client"
 
 declare global {
 	interface HomePageVideoRetrievedFromDB {
-		video_url: string
 		created_at: Date
 		uuid: string
+		videoUrl?: string
 		spl: {
 			spl_name: string
 			listing_price_per_share_usd: number
@@ -13,6 +13,11 @@ declare global {
 			total_number_of_shares: number
 			public_key_address: string
 			original_content_url: string
+			is_spl_exclusive: boolean
+			creator_wallet_id: number
+			spl_id: number
+			value_needed_to_access_exclusive_content_usd: number | null
+			allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 			uploaded_image: {
 				image_url: string
 			}
@@ -35,6 +40,11 @@ declare global {
 		total_number_of_shares: number
 		description: string
 		original_content_url: string
+		is_spl_exclusive: boolean
+		creator_wallet_id: number
+		spl_id: number
+		value_needed_to_access_exclusive_content_usd: number | null
+		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 		spl_creator_wallet: {
 			user: {
 				username: string
@@ -47,7 +57,6 @@ declare global {
 			image_url: string
 		}
 		uploaded_video: {
-			video_url: string
 			created_at: Date
 			uuid: string
 		}
@@ -63,13 +72,18 @@ declare global {
 				total_number_of_shares: number
 				original_content_url: string
 				description: string
+				is_spl_exclusive: boolean
+				creator_wallet_id: number
+				spl_id: number
+				value_needed_to_access_exclusive_content_usd: number | null
+				allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 				uploaded_image: {
 					image_url: string
 				}
 				uploaded_video: {
-					video_url: string
 					created_at: Date
 					uuid: string
+					videoUrl?: string
 				}
 			}[]
 		} | null
@@ -86,14 +100,13 @@ declare global {
 		} | null
 	}
 
-	interface VideoDataSendingToFrontend {
+	interface VideoDataSendingToFrontendLessVideoUrl {
 		splName: string
 		splPublicKey: string
 		listingSharePriceUsd: number
 		splListingStatus: SPLListingStatus
 		description: string
 		imageUrl: string
-		videoUrl: string
 		uuid: string
 		totalNumberShares: number
 		sharesRemainingForSale: number
@@ -103,12 +116,16 @@ declare global {
 		creatorProfilePictureUrl: string | null
 	}
 
+	interface VideoDataSendingToFrontendWithVideoUrl extends VideoDataSendingToFrontendLessVideoUrl {
+		videoUrl: string | undefined
+	}
+
 	interface CreatorSearchDataSendingToFrontend {
 		creatorUsername: string
 		creatorProfilePictureUrl: string | null
 	}
 
-	type SearchData = VideoDataSendingToFrontend | CreatorSearchDataSendingToFrontend
+	type SearchData = VideoDataSendingToFrontendLessVideoUrl | CreatorSearchDataSendingToFrontend
 }
 
 export {}

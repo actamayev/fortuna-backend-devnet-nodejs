@@ -6,11 +6,12 @@ import getVideosByCreatorUsername from "../controllers/videos/get-videos-by-crea
 
 import validateVideoUUID from "../middleware/request-validation/videos/validate-video-uuid"
 import validateCreatorUsername from "../middleware/request-validation/videos/validate-creator-username"
+import optionalJwtVerifyWithWalletAttachment from "../middleware/jwt/optional-jwt-verify-with-wallet-attachment"
 
 const videosRoutes = express.Router()
 
 videosRoutes.get("/get-home-page-videos", getHomePageVideos)
-videosRoutes.get("/get-video/:videoUUID", validateVideoUUID, getVideoByUUID)
+videosRoutes.get("/get-video/:videoUUID", validateVideoUUID, optionalJwtVerifyWithWalletAttachment, getVideoByUUID)
 videosRoutes.get("/get-creator-videos/:creatorUsername", validateCreatorUsername, getVideosByCreatorUsername)
 
 export default videosRoutes

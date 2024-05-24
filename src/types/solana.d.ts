@@ -14,7 +14,7 @@ declare global {
 		creatorOwnershipPercentage: number
 		listingSharePriceUsd: number
 		imageUrl: string
-		videoUrl: string
+		videoUrl: string | undefined
 		description: string
 		originalContentUrl: string
 		isContentExclusive: boolean
@@ -38,7 +38,7 @@ declare global {
 		description: string
 		initial_creator_ownership_percentage: number
 		uploaded_image: { image_url: string }
-		uploaded_video: { video_url: string, uuid: string }
+		uploaded_video: { uuid: string }
 		public_key_address: string
 	}
 
@@ -51,7 +51,6 @@ declare global {
 		description: string
 		creatorOwnershipPercentage: number
 		imageUrl: string
-		videoUrl: string
 		uuid: string
 		mintAddress: string
 	}
@@ -95,6 +94,16 @@ declare global {
 
 		created_at: Date
 		username?: string
+	}
+
+	interface SplDataNeededToCheckForExclusiveContentAccess {
+		is_spl_exclusive: boolean
+		creator_wallet_id: number
+		spl_id: number
+		value_needed_to_access_exclusive_content_usd: number | null
+		listing_price_per_share_usd: number
+		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
+		public_key_address: string
 	}
 
 	interface OutputTransactionData {

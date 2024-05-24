@@ -10,7 +10,6 @@ const createAndMintSPLSchema = Joi.object({
 		creatorOwnershipPercentage: Joi.number().strict().min(50).max(90).required(),
 		listingSharePriceUsd: Joi.number().strict().required(),
 		imageUrl: Joi.string().required(),
-		videoUrl: Joi.string().required(),
 		uuid: uuidValidator.required(),
 		uploadedImageId: Joi.number().strict().required(),
 		uploadedVideoId: Joi.number().strict().required(),
