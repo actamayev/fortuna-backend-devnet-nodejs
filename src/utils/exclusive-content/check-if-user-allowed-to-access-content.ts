@@ -1,10 +1,9 @@
 import _ from "lodash"
-import { checkIfUserMadeExclusiveSplPurchase }
-	from "../../db-operations/read/exclusive-spl-purchase/check-if-user-made-exclusive-spl-purchase"
 import retrieveSplOwnershipByWalletIdAndCreatorId
 	from "../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-creator-id"
 import retrieveSplOwnershipByWalletIdAndSplPublicKey
 	from "../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-public-key"
+import checkIfUserMadeExclusiveSplPurchase from "../../db-operations/read/exclusive-spl-purchase/check-if-user-made-exclusive-spl-purchase"
 
 export default async function checkIfUserAllowedToAccessContent(
 	userSolanaWalletId: number,

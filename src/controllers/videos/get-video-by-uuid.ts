@@ -20,7 +20,7 @@ export default async function getVideoByUUID (req: Request, res: Response): Prom
 			)
 		}
 
-		if (!_.isUndefined(req.solanaWallet)) {
+		if (!_.isUndefined(req.solanaWallet) || videoData.spl.is_spl_exclusive === false) {
 			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(req.solanaWallet.solana_wallet_id, videoData.spl)
 			if (isUserAbleToAccessVideo === true) {
 				const videoUrl = await AwsS3.getInstance().getSignedVideoUrl(videoData.uuid)
