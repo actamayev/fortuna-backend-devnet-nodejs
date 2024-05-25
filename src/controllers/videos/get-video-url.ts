@@ -12,7 +12,7 @@ export default async function getVideoUrl(req: Request, res: Response): Promise<
 		if (_.isNull(videoData)) return res.status(500).json({ error: "Unable to find video for the provided UUID" })
 
 		let videoUrl
-		if (videoData.spl.is_spl_exclusive === false) {
+		if (videoData.is_spl_exclusive === false) {
 			videoUrl = await AwsS3.getInstance().getSignedVideoUrl(videoUUID)
 		} else if (!_.isUndefined(req.solanaWallet)) {
 			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(req.solanaWallet.solana_wallet_id, videoData)

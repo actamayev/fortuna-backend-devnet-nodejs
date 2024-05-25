@@ -28,7 +28,7 @@ export default async function retrieveSplDataForExclusiveContent(
 
 		if (_.isNull(retrievedSplWithExclusiveInfo) || _.isNull(retrievedSplWithExclusiveInfo.spl)) return null
 
-		return retrievedSplWithExclusiveInfo as SplDataNeededToCheckForExclusiveContentAccess
+		return retrievedSplWithExclusiveInfo.spl as SplDataNeededToCheckForExclusiveContentAccess
 	} catch (error) {
 		console.error(error)
 		throw error

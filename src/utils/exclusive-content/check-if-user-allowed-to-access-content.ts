@@ -10,20 +10,20 @@ export default async function checkIfUserAllowedToAccessContent(
 	retrievedSpl: SplDataNeededToCheckForExclusiveContentAccess
 ): Promise<boolean> {
 	try {
-		if (retrievedSpl.spl.is_spl_exclusive === false) return true
-		if (userSolanaWalletId === retrievedSpl.spl.creator_wallet_id) return true
-		const didUserPurchaseSplAccess = await checkIfUserMadeExclusiveSplPurchase(userSolanaWalletId, retrievedSpl.spl.spl_id)
+		if (retrievedSpl.is_spl_exclusive === false) return true
+		if (userSolanaWalletId === retrievedSpl.creator_wallet_id) return true
+		const didUserPurchaseSplAccess = await checkIfUserMadeExclusiveSplPurchase(userSolanaWalletId, retrievedSpl.spl_id)
 		if (didUserPurchaseSplAccess === true) return true
 
-		if (_.isNull(retrievedSpl.spl.value_needed_to_access_exclusive_content_usd)) return false
+		if (_.isNull(retrievedSpl.value_needed_to_access_exclusive_content_usd)) return false
 
 		const numberSharesNeededToAccessExclusiveContent =
-			retrievedSpl.spl.value_needed_to_access_exclusive_content_usd / retrievedSpl.spl.listing_price_per_share_usd
+			retrievedSpl.value_needed_to_access_exclusive_content_usd / retrievedSpl.listing_price_per_share_usd
 
-		if (retrievedSpl.spl.allow_value_from_same_creator_tokens_for_exclusive_content === false) {
+		if (retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content === false) {
 			const splOwnershipForThisSpecificSpl = await retrieveSplOwnershipByWalletIdAndSplPublicKey(
 				userSolanaWalletId,
-				retrievedSpl.spl.public_key_address
+				retrievedSpl.public_key_address
 			)
 			let numberSharesOwned = 0
 
@@ -33,7 +33,7 @@ export default async function checkIfUserAllowedToAccessContent(
 		} else {
 			const allUserSplOwnership = await retrieveSplOwnershipByWalletIdAndCreatorId(
 				userSolanaWalletId,
-				retrievedSpl.spl.creator_wallet_id
+				retrievedSpl.creator_wallet_id
 			)
 			let valueOfsharesOwned = 0
 
