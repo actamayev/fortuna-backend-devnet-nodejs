@@ -12,11 +12,11 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 			},
 			select: {
 				spl_name: true,
+				public_key_address: true,
 				listing_price_per_share_usd: true,
 				spl_listing_status: true,
 				description: true,
 				total_number_of_shares: true,
-				public_key_address: true,
 				original_content_url: true,
 				is_spl_exclusive: true,
 				spl_id: true,
@@ -52,7 +52,11 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 			}
 		})
 
-		return mediaDetails
+		const filteredVideos = mediaDetails.filter(video =>
+			video.spl_creator_wallet.user.username !== null
+		) as RetrievedHomePageVideo[]
+
+		return filteredVideos
 	} catch (error) {
 		console.error(error)
 		throw error

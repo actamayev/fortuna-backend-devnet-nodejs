@@ -1,7 +1,7 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
-export default async function retrieveVideosByTitle(videoTitle: string): Promise<RetrievedVideosByTitle[]> {
+export default async function retrieveVideosByTitle(videoTitle: string): Promise<RetrievedHomePageVideo[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const retrievedVideos = await prismaClient.spl.findMany({
@@ -20,6 +20,8 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 				total_number_of_shares: true,
 				original_content_url: true,
 				is_spl_exclusive: true,
+				spl_id: true,
+				creator_wallet_id: true,
 				value_needed_to_access_exclusive_content_usd: true,
 				listing_price_to_access_exclusive_content_usd: true,
 				allow_value_from_same_creator_tokens_for_exclusive_content: true,
@@ -51,10 +53,9 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 			}
 		})
 
-		const filteredVideos: RetrievedVideosByTitle[] = retrievedVideos.filter(video =>
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		const filteredVideos = retrievedVideos.filter(video =>
 			video.spl_creator_wallet.user.username !== null
-		) as RetrievedVideosByTitle[]
+		) as RetrievedHomePageVideo[]
 
 		return filteredVideos
 	} catch (error) {
