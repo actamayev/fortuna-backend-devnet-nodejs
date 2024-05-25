@@ -30,7 +30,6 @@ import confirmUserHasEnoughTokensToCreateSplAsk
 import validateSplIdInParams from "../middleware/request-validation/exchange/validate-spl-id-in-params"
 import validateCreateSplBid from "../middleware/request-validation/exchange/bid/validate-create-spl-bid"
 import validateCreateSplAsk from "../middleware/request-validation/exchange/ask/validate-create-spl-ask"
-import validateVideoUUIDInBody from "../middleware/request-validation/exchange/validate-video-uuid-in-body"
 import confirmEnoughSharesInEscrowToCompletePurchase
 	from "../middleware/confirmations/exchange/primary/confirm-enough-shares-in-escrow-to-complete-purchase"
 import validatePurchaseSplTokens from "../middleware/request-validation/exchange/validate-purchase-spl-tokens"
@@ -40,6 +39,7 @@ import confirmUserDoesntAlreadyHaveExclusiveAccess
 import confirmUserHasEnoughSolToPurchaseExclusiveAccess
 	from "../middleware/confirmations/exchange/instant-exclusive-access/confirm-user-has-enough-sol-to-purchase-exclusive-access"
 import confirmCreatorNotBuyingOwnShares from "../middleware/confirmations/exchange/primary/confirm-creator-not-buying-own-shares"
+import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
 
 const exchangeRoutes = express.Router()
 
@@ -101,8 +101,8 @@ exchangeRoutes.get(
 )
 
 exchangeRoutes.post(
-	"/purchase-exclusive-content-access",
-	validateVideoUUIDInBody,
+	"/purchase-exclusive-content-access/:videoUUID",
+	validateVideoUUIDInParams,
 	attachExclusiveVideoData,
 	attachSolanaWalletByUserId,
 	confirmUserDoesntAlreadyHaveExclusiveAccess,

@@ -2,9 +2,9 @@ import _ from "lodash"
 import { NextFunction, Request, Response } from "express"
 import retrieveExclusiveVideoDataByUUID from "../../db-operations/read/spl/retrieve-exclusive-video-data-by-uuid"
 
-export default async function attachExclusiveVideoData(req: Request, res: Response, next: NextFunction) : Promise<Response | void> {
+export default async function attachExclusiveVideoData(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {
-		const videoUUID = req.body.videoUUID
+		const { videoUUID } = req.params
 		const exclusiveVideoData = await retrieveExclusiveVideoDataByUUID(videoUUID)
 		if (_.isNull(exclusiveVideoData)) return res.status(400).json({ message: "Cannot find Exclusive Video" })
 
