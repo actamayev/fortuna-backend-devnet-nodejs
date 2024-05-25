@@ -21,7 +21,12 @@ export default async function transformVideoSearchData(input: RetrievedVideosByT
 				originalContentUrl: item.original_content_url,
 				contentMintDate: item.uploaded_video.created_at,
 				creatorUsername: item.spl_creator_wallet.user.username,
-				creatorProfilePictureUrl: item.spl_creator_wallet.user.profile_picture?.image_url || null
+				creatorProfilePictureUrl: item.spl_creator_wallet.user.profile_picture?.image_url || null,
+				isSplExclusive: item.is_spl_exclusive,
+				valueNeededToAccessExclusiveContentUsd:  item.value_needed_to_access_exclusive_content_usd,
+				listingPriceToAccessContentUsd: item.listing_price_to_access_exclusive_content_usd,
+				allowValueFromSameCreatorTokensForExclusiveContent: item.allow_value_from_same_creator_tokens_for_exclusive_content
+
 			}
 		})
 

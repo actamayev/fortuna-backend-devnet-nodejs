@@ -1,7 +1,7 @@
 import _ from "lodash"
 
 export default function transformVideoAndImageData(
-	videoData: HomePageVideoRetrievedFromDB,
+	videoData: HomePageVideoRetrievedFromDBByUUID,
 	sharesRemainingForSale: number
 ): VideoDataSendingToFrontendWithVideoUrl {
 	const videoDataSendingToFrontEnd: VideoDataSendingToFrontendWithVideoUrl = {
@@ -17,7 +17,12 @@ export default function transformVideoAndImageData(
 		originalContentUrl: videoData.spl.original_content_url,
 		contentMintDate: videoData.created_at,
 		creatorUsername: videoData.spl.spl_creator_wallet.user.username,
-		creatorProfilePictureUrl: videoData.spl.spl_creator_wallet.user.profile_picture?.image_url || null
+		creatorProfilePictureUrl: videoData.spl.spl_creator_wallet.user.profile_picture?.image_url || null,
+		isSplExclusive: videoData.spl.is_spl_exclusive,
+		valueNeededToAccessExclusiveContentUsd:  videoData.spl.value_needed_to_access_exclusive_content_usd,
+		listingPriceToAccessContentUsd: videoData.spl.listing_price_to_access_exclusive_content_usd,
+		allowValueFromSameCreatorTokensForExclusiveContent: videoData.spl.allow_value_from_same_creator_tokens_for_exclusive_content
+
 	}
 
 	if (!_.isUndefined(videoData.videoUrl)) {

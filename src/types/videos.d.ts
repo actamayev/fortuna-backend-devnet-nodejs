@@ -1,7 +1,7 @@
 import { SPLListingStatus } from "@prisma/client"
 
 declare global {
-	interface HomePageVideoRetrievedFromDB {
+	interface HomePageVideoRetrievedFromDBByUUID {
 		created_at: Date
 		uuid: string
 		videoUrl?: string
@@ -17,6 +17,7 @@ declare global {
 			creator_wallet_id: number
 			spl_id: number
 			value_needed_to_access_exclusive_content_usd: number | null
+			listing_price_to_access_exclusive_content_usd: number | null
 			allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 			uploaded_image: {
 				image_url: string
@@ -32,6 +33,37 @@ declare global {
 		}
 	}
 
+	interface RetrievedHomePageVideo {
+		spl_name: string
+		listing_price_per_share_usd: number
+		spl_listing_status: SPLListingStatus
+		description: string
+		total_number_of_shares: number
+		public_key_address: string
+		original_content_url: string
+		is_spl_exclusive: boolean
+		creator_wallet_id: number
+		spl_id: number
+		value_needed_to_access_exclusive_content_usd: number | null
+		listing_price_to_access_exclusive_content_usd: number | null
+		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
+		uploaded_image: {
+			image_url: string
+		}
+		uploaded_video: {
+			created_at: Date
+			uuid: string
+		}
+		spl_creator_wallet: {
+			user: {
+				username: string | null
+				profile_picture: {
+					image_url: string
+				} | null
+			}
+		}
+	}
+
 	interface RetrievedVideosByTitle {
 		spl_name: string
 		public_key_address: string
@@ -43,6 +75,8 @@ declare global {
 		is_spl_exclusive: boolean
 		creator_wallet_id: number
 		spl_id: number
+		is_spl_exclusive: boolean
+		listing_price_to_access_exclusive_content_usd: number | null
 		value_needed_to_access_exclusive_content_usd: number | null
 		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 		spl_creator_wallet: {
@@ -77,6 +111,7 @@ declare global {
 				spl_id: number
 				value_needed_to_access_exclusive_content_usd: number | null
 				allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
+				listing_price_to_access_exclusive_content_usd: number | null
 				uploaded_image: {
 					image_url: string
 				}
@@ -100,6 +135,15 @@ declare global {
 		} | null
 	}
 
+	interface ExclusiveVideoData {
+		uuid: string
+		spl_id: number
+		is_spl_exclusive: boolean
+		value_needed_to_access_exclusive_content_usd: number
+		allow_value_from_same_creator_tokens_for_exclusive_content: boolean
+		listing_price_to_access_exclusive_content_usd: number
+	}
+
 	interface VideoDataSendingToFrontendLessVideoUrl {
 		splName: string
 		splPublicKey: string
@@ -114,6 +158,10 @@ declare global {
 		contentMintDate: Date
 		creatorUsername: string
 		creatorProfilePictureUrl: string | null
+		isSplExclusive: boolean
+		valueNeededToAccessExclusiveContentUsd: number | null
+		listingPriceToAccessContentUsd: number | null
+		allowValueFromSameCreatorTokensForExclusiveContent: boolean | null
 	}
 
 	interface VideoDataSendingToFrontendWithVideoUrl extends VideoDataSendingToFrontendLessVideoUrl {

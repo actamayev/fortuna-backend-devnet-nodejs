@@ -162,12 +162,15 @@ model exclusive_spl_purchase {
 	exclusive_spl_purchase_id									Int  @id @default(autoincrement())
 	spl_id														Int
 	solana_wallet_id											Int
+	sol_transfer_id												Int		@unique
 
 	spl       													spl @relation(fields: [spl_id], references: [spl_id])
 	solana_wallet												solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
+	sol_transfer												sol_transfer   @relation(fields: [sol_transfer_id], references: [sol_transfer_id])
 
   	@@index([spl_id], name: "exclusive_spl_purchase__spl_id_idx")
 	@@index([solana_wallet_id], name: "exclusive_spl_purchase__solana_wallet_id_idx")
+	@@index([sol_transfer_id], name: "exclusive_spl_purchasee__sol_transfer_id_idx")
 	@@unique([spl_id, solana_wallet_id])
 }
 
@@ -279,6 +282,7 @@ model sol_transfer {
 
 	spl_purchase_sol_transfer									spl_purchase?
 	secondary_market_transaction								secondary_market_transaction[]
+	exclusive_spl_purchase										exclusive_spl_purchase?
 
 	@@index([sender_solana_wallet_id], name: "sol_transfer__sender_solana_wallet_id_idx")
 	@@index([recipient_solana_wallet_id], name: "sol_transfer__recipient_solana_wallet_id_idx")

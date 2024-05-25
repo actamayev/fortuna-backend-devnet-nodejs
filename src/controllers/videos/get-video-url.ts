@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { Request, Response } from "express"
 import AwsS3 from "../../classes/aws-s3"
-import retrieveSplDataForExclusiveContent from "../../db-operations/read/spl/retrieve-spl-data-for-exclusive-content"
+import retrieveSplDataForExclusiveContent from "../../db-operations/read/uploaded-video/retrieve-spl-data-for-exclusive-content"
 import checkIfUserAllowedToAccessContent from "../../utils/exclusive-content/check-if-user-allowed-to-access-content"
 
 export default async function getVideoUrl(req: Request, res: Response): Promise<Response> {
@@ -12,7 +12,7 @@ export default async function getVideoUrl(req: Request, res: Response): Promise<
 		if (_.isNull(videoData)) return res.status(500).json({ error: "Unable to find video for the provided UUID" })
 
 		let videoUrl
-		if (videoData.is_spl_exclusive === false) {
+		if (videoData.spl?.is_spl_exclusive === false) {
 			videoUrl = await AwsS3.getInstance().getSignedVideoUrl(videoUUID)
 		} else if (!_.isUndefined(req.solanaWallet)) {
 			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(req.solanaWallet.solana_wallet_id, videoData)

@@ -1,6 +1,7 @@
 import _ from "lodash"
 import EscrowWalletManager from "../../classes/escrow-wallet-manager"
 
+// eslint-disable-next-line max-lines-per-function
 export default async function transformVideosByCreatorUsername(
 	input: RetrievedVideosByCreatorUsername
 ): Promise<{ videoData: VideoDataSendingToFrontendLessVideoUrl[], creatorData: CreatorSearchDataSendingToFrontend } | null> {
@@ -33,7 +34,12 @@ export default async function transformVideosByCreatorUsername(
 				originalContentUrl: wallet.original_content_url,
 				contentMintDate: wallet.uploaded_video.created_at,
 				creatorUsername: input.username,
-				creatorProfilePictureUrl: input.profile_picture?.image_url || null
+				creatorProfilePictureUrl: input.profile_picture?.image_url || null,
+				isSplExclusive: wallet.is_spl_exclusive,
+				valueNeededToAccessExclusiveContentUsd:  wallet.value_needed_to_access_exclusive_content_usd,
+				listingPriceToAccessContentUsd: wallet.listing_price_to_access_exclusive_content_usd,
+				allowValueFromSameCreatorTokensForExclusiveContent: wallet.allow_value_from_same_creator_tokens_for_exclusive_content
+
 			}
 		})
 

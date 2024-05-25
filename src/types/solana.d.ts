@@ -97,13 +97,16 @@ declare global {
 	}
 
 	interface SplDataNeededToCheckForExclusiveContentAccess {
-		is_spl_exclusive: boolean
-		creator_wallet_id: number
-		spl_id: number
-		value_needed_to_access_exclusive_content_usd: number | null
-		listing_price_per_share_usd: number
-		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
-		public_key_address: string
+		spl: {
+			spl_id: number
+			public_key_address: string
+			listing_price_per_share_usd: number
+			creator_wallet_id: number
+			original_content_url: string
+			is_spl_exclusive: boolean
+			value_needed_to_access_exclusive_content_usd: number | null
+			allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
+		}
 	}
 
 	interface OutputTransactionData {

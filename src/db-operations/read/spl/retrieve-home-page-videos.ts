@@ -1,25 +1,26 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
-export default async function retrieveVideosByTitle(videoTitle: string): Promise<RetrievedVideosByTitle[]> {
+export default async function retrieveHomePageVideos(): Promise<RetrievedHomePageVideo[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
-		const retrievedVideos = await prismaClient.spl.findMany({
+		const mediaDetails = await prismaClient.spl.findMany({
 			where: {
-				spl_name: {
-					contains: videoTitle,
-					mode: "insensitive"
+				spl_listing_status: {
+					notIn: ["PRELISTING", "REMOVED"]
 				}
 			},
 			select: {
 				spl_name: true,
-				public_key_address: true,
 				listing_price_per_share_usd: true,
 				spl_listing_status: true,
 				description: true,
 				total_number_of_shares: true,
+				public_key_address: true,
 				original_content_url: true,
 				is_spl_exclusive: true,
+				spl_id: true,
+				creator_wallet_id: true,
 				value_needed_to_access_exclusive_content_usd: true,
 				listing_price_to_access_exclusive_content_usd: true,
 				allow_value_from_same_creator_tokens_for_exclusive_content: true,
@@ -30,8 +31,8 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 				},
 				uploaded_video: {
 					select: {
-						uuid: true,
 						created_at: true,
+						uuid: true
 					}
 				},
 				spl_creator_wallet: {
@@ -51,12 +52,7 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 			}
 		})
 
-		const filteredVideos: RetrievedVideosByTitle[] = retrievedVideos.filter(video =>
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			video.spl_creator_wallet.user.username !== null
-		) as RetrievedVideosByTitle[]
-
-		return filteredVideos
+		return mediaDetails
 	} catch (error) {
 		console.error(error)
 		throw error

@@ -7,12 +7,14 @@ import cancelSplBid from "../controllers/exchange/bid/cancel-spl-bid"
 import retrieveUserOrders from "../controllers/exchange/retrieve-user-orders"
 import primarySplTokenPurchase from "../controllers/exchange/primary-spl-token-purchase"
 import retrieveOpenOrdersBySplId from "../controllers/exchange/retrieve-open-orders-by-spl-id"
+import purchaseExclusiveContentAccess from "../controllers/exchange/purchase-exclusive-content-access"
 
 import {
 	attachSplDetailsByPublicKeyForSecondarySplBid,
 	attachSplDetailsByPublicKeyForSecondarySplAsk,
 	attachSplDetailsByPublicKeyForPrimarySplPurchase
 } from "../middleware/attach/attach-spl-details-by-public-key"
+import attachExclusiveVideoData from "../middleware/attach/attach-exclusive-video-data"
 import confirmBidCreator from "../middleware/confirmations/exchange/bid/confirm-bid-creator"
 import confirmAskCreator from "../middleware/confirmations/exchange/ask/confirm-ask-creator"
 import {
@@ -28,10 +30,15 @@ import confirmUserHasEnoughTokensToCreateSplAsk
 import validateSplIdInParams from "../middleware/request-validation/exchange/validate-spl-id-in-params"
 import validateCreateSplBid from "../middleware/request-validation/exchange/bid/validate-create-spl-bid"
 import validateCreateSplAsk from "../middleware/request-validation/exchange/ask/validate-create-spl-ask"
+import validateVideoUUIDInBody from "../middleware/request-validation/exchange/validate-video-uuid-in-body"
 import confirmEnoughSharesInEscrowToCompletePurchase
 	from "../middleware/confirmations/exchange/primary/confirm-enough-shares-in-escrow-to-complete-purchase"
 import validatePurchaseSplTokens from "../middleware/request-validation/exchange/validate-purchase-spl-tokens"
 import confirmPrimarySplSharesSoldOut from "../middleware/confirmations/exchange/confirm-primary-spl-shares-sold-out"
+import confirmUserDoesntAlreadyHaveExclusiveAccess
+	from "../middleware/confirmations/exchange/instant-exclusive-access/confirm-user-doesnt-already-have-exclusive-access"
+import confirmUserHasEnoughSolToPurchaseExclusiveAccess
+	from "../middleware/confirmations/exchange/instant-exclusive-access/confirm-user-has-enough-sol-to-purchase-exclusive-access"
 import confirmCreatorNotBuyingOwnShares from "../middleware/confirmations/exchange/primary/confirm-creator-not-buying-own-shares"
 
 const exchangeRoutes = express.Router()
@@ -91,6 +98,16 @@ exchangeRoutes.get(
 	validateSplIdInParams,
 	confirmSplExistsById,
 	retrieveOpenOrdersBySplId
+)
+
+exchangeRoutes.post(
+	"/purchase-exclusive-content-access",
+	validateVideoUUIDInBody,
+	attachExclusiveVideoData,
+	attachSolanaWalletByUserId,
+	confirmUserDoesntAlreadyHaveExclusiveAccess,
+	confirmUserHasEnoughSolToPurchaseExclusiveAccess,
+	purchaseExclusiveContentAccess
 )
 
 // FUTURE TODO: Add routes to edit an order.
