@@ -36,6 +36,6 @@ export default async function purchaseExclusiveContentAccess(req: Request, res: 
 		return res.status(200).json({ videoUrl })
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to retrieve user's orders" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to purchase exclusive content" })
 	}
 }
