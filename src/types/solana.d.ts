@@ -165,6 +165,16 @@ declare global {
 		}
 	}
 
+	interface RetrievedMyExclusiveContentData {
+		spl: {
+			spl_name: string
+			uploaded_image: {
+				image_url: string
+				uuid: string
+			}
+		}
+	}
+
 	interface PurchaseData {
 		numberOfShares: number
 		purchasePricePerShareUsd: number
@@ -192,6 +202,12 @@ declare global {
 		uuid: string
 		isMyContent: boolean
 		splName: string
+	}
+
+	interface MyExclusiveContentData {
+		splName: string
+		imageUrl: string
+		uuid: string
 	}
 }
 

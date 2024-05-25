@@ -1,24 +1,17 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function retrieveSplOwnershipsByWalletId(
+export default async function retrieveExclusiveAccessByWalletId(
 	solanaWalletId: number
-): Promise<RetrievedMyOwnershipData[]> {
+): Promise<RetrievedMyExclusiveContentData[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
-		const splOwnerships = await prismaClient.spl_ownership.findMany({
+		const exclusiveContentOwnership = await prismaClient.exclusive_spl_purchase.findMany({
 			where: {
 				solana_wallet_id: solanaWalletId,
-				number_of_shares: {
-					gt: 0
-				}
 			},
 			select: {
-				number_of_shares: true,
-				purchase_price_per_share_usd: true,
 				spl: {
 					select: {
-						creator_wallet_id: true,
-						public_key_address: true,
 						spl_name: true,
 						uploaded_image: {
 							select: {
@@ -31,7 +24,7 @@ export default async function retrieveSplOwnershipsByWalletId(
 			}
 		})
 
-		return splOwnerships
+		return exclusiveContentOwnership
 	} catch (error) {
 		console.error(error)
 		throw error
