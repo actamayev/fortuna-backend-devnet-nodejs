@@ -193,6 +193,17 @@ declare global {
 		}
 	}
 
+	interface RetrievedSplOwnershipByWalletIdAndSplPublicKey {
+		spl_ownership_id: number
+		number_of_shares: number
+	}
+
+	interface RetrievedSplOwnershipByWalletIdAndCreatorId extends RetrievedSplOwnershipByWalletIdAndSplPublicKey {
+		spl: {
+			listing_price_per_share_usd: number
+		}
+	}
+
 	type RetrievedMyOwnershipDataMap = Map<string, MyOwnershipDataInMap>
 
 	interface MyOwnershipData {

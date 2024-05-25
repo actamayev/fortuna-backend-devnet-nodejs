@@ -19,10 +19,13 @@ export default async function primarySplTokenPurchase(req: Request, res: Respons
 		const creatorWalletInfo = await retrieveCreatorWalletInfoFromSpl(splDetails.splId)
 		if (_.isNull(creatorWalletInfo)) return res.status(500).json({ error: "Unable to find creator's public key" })
 
-		const transferCurrencyAmounts = { solPriceToTransferAt: 0, usdPriceToTransferAt: splDetails.listingSharePriceUsd }
-
 		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
-		transferCurrencyAmounts.solPriceToTransferAt = splDetails.listingSharePriceUsd / solPrice
+
+		const transferCurrencyAmounts = {
+			usdPriceToTransferAt: splDetails.listingSharePriceUsd,
+			solPriceToTransferAt: splDetails.listingSharePriceUsd / solPrice
+		}
+
 		const solTransferId = await transferSolFunction(
 			solanaWallet,
 			creatorWalletInfo,

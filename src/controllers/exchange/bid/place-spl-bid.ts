@@ -4,10 +4,10 @@ import { PublicKey } from "@solana/web3.js"
 import SolPriceManager from "../../../classes/sol-price-manager"
 import transferSolFunction from "../../../utils/exchange/transfer-sol-function"
 import createBidOrderDataToReturn from "../../../utils/exchange/create-bid-order-data-to-return"
-import retrieveSplOwnershipByWalletIdAndSplPublicKey
-	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-public-key"
 import { updateSplTransferRecordsWithTransactionId }
 	from "../../../db-operations/write/spl/spl-transfer/update-spl-transfer-record-with-transaction-id"
+import retrieveSplOwnershipByWalletIdAndSplPublicKey
+	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-public-key"
 import addSecondaryMarketBid from "../../../db-operations/write/secondary-market/bid/add-secondary-market-bid"
 import updateBidStatusOnWalletBalanceChange from "../../../utils/exchange/update-bid-status-on-wallet-balance-change"
 import addSecondaryMarketTransaction from "../../../db-operations/write/secondary-market/add-secondary-market-transaction"

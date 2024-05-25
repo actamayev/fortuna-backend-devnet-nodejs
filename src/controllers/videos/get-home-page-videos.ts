@@ -1,6 +1,6 @@
 import { Response, Request } from "express"
-import transformHomePageVideoData from "../../utils/transform/transform-home-page-video-data"
 import retrieveHomePageVideos from "../../db-operations/read/spl/retrieve-home-page-videos"
+import transformHomePageVideoData from "../../utils/transform/transform-home-page-video-data"
 
 export default async function getHomePageVideos (req: Request, res: Response): Promise<Response> {
 	try {

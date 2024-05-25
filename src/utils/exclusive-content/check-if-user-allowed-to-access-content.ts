@@ -19,6 +19,7 @@ export default async function checkIfUserAllowedToAccessContent(
 
 		const numberSharesNeededToAccessExclusiveContent =
 			retrievedSpl.spl.value_needed_to_access_exclusive_content_usd / retrievedSpl.spl.listing_price_per_share_usd
+
 		if (retrievedSpl.spl.allow_value_from_same_creator_tokens_for_exclusive_content === false) {
 			const splOwnershipForThisSpecificSpl = await retrieveSplOwnershipByWalletIdAndSplPublicKey(
 				userSolanaWalletId,

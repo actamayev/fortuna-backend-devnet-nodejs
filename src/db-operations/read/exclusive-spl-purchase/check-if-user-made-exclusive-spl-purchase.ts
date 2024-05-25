@@ -1,9 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function checkIfUserMadeExclusiveSplPurchase(
-	solanaWalletId: number,
-	splId: number
-): Promise<boolean> {
+export default async function checkIfUserMadeExclusiveSplPurchase(solanaWalletId: number, splId: number): Promise<boolean> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const exclusiveSplPurchase = await prismaClient.exclusive_spl_purchase.findFirst({

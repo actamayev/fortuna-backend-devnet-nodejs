@@ -13,13 +13,13 @@ export default async function purchaseExclusiveContentAccess(req: Request, res: 
 		const creatorWalletInfo = await retrieveCreatorWalletInfoFromSpl(exclusiveVideoData.spl_id)
 		if (_.isNull(creatorWalletInfo)) return res.status(500).json({ error: "Unable to find creator's public key" })
 
+		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
+
 		const transferCurrencyAmounts = {
-			solPriceToTransferAt: 0,
-			usdPriceToTransferAt: exclusiveVideoData.listing_price_to_access_exclusive_content_usd
+			usdPriceToTransferAt: exclusiveVideoData.listing_price_to_access_exclusive_content_usd,
+			solPriceToTransferAt: exclusiveVideoData.listing_price_to_access_exclusive_content_usd / solPrice
 		}
 
-		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
-		transferCurrencyAmounts.solPriceToTransferAt = exclusiveVideoData.listing_price_to_access_exclusive_content_usd / solPrice
 		const solTransferId = await transferSolFunction(
 			solanaWallet,
 			creatorWalletInfo,

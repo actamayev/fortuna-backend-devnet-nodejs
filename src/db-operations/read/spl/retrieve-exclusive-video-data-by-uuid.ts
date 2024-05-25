@@ -41,10 +41,10 @@ export default async function retrieveExclusiveVideoDataByUUID(videoUUID: string
 			uuid: exclusiveVideoData.uploaded_video.uuid,
 			spl_id: exclusiveVideoData.spl_id,
 			is_spl_exclusive: exclusiveVideoData.is_spl_exclusive,
-			value_needed_to_access_exclusive_content_usd: exclusiveVideoData.value_needed_to_access_exclusive_content_usd ?? 0,
+			value_needed_to_access_exclusive_content_usd: exclusiveVideoData.value_needed_to_access_exclusive_content_usd as number,
 			// eslint-disable-next-line max-len
-			allow_value_from_same_creator_tokens_for_exclusive_content: exclusiveVideoData.allow_value_from_same_creator_tokens_for_exclusive_content ?? false,
-			listing_price_to_access_exclusive_content_usd: exclusiveVideoData.listing_price_to_access_exclusive_content_usd ?? 0
+			allow_value_from_same_creator_tokens_for_exclusive_content: exclusiveVideoData.allow_value_from_same_creator_tokens_for_exclusive_content as boolean,
+			listing_price_to_access_exclusive_content_usd: exclusiveVideoData.listing_price_to_access_exclusive_content_usd as number
 		}
 
 		return result
