@@ -6,6 +6,9 @@ export default async function retrieveCreatorContentList(solanaWalletId: number)
 		const creatorSPLData = await prismaClient.spl.findMany({
 			where: {
 				creator_wallet_id: solanaWalletId,
+				spl_listing_status: {
+					notIn: ["PRELISTING", "REMOVED"]
+				}
 			},
 			orderBy: {
 				created_at: "desc"

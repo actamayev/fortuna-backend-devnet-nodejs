@@ -1,16 +1,14 @@
 import EscrowWalletManager from "../../classes/escrow-wallet-manager"
 
 export default async function transformHomePageVideoData(
-	input: RetrievedHomePageVideo[]
+	retrievedHomePageVideos: RetrievedHomePageVideo[]
 ): Promise<VideoDataSendingToFrontendLessVideoUrl[]> {
 	try {
-		const videosWithCreatorUsername = input.filter(video => video.spl_creator_wallet.user.username !== null)
-
-		const publicKeys = videosWithCreatorUsername.map(item => item.public_key_address)
+		const publicKeys = retrievedHomePageVideos.map(item => item.public_key_address)
 
 		const tokensRemaining = await EscrowWalletManager.getInstance().retrieveTokenAmountsByPublicKeys(publicKeys)
 
-		const results = videosWithCreatorUsername.map(item => {
+		const results = retrievedHomePageVideos.map(item => {
 			const sharesRemainingForSale = tokensRemaining[item.public_key_address]
 			return {
 				splName: item.spl_name,

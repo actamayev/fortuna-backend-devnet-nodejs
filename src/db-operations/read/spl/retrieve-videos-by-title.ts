@@ -9,6 +9,9 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 				spl_name: {
 					contains: videoTitle,
 					mode: "insensitive"
+				},
+				spl_listing_status: {
+					notIn: ["PRELISTING", "REMOVED"]
 				}
 			},
 			select: {
