@@ -17,6 +17,10 @@ export default async function retrieveSplDetailsByPublicKey(
 				listing_price_per_share_usd: true,
 				spl_listing_status: true,
 				creator_wallet_id: true,
+				is_spl_exclusive: true,
+				value_needed_to_access_exclusive_content_usd: true,
+				listing_price_to_access_exclusive_content_usd: true,
+				allow_value_from_same_creator_tokens_for_exclusive_content: true,
 				uploaded_image: {
 					select: {
 						uuid: true,

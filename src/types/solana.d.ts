@@ -131,6 +131,10 @@ declare global {
 		listing_price_per_share_usd: number
 		spl_listing_status: SPLListingStatus
 		creator_wallet_id: number
+		is_spl_exclusive: boolean
+		value_needed_to_access_exclusive_content_usd: number | null
+		listing_price_to_access_exclusive_content_usd: number | null
+		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 		uploaded_image: {
 			uuid: string
 			image_url: string
@@ -147,6 +151,10 @@ declare global {
 		creatorWalletId: number
 		imageUrl: string
 		uuid: string
+		isSplExclusive: boolean
+		valueNeededToAccessExclusiveContentUsd: number | null
+		listingPriceToAccessContentUsd: number | null
+		allowValueFromSameCreatorTokensForExclusiveContent: boolean | null
 	}
 
 	interface RetrievedMyOwnershipData {
