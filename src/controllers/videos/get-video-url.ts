@@ -6,6 +6,7 @@ import retrieveSplDataForExclusiveContent from "../../db-operations/read/uploade
 
 export default async function getVideoUrl(req: Request, res: Response): Promise<Response> {
 	try {
+		const solanaWallet = req.solanaWallet as ExtendedSolanaWallet | undefined
 		const { videoUUID } = req.params
 
 		const videoData = await retrieveSplDataForExclusiveContent(videoUUID)
@@ -14,8 +15,8 @@ export default async function getVideoUrl(req: Request, res: Response): Promise<
 		let videoUrl
 		if (videoData.is_spl_exclusive === false) {
 			videoUrl = await AwsS3.getInstance().getSignedVideoUrl(videoUUID)
-		} else if (!_.isUndefined(req.solanaWallet)) {
-			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(req.solanaWallet.solana_wallet_id, videoData)
+		} else if (!_.isUndefined(solanaWallet)) {
+			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(solanaWallet.solana_wallet_id, videoData)
 			if (isUserAbleToAccessVideo === true) {
 				videoUrl = await AwsS3.getInstance().getSignedVideoUrl(videoUUID)
 			}
