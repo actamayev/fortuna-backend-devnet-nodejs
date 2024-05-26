@@ -22,7 +22,7 @@ export default async function transformHomePageVideoData(
 				sharesRemainingForSale,
 				originalContentUrl: item.original_content_url,
 				contentMintDate: item.uploaded_video.created_at,
-				creatorUsername: item.spl_creator_wallet.user.username as string,
+				creatorUsername: item.spl_creator_wallet.user.username,
 				creatorProfilePictureUrl: item.spl_creator_wallet.user.profile_picture?.image_url || null,
 				isSplExclusive: item.is_spl_exclusive,
 				valueNeededToAccessExclusiveContentUsd: item.value_needed_to_access_exclusive_content_usd,
