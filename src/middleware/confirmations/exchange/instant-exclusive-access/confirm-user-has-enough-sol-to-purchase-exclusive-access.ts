@@ -1,7 +1,6 @@
 import { PublicKey } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
-import SolPriceManager from "../../../../classes/sol-price-manager"
-import { getWalletBalanceSol } from "../../../../utils/solana/get-wallet-balance"
+import { getWalletBalanceWithUSD } from "../../../../utils/solana/get-wallet-balance"
 
 export default async function confirmUserHasEnoughSolToPurchaseExclusiveAccess(
 	req: Request,
@@ -11,13 +10,11 @@ export default async function confirmUserHasEnoughSolToPurchaseExclusiveAccess(
 	try {
 		const { solanaWallet, exclusiveVideoData } = req
 		const publicKey = new PublicKey(solanaWallet.public_key)
-		const balanceInSol = await getWalletBalanceSol(publicKey)
+		const walletBalance = await getWalletBalanceWithUSD(publicKey)
 
-		const solPriceInUSD = (await SolPriceManager.getInstance().getPrice()).price
-		const balanceInUsd = balanceInSol * solPriceInUSD
 		const exclusiveListingPrice = exclusiveVideoData.listing_price_to_access_exclusive_content_usd
 
-		if (balanceInUsd < exclusiveListingPrice) {
+		if (walletBalance.balanceInUsd < exclusiveListingPrice) {
 			return res.status(400).json({ message: "User does not have enough Sol to complete the purchase" })
 		}
 

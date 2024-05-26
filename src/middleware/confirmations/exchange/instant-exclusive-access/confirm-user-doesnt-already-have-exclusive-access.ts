@@ -21,6 +21,6 @@ export default async function confirmUserDoesntAlreadyHaveExclusiveAccess(
 		next()
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to Check if User has enough Sol to purchase exclusive content"})
+		return res.status(500).json({ error: "Internal Server Error: Unable to Check if user already has exclusive content access" })
 	}
 }
