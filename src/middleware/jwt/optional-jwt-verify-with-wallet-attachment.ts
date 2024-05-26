@@ -23,8 +23,6 @@ export default async function optionalJwtVerifyWithWalletAttachment(
 
 		if (_.isNull(user)) return handleUnauthorized()
 
-		req.user = user
-
 		const solanaWallet = await findSolanaWalletByUserId(user.user_id)
 		if (_.isNull(solanaWallet)) return res.status(400).json({ message: "Cannot find Solana Wallet" })
 

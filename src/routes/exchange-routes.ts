@@ -32,6 +32,7 @@ import validateCreateSplBid from "../middleware/request-validation/exchange/bid/
 import validateCreateSplAsk from "../middleware/request-validation/exchange/ask/validate-create-spl-ask"
 import confirmEnoughSharesInEscrowToCompletePurchase
 	from "../middleware/confirmations/exchange/primary/confirm-enough-shares-in-escrow-to-complete-purchase"
+import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
 import validatePurchaseSplTokens from "../middleware/request-validation/exchange/validate-purchase-spl-tokens"
 import confirmPrimarySplSharesSoldOut from "../middleware/confirmations/exchange/confirm-primary-spl-shares-sold-out"
 import confirmUserDoesntAlreadyHaveExclusiveAccess
@@ -39,7 +40,6 @@ import confirmUserDoesntAlreadyHaveExclusiveAccess
 import confirmUserHasEnoughSolToPurchaseExclusiveAccess
 	from "../middleware/confirmations/exchange/instant-exclusive-access/confirm-user-has-enough-sol-to-purchase-exclusive-access"
 import confirmCreatorNotBuyingOwnShares from "../middleware/confirmations/exchange/primary/confirm-creator-not-buying-own-shares"
-import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
 
 const exchangeRoutes = express.Router()
 
