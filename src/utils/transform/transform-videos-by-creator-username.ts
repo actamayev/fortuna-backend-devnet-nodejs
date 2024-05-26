@@ -1,10 +1,15 @@
 import _ from "lodash"
 import EscrowWalletManager from "../../classes/escrow-wallet-manager"
 
+interface VideosAndCreatorData {
+	videoData: VideoDataSendingToFrontendLessVideoUrl[]
+	creatorData: CreatorSearchDataSendingToFrontend
+}
+
 // eslint-disable-next-line max-lines-per-function
 export default async function transformVideosByCreatorUsername(
 	input: RetrievedVideosByCreatorUsername
-): Promise<{ videoData: VideoDataSendingToFrontendLessVideoUrl[], creatorData: CreatorSearchDataSendingToFrontend } | null> {
+): Promise<VideosAndCreatorData | null> {
 	try {
 		if (_.isNull(input.solana_wallet)) return null
 
