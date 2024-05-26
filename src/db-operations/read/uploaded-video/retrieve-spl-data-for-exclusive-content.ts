@@ -14,12 +14,11 @@ export default async function retrieveSplDataForExclusiveContent(
 				spl: {
 					select: {
 						spl_id: true,
+						is_spl_exclusive: true,
+						value_needed_to_access_exclusive_content_usd: true,
 						public_key_address: true,
 						listing_price_per_share_usd: true,
 						creator_wallet_id: true,
-						original_content_url: true,
-						is_spl_exclusive: true,
-						value_needed_to_access_exclusive_content_usd: true,
 						allow_value_from_same_creator_tokens_for_exclusive_content: true,
 					}
 				}

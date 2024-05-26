@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import checkIfUserMadeExclusiveSplPurchase
-	from "../../../../db-operations/read/exclusive-spl-purchase/check-if-user-made-exclusive-spl-purchase"
+import checkIfUserAllowedToAccessContent from "../../../../utils/exclusive-content/check-if-user-allowed-to-access-content"
 
 export default async function confirmUserDoesntAlreadyHaveExclusiveAccess(
 	req: Request,
@@ -9,8 +8,8 @@ export default async function confirmUserDoesntAlreadyHaveExclusiveAccess(
 ): Promise<Response | void> {
 	try {
 		const { solanaWallet, exclusiveVideoData } = req
-		const doesUserAlreadyHaveExclusiveAccess = await checkIfUserMadeExclusiveSplPurchase(
-			solanaWallet.solana_wallet_id, exclusiveVideoData.spl_id
+		const doesUserAlreadyHaveExclusiveAccess = await checkIfUserAllowedToAccessContent(
+			solanaWallet.solana_wallet_id, exclusiveVideoData
 		)
 
 		if (doesUserAlreadyHaveExclusiveAccess === true) {

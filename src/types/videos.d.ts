@@ -103,10 +103,8 @@ declare global {
 		} | null
 	}
 
-	interface ExclusiveVideoData {
+	interface ExclusiveVideoData extends SplDataNeededToCheckForExclusiveContentAccess {
 		uuid: string
-		spl_id: number
-		is_spl_exclusive: boolean
 		value_needed_to_access_exclusive_content_usd: number
 		allow_value_from_same_creator_tokens_for_exclusive_content: boolean
 		listing_price_to_access_exclusive_content_usd: number
