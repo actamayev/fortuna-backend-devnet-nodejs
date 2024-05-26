@@ -24,6 +24,12 @@ export default function aggregateOwnershipList(splOwnerships: RetrievedMyOwnersh
 						public_key_address: publicKey,
 						creator_wallet_id: splOwnership.spl.creator_wallet_id,
 						spl_name: splOwnership.spl.spl_name,
+						listing_price_per_share_usd: splOwnership.spl.listing_price_per_share_usd,
+						spl_creator_wallet: {
+							user: {
+								username: splOwnership.spl.spl_creator_wallet.user.username
+							}
+						},
 						uploaded_image: {
 							image_url: splOwnership.spl.uploaded_image.image_url,
 							uuid: splOwnership.spl.uploaded_image.uuid

@@ -163,6 +163,12 @@ declare global {
 			public_key_address: string
 			creator_wallet_id: number
 			spl_name: string
+			listing_price_per_share_usd: number
+			spl_creator_wallet: {
+				user: {
+					username: string | null
+				}
+			}
 			uploaded_image: {
 				image_url: string
 				uuid: string
@@ -191,6 +197,12 @@ declare global {
 			public_key_address: string
 			creator_wallet_id: number
 			spl_name: string
+			listing_price_per_share_usd: number
+			spl_creator_wallet: {
+				user: {
+					username: string | null
+				}
+			}
 			uploaded_image: {
 				image_url: string
 				uuid: string
@@ -218,6 +230,8 @@ declare global {
 		uuid: string
 		isMyContent: boolean
 		splName: string
+		creatorUsername: string
+		originalListingPricePerShareUsd: number
 	}
 
 	interface MyExclusiveContentData {
