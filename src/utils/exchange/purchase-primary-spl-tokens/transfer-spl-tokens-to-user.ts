@@ -22,7 +22,6 @@ export default async function transferSplTokensToUser(
 			solanaWalletTransferringTo.solana_wallet_id,
 			parseInt(fortunaEscrowSolanaWalletIdDb, 10),
 			true,
-			false,
 			purchaseSplTokensData.numberOfTokensPurchasing,
 			splDetails.listingSharePriceUsd,
 			// There should just be one item in the array (escrow should just have 1 ownership record of each spl):
