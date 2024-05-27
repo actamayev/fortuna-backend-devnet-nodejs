@@ -23,20 +23,6 @@ import confirmUserHasEnoughSolToTransfer from "../middleware/confirmations/solan
 
 const solanaRoutes = express.Router()
 
-solanaRoutes.get(
-	"/get-wallet-balance",
-	jwtVerify,
-	attachSolanaWalletByUserId,
-	getSolanaWalletBalance
-)
-
-solanaRoutes.post(
-	"/request-airdrop",
-	jwtVerify,
-	attachSolanaWalletByUserId,
-	requestSolanaAirdrop
-)
-
 solanaRoutes.post(
 	"/create-and-mint-spl",
 	jwtVerify,
@@ -85,6 +71,20 @@ solanaRoutes.post(
 	jwtVerify,
 	validateTransactionSignatures,
 	getTransactionDetails
+)
+
+solanaRoutes.get(
+	"/get-wallet-balance",
+	jwtVerify,
+	attachSolanaWalletByUserId,
+	getSolanaWalletBalance
+)
+
+solanaRoutes.post(
+	"/request-airdrop",
+	jwtVerify,
+	attachSolanaWalletByUserId,
+	requestSolanaAirdrop
 )
 
 export default solanaRoutes
