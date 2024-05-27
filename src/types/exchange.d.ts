@@ -3,11 +3,6 @@ declare global {
 		numberOfTokensPurchasing: number
 		splPublicKey: string
 	}
-
-	interface TransactionsMap {
-		fillPriceUsd: number
-		numberOfShares: number
-	}
 }
 
 export {}
