@@ -3,6 +3,7 @@ import { Response, Request } from "express"
 import Hash from "../../classes/hash"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
 import determineContactType from "../../utils/auth-helpers/login/determine-contact-type"
+import { findSolanaWalletByUserId } from "../../db-operations/read/find/find-solana-wallet"
 import retrieveUserFromContact from "../../utils/auth-helpers/login/retrieve-user-from-contact"
 import addLoginHistoryRecord from "../../db-operations/write/login-history/add-login-history-record"
 
@@ -24,7 +25,10 @@ export default async function login (req: Request, res: Response): Promise<Respo
 
 		await addLoginHistoryRecord(credentialsResult.user_id)
 
-		return res.status(200).json({ accessToken })
+		const solanaWallet = await findSolanaWalletByUserId(credentialsResult.user_id)
+		if (_.isNull(solanaWallet)) return res.status(400).json({ message: "Unable to find user's Solana wallet" })
+
+		return res.status(200).json({ accessToken, publicKey: solanaWallet.public_key })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Login" })

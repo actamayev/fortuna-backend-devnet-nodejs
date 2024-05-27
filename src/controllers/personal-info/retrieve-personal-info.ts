@@ -5,7 +5,7 @@ import retrieveProfilePictureUrlByUserId from "../../db-operations/read/credenti
 
 export default async function retrievePersonalInfo(req: Request, res: Response): Promise<Response> {
 	try {
-		const { user } = req
+		const { user, solanaWallet } = req
 		const profilePictureUrl = await retrieveProfilePictureUrlByUserId(user.user_id)
 
 		let email
@@ -13,13 +13,15 @@ export default async function retrievePersonalInfo(req: Request, res: Response):
 			const encryptor = new Encryptor()
 			email = await encryptor.deterministicDecrypt(user.email__encrypted, "EMAIL_ENCRYPTION_KEY")
 		}
+
 		return res.status(200).json({
 			username: user.username,
 			email,
 			defaultCurrency: user.default_currency,
 			defaultSiteTheme: user.default_site_theme,
 			isApprovedToBeCreator: user.is_approved_to_be_creator,
-			profilePictureUrl
+			profilePictureUrl,
+			publicKey: solanaWallet.public_key
 		})
 	} catch (error) {
 		console.error(error)
