@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { Response, Request } from "express"
-import AwsS3 from "../../classes/aws-s3"
+import VideoUrlsManager from "../../classes/video-urls-manager"
 import EscrowWalletManager from "../../classes/escrow-wallet-manager"
 import transformVideoAndImageData from "../../utils/transform/transform-video-and-image-data"
 import retrieveVideoByUUID from "../../db-operations/read/uploaded-video/retrieve-video-by-uuid"
@@ -22,12 +22,12 @@ export default async function getVideoByUUID (req: Request, res: Response): Prom
 		}
 
 		if (videoData.spl.is_spl_exclusive === false) {
-			const videoUrl = await AwsS3.getInstance().getSignedVideoUrl(videoData.uuid)
+			const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoData.uuid)
 			videoData.videoUrl = videoUrl
 		} else if (!_.isUndefined(solanaWallet)) {
 			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(solanaWallet.solana_wallet_id, videoData.spl)
 			if (isUserAbleToAccessVideo === true) {
-				const videoUrl = await AwsS3.getInstance().getSignedVideoUrl(videoData.uuid)
+				const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoData.uuid)
 				videoData.videoUrl = videoUrl
 			}
 		}

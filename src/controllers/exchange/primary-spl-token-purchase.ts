@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { Request, Response } from "express"
-import AwsS3 from "../../classes/aws-s3"
 import SolPriceManager from "../../classes/sol-price-manager"
+import VideoUrlsManager from "../../classes/video-urls-manager"
 import transferSolFunction from "../../utils/exchange/transfer-sol-function"
 import checkIfNewSplPurchaseAllowsAccessToExclusiveContent
 	from "../../utils/exclusive-content/check-if-new-spl-purchase-allows-access-to-exclusive-content"
@@ -56,7 +56,7 @@ export default async function primarySplTokenPurchase(req: Request, res: Respons
 		)
 
 		if (doesUserNeedVideoUrl === true) {
-			videoUrl = await AwsS3.getInstance().getSignedVideoUrl(splDetails.uuid)
+			videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(splDetails.uuid)
 		}
 
 		return res.status(200).json({

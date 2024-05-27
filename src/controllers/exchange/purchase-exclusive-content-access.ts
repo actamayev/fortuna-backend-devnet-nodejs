@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { Request, Response } from "express"
-import AwsS3 from "../../classes/aws-s3"
 import SolPriceManager from "../../classes/sol-price-manager"
+import VideoUrlsManager from "../../classes/video-urls-manager"
 import transferSolFunction from "../../utils/exchange/transfer-sol-function"
 import retrieveCreatorWalletInfoFromSpl from "../../db-operations/read/spl/retrieve-creator-wallet-info-from-spl"
 import addExclusiveSplPurchase from "../../db-operations/write/exclusive-spl-purchase/add-exclusive-spl-purchase"
@@ -31,7 +31,7 @@ export default async function purchaseExclusiveContentAccess(req: Request, res: 
 		)
 
 		await addExclusiveSplPurchase(exclusiveVideoData.spl_id, solanaWallet.solana_wallet_id, solTransferId)
-		const videoUrl = await AwsS3.getInstance().getSignedVideoUrl(exclusiveVideoData.uuid)
+		const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(exclusiveVideoData.uuid)
 
 		return res.status(200).json({ videoUrl })
 	} catch (error) {
