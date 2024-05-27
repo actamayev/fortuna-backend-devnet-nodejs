@@ -11,12 +11,11 @@ export default async function uploadVideoToS3 (req: Request, res: Response): Pro
 		const { buffer, originalname } = req.file
 
 		const uploadVideoToS3KeyAndUUID = createS3KeyGenerateUUID("uploaded-videos")
-		const videoUploadUrl = await AwsS3.getInstance().uploadVideo(buffer, uploadVideoToS3KeyAndUUID.key)
+		await AwsS3.getInstance().uploadVideo(buffer, uploadVideoToS3KeyAndUUID.key)
 
 		const uploadedVideoId = await addUploadVideoRecord(originalname, uploadVideoToS3KeyAndUUID.uuid)
 
 		return res.status(200).json({
-			videoUploadUrl,
 			uuid: uploadVideoToS3KeyAndUUID.uuid,
 			uploadedVideoId
 		})
