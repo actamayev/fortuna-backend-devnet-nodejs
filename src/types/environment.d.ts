@@ -3,7 +3,8 @@ declare namespace NodeJS {
 		// JWT:
 		JWT_KEY: string
 
-		S3_BUCKET: string
+		PUBLIC_S3_BUCKET: string
+		PRIVATE_S3_BUCKET: string
 
 		// Solana:
 		FORTUNA_FEE_PAYER_PUBLIC_KEY: string

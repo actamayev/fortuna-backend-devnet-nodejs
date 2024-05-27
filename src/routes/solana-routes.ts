@@ -2,13 +2,10 @@ import express from "express"
 
 import transferSol from "../controllers/solana/transfer-sol"
 import getSolPrice from "../controllers/solana/get-sol-price"
-import getMyOwnership from "../controllers/solana/get-my-ownership"
-import getTransactions from "../controllers/solana/get-transactions"
 import createAndMintSPL from "../controllers/solana/create-and-mint-spl"
 import getTransactionFees from "../controllers/solana/get-transaction-fees"
 import requestSolanaAirdrop from "../controllers/solana/request-solana-airdrop"
 import getTransactionDetails from "../controllers/solana/get-transaction-details"
-import getCreatorContentList from "../controllers/solana/get-creator-content-list"
 import getSolanaWalletBalance from "../controllers/solana/get-solana-wallet-balance"
 import getNumberOfTokensInTokenAccount from "../controllers/solana/get-number-of-tokens-in-token-account"
 
@@ -70,28 +67,6 @@ solanaRoutes.post(
 	confirmNotSendingSolToSelf,
 	confirmUserHasEnoughSolToTransfer,
 	transferSol
-)
-
-solanaRoutes.get(
-	"/get-transactions",
-	jwtVerify,
-	attachSolanaWalletByUserId,
-	getTransactions
-)
-
-solanaRoutes.get(
-	"/get-creator-content-list",
-	jwtVerify,
-	confirmUserIsCreator,
-	attachSolanaWalletByUserId,
-	getCreatorContentList
-)
-
-solanaRoutes.get(
-	"/get-my-ownership",
-	jwtVerify,
-	attachSolanaWalletByUserId,
-	getMyOwnership
 )
 
 solanaRoutes.get("/get-sol-price", getSolPrice)

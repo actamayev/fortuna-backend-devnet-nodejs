@@ -11,7 +11,7 @@ export default async function uploadImageToS3 (req: Request, res: Response): Pro
 		const { buffer, originalname } = req.file
 		const uuid = req.body.uuid
 
-		const uploadImageToS3Key = createS3Key("uploaded-images", originalname, uuid)
+		const uploadImageToS3Key = createS3Key("uploaded-images", uuid)
 		const imageUploadUrl = await AwsS3.getInstance().uploadImage(buffer, uploadImageToS3Key)
 
 		const uploadedImageId = await addUploadImageRecord(imageUploadUrl, originalname, uuid)

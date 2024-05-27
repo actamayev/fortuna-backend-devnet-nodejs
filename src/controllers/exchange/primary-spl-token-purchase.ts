@@ -2,11 +2,15 @@ import _ from "lodash"
 import { Request, Response } from "express"
 import SolPriceManager from "../../classes/sol-price-manager"
 import transferSolFunction from "../../utils/exchange/transfer-sol-function"
+import checkIfNewSplPurchaseAllowsAccessToExclusiveContent
+	from "../../utils/exclusive-content/check-if-new-spl-purchase-allows-access-to-exclusive-content"
 import addSplPurchaseRecord from "../../db-operations/write/spl/spl-purchase/add-spl-purchase-record"
 import retrieveCreatorWalletInfoFromSpl from "../../db-operations/read/spl/retrieve-creator-wallet-info-from-spl"
 import transferSplTokensToUser from "../../utils/exchange/purchase-primary-spl-tokens/transfer-spl-tokens-to-user"
 import updateBidStatusOnWalletBalanceChange from "../../utils/exchange/update-bid-status-on-wallet-balance-change"
+import AwsS3 from "../../classes/aws-s3"
 
+// eslint-disable-next-line max-lines-per-function
 export default async function primarySplTokenPurchase(req: Request, res: Response): Promise<Response> {
 	try {
 		const { solanaWallet, splDetails } = req
@@ -19,10 +23,13 @@ export default async function primarySplTokenPurchase(req: Request, res: Respons
 		const creatorWalletInfo = await retrieveCreatorWalletInfoFromSpl(splDetails.splId)
 		if (_.isNull(creatorWalletInfo)) return res.status(500).json({ error: "Unable to find creator's public key" })
 
-		const transferCurrencyAmounts = { solPriceToTransferAt: 0, usdPriceToTransferAt: splDetails.listingSharePriceUsd }
-
 		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
-		transferCurrencyAmounts.solPriceToTransferAt = splDetails.listingSharePriceUsd / solPrice
+
+		const transferCurrencyAmounts = {
+			usdPriceToTransferAt: splDetails.listingSharePriceUsd,
+			solPriceToTransferAt: splDetails.listingSharePriceUsd / solPrice
+		}
+
 		const solTransferId = await transferSolFunction(
 			solanaWallet,
 			creatorWalletInfo,
@@ -43,6 +50,18 @@ export default async function primarySplTokenPurchase(req: Request, res: Respons
 		await addSplPurchaseRecord(splDetails.splId, splTransferId, solTransferId)
 
 		await updateBidStatusOnWalletBalanceChange(solanaWallet)
+
+		let videoUrl
+		const doesUserNeedVideoUrl = await checkIfNewSplPurchaseAllowsAccessToExclusiveContent(
+			solanaWallet.solana_wallet_id,
+			splDetails,
+			purchaseSplTokensData.numberOfTokensPurchasing
+		)
+
+		if (doesUserNeedVideoUrl === true) {
+			videoUrl = await AwsS3.getInstance().getSignedVideoUrl(splDetails.uuid)
+		}
+
 		return res.status(200).json({
 			splName: splDetails.splName,
 			splPublicKey: splDetails.publicKeyAddress,
@@ -52,7 +71,8 @@ export default async function primarySplTokenPurchase(req: Request, res: Respons
 			}],
 			imageUrl: splDetails.imageUrl,
 			uuid: splDetails.uuid,
-			isMyContent: splDetails.creatorWalletId === solanaWallet.solana_wallet_id
+			isMyContent: splDetails.creatorWalletId === solanaWallet.solana_wallet_id,
+			videoUrl
 		})
 	} catch (error) {
 		console.error(error)

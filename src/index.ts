@@ -16,6 +16,7 @@ import youtubeRoutes from "./routes/youtube-routes"
 import exchangeRoutes from "./routes/exchange-routes"
 import encryptionRoutes from "./routes/encryption-routes"
 import personalInfoRoutes from "./routes/personal-info-routes"
+import positionsAndTransactionsRoutes from "./routes/positions-and-transactions-routes"
 
 dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.local" })
 // dotenv.config({ path: ".env.production" })
@@ -49,6 +50,7 @@ app.use(express.json())
 app.use("/auth", authRoutes)
 app.use("/exchange", jwtVerify, exchangeRoutes)
 app.use("/personal-info", jwtVerify, personalInfoRoutes)
+app.use("/positions-and-transactions", jwtVerify, positionsAndTransactionsRoutes)
 app.use("/search", searchRoutes)
 app.use("/solana", solanaRoutes)
 app.use("/upload", jwtVerify, uploadRoutes)

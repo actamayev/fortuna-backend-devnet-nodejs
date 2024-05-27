@@ -1,14 +1,14 @@
 import { Connection, LAMPORTS_PER_SOL, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import SolPriceManager from "../../classes/sol-price-manager"
 
-export async function getWalletBalanceWithUSD(
-	publicKey: PublicKey
-): Promise<{
-	balanceInSol: number,
-	balanceInUsd: number,
-	solPriceInUSD: number,
+interface WalletBalanceDetails {
+	balanceInSol: number
+	balanceInUsd: number
+	solPriceInUSD: number
 	solPriceRetrievedTime: Date
-}> {
+}
+
+export async function getWalletBalanceWithUSD(publicKey: PublicKey): Promise<WalletBalanceDetails> {
 	try {
 		const balanceInSol = await getWalletBalanceSol(publicKey)
 		const solPriceDetails = await SolPriceManager.getInstance().getPrice()

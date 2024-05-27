@@ -1,11 +1,14 @@
 import _ from "lodash"
 import { Response, Request } from "express"
+import AwsS3 from "../../classes/aws-s3"
 import EscrowWalletManager from "../../classes/escrow-wallet-manager"
 import transformVideoAndImageData from "../../utils/transform/transform-video-and-image-data"
 import retrieveVideoByUUID from "../../db-operations/read/uploaded-video/retrieve-video-by-uuid"
+import checkIfUserAllowedToAccessContent from "../../utils/exclusive-content/check-if-user-allowed-to-access-content"
 
 export default async function getVideoByUUID (req: Request, res: Response): Promise<Response> {
 	try {
+		const solanaWallet = req.solanaWallet as ExtendedSolanaWallet | undefined
 		const { videoUUID } = req.params
 
 		const videoData = await retrieveVideoByUUID(videoUUID)
@@ -16,6 +19,17 @@ export default async function getVideoByUUID (req: Request, res: Response): Prom
 			remainingSharesForSale = await EscrowWalletManager.getInstance().retrieveTokenAmountByPublicKey(
 				videoData.spl.public_key_address
 			)
+		}
+
+		if (videoData.spl.is_spl_exclusive === false) {
+			const videoUrl = await AwsS3.getInstance().getSignedVideoUrl(videoData.uuid)
+			videoData.videoUrl = videoUrl
+		} else if (!_.isUndefined(solanaWallet)) {
+			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(solanaWallet.solana_wallet_id, videoData.spl)
+			if (isUserAbleToAccessVideo === true) {
+				const videoUrl = await AwsS3.getInstance().getSignedVideoUrl(videoData.uuid)
+				videoData.videoUrl = videoUrl
+			}
 		}
 
 		const transformedVideoData = transformVideoAndImageData(videoData, remainingSharesForSale)

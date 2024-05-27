@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
-import transformVideoSearchData from "../../utils/transform/transform-video-search-data"
 import retrieveVideosByTitle from "../../db-operations/read/spl/retrieve-videos-by-title"
 import transformCreatorSearchData from "../../utils/transform/transform-creator-search-data"
+import transformHomePageVideoData from "../../utils/transform/transform-home-page-video-data"
 import retrieveCreatorsByUsername from "../../db-operations/read/credentials/retrieve-creators-by-username"
 
 export default async function generalSearch(req: Request, res: Response): Promise<Response> {
@@ -11,7 +11,7 @@ export default async function generalSearch(req: Request, res: Response): Promis
 		const videos = await retrieveVideosByTitle(searchTerm)
 		const creators = await retrieveCreatorsByUsername(searchTerm)
 		const transformedCreatorData = transformCreatorSearchData(creators)
-		const transformedVideoSearchData = await transformVideoSearchData(videos)
+		const transformedVideoSearchData = await transformHomePageVideoData(videos)
 		const searchResults: SearchData[] = [
 			...transformedCreatorData,
 			...transformedVideoSearchData

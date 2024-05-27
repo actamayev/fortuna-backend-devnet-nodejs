@@ -14,7 +14,7 @@ declare global {
 		creatorOwnershipPercentage: number
 		listingSharePriceUsd: number
 		imageUrl: string
-		videoUrl: string
+		videoUrl: string | undefined
 		description: string
 		originalContentUrl: string
 		isContentExclusive: boolean
@@ -38,7 +38,7 @@ declare global {
 		description: string
 		initial_creator_ownership_percentage: number
 		uploaded_image: { image_url: string }
-		uploaded_video: { video_url: string, uuid: string }
+		uploaded_video: { uuid: string }
 		public_key_address: string
 	}
 
@@ -51,7 +51,6 @@ declare global {
 		description: string
 		creatorOwnershipPercentage: number
 		imageUrl: string
-		videoUrl: string
 		uuid: string
 		mintAddress: string
 	}
@@ -97,6 +96,16 @@ declare global {
 		username?: string
 	}
 
+	interface SplDataNeededToCheckForExclusiveContentAccess {
+		spl_id: number
+		public_key_address: string
+		listing_price_per_share_usd: number
+		creator_wallet_id: number
+		is_spl_exclusive: boolean
+		value_needed_to_access_exclusive_content_usd: number | null
+		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
+	}
+
 	interface OutputTransactionData {
 		solTransferId: number
 		solAmountTransferred: number
@@ -121,6 +130,10 @@ declare global {
 		listing_price_per_share_usd: number
 		spl_listing_status: SPLListingStatus
 		creator_wallet_id: number
+		is_spl_exclusive: boolean
+		value_needed_to_access_exclusive_content_usd: number | null
+		listing_price_to_access_exclusive_content_usd: number | null
+		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 		uploaded_image: {
 			uuid: string
 			image_url: string
@@ -137,6 +150,10 @@ declare global {
 		creatorWalletId: number
 		imageUrl: string
 		uuid: string
+		isSplExclusive: boolean
+		valueNeededToAccessExclusiveContentUsd: number | null
+		listingPriceToAccessContentUsd: number | null
+		allowValueFromSameCreatorTokensForExclusiveContent: boolean | null
 	}
 
 	interface RetrievedMyOwnershipData {
@@ -145,6 +162,22 @@ declare global {
 		spl: {
 			public_key_address: string
 			creator_wallet_id: number
+			spl_name: string
+			listing_price_per_share_usd: number
+			spl_creator_wallet: {
+				user: {
+					username: string | null
+				}
+			}
+			uploaded_image: {
+				image_url: string
+				uuid: string
+			}
+		}
+	}
+
+	interface RetrievedMyExclusiveContentData {
+		spl: {
 			spl_name: string
 			uploaded_image: {
 				image_url: string
@@ -164,10 +197,27 @@ declare global {
 			public_key_address: string
 			creator_wallet_id: number
 			spl_name: string
+			listing_price_per_share_usd: number
+			spl_creator_wallet: {
+				user: {
+					username: string | null
+				}
+			}
 			uploaded_image: {
 				image_url: string
 				uuid: string
 			}
+		}
+	}
+
+	interface RetrievedSplOwnershipByWalletIdAndSplPublicKey {
+		spl_ownership_id: number
+		number_of_shares: number
+	}
+
+	interface RetrievedSplOwnershipByWalletIdAndCreatorId extends RetrievedSplOwnershipByWalletIdAndSplPublicKey {
+		spl: {
+			listing_price_per_share_usd: number
 		}
 	}
 
@@ -180,6 +230,14 @@ declare global {
 		uuid: string
 		isMyContent: boolean
 		splName: string
+		creatorUsername: string
+		originalListingPricePerShareUsd: number
+	}
+
+	interface MyExclusiveContentData {
+		splName: string
+		imageUrl: string
+		uuid: string
 	}
 }
 

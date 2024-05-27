@@ -1,8 +1,7 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function getSplOwnershipsByWalletId(
-	solanaWalletId: number
-): Promise<RetrievedMyOwnershipData[]> {
+// eslint-disable-next-line max-lines-per-function
+export default async function retrieveSplOwnershipsByWalletId(solanaWalletId: number): Promise<RetrievedMyOwnershipData[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const splOwnerships = await prismaClient.spl_ownership.findMany({
@@ -20,6 +19,16 @@ export default async function getSplOwnershipsByWalletId(
 						creator_wallet_id: true,
 						public_key_address: true,
 						spl_name: true,
+						listing_price_per_share_usd: true,
+						spl_creator_wallet: {
+							select: {
+								user: {
+									select: {
+										username: true
+									}
+								}
+							}
+						},
 						uploaded_image: {
 							select: {
 								image_url: true,

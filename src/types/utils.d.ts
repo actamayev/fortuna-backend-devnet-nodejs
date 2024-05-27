@@ -30,7 +30,8 @@ declare global {
 		"AWS_SECRET_ACCESS_KEY" |
 		"DATABASE_URL" |
 		"JWT_KEY" |
-		"S3_BUCKET" |
+		"PUBLIC_S3_BUCKET" |
+		"PRIVATE_S3_BUCKET" |
 		"FORTUNA_FEE_PAYER_PUBLIC_KEY" |
 		"FORTUNA_FEE_PAYER_SECRET_KEY" |
 		"FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_PUBLIC_KEY" |
@@ -43,6 +44,7 @@ declare global {
 		"MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR"
 
 	type SecretsObject = { [K in SecretKeys]: string }
+	type PublicOrPrivate = "Public" | "Private"
 }
 
 export {}

@@ -6,6 +6,7 @@
 -- delete from token_account;
 -- delete from spl;
 
+
 -- To delete a user:
 -- delete from login_history where user_id = ;
 -- delete from solana_wallet where user_id = ;
@@ -18,6 +19,7 @@
 -- delete from sol_transfer;
 -- delete from spl_transfer;
 -- delete from spl_purchase;
+-- delete from upoaded_video;
 
 -- delete FROM secondary_market_transaction;
 -- delete FROM secondary_market_bid;

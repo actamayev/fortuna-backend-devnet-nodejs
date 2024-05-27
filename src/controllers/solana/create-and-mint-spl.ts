@@ -10,7 +10,7 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 		const creatorSolanaWallet = req.solanaWallet
 		const newSPLData = req.body.newSPLData as IncomingNewSPLData
 
-		const uploadJSONS3Key = createS3Key("spl-metadata", newSPLData.splName, newSPLData.uuid)
+		const uploadJSONS3Key = createS3Key("spl-metadata", newSPLData.uuid)
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { uuid, uploadedImageId, ...restOfNewSPLData } = newSPLData
 		const metadataJSONUrl = await AwsS3.getInstance().uploadJSON(restOfNewSPLData, uploadJSONS3Key)
