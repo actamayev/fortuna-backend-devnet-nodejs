@@ -11,7 +11,11 @@ export default function transformSplDetailsRetrievedByPublicKey(
 			totalNumberOfShares: splData.total_number_of_shares,
 			creatorWalletId: splData.creator_wallet_id,
 			imageUrl: splData.uploaded_image.image_url,
-			uuid: splData.uploaded_image.uuid
+			uuid: splData.uploaded_image.uuid,
+			isSplExclusive: splData.is_spl_exclusive,
+			valueNeededToAccessExclusiveContentUsd: splData.value_needed_to_access_exclusive_content_usd,
+			listingPriceToAccessContentUsd: splData.listing_price_to_access_exclusive_content_usd,
+			allowValueFromSameCreatorTokensForExclusiveContent: splData.allow_value_from_same_creator_tokens_for_exclusive_content
 		}
 	} catch (error) {
 		console.error(error)

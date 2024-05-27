@@ -2,7 +2,7 @@ import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
-export default async function retrieveVideoByUUID(videoUUID: string): Promise<HomePageVideoRetrievedFromDB | null> {
+export default async function retrieveVideoByUUID(videoUUID: string): Promise<HomePageVideoRetrievedFromDBByUUID | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const retrievedVideo = await prismaClient.uploaded_video.findFirst({
@@ -10,7 +10,6 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Ho
 				uuid: videoUUID
 			},
 			select: {
-				video_url: true,
 				created_at: true,
 				uuid: true,
 				spl: {
@@ -22,6 +21,12 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Ho
 						total_number_of_shares: true,
 						public_key_address: true,
 						original_content_url: true,
+						creator_wallet_id: true,
+						spl_id: true,
+						is_spl_exclusive: true,
+						value_needed_to_access_exclusive_content_usd: true,
+						listing_price_to_access_exclusive_content_usd: true,
+						allow_value_from_same_creator_tokens_for_exclusive_content: true,
 						uploaded_image: {
 							select: {
 								image_url: true
@@ -55,7 +60,7 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Ho
 		return {
 			...retrievedVideo,
 			spl: retrievedVideo.spl
-		} as HomePageVideoRetrievedFromDB
+		} as HomePageVideoRetrievedFromDBByUUID
 	} catch (error) {
 		console.error(error)
 		throw error

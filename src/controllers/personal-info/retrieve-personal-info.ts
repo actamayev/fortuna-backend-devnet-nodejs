@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { Request, Response } from "express"
 import Encryptor from "../../classes/encryptor"
-import retrieveProfilePictureUrlByUserId from "../../db-operations/read/profile-picture/retrieve-profile-picture-url-by-user-id"
+import retrieveProfilePictureUrlByUserId from "../../db-operations/read/credentials/retrieve-profile-picture-url-by-user-id"
 
 export default async function retrievePersonalInfo(req: Request, res: Response): Promise<Response> {
 	try {

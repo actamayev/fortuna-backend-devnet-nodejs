@@ -8,7 +8,6 @@ export default function transformCreatorContentList(input: RetrievedDBSplData[])
 			description: item.description,
 			creatorOwnershipPercentage: item.initial_creator_ownership_percentage,
 			imageUrl: item.uploaded_image.image_url,
-			videoUrl: item.uploaded_video.video_url,
 			uuid: item.uploaded_video.uuid,
 			splName: item.spl_name,
 			mintAddress: item.public_key_address

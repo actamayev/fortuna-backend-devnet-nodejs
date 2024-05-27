@@ -20,7 +20,7 @@ export default class EscrowWalletManager {
 		return EscrowWalletManager.instance
 	}
 
-	private get doessplMapNeedRefresh(): boolean {
+	private get doesSplMapNeedRefresh(): boolean {
 		const currentTime = Date.now()
 		return this.lastFetchedTime < currentTime - 600000 // 1 hour
 	}
@@ -47,7 +47,7 @@ export default class EscrowWalletManager {
 	public async retrieveTokenAmountByPublicKey(publicKey: string): Promise<number> {
 		try {
 			if (
-				this.doessplMapNeedRefresh ||
+				this.doesSplMapNeedRefresh ||
 				_.isUndefined(this.getTokenQuantityByPublicKey(publicKey))
 			) {
 				await this.refreshSplMap()
@@ -61,7 +61,7 @@ export default class EscrowWalletManager {
 
 	public async retrieveTokenAmountsByPublicKeys(publicKeys: string[]): Promise<{ [key: string]: number }> {
 		try {
-			let needsRefresh = this.doessplMapNeedRefresh
+			let needsRefresh = this.doesSplMapNeedRefresh
 
 			const result: { [key: string]: number } = {}
 

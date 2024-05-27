@@ -1,7 +1,6 @@
 import { PublicKey } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
-import SolPriceManager from "../../../classes/sol-price-manager"
-import { getWalletBalanceSol } from "../../../utils/solana/get-wallet-balance"
+import { getWalletBalanceWithUSD } from "../../../utils/solana/get-wallet-balance"
 
 export async function confirmUserHasEnoughSolToPurchasePrimaryTokens(
 	req: Request,
@@ -12,13 +11,11 @@ export async function confirmUserHasEnoughSolToPurchasePrimaryTokens(
 		const { solanaWallet, splDetails } = req
 		const purchaseSplTokensData = req.body.purchaseSplTokensData as PurchasePrimarySPLTokensData
 		const publicKey = new PublicKey(solanaWallet.public_key)
-		const balanceInSol = await getWalletBalanceSol(publicKey)
+		const walletBalance = await getWalletBalanceWithUSD(publicKey)
 
-		const solPriceInUSD = (await SolPriceManager.getInstance().getPrice()).price
-		const balanceInUsd = balanceInSol * solPriceInUSD
 		const totalPurchasePriceInUsd = splDetails.listingSharePriceUsd * purchaseSplTokensData.numberOfTokensPurchasing
 
-		if (balanceInUsd < totalPurchasePriceInUsd) {
+		if (walletBalance.balanceInUsd < totalPurchasePriceInUsd) {
 			return res.status(400).json({ message: "User does not have enough Sol to complete the purchase" })
 		}
 
@@ -38,13 +35,11 @@ export async function confirmUserHasEnoughSolToBidForSecondaryTokens(
 		const { solanaWallet } = req
 		const createSplBid = req.body.createSplBid as CreateSplBidData
 		const publicKey = new PublicKey(solanaWallet.public_key)
-		const balanceInSol = await getWalletBalanceSol(publicKey)
+		const walletBalance = await getWalletBalanceWithUSD(publicKey)
 
-		const solPriceInUSD = (await SolPriceManager.getInstance().getPrice()).price
-		const balanceInUsd = balanceInSol * solPriceInUSD
 		const totalPurchasePriceInUsd = createSplBid.bidPricePerShareUsd * createSplBid.numberOfSharesBiddingFor
 
-		if (balanceInUsd < totalPurchasePriceInUsd) {
+		if (walletBalance.balanceInUsd < totalPurchasePriceInUsd) {
 			return res.status(400).json({ message: "User does not have enough Sol to create the bid" })
 		}
 

@@ -5,10 +5,10 @@ import SolPriceManager from "../../../classes/sol-price-manager"
 import transferSolFunction from "../../../utils/exchange/transfer-sol-function"
 import { getWalletBalanceWithUSD } from "../../../utils/solana/get-wallet-balance"
 import createAskOrderDataToReturn from "../../../utils/exchange/create-ask-order-data-to-return"
-import retrieveSplOwnershipByWalletIdAndSplId
-	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-id"
 import { updateSplTransferRecordWithTransactionId }
 	from "../../../db-operations/write/spl/spl-transfer/update-spl-transfer-record-with-transaction-id"
+import retrieveSplOwnershipByWalletIdAndSplPublicKey
+	from "../../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-public-key"
 import addSecondaryMarketAsk from "../../../db-operations/write/secondary-market/ask/add-secondary-market-ask"
 import updateBidStatusOnWalletBalanceChange from "../../../utils/exchange/update-bid-status-on-wallet-balance-change"
 import addSecondaryMarketTransaction from "../../../db-operations/write/secondary-market/add-secondary-market-transaction"
@@ -38,7 +38,7 @@ export default async function placeSplAsk(req: Request, res: Response): Promise<
 
 		let numberOfRemainingSharesToSell = createSplAskData.numberOfSharesAskingFor
 		const transactionsMap: TransactionsMap[] = []
-		const askerOwnershipData = await retrieveSplOwnershipByWalletIdAndSplId(
+		const askerOwnershipData = await retrieveSplOwnershipByWalletIdAndSplPublicKey(
 			solanaWallet.solana_wallet_id,
 			splDetails.publicKeyAddress
 		)
