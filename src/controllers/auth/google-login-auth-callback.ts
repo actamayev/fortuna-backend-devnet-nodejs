@@ -26,13 +26,14 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 
 		const encryptor = new Encryptor()
 		const encryptedEmail = await encryptor.deterministicEncrypt(payload.email, "EMAIL_ENCRYPTION_KEY")
-		let googleUserId = await retrieveUserByEmail(encryptedEmail)
+		let userId = await retrieveUserByEmail(encryptedEmail)
 		let accessToken: string
 		let isNewUser = false
 		let publicKey
-		if (!_.isNull(googleUserId)) {
-			accessToken = await signJWT({ userId: googleUserId, newUser: false })
-			const solanaWallet = await findSolanaWalletByUserId(googleUserId)
+
+		if (!_.isNull(userId)) {
+			accessToken = await signJWT({ userId, newUser: false })
+			const solanaWallet = await findSolanaWalletByUserId(userId)
 			if (_.isNull(solanaWallet)) return res.status(400).json({ message: "Unable to find user's Solana wallet" })
 			publicKey = solanaWallet.public_key
 		} else {
@@ -40,13 +41,13 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 			const encryptedSecretKey = await encryptor.nonDeterministicEncrypt(bs58.encode(
 				Buffer.from(walletKeypair.secretKey)
 			), "SECRET_KEY_ENCRYPTION_KEY")
-			googleUserId = await addGoogleUserWithWallet(encryptedEmail, walletKeypair.publicKey, encryptedSecretKey)
-			accessToken = await signJWT({ userId: googleUserId, newUser: true })
+			userId = await addGoogleUserWithWallet(encryptedEmail, walletKeypair.publicKey, encryptedSecretKey)
+			accessToken = await signJWT({ userId: userId, newUser: true })
 			isNewUser = true
 			publicKey = walletKeypair.publicKey.toString()
 		}
 
-		await addLoginHistoryRecord(googleUserId)
+		await addLoginHistoryRecord(userId)
 
 		return res.status(200).json({ accessToken, isNewUser, publicKey })
 	} catch (error) {
