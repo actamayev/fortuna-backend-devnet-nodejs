@@ -4,7 +4,7 @@ export default class SolPriceManager {
 	private static instance: SolPriceManager | null = null
 	private lastPrice: number | null = null
 	private lastFetchedTime: Date | null = null
-	private readonly fetchInterval: number = 30000
+	private readonly fetchInterval: number = 30000 // 30000 miliseconds: 30 seconds
 
 	private constructor() {
 	}

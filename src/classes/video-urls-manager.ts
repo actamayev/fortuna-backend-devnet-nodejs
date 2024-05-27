@@ -13,7 +13,7 @@ export default class VideoUrlsManager {
 	private videoUrlsMap: Map<string, VideoUrlData> = new Map()
 	private secretsManagerInstance: SecretsManager
 	private s3: S3Client
-	private readonly expirySeconds: number = 7200 // 2 hours
+	private readonly expirySeconds: number = 7200 // 7200 seconds: 2 hours
 	private readonly region: string = "us-east-1"
 
 	private constructor() {
