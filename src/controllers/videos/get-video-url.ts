@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { Request, Response } from "express"
-import AwsS3 from "../../classes/aws-s3"
+import VideoUrlsManager from "../../classes/video-urls-manager"
 import checkIfUserAllowedToAccessContent from "../../utils/exclusive-content/check-if-user-allowed-to-access-content"
 import retrieveSplDataForExclusiveContent from "../../db-operations/read/uploaded-video/retrieve-spl-data-for-exclusive-content"
 
@@ -14,11 +14,11 @@ export default async function getVideoUrl(req: Request, res: Response): Promise<
 
 		let videoUrl
 		if (videoData.is_spl_exclusive === false) {
-			videoUrl = await AwsS3.getInstance().getSignedVideoUrl(videoUUID)
+			videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoUUID)
 		} else if (!_.isUndefined(solanaWallet)) {
 			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(solanaWallet.solana_wallet_id, videoData)
 			if (isUserAbleToAccessVideo === true) {
-				videoUrl = await AwsS3.getInstance().getSignedVideoUrl(videoUUID)
+				videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoUUID)
 			}
 		}
 

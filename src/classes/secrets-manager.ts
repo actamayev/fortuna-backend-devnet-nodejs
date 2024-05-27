@@ -6,6 +6,7 @@ export default class SecretsManager {
 	private static instance: SecretsManager | null = null
 	private secrets: Map<SecretKeys, string> = new Map()
 	private secretsManager?: SecretsManagerClient
+	private readonly region: string = "us-east-1"
 
 	private constructor() {
 		if (process.env.NODE_ENV !== "production") {
@@ -18,7 +19,7 @@ export default class SecretsManager {
 				secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 			},
 
-			region: "us-east-1"
+			region: this.region
 		})
 	}
 
