@@ -6,7 +6,6 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 	recipientSolanaWalletId: number,
 	senderSolanaWalletId: number,
 	isSplPurchase: boolean,
-	isSecondaryMarketTransaction: boolean,
 	numberSplSharesTransferred: number,
 	transferPricePerShareUsd: number,
 	splOwnershipIdToDecrementFrom: number
@@ -22,7 +21,6 @@ export default async function addSplTransferRecordAndUpdateOwnership(
 					recipient_solana_wallet_id: recipientSolanaWalletId,
 					sender_solana_wallet_id: senderSolanaWalletId,
 					is_spl_purchase: isSplPurchase,
-					is_secondary_market_transaction: isSecondaryMarketTransaction,
 					number_spl_shares_transferred: numberSplSharesTransferred,
 				}
 			})

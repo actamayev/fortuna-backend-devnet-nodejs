@@ -1,5 +1,6 @@
 import _ from "lodash"
 import { Request, Response } from "express"
+import AwsS3 from "../../classes/aws-s3"
 import SolPriceManager from "../../classes/sol-price-manager"
 import transferSolFunction from "../../utils/exchange/transfer-sol-function"
 import checkIfNewSplPurchaseAllowsAccessToExclusiveContent
@@ -7,8 +8,6 @@ import checkIfNewSplPurchaseAllowsAccessToExclusiveContent
 import addSplPurchaseRecord from "../../db-operations/write/spl/spl-purchase/add-spl-purchase-record"
 import retrieveCreatorWalletInfoFromSpl from "../../db-operations/read/spl/retrieve-creator-wallet-info-from-spl"
 import transferSplTokensToUser from "../../utils/exchange/purchase-primary-spl-tokens/transfer-spl-tokens-to-user"
-import updateBidStatusOnWalletBalanceChange from "../../utils/exchange/update-bid-status-on-wallet-balance-change"
-import AwsS3 from "../../classes/aws-s3"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function primarySplTokenPurchase(req: Request, res: Response): Promise<Response> {
@@ -48,8 +47,6 @@ export default async function primarySplTokenPurchase(req: Request, res: Respons
 
 		// 3) Record to spl_purchase table:
 		await addSplPurchaseRecord(splDetails.splId, splTransferId, solTransferId)
-
-		await updateBidStatusOnWalletBalanceChange(solanaWallet)
 
 		let videoUrl
 		const doesUserNeedVideoUrl = await checkIfNewSplPurchaseAllowsAccessToExclusiveContent(
