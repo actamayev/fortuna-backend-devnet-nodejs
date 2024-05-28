@@ -3,6 +3,7 @@ import AwsS3 from "../../classes/aws-s3"
 import { createS3Key } from "../../utils/s3/create-s3-key"
 import addSPLRecord from "../../db-operations/write/spl/add-spl-record"
 import createSPLToken from "../../utils/solana/create-and-mint-spl/create-spl-token"
+import updateSplListingStatus from "../../db-operations/write/spl/update-spl-listing-status"
 import assignSPLTokenShares from "../../utils/solana/create-and-mint-spl/assign-spl-token-shares"
 
 export default async function createAndMintSPL (req: Request, res: Response): Promise<Response> {
@@ -32,6 +33,8 @@ export default async function createAndMintSPL (req: Request, res: Response): Pr
 			newSPLId,
 			creatorSolanaWallet.solana_wallet_id
 		)
+
+		await updateSplListingStatus(newSPLId, "LISTED")
 
 		return res.status(200).json({ newSPLId, mintAddress: createSPLResponse.mint })
 	} catch (error) {
