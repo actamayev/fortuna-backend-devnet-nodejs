@@ -27,7 +27,7 @@ export default async function transformHomePageVideoData(
 				isSplExclusive: item.is_spl_exclusive,
 				valueNeededToAccessExclusiveContentUsd: item.value_needed_to_access_exclusive_content_usd,
 				isContentInstantlyAccessible: item.is_content_instantly_accessible,
-				listingPriceToAccessContentUsd: item.instant_access_price_to_exclusive_content_usd,
+				instantAccessPriceToExclusiveContentUsd: item.instant_access_price_to_exclusive_content_usd,
 				allowValueFromSameCreatorTokensForExclusiveContent: item.allow_value_from_same_creator_tokens_for_exclusive_content
 			}
 		})
