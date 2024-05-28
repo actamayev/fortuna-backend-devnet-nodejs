@@ -4,7 +4,7 @@ import primarySplTokenPurchase from "../controllers/exchange/primary-spl-token-p
 import purchaseExclusiveContentAccess from "../controllers/exchange/purchase-exclusive-content-access"
 
 import attachExclusiveVideoData from "../middleware/attach/attach-exclusive-video-data"
-import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
+import jwtVerifyAttachSolanaWallet from "../middleware/jwt/jwt-verify-attach-solana-wallet"
 import confirmUserHasEnoughSolToPurchasePrimaryTokens
 	from "../middleware/confirmations/exchange/confirm-user-has-enough-sol-to-purchase-tokens"
 import confirmEnoughSharesInEscrowToCompletePurchase
@@ -26,9 +26,9 @@ const exchangeRoutes = express.Router()
 exchangeRoutes.post(
 	"/primary-spl-token-purchase",
 	validatePurchaseSplTokens,
+	jwtVerifyAttachSolanaWallet,
 	attachSplDetailsByPublicKeyForPrimarySplPurchase,
 	confirmEnoughSharesInEscrowToCompletePurchase,
-	attachSolanaWalletByUserId,
 	confirmCreatorNotBuyingOwnShares,
 	confirmUserHasEnoughSolToPurchasePrimaryTokens,
 	primarySplTokenPurchase
@@ -37,8 +37,8 @@ exchangeRoutes.post(
 exchangeRoutes.post(
 	"/purchase-exclusive-content-access/:videoUUID",
 	validateVideoUUIDInParams,
+	jwtVerifyAttachSolanaWallet,
 	attachExclusiveVideoData,
-	attachSolanaWalletByUserId,
 	confirmUserDoesntAlreadyHaveExclusiveAccess,
 	confirmUserHasEnoughSolToPurchaseExclusiveAccess,
 	purchaseExclusiveContentAccess

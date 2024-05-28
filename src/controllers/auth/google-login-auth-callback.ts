@@ -42,7 +42,7 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 				Buffer.from(walletKeypair.secretKey)
 			), "SECRET_KEY_ENCRYPTION_KEY")
 			userId = await addGoogleUserWithWallet(encryptedEmail, walletKeypair.publicKey, encryptedSecretKey)
-			accessToken = await signJWT({ userId: userId, newUser: true })
+			accessToken = await signJWT({ userId, newUser: true })
 			isNewUser = true
 			publicKey = walletKeypair.publicKey.toString()
 		}

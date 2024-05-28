@@ -9,8 +9,10 @@ import getTransactionDetails from "../controllers/solana/get-transaction-details
 import getSolanaWalletBalance from "../controllers/solana/get-solana-wallet-balance"
 import getNumberOfTokensInTokenAccount from "../controllers/solana/get-number-of-tokens-in-token-account"
 
-import jwtVerify from "../middleware/jwt/jwt-verify"
+import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import confirmUserIsCreator from "../middleware/confirmations/confirm-user-is-creator"
+import validatePublicKey from "../middleware/request-validation/search/validate-public-key"
+import jwtVerifyAttachSolanaWallet from "../middleware/jwt/jwt-verify-attach-solana-wallet"
 import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
 import confirmPublicKeyExists from "../middleware/confirmations/solana/confirm-public-key-exists"
 import validateCreateAndMintSPL from "../middleware/request-validation/solana/validate-create-and-mint-spl"
@@ -25,7 +27,7 @@ const solanaRoutes = express.Router()
 
 solanaRoutes.post(
 	"/create-and-mint-spl",
-	jwtVerify,
+	jwtVerifyAttachUser,
 	confirmUserIsCreator,
 	validateCreateAndMintSPL,
 	attachSolanaWalletByUserId,
@@ -34,7 +36,7 @@ solanaRoutes.post(
 
 solanaRoutes.post(
 	"/transfer-sol-to-username",
-	jwtVerify,
+	jwtVerifyAttachUser,
 	validateTransferSolToUsername,
 	confirmPublicKeyExists,
 	attachSolanaWalletByUserId,
@@ -45,7 +47,7 @@ solanaRoutes.post(
 
 solanaRoutes.post(
 	"/transfer-sol-to-public-key",
-	jwtVerify,
+	jwtVerifyAttachUser,
 	validateTransferSolToPublicKey,
 	checkIfPublicKeyPartOfFortuna,
 	confirmPublicKeyExists,
@@ -58,32 +60,20 @@ solanaRoutes.post(
 solanaRoutes.get("/get-sol-price", getSolPrice)
 
 // Internal use
-solanaRoutes.get("/get-token-counts-in-wallet/:publicKey", jwtVerify, getNumberOfTokensInTokenAccount)
-solanaRoutes.post(
-	"/get-transaction-fees",
-	jwtVerify,
-	validateTransactionSignatures,
-	getTransactionFees
-)
+solanaRoutes.get("/get-token-counts-in-wallet/:publicKey", validatePublicKey, getNumberOfTokensInTokenAccount)
+solanaRoutes.post("/get-transaction-fees", validateTransactionSignatures, getTransactionFees)
 
-solanaRoutes.post(
-	"/get-transaction-details",
-	jwtVerify,
-	validateTransactionSignatures,
-	getTransactionDetails
-)
+solanaRoutes.post("/get-transaction-details", validateTransactionSignatures, getTransactionDetails)
 
 solanaRoutes.get(
 	"/get-wallet-balance",
-	jwtVerify,
-	attachSolanaWalletByUserId,
+	jwtVerifyAttachSolanaWallet,
 	getSolanaWalletBalance
 )
 
 solanaRoutes.post(
 	"/request-airdrop",
-	jwtVerify,
-	attachSolanaWalletByUserId,
+	jwtVerifyAttachSolanaWallet,
 	requestSolanaAirdrop
 )
 

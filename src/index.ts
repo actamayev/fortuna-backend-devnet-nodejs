@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser"
 
 import checkHealth from "./controllers/health-checks/check-health"
 
-import jwtVerify from "./middleware/jwt/jwt-verify"
+import jwtVerifyAttachUser from "./middleware/jwt/jwt-verify-attach-user"
 
 import searchRoutes from "./routes/search-routes"
 import solanaRoutes from "./routes/solana-routes"
@@ -48,14 +48,14 @@ app.use(cookieParser())
 app.use(express.json())
 
 app.use("/auth", authRoutes)
-app.use("/exchange", jwtVerify, exchangeRoutes)
-app.use("/personal-info", jwtVerify, personalInfoRoutes)
-app.use("/positions-and-transactions", jwtVerify, positionsAndTransactionsRoutes)
+app.use("/exchange", exchangeRoutes)
+app.use("/personal-info", jwtVerifyAttachUser, personalInfoRoutes)
+app.use("/positions-and-transactions", positionsAndTransactionsRoutes)
 app.use("/search", searchRoutes)
 app.use("/solana", solanaRoutes)
-app.use("/upload", jwtVerify, uploadRoutes)
+app.use("/upload", jwtVerifyAttachUser, uploadRoutes)
 app.use("/videos", videosRoutes)
-app.use("/youtube", jwtVerify, youtubeRoutes)
+app.use("/youtube", jwtVerifyAttachUser, youtubeRoutes)
 
 // Internal use:
 app.use("/encryption", encryptionRoutes)
