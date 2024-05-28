@@ -20,6 +20,7 @@ export default function transformVideoAndImageData(
 		creatorProfilePictureUrl: videoData.spl.spl_creator_wallet.user.profile_picture?.image_url || null,
 		isSplExclusive: videoData.spl.is_spl_exclusive,
 		valueNeededToAccessExclusiveContentUsd:  videoData.spl.value_needed_to_access_exclusive_content_usd,
+		isContentInstantlyAccessible: videoData.spl.is_content_instantly_accessible,
 		listingPriceToAccessContentUsd: videoData.spl.listing_price_to_access_exclusive_content_usd,
 		allowValueFromSameCreatorTokensForExclusiveContent: videoData.spl.allow_value_from_same_creator_tokens_for_exclusive_content
 

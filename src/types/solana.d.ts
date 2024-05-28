@@ -19,6 +19,7 @@ declare global {
 		originalContentUrl: string
 		isContentExclusive: boolean
 		valueNeededToAccessExclusiveContentUsd?: number
+		isContentInstantlyAccessible?: boolean
 		listingPriceToAccessExclusiveContentUsd?: number
 		allowValueFromSameCreatorTokensForExclusiveContent?: boolean
 	}
@@ -103,6 +104,7 @@ declare global {
 		creator_wallet_id: number
 		is_spl_exclusive: boolean
 		value_needed_to_access_exclusive_content_usd: number | null
+		is_content_instantly_accessible: boolean | null
 		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 	}
 
@@ -132,6 +134,7 @@ declare global {
 		creator_wallet_id: number
 		is_spl_exclusive: boolean
 		value_needed_to_access_exclusive_content_usd: number | null
+		is_content_instantly_accessible: boolean | null
 		listing_price_to_access_exclusive_content_usd: number | null
 		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 		uploaded_image: {
@@ -152,6 +155,7 @@ declare global {
 		uuid: string
 		isSplExclusive: boolean
 		valueNeededToAccessExclusiveContentUsd: number | null
+		isContentInstantlyAccessible: boolean | null
 		listingPriceToAccessContentUsd: number | null
 		allowValueFromSameCreatorTokensForExclusiveContent: boolean | null
 	}

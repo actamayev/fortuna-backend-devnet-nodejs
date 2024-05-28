@@ -42,6 +42,7 @@ export default async function transformVideosByCreatorUsername(
 				creatorProfilePictureUrl: input.profile_picture?.image_url || null,
 				isSplExclusive: wallet.is_spl_exclusive,
 				valueNeededToAccessExclusiveContentUsd:  wallet.value_needed_to_access_exclusive_content_usd,
+				isContentInstantlyAccessible: wallet.is_content_instantly_accessible,
 				listingPriceToAccessContentUsd: wallet.listing_price_to_access_exclusive_content_usd,
 				allowValueFromSameCreatorTokensForExclusiveContent: wallet.allow_value_from_same_creator_tokens_for_exclusive_content
 
