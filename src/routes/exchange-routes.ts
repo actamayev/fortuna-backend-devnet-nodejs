@@ -28,8 +28,8 @@ exchangeRoutes.post(
 	validatePurchaseSplTokens,
 	jwtVerifyAttachSolanaWallet,
 	attachSplDetailsByPublicKeyForPrimarySplPurchase,
-	confirmEnoughSharesInEscrowToCompletePurchase,
 	confirmCreatorNotBuyingOwnShares,
+	confirmEnoughSharesInEscrowToCompletePurchase,
 	confirmUserHasEnoughSolToPurchasePrimaryTokens,
 	primarySplTokenPurchase
 )

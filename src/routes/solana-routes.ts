@@ -50,9 +50,9 @@ solanaRoutes.post(
 solanaRoutes.post(
 	"/transfer-sol-to-public-key",
 	validateTransferSolToPublicKey,
+	confirmPublicKeyExists,
 	jwtVerifyAttachUser,
 	checkIfPublicKeyPartOfFortuna,
-	confirmPublicKeyExists,
 	attachSolanaWalletByUserId,
 	confirmNotSendingSolToSelf,
 	confirmUserHasEnoughSolToTransfer,

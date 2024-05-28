@@ -18,18 +18,21 @@ searchRoutes.get(
 	jwtVerifyAttachUser,
 	searchForUsername
 )
+
 searchRoutes.get(
 	"/check-if-public-key-exists-with-fortuna/:publicKey",
 	validatePublicKey,
 	jwtVerifyAttachUser,
 	checkIfPublicKeyExistsWithFortuna
 )
+
 searchRoutes.get(
 	"/check-if-public-key-exists-on-solana/:publicKey",
 	validatePublicKey,
 	jwtVerifyAttachUser,
 	checkIfPublicKeyExistsOnSolana
 )
+
 searchRoutes.get("/general-search/:searchTerm", validateSearchTerm, generalSearch)
 
 export default searchRoutes
