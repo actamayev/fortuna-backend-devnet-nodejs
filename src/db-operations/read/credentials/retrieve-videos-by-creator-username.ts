@@ -34,7 +34,7 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 								value_needed_to_access_exclusive_content_usd: true,
 								is_content_instantly_accessible: true,
 								allow_value_from_same_creator_tokens_for_exclusive_content: true,
-								listing_price_to_access_exclusive_content_usd: true,
+								instant_access_price_to_exclusive_content_usd: true,
 								uploaded_image: {
 									select: {
 										image_url: true

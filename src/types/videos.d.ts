@@ -18,7 +18,7 @@ declare global {
 			spl_id: number
 			value_needed_to_access_exclusive_content_usd: number | null
 			is_content_instantly_accessible: boolean | null
-			listing_price_to_access_exclusive_content_usd: number | null
+			instant_access_price_to_exclusive_content_usd: number | null
 			allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 			uploaded_image: {
 				image_url: string
@@ -47,7 +47,7 @@ declare global {
 		spl_id: number
 		value_needed_to_access_exclusive_content_usd: number | null
 		is_content_instantly_accessible: boolean | null
-		listing_price_to_access_exclusive_content_usd: number | null
+		instant_access_price_to_exclusive_content_usd: number | null
 		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 		uploaded_image: {
 			image_url: string
@@ -82,7 +82,7 @@ declare global {
 				value_needed_to_access_exclusive_content_usd: number | null
 				is_content_instantly_accessible: boolean | null
 				allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
-				listing_price_to_access_exclusive_content_usd: number | null
+				instant_access_price_to_exclusive_content_usd: number | null
 				uploaded_image: {
 					image_url: string
 				}
@@ -111,7 +111,7 @@ declare global {
 		value_needed_to_access_exclusive_content_usd: number
 		is_content_instantly_accessible: boolean | null
 		allow_value_from_same_creator_tokens_for_exclusive_content: boolean
-		listing_price_to_access_exclusive_content_usd: number
+		instant_access_price_to_exclusive_content_usd: number
 	}
 
 	interface VideoDataSendingToFrontendLessVideoUrl {

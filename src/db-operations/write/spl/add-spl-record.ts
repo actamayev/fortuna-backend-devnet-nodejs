@@ -44,7 +44,7 @@ export default async function addSPLRecord (
 				is_spl_exclusive: newSPLData.isContentExclusive,
 				value_needed_to_access_exclusive_content_usd: newSPLData.valueNeededToAccessExclusiveContentUsd,
 				is_content_instantly_accessible: newSPLData.isContentInstantlyAccessible,
-				listing_price_to_access_exclusive_content_usd: newSPLData.listingPriceToAccessExclusiveContentUsd,
+				instant_access_price_to_exclusive_content_usd: newSPLData.instantAccessPriceToExclusiveContentUsd,
 				allow_value_from_same_creator_tokens_for_exclusive_content: newSPLData.allowValueFromSameCreatorTokensForExclusiveContent,
 
 				spl_listing_status: "LISTED",

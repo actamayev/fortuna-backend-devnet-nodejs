@@ -20,7 +20,7 @@ declare global {
 		isContentExclusive: boolean
 		valueNeededToAccessExclusiveContentUsd?: number
 		isContentInstantlyAccessible?: boolean
-		listingPriceToAccessExclusiveContentUsd?: number
+		instantAccessPriceToExclusiveContentUsd?: number
 		allowValueFromSameCreatorTokensForExclusiveContent?: boolean
 	}
 
@@ -135,7 +135,7 @@ declare global {
 		is_spl_exclusive: boolean
 		value_needed_to_access_exclusive_content_usd: number | null
 		is_content_instantly_accessible: boolean | null
-		listing_price_to_access_exclusive_content_usd: number | null
+		instant_access_price_to_exclusive_content_usd: number | null
 		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 		uploaded_image: {
 			uuid: string

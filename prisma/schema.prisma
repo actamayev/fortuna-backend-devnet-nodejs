@@ -126,7 +126,7 @@ model spl {
 	is_spl_exclusive											Boolean
 	value_needed_to_access_exclusive_content_usd				Float?
 	is_content_instantly_accessible								Boolean?
-	listing_price_to_access_exclusive_content_usd				Float?
+	instant_access_price_to_exclusive_content_usd				Float?
 	allow_value_from_same_creator_tokens_for_exclusive_content 	Boolean?
 
 	spl_listing_status 											SPLListingStatus

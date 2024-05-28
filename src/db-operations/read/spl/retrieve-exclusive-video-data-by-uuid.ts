@@ -17,7 +17,7 @@ export default async function retrieveExclusiveVideoDataByUUID(videoUUID: string
 				allow_value_from_same_creator_tokens_for_exclusive_content: {
 					not: null
 				},
-				listing_price_to_access_exclusive_content_usd: {
+				instant_access_price_to_exclusive_content_usd: {
 					not: null
 				}, is_content_instantly_accessible: {
 					not: null
@@ -28,7 +28,7 @@ export default async function retrieveExclusiveVideoDataByUUID(videoUUID: string
 				is_spl_exclusive: true,
 				value_needed_to_access_exclusive_content_usd: true,
 				is_content_instantly_accessible: true,
-				listing_price_to_access_exclusive_content_usd: true,
+				instant_access_price_to_exclusive_content_usd: true,
 				allow_value_from_same_creator_tokens_for_exclusive_content: true,
 				public_key_address: true,
 				listing_price_per_share_usd: true,
@@ -51,7 +51,7 @@ export default async function retrieveExclusiveVideoDataByUUID(videoUUID: string
 			is_content_instantly_accessible: exclusiveVideoData.is_content_instantly_accessible as boolean,
 			// eslint-disable-next-line max-len
 			allow_value_from_same_creator_tokens_for_exclusive_content: exclusiveVideoData.allow_value_from_same_creator_tokens_for_exclusive_content as boolean,
-			listing_price_to_access_exclusive_content_usd: exclusiveVideoData.listing_price_to_access_exclusive_content_usd as number,
+			instant_access_price_to_exclusive_content_usd: exclusiveVideoData.instant_access_price_to_exclusive_content_usd as number,
 			public_key_address: exclusiveVideoData.public_key_address,
 			listing_price_per_share_usd: exclusiveVideoData.listing_price_per_share_usd,
 			creator_wallet_id: exclusiveVideoData.creator_wallet_id
