@@ -16,11 +16,6 @@ export default async function retrieveExclusiveVideoDataByUUID(videoUUID: string
 				},
 				allow_value_from_same_creator_tokens_for_exclusive_content: {
 					not: null
-				},
-				instant_access_price_to_exclusive_content_usd: {
-					not: null
-				}, is_content_instantly_accessible: {
-					not: null
 				}
 			},
 			select: {
