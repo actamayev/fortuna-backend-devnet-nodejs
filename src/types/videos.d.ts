@@ -137,6 +137,7 @@ declare global {
 		isContentInstantlyAccessible: boolean | null
 		priceToInstantlyAccessExclusiveContentUsd: number | null
 		allowValueFromSameCreatorTokensForExclusiveContent: boolean | null
+		isUserAbleToAccessVideo: boolean
 	}
 
 	interface VideoDataSendingToFrontendWithVideoUrl extends VideoDataSendingToFrontendLessVideoUrl {

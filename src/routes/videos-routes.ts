@@ -11,7 +11,7 @@ import optionalJwtVerifyWithWalletAttachment from "../middleware/jwt/optional-jw
 
 const videosRoutes = express.Router()
 
-videosRoutes.get("/get-home-page-videos", getHomePageVideos)
+videosRoutes.get("/get-home-page-videos", optionalJwtVerifyWithWalletAttachment, getHomePageVideos)
 
 videosRoutes.get(
 	"/get-video/:videoUUID",
@@ -20,7 +20,12 @@ videosRoutes.get(
 	getVideoByUUID
 )
 
-videosRoutes.get("/get-creator-videos/:creatorUsername", validateCreatorUsername, getVideosByCreatorUsername)
+videosRoutes.get(
+	"/get-creator-videos/:creatorUsername",
+	validateCreatorUsername,
+	optionalJwtVerifyWithWalletAttachment,
+	getVideosByCreatorUsername
+)
 
 videosRoutes.get(
 	"/get-video-url/:videoUUID",
