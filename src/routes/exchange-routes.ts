@@ -17,6 +17,8 @@ import confirmUserDoesntAlreadyHaveExclusiveAccess
 import confirmUserHasEnoughSolToPurchaseExclusiveAccess
 	from "../middleware/confirmations/exchange/instant-exclusive-access/confirm-user-has-enough-sol-to-purchase-exclusive-access"
 import confirmCreatorNotBuyingOwnShares from "../middleware/confirmations/exchange/primary/confirm-creator-not-buying-own-shares"
+import confirmCreatorNotBuyingInstantAccessToOwnExclusiveContent
+	from "../middleware/confirmations/exchange/instant-exclusive-access/confirm-creator-not-buying-instant-access-to-own-exclusive-content"
 
 const exchangeRoutes = express.Router()
 
@@ -39,6 +41,7 @@ exchangeRoutes.post(
 	validateVideoUUIDInParams,
 	jwtVerifyAttachSolanaWallet,
 	attachExclusiveVideoData,
+	confirmCreatorNotBuyingInstantAccessToOwnExclusiveContent,
 	confirmUserDoesntAlreadyHaveExclusiveAccess,
 	confirmUserHasEnoughSolToPurchaseExclusiveAccess,
 	purchaseExclusiveContentAccess
