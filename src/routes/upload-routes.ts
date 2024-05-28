@@ -25,8 +25,8 @@ uploadRoutes.post(
 
 uploadRoutes.post(
 	"/upload-image-to-s3",
-	validateUploadImageToS3,
 	upload.single("file"),
+	validateUploadImageToS3,
 	validateImageType,
 	jwtVerifyAttachUser,
 	confirmUserIsCreator,
