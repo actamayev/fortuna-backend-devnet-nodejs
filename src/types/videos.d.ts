@@ -17,7 +17,8 @@ declare global {
 			creator_wallet_id: number
 			spl_id: number
 			value_needed_to_access_exclusive_content_usd: number | null
-			listing_price_to_access_exclusive_content_usd: number | null
+			is_content_instantly_accessible: boolean | null
+			instant_access_price_to_exclusive_content_usd: number | null
 			allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 			uploaded_image: {
 				image_url: string
@@ -45,7 +46,8 @@ declare global {
 		creator_wallet_id: number
 		spl_id: number
 		value_needed_to_access_exclusive_content_usd: number | null
-		listing_price_to_access_exclusive_content_usd: number | null
+		is_content_instantly_accessible: boolean | null
+		instant_access_price_to_exclusive_content_usd: number | null
 		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 		uploaded_image: {
 			image_url: string
@@ -78,8 +80,9 @@ declare global {
 				creator_wallet_id: number
 				spl_id: number
 				value_needed_to_access_exclusive_content_usd: number | null
+				is_content_instantly_accessible: boolean | null
 				allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
-				listing_price_to_access_exclusive_content_usd: number | null
+				instant_access_price_to_exclusive_content_usd: number | null
 				uploaded_image: {
 					image_url: string
 				}
@@ -107,7 +110,12 @@ declare global {
 		uuid: string
 		value_needed_to_access_exclusive_content_usd: number
 		allow_value_from_same_creator_tokens_for_exclusive_content: boolean
-		listing_price_to_access_exclusive_content_usd: number
+		instant_access_price_to_exclusive_content_usd: number | null
+	}
+
+	interface InstantAccessExclusiveVideoData extends ExclusiveVideoData {
+		is_content_instantly_accessible: boolean
+		instant_access_price_to_exclusive_content_usd: number
 	}
 
 	interface VideoDataSendingToFrontendLessVideoUrl {
@@ -126,7 +134,8 @@ declare global {
 		creatorProfilePictureUrl: string | null
 		isSplExclusive: boolean
 		valueNeededToAccessExclusiveContentUsd: number | null
-		listingPriceToAccessContentUsd: number | null
+		isContentInstantlyAccessible: boolean | null
+		priceToInstantlyAccessExclusiveContentUsd: number | null
 		allowValueFromSameCreatorTokensForExclusiveContent: boolean | null
 	}
 

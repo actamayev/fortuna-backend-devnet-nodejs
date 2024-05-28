@@ -1,7 +1,7 @@
 -- AlterTable
 ALTER TABLE "spl" ADD COLUMN     "allow_value_from_same_creator_tokens_for_exclusive_content" BOOLEAN,
 ADD COLUMN     "is_spl_exclusive" BOOLEAN NOT NULL DEFAULT false,
-ADD COLUMN     "listing_price_to_access_exclusive_content_usd" DOUBLE PRECISION,
+ADD COLUMN     "instant_access_price_to_exclusive_content_usd" DOUBLE PRECISION,
 ADD COLUMN     "value_needed_to_access_exclusive_content_usd" DOUBLE PRECISION;
 
 -- CreateTable

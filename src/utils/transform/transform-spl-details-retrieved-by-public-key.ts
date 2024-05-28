@@ -14,7 +14,8 @@ export default function transformSplDetailsRetrievedByPublicKey(
 			uuid: splData.uploaded_image.uuid,
 			isSplExclusive: splData.is_spl_exclusive,
 			valueNeededToAccessExclusiveContentUsd: splData.value_needed_to_access_exclusive_content_usd,
-			listingPriceToAccessContentUsd: splData.listing_price_to_access_exclusive_content_usd,
+			isContentInstantlyAccessible: splData.is_content_instantly_accessible,
+			priceToInstantlyAccessExclusiveContentUsd: splData.instant_access_price_to_exclusive_content_usd,
 			allowValueFromSameCreatorTokensForExclusiveContent: splData.allow_value_from_same_creator_tokens_for_exclusive_content
 		}
 	} catch (error) {

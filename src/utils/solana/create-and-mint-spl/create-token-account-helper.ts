@@ -1,4 +1,4 @@
-import { createAssociatedTokenAccount } from "@solana/spl-token"
+import { createAssociatedTokenAccount, } from "@solana/spl-token"
 import { Connection, Keypair, PublicKey, clusterApiUrl } from "@solana/web3.js"
 import { getWalletBalanceWithUSD } from "../get-wallet-balance"
 import addTokenAccountRecord from "../../../db-operations/write/token-account/add-token-account-record"
@@ -22,6 +22,8 @@ export default async function createTokenAccountHelper(
 		)
 
 		const secondWalletBalance = await getWalletBalanceWithUSD(fortunaFeePayerWallet.publicKey)
+
+		// TODO: Utilize getMinimumBalanceForRentExemptAccount
 
 		const fortunaTokenAccountDB = await addTokenAccountRecord(
 			splId,

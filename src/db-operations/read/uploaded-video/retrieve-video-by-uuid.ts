@@ -7,7 +7,12 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Ho
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const retrievedVideo = await prismaClient.uploaded_video.findFirst({
 			where: {
-				uuid: videoUUID
+				uuid: videoUUID,
+				spl: {
+					spl_listing_status: {
+						notIn: ["PRELISTING", "REMOVED"]
+					}
+				}
 			},
 			select: {
 				created_at: true,
@@ -25,7 +30,8 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Ho
 						spl_id: true,
 						is_spl_exclusive: true,
 						value_needed_to_access_exclusive_content_usd: true,
-						listing_price_to_access_exclusive_content_usd: true,
+						is_content_instantly_accessible: true,
+						instant_access_price_to_exclusive_content_usd: true,
 						allow_value_from_same_creator_tokens_for_exclusive_content: true,
 						uploaded_image: {
 							select: {
