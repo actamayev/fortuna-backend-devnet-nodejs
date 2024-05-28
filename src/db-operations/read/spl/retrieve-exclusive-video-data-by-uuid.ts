@@ -43,10 +43,10 @@ export default async function retrieveExclusiveVideoDataByUUID(videoUUID: string
 			spl_id: exclusiveVideoData.spl_id,
 			is_spl_exclusive: exclusiveVideoData.is_spl_exclusive,
 			value_needed_to_access_exclusive_content_usd: exclusiveVideoData.value_needed_to_access_exclusive_content_usd as number,
-			is_content_instantly_accessible: exclusiveVideoData.is_content_instantly_accessible as boolean,
+			is_content_instantly_accessible: exclusiveVideoData.is_content_instantly_accessible,
 			// eslint-disable-next-line max-len
 			allow_value_from_same_creator_tokens_for_exclusive_content: exclusiveVideoData.allow_value_from_same_creator_tokens_for_exclusive_content as boolean,
-			instant_access_price_to_exclusive_content_usd: exclusiveVideoData.instant_access_price_to_exclusive_content_usd as number,
+			instant_access_price_to_exclusive_content_usd: exclusiveVideoData.instant_access_price_to_exclusive_content_usd,
 			public_key_address: exclusiveVideoData.public_key_address,
 			listing_price_per_share_usd: exclusiveVideoData.listing_price_per_share_usd,
 			creator_wallet_id: exclusiveVideoData.creator_wallet_id
