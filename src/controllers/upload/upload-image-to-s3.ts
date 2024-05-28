@@ -9,7 +9,7 @@ export default async function uploadImageToS3 (req: Request, res: Response): Pro
 		if (_.isUndefined(req.file)) return res.status(400).json({ message: "No image uploaded" })
 
 		const { buffer, originalname } = req.file
-		const uuid = req.body.uuid
+		const { uuid } = req.body
 
 		const uploadImageToS3Key = createS3Key("uploaded-images", uuid)
 		const imageUploadUrl = await AwsS3.getInstance().uploadImage(buffer, uploadImageToS3Key)

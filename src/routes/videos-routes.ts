@@ -19,6 +19,7 @@ videosRoutes.get(
 	optionalJwtVerifyWithWalletAttachment,
 	getVideoByUUID
 )
+
 videosRoutes.get("/get-creator-videos/:creatorUsername", validateCreatorUsername, getVideosByCreatorUsername)
 
 videosRoutes.get(

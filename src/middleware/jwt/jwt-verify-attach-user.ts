@@ -8,7 +8,7 @@ const authorizationSchema = Joi.object({
 	authorization: Joi.string().required()
 }).unknown(true)
 
-export default async function jwtVerify(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+export default async function jwtVerifyAttachUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {
 		const { error } = authorizationSchema.validate(req.headers)
 
