@@ -49,11 +49,11 @@ app.use(express.json())
 
 app.use("/auth", authRoutes)
 app.use("/exchange", exchangeRoutes)
-app.use("/personal-info", jwtVerifyAttachUser, personalInfoRoutes)
+app.use("/personal-info", personalInfoRoutes)
 app.use("/positions-and-transactions", positionsAndTransactionsRoutes)
 app.use("/search", searchRoutes)
 app.use("/solana", solanaRoutes)
-app.use("/upload", jwtVerifyAttachUser, uploadRoutes)
+app.use("/upload", uploadRoutes)
 app.use("/videos", videosRoutes)
 app.use("/youtube", jwtVerifyAttachUser, youtubeRoutes)
 

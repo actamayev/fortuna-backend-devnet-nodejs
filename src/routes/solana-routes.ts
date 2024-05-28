@@ -17,6 +17,7 @@ import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-walle
 import confirmPublicKeyExists from "../middleware/confirmations/solana/confirm-public-key-exists"
 import validateCreateAndMintSPL from "../middleware/request-validation/solana/validate-create-and-mint-spl"
 import confirmNotSendingSolToSelf from "../middleware/confirmations/solana/confirm-not-sending-sol-to-self"
+import attachPublicKeyByTransferToUsername from "../middleware/attach/attach-public-key-by-transfer-to-username"
 import validateTransactionSignatures from "../middleware/request-validation/solana/validate-transaction-signatures"
 import validateTransferSolToUsername from "../middleware/request-validation/solana/validate-transfer-sol-to-username"
 import checkIfPublicKeyPartOfFortuna from "../middleware/request-validation/solana/check-if-public-key-part-of-fortuna"
@@ -27,17 +28,18 @@ const solanaRoutes = express.Router()
 
 solanaRoutes.post(
 	"/create-and-mint-spl",
+	validateCreateAndMintSPL,
 	jwtVerifyAttachUser,
 	confirmUserIsCreator,
-	validateCreateAndMintSPL,
 	attachSolanaWalletByUserId,
 	createAndMintSPL
 )
 
 solanaRoutes.post(
 	"/transfer-sol-to-username",
-	jwtVerifyAttachUser,
 	validateTransferSolToUsername,
+	jwtVerifyAttachUser,
+	attachPublicKeyByTransferToUsername,
 	confirmPublicKeyExists,
 	attachSolanaWalletByUserId,
 	confirmNotSendingSolToSelf,
@@ -47,8 +49,8 @@ solanaRoutes.post(
 
 solanaRoutes.post(
 	"/transfer-sol-to-public-key",
-	jwtVerifyAttachUser,
 	validateTransferSolToPublicKey,
+	jwtVerifyAttachUser,
 	checkIfPublicKeyPartOfFortuna,
 	confirmPublicKeyExists,
 	attachSolanaWalletByUserId,

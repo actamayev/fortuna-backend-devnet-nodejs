@@ -1,6 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export async function findPublicKeyAndSolWalletFromUsername(
+export default async function findPublicKeyAndSolWalletFromUsername(
 	username: string
 ): Promise<{ solana_wallet_id: number, public_key: string } | null | undefined> {
 	try {

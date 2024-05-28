@@ -18,7 +18,7 @@ authRoutes.post("/login", validateLogin, login)
 authRoutes.post("/logout", logout)
 authRoutes.post("/register", validateRegister, register)
 
-authRoutes.post("/set-username", jwtVerifyAttachUser, validateRegisterUsername, registerUsername)
+authRoutes.post("/set-username", validateRegisterUsername, jwtVerifyAttachUser, registerUsername)
 
 authRoutes.use("/google-auth", googleAuthRoutes)
 

@@ -6,10 +6,6 @@ import attachYouTubeAccessToken from "../middleware/attach/attach-youtube-access
 
 const youtubeRoutes = express.Router()
 
-youtubeRoutes.get(
-	"/retrieve-user-youtube-info",
-	attachYouTubeAccessToken,
-	retrieveUserYouTubeInfo
-)
+youtubeRoutes.get("/retrieve-user-youtube-info", attachYouTubeAccessToken, retrieveUserYouTubeInfo)
 
 export default youtubeRoutes
