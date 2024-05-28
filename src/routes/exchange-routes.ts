@@ -4,7 +4,7 @@ import primarySplTokenPurchase from "../controllers/exchange/primary-spl-token-p
 import purchaseExclusiveContentAccess from "../controllers/exchange/purchase-exclusive-content-access"
 
 import attachExclusiveVideoData from "../middleware/attach/attach-exclusive-video-data"
-import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
+import jwtVerifyAttachSolanaWallet from "../middleware/jwt/jwt-verify-attach-solana-wallet"
 import confirmUserHasEnoughSolToPurchasePrimaryTokens
 	from "../middleware/confirmations/exchange/confirm-user-has-enough-sol-to-purchase-tokens"
 import confirmEnoughSharesInEscrowToCompletePurchase
@@ -17,6 +17,8 @@ import confirmUserDoesntAlreadyHaveExclusiveAccess
 import confirmUserHasEnoughSolToPurchaseExclusiveAccess
 	from "../middleware/confirmations/exchange/instant-exclusive-access/confirm-user-has-enough-sol-to-purchase-exclusive-access"
 import confirmCreatorNotBuyingOwnShares from "../middleware/confirmations/exchange/primary/confirm-creator-not-buying-own-shares"
+import confirmCreatorNotBuyingInstantAccessToOwnExclusiveContent
+	from "../middleware/confirmations/exchange/instant-exclusive-access/confirm-creator-not-buying-instant-access-to-own-exclusive-content"
 
 const exchangeRoutes = express.Router()
 
@@ -26,10 +28,10 @@ const exchangeRoutes = express.Router()
 exchangeRoutes.post(
 	"/primary-spl-token-purchase",
 	validatePurchaseSplTokens,
+	jwtVerifyAttachSolanaWallet,
 	attachSplDetailsByPublicKeyForPrimarySplPurchase,
-	confirmEnoughSharesInEscrowToCompletePurchase,
-	attachSolanaWalletByUserId,
 	confirmCreatorNotBuyingOwnShares,
+	confirmEnoughSharesInEscrowToCompletePurchase,
 	confirmUserHasEnoughSolToPurchasePrimaryTokens,
 	primarySplTokenPurchase
 )
@@ -37,8 +39,9 @@ exchangeRoutes.post(
 exchangeRoutes.post(
 	"/purchase-exclusive-content-access/:videoUUID",
 	validateVideoUUIDInParams,
+	jwtVerifyAttachSolanaWallet,
 	attachExclusiveVideoData,
-	attachSolanaWalletByUserId,
+	confirmCreatorNotBuyingInstantAccessToOwnExclusiveContent,
 	confirmUserDoesntAlreadyHaveExclusiveAccess,
 	confirmUserHasEnoughSolToPurchaseExclusiveAccess,
 	purchaseExclusiveContentAccess

@@ -6,7 +6,8 @@ import SecretsManager from "../../classes/secrets-manager"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
 import createSolanaWallet from "../../utils/solana/create-solana-wallet"
 import createGoogleAuthClient from "../../utils/google/create-google-auth-client"
-import retrieveUserByEmail from "../../db-operations/read/credentials/retrieve-user-by-email"
+import { findSolanaWalletByUserId } from "../../db-operations/read/find/find-solana-wallet"
+import retrieveUserByEmail from "../../db-operations/read/credentials/retrieve-user-id-by-email"
 import addLoginHistoryRecord from "../../db-operations/write/login-history/add-login-history-record"
 import addGoogleUserWithWallet from "../../db-operations/write/simultaneous-writes/add-google-user-with-wallet"
 
@@ -25,24 +26,30 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 
 		const encryptor = new Encryptor()
 		const encryptedEmail = await encryptor.deterministicEncrypt(payload.email, "EMAIL_ENCRYPTION_KEY")
-		let googleUserId = await retrieveUserByEmail(encryptedEmail)
+		let userId = await retrieveUserByEmail(encryptedEmail)
 		let accessToken: string
 		let isNewUser = false
-		if (!_.isNull(googleUserId)) {
-			accessToken = await signJWT({ userId: googleUserId, newUser: false })
+		let publicKey
+
+		if (!_.isNull(userId)) {
+			accessToken = await signJWT({ userId, newUser: false })
+			const solanaWallet = await findSolanaWalletByUserId(userId)
+			if (_.isNull(solanaWallet)) return res.status(400).json({ message: "Unable to find user's Solana wallet" })
+			publicKey = solanaWallet.public_key
 		} else {
 			const walletKeypair = await createSolanaWallet()
 			const encryptedSecretKey = await encryptor.nonDeterministicEncrypt(bs58.encode(
 				Buffer.from(walletKeypair.secretKey)
 			), "SECRET_KEY_ENCRYPTION_KEY")
-			googleUserId = await addGoogleUserWithWallet(encryptedEmail, walletKeypair.publicKey, encryptedSecretKey)
-			accessToken = await signJWT({ userId: googleUserId, newUser: true })
+			userId = await addGoogleUserWithWallet(encryptedEmail, walletKeypair.publicKey, encryptedSecretKey)
+			accessToken = await signJWT({ userId, newUser: true })
 			isNewUser = true
+			publicKey = walletKeypair.publicKey.toString()
 		}
 
-		await addLoginHistoryRecord(googleUserId)
+		await addLoginHistoryRecord(userId)
 
-		return res.status(200).json({ accessToken, isNewUser })
+		return res.status(200).json({ accessToken, isNewUser, publicKey })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Login with Google" })

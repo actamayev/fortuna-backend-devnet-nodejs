@@ -5,6 +5,7 @@ import uploadImageToS3 from "../controllers/upload/upload-image-to-s3"
 import uploadVideoToS3 from "../controllers/upload/upload-video-to-s3"
 import uploadProfilePictureImage from "../controllers/upload/upload-profile-picture"
 
+import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import confirmUserIsCreator from "../middleware/confirmations/confirm-user-is-creator"
 import validateVideoType from "../middleware/request-validation/upload/validate-video-type"
 import validateImageType from "../middleware/request-validation/upload/validate-image-type"
@@ -15,18 +16,20 @@ const upload = multer()
 
 uploadRoutes.post(
 	"/upload-video-to-s3",
-	confirmUserIsCreator,
 	upload.single("file"),
 	validateVideoType,
+	jwtVerifyAttachUser,
+	confirmUserIsCreator,
 	uploadVideoToS3
 )
 
 uploadRoutes.post(
 	"/upload-image-to-s3",
-	confirmUserIsCreator,
 	upload.single("file"),
-	validateImageType,
 	validateUploadImageToS3,
+	validateImageType,
+	jwtVerifyAttachUser,
+	confirmUserIsCreator,
 	uploadImageToS3
 )
 
@@ -34,6 +37,7 @@ uploadRoutes.post(
 	"/upload-profile-picture",
 	upload.single("file"),
 	validateImageType,
+	jwtVerifyAttachUser,
 	uploadProfilePictureImage
 )
 

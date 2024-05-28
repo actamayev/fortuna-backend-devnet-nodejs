@@ -9,12 +9,15 @@ import getTransactionDetails from "../controllers/solana/get-transaction-details
 import getSolanaWalletBalance from "../controllers/solana/get-solana-wallet-balance"
 import getNumberOfTokensInTokenAccount from "../controllers/solana/get-number-of-tokens-in-token-account"
 
-import jwtVerify from "../middleware/jwt/jwt-verify"
+import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import confirmUserIsCreator from "../middleware/confirmations/confirm-user-is-creator"
+import validatePublicKey from "../middleware/request-validation/search/validate-public-key"
+import jwtVerifyAttachSolanaWallet from "../middleware/jwt/jwt-verify-attach-solana-wallet"
 import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
 import confirmPublicKeyExists from "../middleware/confirmations/solana/confirm-public-key-exists"
 import validateCreateAndMintSPL from "../middleware/request-validation/solana/validate-create-and-mint-spl"
 import confirmNotSendingSolToSelf from "../middleware/confirmations/solana/confirm-not-sending-sol-to-self"
+import attachPublicKeyByTransferToUsername from "../middleware/attach/attach-public-key-by-transfer-to-username"
 import validateTransactionSignatures from "../middleware/request-validation/solana/validate-transaction-signatures"
 import validateTransferSolToUsername from "../middleware/request-validation/solana/validate-transfer-sol-to-username"
 import checkIfPublicKeyPartOfFortuna from "../middleware/request-validation/solana/check-if-public-key-part-of-fortuna"
@@ -23,33 +26,20 @@ import confirmUserHasEnoughSolToTransfer from "../middleware/confirmations/solan
 
 const solanaRoutes = express.Router()
 
-solanaRoutes.get(
-	"/get-wallet-balance",
-	jwtVerify,
-	attachSolanaWalletByUserId,
-	getSolanaWalletBalance
-)
-
-solanaRoutes.post(
-	"/request-airdrop",
-	jwtVerify,
-	attachSolanaWalletByUserId,
-	requestSolanaAirdrop
-)
-
 solanaRoutes.post(
 	"/create-and-mint-spl",
-	jwtVerify,
-	confirmUserIsCreator,
 	validateCreateAndMintSPL,
+	jwtVerifyAttachUser,
+	confirmUserIsCreator,
 	attachSolanaWalletByUserId,
 	createAndMintSPL
 )
 
 solanaRoutes.post(
 	"/transfer-sol-to-username",
-	jwtVerify,
 	validateTransferSolToUsername,
+	jwtVerifyAttachUser,
+	attachPublicKeyByTransferToUsername,
 	confirmPublicKeyExists,
 	attachSolanaWalletByUserId,
 	confirmNotSendingSolToSelf,
@@ -59,10 +49,10 @@ solanaRoutes.post(
 
 solanaRoutes.post(
 	"/transfer-sol-to-public-key",
-	jwtVerify,
 	validateTransferSolToPublicKey,
-	checkIfPublicKeyPartOfFortuna,
 	confirmPublicKeyExists,
+	jwtVerifyAttachUser,
+	checkIfPublicKeyPartOfFortuna,
 	attachSolanaWalletByUserId,
 	confirmNotSendingSolToSelf,
 	confirmUserHasEnoughSolToTransfer,
@@ -72,19 +62,21 @@ solanaRoutes.post(
 solanaRoutes.get("/get-sol-price", getSolPrice)
 
 // Internal use
-solanaRoutes.get("/get-token-counts-in-wallet/:publicKey", jwtVerify, getNumberOfTokensInTokenAccount)
-solanaRoutes.post(
-	"/get-transaction-fees",
-	jwtVerify,
-	validateTransactionSignatures,
-	getTransactionFees
+solanaRoutes.get("/get-token-counts-in-wallet/:publicKey", validatePublicKey, getNumberOfTokensInTokenAccount)
+solanaRoutes.post("/get-transaction-fees", validateTransactionSignatures, getTransactionFees)
+
+solanaRoutes.post("/get-transaction-details", validateTransactionSignatures, getTransactionDetails)
+
+solanaRoutes.get(
+	"/get-wallet-balance",
+	jwtVerifyAttachSolanaWallet,
+	getSolanaWalletBalance
 )
 
 solanaRoutes.post(
-	"/get-transaction-details",
-	jwtVerify,
-	validateTransactionSignatures,
-	getTransactionDetails
+	"/request-airdrop",
+	jwtVerifyAttachSolanaWallet,
+	requestSolanaAirdrop
 )
 
 export default solanaRoutes
