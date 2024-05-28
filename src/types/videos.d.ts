@@ -135,7 +135,7 @@ declare global {
 		isSplExclusive: boolean
 		valueNeededToAccessExclusiveContentUsd: number | null
 		isContentInstantlyAccessible: boolean | null
-		instantAccessPriceToExclusiveContentUsd: number | null
+		priceToInstantlyAccessExclusiveContentUsd: number | null
 		allowValueFromSameCreatorTokensForExclusiveContent: boolean | null
 	}
 

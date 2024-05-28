@@ -43,7 +43,7 @@ export default async function transformVideosByCreatorUsername(
 				isSplExclusive: wallet.is_spl_exclusive,
 				valueNeededToAccessExclusiveContentUsd:  wallet.value_needed_to_access_exclusive_content_usd,
 				isContentInstantlyAccessible: wallet.is_content_instantly_accessible,
-				instantAccessPriceToExclusiveContentUsd: wallet.instant_access_price_to_exclusive_content_usd,
+				priceToInstantlyAccessExclusiveContentUsd: wallet.instant_access_price_to_exclusive_content_usd,
 				allowValueFromSameCreatorTokensForExclusiveContent: wallet.allow_value_from_same_creator_tokens_for_exclusive_content
 
 			}

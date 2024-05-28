@@ -21,7 +21,7 @@ export default function transformVideoAndImageData(
 		isSplExclusive: videoData.spl.is_spl_exclusive,
 		valueNeededToAccessExclusiveContentUsd:  videoData.spl.value_needed_to_access_exclusive_content_usd,
 		isContentInstantlyAccessible: videoData.spl.is_content_instantly_accessible,
-		instantAccessPriceToExclusiveContentUsd: videoData.spl.instant_access_price_to_exclusive_content_usd,
+		priceToInstantlyAccessExclusiveContentUsd: videoData.spl.instant_access_price_to_exclusive_content_usd,
 		allowValueFromSameCreatorTokensForExclusiveContent: videoData.spl.allow_value_from_same_creator_tokens_for_exclusive_content
 
 	}

@@ -18,7 +18,7 @@ const createAndMintSPLSchema = Joi.object({
 		isContentExclusive: Joi.boolean().required(),
 		valueNeededToAccessExclusiveContentUsd: Joi.number().optional(),
 		isContentInstantlyAccessible: Joi.boolean().optional(),
-		instantAccessPriceToExclusiveContentUsd: Joi.number().optional(),
+		priceToInstantlyAccessExclusiveContentUsd: Joi.number().optional(),
 		allowValueFromSameCreatorTokensForExclusiveContent: Joi.boolean().optional(),
 	}).required()
 }).required()
