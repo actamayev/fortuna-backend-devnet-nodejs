@@ -16,8 +16,8 @@ export default async function purchaseExclusiveContentAccess(req: Request, res: 
 		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
 
 		const transferCurrencyAmounts = {
-			usdPriceToTransferAt: exclusiveVideoData.listing_price_to_access_exclusive_content_usd,
-			solPriceToTransferAt: exclusiveVideoData.listing_price_to_access_exclusive_content_usd / solPrice
+			usdPriceToTransferAt: exclusiveVideoData.instant_access_price_to_exclusive_content_usd,
+			solPriceToTransferAt: exclusiveVideoData.instant_access_price_to_exclusive_content_usd / solPrice
 		}
 
 		const solTransferId = await transferSolFunction(

@@ -8,7 +8,8 @@ declare global {
 			recipientPublicKey: PublicKey
 
 			splDetails: SplByPublicKeyData
-			exclusiveVideoData: ExclusiveVideoData
+			exclusiveVideoData: InstantAccessExclusiveVideoData
+
 			isRecipientFortunaWallet: boolean
 			recipientSolanaWalletId: number | undefined
 

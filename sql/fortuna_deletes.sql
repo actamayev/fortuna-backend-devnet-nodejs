@@ -4,6 +4,7 @@
 -- delete from spl_purchase;
 -- delete from spl_transfer;
 -- delete from token_account;
+-- delete from exclusive_spl_purchase;
 -- delete from spl;
 
 

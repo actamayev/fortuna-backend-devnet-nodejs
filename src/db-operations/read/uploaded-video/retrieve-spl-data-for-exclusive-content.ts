@@ -16,6 +16,7 @@ export default async function retrieveSplDataForExclusiveContent(
 						spl_id: true,
 						is_spl_exclusive: true,
 						value_needed_to_access_exclusive_content_usd: true,
+						is_content_instantly_accessible: true,
 						public_key_address: true,
 						listing_price_per_share_usd: true,
 						creator_wallet_id: true,

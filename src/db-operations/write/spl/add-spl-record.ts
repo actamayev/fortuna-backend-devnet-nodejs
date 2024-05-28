@@ -43,10 +43,11 @@ export default async function addSPLRecord (
 
 				is_spl_exclusive: newSPLData.isContentExclusive,
 				value_needed_to_access_exclusive_content_usd: newSPLData.valueNeededToAccessExclusiveContentUsd,
-				listing_price_to_access_exclusive_content_usd: newSPLData.listingPriceToAccessExclusiveContentUsd,
+				is_content_instantly_accessible: newSPLData.isContentInstantlyAccessible,
+				instant_access_price_to_exclusive_content_usd: newSPLData.priceToInstantlyAccessExclusiveContentUsd,
 				allow_value_from_same_creator_tokens_for_exclusive_content: newSPLData.allowValueFromSameCreatorTokensForExclusiveContent,
 
-				spl_listing_status: "LISTED",
+				spl_listing_status: "PRELISTING",
 				description: newSPLData.description,
 				original_content_url: newSPLData.originalContentUrl
 			}

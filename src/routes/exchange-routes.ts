@@ -37,7 +37,7 @@ exchangeRoutes.post(
 )
 
 exchangeRoutes.post(
-	"/purchase-exclusive-content-access/:videoUUID",
+	"/purchase-instant-exclusive-content-access/:videoUUID",
 	validateVideoUUIDInParams,
 	jwtVerifyAttachSolanaWallet,
 	attachExclusiveVideoData,
