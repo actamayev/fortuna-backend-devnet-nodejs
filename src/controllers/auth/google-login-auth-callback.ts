@@ -7,7 +7,7 @@ import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
 import createSolanaWallet from "../../utils/solana/create-solana-wallet"
 import createGoogleAuthClient from "../../utils/google/create-google-auth-client"
 import { findSolanaWalletByUserId } from "../../db-operations/read/find/find-solana-wallet"
-import retrieveUserByEmail from "../../db-operations/read/credentials/retrieve-user-by-email"
+import retrieveUserByEmail from "../../db-operations/read/credentials/retrieve-user-id-by-email"
 import addLoginHistoryRecord from "../../db-operations/write/login-history/add-login-history-record"
 import addGoogleUserWithWallet from "../../db-operations/write/simultaneous-writes/add-google-user-with-wallet"
 
