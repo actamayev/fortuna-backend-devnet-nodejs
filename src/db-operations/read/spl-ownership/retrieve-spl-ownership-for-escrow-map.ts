@@ -6,7 +6,7 @@ export default async function retrieveSplOwnershipForEscrowMap(solanaWalletId: n
 		const splOwnerships = await prismaClient.spl_ownership.findMany({
 			where: {
 				solana_wallet_id: solanaWalletId,
-				spl:{
+				spl: {
 					spl_listing_status: {
 						notIn: ["PRELISTING"]
 					}
