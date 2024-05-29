@@ -1,13 +1,10 @@
-import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function checkIfUserMadeExclusiveSplPurchases(
 	splIds: number[],
-	solanaWalletId?: number
+	solanaWalletId: number
 ): Promise<Record<number, boolean>> {
 	try {
-		if (_.isUndefined(solanaWalletId)) return {}
-
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const exclusiveSplPurchases = await prismaClient.exclusive_spl_purchase.findMany({
 			where: {
