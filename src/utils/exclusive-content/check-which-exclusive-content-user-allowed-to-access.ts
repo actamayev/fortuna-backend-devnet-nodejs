@@ -65,8 +65,8 @@ export default async function checkWhichExclusiveContentUserAllowedToAccess(
 				const numberSharesNeededToAccessExclusiveContent =
 					(retrievedSpl.value_needed_to_access_exclusive_content_usd as number) / retrievedSpl.listing_price_per_share_usd
 
-				const userOwnership = splOwnershipsByWalletIdAndSplIds[retrievedSpl.spl_id] || 0
-				accessRecord[retrievedSpl.spl_id] = userOwnership >= numberSharesNeededToAccessExclusiveContent
+				const numberSharesUserOwns = splOwnershipsByWalletIdAndSplIds[retrievedSpl.spl_id] || 0
+				accessRecord[retrievedSpl.spl_id] = numberSharesUserOwns >= numberSharesNeededToAccessExclusiveContent
 			}
 		}
 
