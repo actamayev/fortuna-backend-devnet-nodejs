@@ -5,12 +5,6 @@ import retrieveSplOwnershipByWalletIdAndSplPublicKey
 	from "../../db-operations/read/spl-ownership/retrieve-spl-ownership-by-wallet-id-and-spl-public-key"
 import checkIfUserMadeExclusiveSplPurchase from "../../db-operations/read/exclusive-spl-purchase/check-if-user-made-exclusive-spl-purchase"
 
-// TODO: Check all the places this function is being called.
-// For the places that it's being called in a loop, create a different function.
-// Pass in an array of retrieved Spls, and perform each of the db operations only once.
-// For example, for checkIfUserMadeExclusiveSplPurchase, fetch all of the user's exclusive spl purchases in one query,
-// and then sort out if any of the items in the retrievedSpl array fit.
-// do the same thing for retrieveSplOwnershipByWalletIdAndSplPublicKey and retrieveSplOwnershipByWalletIdAndCreatorId
 export default async function checkIfUserAllowedToAccessContent(
 	retrievedSpl: SplDataNeededToCheckForExclusiveContentAccess,
 	userSolanaWalletId: number | undefined
