@@ -25,6 +25,6 @@ export default async function optionalJwtVerifyWithWalletAttachment(
 		next()
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Unable to verify user" })
+		return res.status(500).json({ error: "Unable to verify user and attach wallet" })
 	}
 }

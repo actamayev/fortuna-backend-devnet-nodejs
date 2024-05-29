@@ -6,12 +6,14 @@ import retrieveCreatorsByUsername from "../../db-operations/read/credentials/ret
 
 export default async function generalSearch(req: Request, res: Response): Promise<Response> {
 	try {
+		const solanaWallet = req.solanaWallet as ExtendedSolanaWallet | undefined
+
 		const searchTerm = req.params.searchTerm as string
 
 		const videos = await retrieveVideosByTitle(searchTerm)
 		const creators = await retrieveCreatorsByUsername(searchTerm)
 		const transformedCreatorData = transformCreatorSearchData(creators)
-		const transformedVideoSearchData = await transformHomePageVideoData(videos)
+		const transformedVideoSearchData = await transformHomePageVideoData(videos, solanaWallet?.solana_wallet_id)
 		const searchResults: SearchData[] = [
 			...transformedCreatorData,
 			...transformedVideoSearchData

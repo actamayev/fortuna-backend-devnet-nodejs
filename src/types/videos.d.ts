@@ -111,6 +111,7 @@ declare global {
 		value_needed_to_access_exclusive_content_usd: number
 		allow_value_from_same_creator_tokens_for_exclusive_content: boolean
 		instant_access_price_to_exclusive_content_usd: number | null
+		is_content_instantly_accessible: boolean | null
 	}
 
 	interface InstantAccessExclusiveVideoData extends ExclusiveVideoData {
@@ -137,6 +138,7 @@ declare global {
 		isContentInstantlyAccessible: boolean | null
 		priceToInstantlyAccessExclusiveContentUsd: number | null
 		allowValueFromSameCreatorTokensForExclusiveContent: boolean | null
+		isUserAbleToAccessVideo: boolean
 	}
 
 	interface VideoDataSendingToFrontendWithVideoUrl extends VideoDataSendingToFrontendLessVideoUrl {

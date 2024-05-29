@@ -25,7 +25,7 @@ export default async function getVideoByUUID (req: Request, res: Response): Prom
 			const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoData.uuid)
 			videoData.videoUrl = videoUrl
 		} else if (!_.isUndefined(solanaWallet)) {
-			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(solanaWallet.solana_wallet_id, videoData.spl)
+			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(videoData.spl, solanaWallet.solana_wallet_id)
 			if (isUserAbleToAccessVideo === true) {
 				const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoData.uuid)
 				videoData.videoUrl = videoUrl

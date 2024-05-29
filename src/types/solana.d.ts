@@ -104,7 +104,6 @@ declare global {
 		creator_wallet_id: number
 		is_spl_exclusive: boolean
 		value_needed_to_access_exclusive_content_usd: number | null
-		is_content_instantly_accessible: boolean | null
 		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
 	}
 

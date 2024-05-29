@@ -16,7 +16,7 @@ export default async function getVideoUrl(req: Request, res: Response): Promise<
 		if (videoData.is_spl_exclusive === false) {
 			videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoUUID)
 		} else if (!_.isUndefined(solanaWallet)) {
-			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(solanaWallet.solana_wallet_id, videoData)
+			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(videoData, solanaWallet.solana_wallet_id)
 			if (isUserAbleToAccessVideo === true) {
 				videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoUUID)
 			}

@@ -6,21 +6,24 @@ import retrieveSplOwnershipByWalletIdAndSplPublicKey
 import checkIfUserMadeExclusiveSplPurchase from "../../db-operations/read/exclusive-spl-purchase/check-if-user-made-exclusive-spl-purchase"
 
 export default async function checkIfUserAllowedToAccessContent(
-	userSolanaWalletId: number,
-	retrievedSpl: SplDataNeededToCheckForExclusiveContentAccess
+	retrievedSpl: SplDataNeededToCheckForExclusiveContentAccess,
+	userSolanaWalletId: number | undefined
 ): Promise<boolean> {
 	try {
 		if (retrievedSpl.is_spl_exclusive === false) return true
 		if (userSolanaWalletId === retrievedSpl.creator_wallet_id) return true
-		const didUserPurchaseSplAccess = await checkIfUserMadeExclusiveSplPurchase(userSolanaWalletId, retrievedSpl.spl_id)
-		if (didUserPurchaseSplAccess === true) return true
 
-		if (_.isNull(retrievedSpl.value_needed_to_access_exclusive_content_usd)) return false
+		if (
+			_.isNull(retrievedSpl.value_needed_to_access_exclusive_content_usd) ||
+			_.isNull(retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content) ||
+			_.isUndefined(userSolanaWalletId)
+		) return false
+
+		const didUserPurchaseSplAccess = await checkIfUserMadeExclusiveSplPurchase(retrievedSpl.spl_id, userSolanaWalletId)
+		if (didUserPurchaseSplAccess === true) return true
 
 		const numberSharesNeededToAccessExclusiveContent =
 			retrievedSpl.value_needed_to_access_exclusive_content_usd / retrievedSpl.listing_price_per_share_usd
-
-		if (_.isNull(retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content)) return false
 
 		if (retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content === false) {
 			const splOwnershipForThisSpecificSpl = await retrieveSplOwnershipByWalletIdAndSplPublicKey(

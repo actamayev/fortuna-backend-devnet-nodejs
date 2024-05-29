@@ -1,15 +1,20 @@
 import EscrowWalletManager from "../../classes/escrow-wallet-manager"
+import checkWhichExclusiveContentUserAllowedToAccess from "../exclusive-content/check-which-exclusive-content-user-allowed-to-access"
 
 export default async function transformHomePageVideoData(
-	retrievedHomePageVideos: RetrievedHomePageVideo[]
+	retrievedHomePageVideos: RetrievedHomePageVideo[],
+	solanaWalletId: number | undefined
 ): Promise<VideoDataSendingToFrontendLessVideoUrl[]> {
 	try {
 		const publicKeys = retrievedHomePageVideos.map(item => item.public_key_address)
 
 		const tokensRemaining = await EscrowWalletManager.getInstance().retrieveTokenAmountsByPublicKeys(publicKeys)
 
+		const userAllowedToAccessContent = await checkWhichExclusiveContentUserAllowedToAccess(retrievedHomePageVideos, solanaWalletId)
+
 		const results = retrievedHomePageVideos.map(item => {
 			const sharesRemainingForSale = tokensRemaining[item.public_key_address]
+			const isUserAbleToAccessVideo = userAllowedToAccessContent[item.spl_id]
 			return {
 				splName: item.spl_name,
 				splPublicKey: item.public_key_address,
@@ -28,7 +33,8 @@ export default async function transformHomePageVideoData(
 				valueNeededToAccessExclusiveContentUsd: item.value_needed_to_access_exclusive_content_usd,
 				isContentInstantlyAccessible: item.is_content_instantly_accessible,
 				priceToInstantlyAccessExclusiveContentUsd: item.instant_access_price_to_exclusive_content_usd,
-				allowValueFromSameCreatorTokensForExclusiveContent: item.allow_value_from_same_creator_tokens_for_exclusive_content
+				allowValueFromSameCreatorTokensForExclusiveContent: item.allow_value_from_same_creator_tokens_for_exclusive_content,
+				isUserAbleToAccessVideo
 			}
 		})
 

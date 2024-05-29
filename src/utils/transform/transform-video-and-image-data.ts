@@ -22,8 +22,8 @@ export default function transformVideoAndImageData(
 		valueNeededToAccessExclusiveContentUsd:  videoData.spl.value_needed_to_access_exclusive_content_usd,
 		isContentInstantlyAccessible: videoData.spl.is_content_instantly_accessible,
 		priceToInstantlyAccessExclusiveContentUsd: videoData.spl.instant_access_price_to_exclusive_content_usd,
-		allowValueFromSameCreatorTokensForExclusiveContent: videoData.spl.allow_value_from_same_creator_tokens_for_exclusive_content
-
+		allowValueFromSameCreatorTokensForExclusiveContent: videoData.spl.allow_value_from_same_creator_tokens_for_exclusive_content,
+		isUserAbleToAccessVideo: !_.isUndefined(videoData.videoUrl)
 	}
 
 	if (!_.isUndefined(videoData.videoUrl)) {
