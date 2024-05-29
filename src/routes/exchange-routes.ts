@@ -1,7 +1,7 @@
 import express from "express"
 
 import primarySplTokenPurchase from "../controllers/exchange/primary-spl-token-purchase"
-import purchaseExclusiveContentAccess from "../controllers/exchange/purchase-exclusive-content-access"
+import purchaseInstantExclusiveContentAccess from "../controllers/exchange/purchase-instant-exclusive-content-access"
 
 import attachExclusiveVideoData from "../middleware/attach/attach-exclusive-video-data"
 import jwtVerifyAttachSolanaWallet from "../middleware/jwt/jwt-verify-attach-solana-wallet"
@@ -44,7 +44,7 @@ exchangeRoutes.post(
 	confirmCreatorNotBuyingInstantAccessToOwnExclusiveContent,
 	confirmUserDoesntAlreadyHaveExclusiveAccess,
 	confirmUserHasEnoughSolToPurchaseExclusiveAccess,
-	purchaseExclusiveContentAccess
+	purchaseInstantExclusiveContentAccess
 )
 
 export default exchangeRoutes

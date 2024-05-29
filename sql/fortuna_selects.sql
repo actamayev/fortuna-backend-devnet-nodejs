@@ -10,6 +10,16 @@
 -- 	join solana_wallet on spl_ownership.solana_wallet_id = solana_wallet.solana_wallet_id
 -- 	join credentials on solana_wallet.user_id = credentials.user_id;
 
+select * from spl_ownership where spl_id = 56;
+
+-- select
+-- 	spl_id,
+-- 	uploaded_video.uuid,
+-- 	allow_value_from_same_creator_tokens_for_exclusive_content,
+-- 	value_needed_to_access_exclusive_content_usd,
+-- 	listing_price_per_share_usd
+-- 	from spl join uploaded_video on uploaded_video.uploaded_video_id = spl.uploaded_video_id;
+
 -- select * from token_account;
 -- select * from uploaded_image;
 -- select * from uploaded_video;

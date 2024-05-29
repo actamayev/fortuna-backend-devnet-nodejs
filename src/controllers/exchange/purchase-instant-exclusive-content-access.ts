@@ -6,7 +6,7 @@ import transferSolFunction from "../../utils/exchange/transfer-sol-function"
 import retrieveCreatorWalletInfoFromSpl from "../../db-operations/read/spl/retrieve-creator-wallet-info-from-spl"
 import addExclusiveSplPurchase from "../../db-operations/write/exclusive-spl-purchase/add-exclusive-spl-purchase"
 
-export default async function purchaseExclusiveContentAccess(req: Request, res: Response): Promise<Response> {
+export default async function purchaseInstantExclusiveContentAccess(req: Request, res: Response): Promise<Response> {
 	try {
 		const { solanaWallet, exclusiveVideoData } = req
 
