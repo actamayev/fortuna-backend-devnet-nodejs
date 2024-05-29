@@ -1,8 +1,8 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function retrieveSplOwnershipsByWalletIdAndSplIds(
+	solanaWalletId: number,
 	splIds: number[],
-	solanaWalletId: number
 ): Promise<Record<number, number>> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
@@ -25,8 +25,9 @@ export default async function retrieveSplOwnershipsByWalletIdAndSplIds(
 		const result: Record<number, number> = {}
 
 		splOwnerships.forEach(splOwnership => {
-			if (!result[splOwnership.spl_id]) result[splOwnership.spl_id] = 0
-			result[splOwnership.spl_id] += splOwnership.number_of_shares
+			const splId = splOwnership.spl_id
+			if (!result[splId]) result[splId] = 0
+			result[splId] += splOwnership.number_of_shares
 		})
 
 		return result

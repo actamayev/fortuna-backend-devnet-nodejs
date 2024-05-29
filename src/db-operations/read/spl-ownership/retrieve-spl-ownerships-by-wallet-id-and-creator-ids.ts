@@ -2,7 +2,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function retrieveSplOwnershipsByWalletIdAndCreatorIds(
 	solanaWalletId: number,
-	splCreatorWalletId: number[]
+	splCreatorWalletIds: number[]
 ): Promise<Record<number, number>> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
@@ -10,7 +10,7 @@ export default async function retrieveSplOwnershipsByWalletIdAndCreatorIds(
 			where: {
 				solana_wallet_id: solanaWalletId,
 				spl: {
-					creator_wallet_id: { in: splCreatorWalletId }
+					creator_wallet_id: { in: splCreatorWalletIds }
 				},
 				number_of_shares: {
 					gt: 0
@@ -20,8 +20,8 @@ export default async function retrieveSplOwnershipsByWalletIdAndCreatorIds(
 				number_of_shares: true,
 				spl: {
 					select: {
-						spl_id: true,
-						listing_price_per_share_usd: true
+						listing_price_per_share_usd: true,
+						creator_wallet_id: true
 					}
 				}
 			}
@@ -30,9 +30,9 @@ export default async function retrieveSplOwnershipsByWalletIdAndCreatorIds(
 		const result: Record<number, number> = {}
 
 		splOwnerships.forEach(splOwnership => {
-			const splId = splOwnership.spl.spl_id
-			if (!result[splId]) result[splId] = 0
-			result[splId] += splOwnership.number_of_shares * splOwnership.spl.listing_price_per_share_usd
+			const creatorWalletId = splOwnership.spl.creator_wallet_id
+			if (!result[creatorWalletId]) result[creatorWalletId] = 0
+			result[creatorWalletId] += splOwnership.number_of_shares * splOwnership.spl.listing_price_per_share_usd
 		})
 
 		return result

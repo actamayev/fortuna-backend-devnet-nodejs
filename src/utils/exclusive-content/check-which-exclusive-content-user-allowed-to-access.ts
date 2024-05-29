@@ -53,10 +53,10 @@ export default async function checkWhichExclusiveContentUserAllowedToAccess(
 			retrievedSpl => retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content === false
 		)
 
-		splIds = retrievedSpls.map(spl => spl.spl_id)
+		splIds = splsThatDontAllowForValueFromSameCreatorForExclusiveContent.map(spl => spl.spl_id)
 
 		if (!_.isEmpty(splsThatDontAllowForValueFromSameCreatorForExclusiveContent)) {
-			const splOwnershipsByWalletIdAndSplIds = await retrieveSplOwnershipsByWalletIdAndSplIds(splIds, userSolanaWalletId)
+			const splOwnershipsByWalletIdAndSplIds = await retrieveSplOwnershipsByWalletIdAndSplIds(userSolanaWalletId, splIds)
 			for (const retrievedSpl of splsThatDontAllowForValueFromSameCreatorForExclusiveContent) {
 				const numberSharesNeededToAccessExclusiveContent =
 					(retrievedSpl.value_needed_to_access_exclusive_content_usd as number) / retrievedSpl.listing_price_per_share_usd
@@ -69,15 +69,16 @@ export default async function checkWhichExclusiveContentUserAllowedToAccess(
 		const splsThatAllowForValueFromSameCreatorForExclusiveContent = retrievedSpls.filter(
 			retrievedSpl => retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content === true
 		)
-		splIds = retrievedSpls.map(spl => spl.spl_id)
+
+		const creatorIds = splsThatAllowForValueFromSameCreatorForExclusiveContent.map(spl => spl.creator_wallet_id)
 
 		if (!_.isEmpty(splsThatAllowForValueFromSameCreatorForExclusiveContent)) {
 			const splOwnershipsByWalletIdAndCreatorIds = await retrieveSplOwnershipsByWalletIdAndCreatorIds(
 				userSolanaWalletId,
-				splIds
+				creatorIds
 			)
 			for (const retrievedSpl of splsThatAllowForValueFromSameCreatorForExclusiveContent) {
-				const userOwnershipValue = splOwnershipsByWalletIdAndCreatorIds[retrievedSpl.spl_id] || 0
+				const userOwnershipValue = splOwnershipsByWalletIdAndCreatorIds[retrievedSpl.creator_wallet_id] || 0
 				accessRecord[retrievedSpl.spl_id] =
 					userOwnershipValue >= (retrievedSpl.value_needed_to_access_exclusive_content_usd as number)
 			}
