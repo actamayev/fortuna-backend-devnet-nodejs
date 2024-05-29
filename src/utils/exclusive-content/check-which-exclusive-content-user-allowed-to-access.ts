@@ -30,7 +30,7 @@ export default async function checkWhichExclusiveContentUserAllowedToAccess(
 			return accessRecord
 		}
 
-		const splIds = retrievedSpls.map(spl => spl.spl_id)
+		let splIds = retrievedSpls.map(spl => spl.spl_id)
 		const exclusiveSplData = await checkIfUserMadeExclusiveSplPurchases(splIds, userSolanaWalletId)
 
 		retrievedSpls = retrievedSpls.filter(retrievedSpl => {
@@ -53,6 +53,8 @@ export default async function checkWhichExclusiveContentUserAllowedToAccess(
 			retrievedSpl => retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content === false
 		)
 
+		splIds = retrievedSpls.map(spl => spl.spl_id)
+
 		if (!_.isEmpty(splsThatDontAllowForValueFromSameCreatorForExclusiveContent)) {
 			const splOwnershipsByWalletIdAndSplIds = await retrieveSplOwnershipsByWalletIdAndSplIds(splIds, userSolanaWalletId)
 			for (const retrievedSpl of splsThatDontAllowForValueFromSameCreatorForExclusiveContent) {
@@ -67,6 +69,7 @@ export default async function checkWhichExclusiveContentUserAllowedToAccess(
 		const splsThatAllowForValueFromSameCreatorForExclusiveContent = retrievedSpls.filter(
 			retrievedSpl => retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content === true
 		)
+		splIds = retrievedSpls.map(spl => spl.spl_id)
 
 		if (!_.isEmpty(splsThatAllowForValueFromSameCreatorForExclusiveContent)) {
 			const splOwnershipsByWalletIdAndCreatorIds = await retrieveSplOwnershipsByWalletIdAndCreatorIds(

@@ -16,18 +16,16 @@ export default async function retrieveSplOwnershipsByWalletIdAndSplIds(
 					gt: 0
 				}
 			},
-			orderBy: {
-				created_at: "asc"
-			},
 			select: {
-				number_of_shares: true,
-				spl_id: true
+				spl_id: true,
+				number_of_shares: true
 			}
 		})
 
 		const result: Record<number, number> = {}
 
 		splOwnerships.forEach(splOwnership => {
+			if (!result[splOwnership.spl_id]) result[splOwnership.spl_id] = 0
 			result[splOwnership.spl_id] += splOwnership.number_of_shares
 		})
 

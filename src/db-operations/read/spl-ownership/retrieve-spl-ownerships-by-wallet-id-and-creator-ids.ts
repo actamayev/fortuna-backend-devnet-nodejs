@@ -20,8 +20,8 @@ export default async function retrieveSplOwnershipsByWalletIdAndCreatorIds(
 				number_of_shares: true,
 				spl: {
 					select: {
-						listing_price_per_share_usd: true,
-						spl_id: true
+						spl_id: true,
+						listing_price_per_share_usd: true
 					}
 				}
 			}
@@ -30,7 +30,9 @@ export default async function retrieveSplOwnershipsByWalletIdAndCreatorIds(
 		const result: Record<number, number> = {}
 
 		splOwnerships.forEach(splOwnership => {
-			result[splOwnership.spl.spl_id] += splOwnership.number_of_shares * splOwnership.spl.listing_price_per_share_usd
+			const splId = splOwnership.spl.spl_id
+			if (!result[splId]) result[splId] = 0
+			result[splId] += splOwnership.number_of_shares * splOwnership.spl.listing_price_per_share_usd
 		})
 
 		return result
