@@ -21,15 +21,14 @@ export default async function checkIfUserAllowedToAccessContent(
 		const didUserPurchaseSplAccess = await checkIfUserMadeExclusiveSplPurchase(retrievedSpl.spl_id, userSolanaWalletId)
 		if (didUserPurchaseSplAccess === true) return true
 
-		if (_.isNull(retrievedSpl.value_needed_to_access_exclusive_content_usd)) return false
-
-		const numberSharesNeededToAccessExclusiveContent =
-			retrievedSpl.value_needed_to_access_exclusive_content_usd / retrievedSpl.listing_price_per_share_usd
-
 		if (
+			_.isNull(retrievedSpl.value_needed_to_access_exclusive_content_usd) ||
 			_.isNull(retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content) ||
 			_.isUndefined(userSolanaWalletId)
 		) return false
+
+		const numberSharesNeededToAccessExclusiveContent =
+			retrievedSpl.value_needed_to_access_exclusive_content_usd / retrievedSpl.listing_price_per_share_usd
 
 		if (retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content === false) {
 			const splOwnershipForThisSpecificSpl = await retrieveSplOwnershipByWalletIdAndSplPublicKey(
