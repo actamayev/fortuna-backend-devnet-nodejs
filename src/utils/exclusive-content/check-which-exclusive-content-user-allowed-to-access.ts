@@ -10,7 +10,7 @@ interface ExclusiveVideoAccessRecord {
 	[splId: number]: boolean
 }
 
-// eslint-disable-next-line max-lines-per-function
+// eslint-disable-next-line max-lines-per-function, complexity
 export default async function checkWhichExclusiveContentUserAllowedToAccess(
 	retrievedSpls: SplDataNeededToCheckForExclusiveContentAccess[],
 	userSolanaWalletId: number | undefined
@@ -24,6 +24,8 @@ export default async function checkWhichExclusiveContentUserAllowedToAccess(
 			}
 			return true
 		})
+
+		if (_.isEmpty(retrievedSpls)) return accessRecord
 
 		if (_.isUndefined(userSolanaWalletId)) {
 			retrievedSpls.forEach(spl => accessRecord[spl.spl_id] = false)
@@ -49,6 +51,8 @@ export default async function checkWhichExclusiveContentUserAllowedToAccess(
 			return true
 		})
 
+		if (_.isEmpty(retrievedSpls)) return accessRecord
+
 		const splsThatDontAllowForValueFromSameCreatorForExclusiveContent = retrievedSpls.filter(
 			retrievedSpl => retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content === false
 		)
@@ -65,6 +69,8 @@ export default async function checkWhichExclusiveContentUserAllowedToAccess(
 				accessRecord[retrievedSpl.spl_id] = userOwnership >= numberSharesNeededToAccessExclusiveContent
 			}
 		}
+
+		if (_.isEmpty(retrievedSpls)) return accessRecord
 
 		const splsThatAllowForValueFromSameCreatorForExclusiveContent = retrievedSpls.filter(
 			retrievedSpl => retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content === true
