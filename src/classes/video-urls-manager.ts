@@ -68,12 +68,11 @@ export default class VideoUrlsManager {
 			const privateS3Bucket = await this.secretsManagerInstance.getSecret("PRIVATE_S3_BUCKET")
 			const params = {
 				Bucket: privateS3Bucket,
-				Key: `uploaded-videos/${key}`,
-				Expires: expiryTimeSeconds
+				Key: `uploaded-videos/${key}`
 			}
 			const command = new GetObjectCommand(params)
 
-			const url = await getSignedUrl(this.s3, command)
+			const url = await getSignedUrl(this.s3, command, { expiresIn: expiryTimeSeconds })
 			return url
 		} catch (error) {
 			console.error(error)
