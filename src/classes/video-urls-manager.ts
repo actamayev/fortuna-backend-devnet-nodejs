@@ -72,7 +72,6 @@ export default class VideoUrlsManager {
 			}
 			const command = new GetObjectCommand(params)
 
-			// Ensure expiresIn is set correctly here
 			const url = await getSignedUrl(this.s3, command, { expiresIn: expiryTimeSeconds })
 			return url
 		} catch (error) {
