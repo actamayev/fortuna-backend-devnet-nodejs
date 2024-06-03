@@ -1,10 +1,12 @@
+import { SiteThemes } from "@prisma/client"
 import { PublicKey } from "@solana/web3.js"
 import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function addGoogleUserWithWallet(
 	encryptedEmail: DeterministicEncryptedString,
 	publicKey: PublicKey,
-	encryptedSecretKey: NonDeterministicEncryptedString
+	encryptedSecretKey: NonDeterministicEncryptedString,
+	siteTheme: SiteThemes = "light"
 ): Promise<number> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
@@ -13,7 +15,8 @@ export default async function addGoogleUserWithWallet(
 			const user = await prisma.credentials.create({
 				data: {
 					email__encrypted: encryptedEmail,
-					auth_method: "google"
+					auth_method: "google",
+					default_site_theme: siteTheme
 				}
 			})
 

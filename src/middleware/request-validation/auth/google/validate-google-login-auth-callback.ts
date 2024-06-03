@@ -3,7 +3,8 @@ import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 
 const googleLoginAuthCallback = Joi.object({
-	idToken: Joi.string().required()
+	idToken: Joi.string().required(),
+	siteTheme: Joi.string().required().trim().valid("light", "dark")
 }).required()
 
 export default function validateGoogleLoginAuthCallback (req: Request, res: Response, next: NextFunction): Response | void {

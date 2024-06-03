@@ -9,7 +9,8 @@ export default async function addLocalUser(
 		const userFields: NewLocalUserFields = {
 			username: registerInformation.username,
 			password: hashedPassword,
-			auth_method: "fortuna"
+			auth_method: "fortuna",
+			default_site_theme: registerInformation.siteTheme
 		}
 
 		const encryptor = new Encryptor()

@@ -1,4 +1,4 @@
-import { AuthMethods } from "@prisma/client"
+import { AuthMethods, SiteThemes } from "@prisma/client"
 
 declare global {
 	interface LoginInformation {
@@ -8,12 +8,14 @@ declare global {
 
 	interface RegisterInformation extends LoginInformation {
 		username: string
+		siteTheme: SiteThemes
 	}
 
 	interface NewLocalUserFields {
 		username: string
 		password: HashedString
 		auth_method: AuthMethods
+		default_site_theme: SiteThemes
 		email__encrypted?: DeterministicEncryptedString
 		phone_number__encrypted?: DeterministicEncryptedString
 	}

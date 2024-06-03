@@ -9,6 +9,7 @@ const registerInformationSchema = Joi.object({
 		contact: Joi.string().required(),
 		username: usernameValidator.required().trim(),
 		password: passwordValidatorSchema.required(),
+		siteTheme: Joi.string().required().trim().valid("light", "dark")
 	}).required()
 }).required()
 

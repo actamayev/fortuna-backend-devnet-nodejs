@@ -1,6 +1,7 @@
 import _ from "lodash"
 import bs58 from "bs58"
 import { Request, Response } from "express"
+import { SiteThemes } from "@prisma/client"
 import Encryptor from "../../classes/encryptor"
 import SecretsManager from "../../classes/secrets-manager"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
@@ -13,7 +14,7 @@ import addGoogleUserWithWallet from "../../db-operations/write/simultaneous-writ
 
 export default async function googleLoginAuthCallback (req: Request, res: Response): Promise<Response> {
 	try {
-		const { idToken } = req.body
+		const { idToken, siteTheme } = req.body
 		const client = await createGoogleAuthClient()
 		const googleClientId = await SecretsManager.getInstance().getSecret("GOOGLE_CLIENT_ID")
 		const ticket = await client.verifyIdToken({
@@ -41,7 +42,7 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 			const encryptedSecretKey = await encryptor.nonDeterministicEncrypt(bs58.encode(
 				Buffer.from(walletKeypair.secretKey)
 			), "SECRET_KEY_ENCRYPTION_KEY")
-			userId = await addGoogleUserWithWallet(encryptedEmail, walletKeypair.publicKey, encryptedSecretKey)
+			userId = await addGoogleUserWithWallet(encryptedEmail, walletKeypair.publicKey, encryptedSecretKey, siteTheme as SiteThemes)
 			accessToken = await signJWT({ userId, newUser: true })
 			isNewUser = true
 			publicKey = walletKeypair.publicKey.toString()
