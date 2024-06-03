@@ -6,7 +6,7 @@ export default async function addGoogleUserWithWallet(
 	encryptedEmail: DeterministicEncryptedString,
 	publicKey: PublicKey,
 	encryptedSecretKey: NonDeterministicEncryptedString,
-	siteTheme: SiteThemes = "light"
+	siteTheme: SiteThemes
 ): Promise<number> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
