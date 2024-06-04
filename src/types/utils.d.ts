@@ -11,7 +11,6 @@ declare global {
 	type S3FolderNames =
 		"uploaded-images" |
 		"uploaded-videos" |
-		"spl-metadata" |
 		"profile-pictures"
 
 	type DeterministicEncryptionKeys =
@@ -34,11 +33,7 @@ declare global {
 		"PRIVATE_S3_BUCKET" |
 		"FORTUNA_FEE_PAYER_PUBLIC_KEY" |
 		"FORTUNA_FEE_PAYER_SECRET_KEY" |
-		"FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_PUBLIC_KEY" |
-		"FORTUNA_TOKENS_WALLET_PUBLIC_KEY" |
 		"FORTUNA_FEE_PAYER_WALLET_ID_DB" |
-		"FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_ID_DB" |
-		"FORTUNA_TOKENS_WALLET_ID_DB" |
 		"GOOGLE_CLIENT_ID" |
 		"GOOGLE_CLIENT_SECRET" |
 		"MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR"

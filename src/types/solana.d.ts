@@ -8,7 +8,10 @@ declare global {
 		feeInSol: number
 	}
 
-	interface SPLDataSavedToS3 {
+	interface IncomingNewSPLData {
+		uuid: string
+		uploadedImageId: number
+		uploadedVideoId: number
 		splName: string
 		numberOfShares: number
 		creatorOwnershipPercentage: number
@@ -22,12 +25,6 @@ declare global {
 		isContentInstantlyAccessible?: boolean
 		priceToInstantlyAccessExclusiveContentUsd?: number
 		allowValueFromSameCreatorTokensForExclusiveContent?: boolean
-	}
-
-	interface IncomingNewSPLData extends SPLDataSavedToS3 {
-		uuid: string
-		uploadedImageId: number
-		uploadedVideoId: number
 	}
 
 	interface RetrievedDBSplData {

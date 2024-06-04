@@ -10,8 +10,6 @@
 -- 	join solana_wallet on spl_ownership.solana_wallet_id = solana_wallet.solana_wallet_id
 -- 	join credentials on solana_wallet.user_id = credentials.user_id;
 
-select * from spl_ownership where spl_id = 56;
-
 -- select
 -- 	spl_id,
 -- 	uploaded_video.uuid,

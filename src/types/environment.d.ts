@@ -10,14 +10,8 @@ declare namespace NodeJS {
 		FORTUNA_FEE_PAYER_PUBLIC_KEY: string
 		FORTUNA_FEE_PAYER_SECRET_KEY: string
 
-		FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_PUBLIC_KEY: string
-
-		FORTUNA_TOKENS_WALLET_PUBLIC_KEY: string
-
 		// The ID_DB fields are actually numbers, but interpreted as a string when read from .env
 		FORTUNA_FEE_PAYER_WALLET_ID_DB: string
-		FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_ID_DB: string
-		FORTUNA_TOKENS_WALLET_ID_DB: string
 
 		// Google Auth:
 		GOOGLE_CLIENT_ID: string
