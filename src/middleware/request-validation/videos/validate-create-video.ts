@@ -12,7 +12,6 @@ const createVideoSchema = Joi.object({
 		listingPriceToAccessUsd: Joi.number().strict().required(),
 		imageUrl: Joi.string().required(),
 		description: Joi.string().required(),
-		originalContentUrl: Joi.string().required().allow(""),
 		isContentExclusive: Joi.boolean().required(),
 		tierData: Joi.array().items(
 			Joi.object({

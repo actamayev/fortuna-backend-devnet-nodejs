@@ -16,11 +16,11 @@ export default async function transformHomePageVideoData(
 				description: item.description,
 				imageUrl: item.uploaded_image.image_url,
 				uuid: item.uuid,
-				originalContentUrl: item.original_content_url,
 				creatorUsername: item.video_creator_wallet.user.username,
 				creatorProfilePictureUrl: item.video_creator_wallet.user.profile_picture?.image_url || null,
 				isVideoExclusive: item.is_video_exclusive,
-				isUserAbleToAccessVideo
+				isUserAbleToAccessVideo,
+				createdAt: item.created_at
 			}
 		})
 

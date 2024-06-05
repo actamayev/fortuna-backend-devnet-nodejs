@@ -1,4 +1,4 @@
-export default function transformCreatorContentList(input: RetrievedDBVideoData[]): OutputVideoData[] {
+export default function transformCreatorContentList(input: RetrievedDBVideoData[]): OutputCreatorVideoData[] {
 	try {
 		return input.map(item => ({
 			videoId: item.video_id,

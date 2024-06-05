@@ -16,7 +16,6 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 				listing_price_to_access_usd: true,
 				video_listing_status: true,
 				description: true,
-				original_content_url: true,
 				creator_wallet_id: true,
 				is_video_exclusive: true,
 				uuid: true,

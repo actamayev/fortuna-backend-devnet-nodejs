@@ -6,7 +6,6 @@ declare global {
 		video_name: string
 		listing_price_to_access_usd: number
 		description: string
-		original_content_url: string
 		creator_wallet_id: number
 		is_video_exclusive: boolean
 		uuid: string
@@ -33,7 +32,6 @@ declare global {
 				video_name: string
 				listing_price_to_access_usd: number
 				description: string
-				original_content_url: string
 				creator_wallet_id: number
 				is_video_exclusive: boolean
 				uuid: string
@@ -65,7 +63,6 @@ declare global {
 		listingPriceToAccessUsd: number
 		imageUrl: string
 		description: string
-		originalContentUrl: string
 		isContentExclusive: boolean
 		tierData: {
 			tierNumber: number
@@ -86,7 +83,7 @@ declare global {
 		}
 	}
 
-	interface OutputVideoData {
+	interface OutputCreatorVideoData {
 		videoId: number
 		videoName: string
 		listingPriceToAccessUsd: number
@@ -130,11 +127,11 @@ declare global {
 		description: string
 		imageUrl: string
 		uuid: string
-		originalContentUrl: string
 		creatorUsername: string
 		creatorProfilePictureUrl: string | null
 		isVideoExclusive: boolean
 		isUserAbleToAccessVideo: boolean
+		createdAt: Date
 	}
 
 	interface VideoDataSendingToFrontendWithVideoUrl extends VideoDataSendingToFrontendLessVideoUrl {

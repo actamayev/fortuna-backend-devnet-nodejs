@@ -10,10 +10,10 @@ export default function transformVideoAndImageData(
 		description: videoData.description,
 		imageUrl: videoData.uploaded_image.image_url,
 		uuid: videoData.uuid,
-		originalContentUrl: videoData.original_content_url,
 		creatorUsername: videoData.video_creator_wallet.user.username,
 		creatorProfilePictureUrl: videoData.video_creator_wallet.user.profile_picture?.image_url || null,
 		isVideoExclusive: videoData.is_video_exclusive,
+		createdAt: videoData.created_at,
 		isUserAbleToAccessVideo: !_.isUndefined(videoData.videoUrl)
 	}
 

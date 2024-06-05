@@ -16,7 +16,6 @@ export default async function addVideoRecord (
 				creator_wallet_id: creatorWalletId,
 				uploaded_image_id: newVideoData.uploadedImageId,
 				uploaded_video_id: newVideoData.uploadedVideoId,
-				original_content_url: newVideoData.originalContentUrl,
 
 				uuid: newVideoData.uuid,
 

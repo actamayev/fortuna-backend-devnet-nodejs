@@ -16,7 +16,7 @@ export default async function retrieveExclusiveAccessByWalletId(
 						uuid: true,
 						uploaded_image: {
 							select: {
-								image_url: true,
+								image_url: true
 							}
 						}
 					}
