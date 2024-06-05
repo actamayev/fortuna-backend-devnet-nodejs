@@ -6,7 +6,6 @@ interface ExclusiveVideoAccessRecord {
 	[videoId: number]: boolean
 }
 
-// eslint-disable-next-line max-lines-per-function, complexity
 export default async function checkWhichExclusiveContentUserAllowedToAccess(
 	retirevedVideos: VideoDataNeededToCheckForExclusiveContentAccess[],
 	userSolanaWalletId: number | undefined

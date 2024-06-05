@@ -6,7 +6,6 @@ interface VideosAndCreatorData {
 	creatorData: CreatorSearchDataSendingToFrontend
 }
 
-// eslint-disable-next-line max-lines-per-function
 export default async function transformVideosByCreatorUsername(
 	input: RetrievedVideosByCreatorUsername,
 	walletId: number | undefined
