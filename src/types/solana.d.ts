@@ -58,61 +58,9 @@ declare global {
 		createdAt: Date
 	}
 
-	interface RetrievedMyOwnershipData {
-		number_of_shares: number
-		purchase_price_per_share_usd: number
-		video: {
-			public_key_address: string
-			creator_wallet_id: number
-			video_name: string
-			listing_price_to_access_usd: number
-			spl_creator_wallet: {
-				user: {
-					username: string | null
-				}
-			}
-			uploaded_image: {
-				image_url: string
-				uuid: string
-			}
-		}
-	}
-
 	interface PurchaseData {
 		numberOfShares: number
 		purchasePricePerShareUsd: number
-	}
-
-	interface MyOwnershipDataInMap {
-		purchaseData: PurchaseData[]
-		spl: {
-			public_key_address: string
-			creator_wallet_id: number
-			video_name: string
-			listing_price_to_access_usd: number
-			spl_creator_wallet: {
-				user: {
-					username: string | null
-				}
-			}
-			uploaded_image: {
-				image_url: string
-				uuid: string
-			}
-		}
-	}
-
-	type RetrievedMyOwnershipDataMap = Map<string, MyOwnershipDataInMap>
-
-	interface MyOwnershipData {
-		splPublicKey: string
-		purchaseData: PurchaseData[]
-		imageUrl: string
-		uuid: string
-		isMyContent: boolean
-		videoName: string
-		creatorUsername: string
-		originalListingPricePerShareUsd: number
 	}
 }
 

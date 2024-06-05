@@ -7,7 +7,7 @@ export default async function retrieveCreatorWalletInfoFromVideo(
 ): Promise<{ public_key: PublicKey, solana_wallet_id: number } | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
-		const creatorSPLData = await prismaClient.video.findFirst({
+		const creatorVideoData = await prismaClient.video.findFirst({
 			where: {
 				video_id: videoId
 			},
@@ -24,11 +24,11 @@ export default async function retrieveCreatorWalletInfoFromVideo(
 			}
 		})
 
-		if (_.isNull(creatorSPLData)) return null
+		if (_.isNull(creatorVideoData)) return null
 
 		return {
-			public_key: new PublicKey(creatorSPLData.video_creator_wallet.public_key),
-			solana_wallet_id: creatorSPLData.video_creator_wallet.solana_wallet_id
+			public_key: new PublicKey(creatorVideoData.video_creator_wallet.public_key),
+			solana_wallet_id: creatorVideoData.video_creator_wallet.solana_wallet_id
 		}
 	} catch (error) {
 		console.error(error)

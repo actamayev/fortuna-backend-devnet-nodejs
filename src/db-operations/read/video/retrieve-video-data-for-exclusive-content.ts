@@ -1,12 +1,12 @@
 import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function retrieveSplDataForExclusiveContent(
+export default async function retrieveVideoDataForExclusiveContent(
 	videoUUID: string
 ): Promise<VideoDataNeededToCheckForExclusiveContentAccess | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
-		const retrievedSplWithExclusiveInfo = await prismaClient.video.findFirst({
+		const retrievedVideoWithExclusiveInfo = await prismaClient.video.findFirst({
 			where: {
 				uuid: videoUUID
 			},
@@ -18,9 +18,9 @@ export default async function retrieveSplDataForExclusiveContent(
 			}
 		})
 
-		if (_.isNull(retrievedSplWithExclusiveInfo)) return null
+		if (_.isNull(retrievedVideoWithExclusiveInfo)) return null
 
-		return retrievedSplWithExclusiveInfo
+		return retrievedVideoWithExclusiveInfo
 	} catch (error) {
 		console.error(error)
 		throw error

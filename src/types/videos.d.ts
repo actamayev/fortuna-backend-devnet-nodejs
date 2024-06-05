@@ -68,6 +68,11 @@ declare global {
 		description: string
 		originalContentUrl: string
 		isContentExclusive: boolean
+		tierData: {
+			tierNumber: number
+			purchasesInThisTier: number
+			tierDiscount: number
+		}[]
 	}
 
 	interface RetrievedDBVideoData {

@@ -2,14 +2,14 @@ import _ from "lodash"
 import { Request, Response } from "express"
 import VideoUrlsManager from "../../classes/video-urls-manager"
 import checkIfUserAllowedToAccessContent from "../../utils/exclusive-content/check-if-user-allowed-to-access-content"
-import retrieveSplDataForExclusiveContent from "../../db-operations/read/video/retrieve-video-data-for-exclusive-content"
+import retrieveVideoDataForExclusiveContent from "../../db-operations/read/video/retrieve-video-data-for-exclusive-content"
 
 export default async function getVideoUrl(req: Request, res: Response): Promise<Response> {
 	try {
 		const solanaWallet = req.solanaWallet as ExtendedSolanaWallet | undefined
 		const { videoUUID } = req.params
 
-		const videoData = await retrieveSplDataForExclusiveContent(videoUUID)
+		const videoData = await retrieveVideoDataForExclusiveContent(videoUUID)
 		if (_.isNull(videoData)) return res.status(500).json({ error: "Unable to find video for the provided UUID" })
 
 		let videoUrl

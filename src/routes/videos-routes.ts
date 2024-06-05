@@ -1,7 +1,7 @@
 import express from "express"
 
+import createVideo from "../controllers/videos/create-video"
 import getVideoUrl from "../controllers/videos/get-video-url"
-import createAndMintSPL from "../controllers/videos/create-video"
 import getVideoByUUID from "../controllers/videos/get-video-by-uuid"
 import getHomePageVideos from "../controllers/videos/get-home-page-videos"
 import getVideosByCreatorUsername from "../controllers/videos/get-videos-by-creator-username"
@@ -43,7 +43,7 @@ videosRoutes.post(
 	validateCreateVideo,
 	jwtVerifyAttachUser,
 	attachSolanaWalletByUserId,
-	createAndMintSPL
+	createVideo
 )
 
 export default videosRoutes

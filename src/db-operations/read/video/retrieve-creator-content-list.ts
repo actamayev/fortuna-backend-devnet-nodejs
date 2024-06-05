@@ -3,7 +3,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 export default async function retrieveCreatorContentList(solanaWalletId: number): Promise<RetrievedDBVideoData[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
-		const creatorSPLData = await prismaClient.video.findMany({
+		const creatorVideoData = await prismaClient.video.findMany({
 			where: {
 				creator_wallet_id: solanaWalletId,
 				video_listing_status: {
@@ -29,7 +29,7 @@ export default async function retrieveCreatorContentList(solanaWalletId: number)
 			}
 		})
 
-		return creatorSPLData
+		return creatorVideoData
 	} catch (error) {
 		console.error(error)
 		throw error

@@ -8,32 +8,32 @@ interface ExclusiveVideoAccessRecord {
 
 // eslint-disable-next-line max-lines-per-function, complexity
 export default async function checkWhichExclusiveContentUserAllowedToAccess(
-	retrievedSpls: VideoDataNeededToCheckForExclusiveContentAccess[],
+	retirevedVideos: VideoDataNeededToCheckForExclusiveContentAccess[],
 	userSolanaWalletId: number | undefined
 ): Promise<ExclusiveVideoAccessRecord> {
 	try {
 		const accessRecord: ExclusiveVideoAccessRecord = {}
-		retrievedSpls = retrievedSpls.filter(retrievedSpl => {
-			if (retrievedSpl.is_video_exclusive === false || retrievedSpl.creator_wallet_id === userSolanaWalletId) {
-				accessRecord[retrievedSpl.video_id] = true
+		retirevedVideos = retirevedVideos.filter(retrievedVideo => {
+			if (retrievedVideo.is_video_exclusive === false || retrievedVideo.creator_wallet_id === userSolanaWalletId) {
+				accessRecord[retrievedVideo.video_id] = true
 				return false
 			}
 			return true
 		})
 
-		if (_.isEmpty(retrievedSpls)) return accessRecord
+		if (_.isEmpty(retirevedVideos)) return accessRecord
 
 		if (_.isUndefined(userSolanaWalletId)) {
-			retrievedSpls.forEach(spl => accessRecord[spl.video_id] = false)
+			retirevedVideos.forEach(video => accessRecord[video.video_id] = false)
 			return accessRecord
 		}
 
-		const videoIds = retrievedSpls.map(spl => spl.video_id)
-		const exclusiveSplData = await checkIfUserMadeExclusiveVideoPurchases(videoIds, userSolanaWalletId)
+		const videoIds = retirevedVideos.map(video => video.video_id)
+		const exclusiveVideoData = await checkIfUserMadeExclusiveVideoPurchases(videoIds, userSolanaWalletId)
 
-		retrievedSpls.map(retrievedSpl => {
-			const didUserPurchaseSplAccess = exclusiveSplData[retrievedSpl.video_id]
-			accessRecord[retrievedSpl.video_id] = didUserPurchaseSplAccess
+		retirevedVideos.map(retrievedVideo => {
+			const didUserPurchaseVideoAccess = exclusiveVideoData[retrievedVideo.video_id]
+			accessRecord[retrievedVideo.video_id] = didUserPurchaseVideoAccess
 		})
 
 		return accessRecord

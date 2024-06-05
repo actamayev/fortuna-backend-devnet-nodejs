@@ -13,7 +13,14 @@ const createVideoSchema = Joi.object({
 		imageUrl: Joi.string().required(),
 		description: Joi.string().required(),
 		originalContentUrl: Joi.string().required().allow(""),
-		isContentExclusive: Joi.boolean().required()
+		isContentExclusive: Joi.boolean().required(),
+		tierData: Joi.array().items(
+			Joi.object({
+				tierNumber: Joi.number().integer().min(1).max(3).required(),
+				purchasesInThisTier: Joi.number().integer().min(1).required(),
+				tierDiscount: Joi.number().integer().min(0).max(90).required()
+			})
+		).max(3).required()
 	}).required()
 }).required()
 

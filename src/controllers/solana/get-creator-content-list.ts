@@ -6,9 +6,9 @@ export default async function getCreatorContentList(req: Request, res: Response)
 	try {
 		const { solanaWallet } = req
 
-		const creatorSPLData = await retrieveCreatorContentList(solanaWallet.solana_wallet_id)
+		const creatorVideoData = await retrieveCreatorContentList(solanaWallet.solana_wallet_id)
 
-		const creatorContentList = transformCreatorContentList(creatorSPLData)
+		const creatorContentList = transformCreatorContentList(creatorVideoData)
 
 		return res.status(200).json({ creatorContentList })
 	} catch (error) {

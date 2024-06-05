@@ -1,14 +1,14 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
-export default async function addSPLRecord (
+export default async function addVideoRecord (
 	newVideoData: IncomingNewVideoData,
 	creatorWalletId: number
 ): Promise<number> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		const addSPLResponse = await prismaClient.video.create({
+		const addVideoResponse = await prismaClient.video.create({
 			data: {
 				video_name: newVideoData.videoName,
 				listing_price_to_access_usd: newVideoData.listingPriceToAccessUsd,
@@ -27,7 +27,7 @@ export default async function addSPLRecord (
 			}
 		})
 
-		return addSPLResponse.video_id
+		return addVideoResponse.video_id
 	} catch (error) {
 		console.error(error)
 		throw error

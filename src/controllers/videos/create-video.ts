@@ -1,12 +1,12 @@
 import { Request, Response } from "express"
-import addSPLRecord from "../../db-operations/write/video/add-spl-record"
+import addVideoRecord from "../../db-operations/write/video/add-video-record"
 
 export default async function createVideo (req: Request, res: Response): Promise<Response> {
 	try {
 		const creatorSolanaWallet = req.solanaWallet
 		const newVideoData = req.body.newVideoData as IncomingNewVideoData
 
-		const newVideoId = await addSPLRecord(newVideoData, creatorSolanaWallet.solana_wallet_id)
+		const newVideoId = await addVideoRecord(newVideoData, creatorSolanaWallet.solana_wallet_id)
 
 		return res.status(200).json({ newVideoId })
 	} catch (error) {
