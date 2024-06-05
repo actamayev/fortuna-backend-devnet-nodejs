@@ -57,11 +57,6 @@ declare global {
 		transferFeeUsd?: number
 		createdAt: Date
 	}
-
-	interface PurchaseData {
-		numberOfShares: number
-		purchasePricePerShareUsd: number
-	}
 }
 
 export {}

@@ -8,7 +8,7 @@ export default async function retrieveCreatorsByUsername(username: string): Prom
 				username: {
 					contains: username,
 					mode: "insensitive",
-					notIn: ["fortunaEscrow", "fortunaBoss"]
+					notIn: ["fortunaBoss"]
 				},
 			},
 			select: {

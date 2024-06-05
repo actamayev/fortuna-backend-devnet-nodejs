@@ -2,7 +2,7 @@ import _ from "lodash"
 import { Request, Response } from "express"
 import SolPriceManager from "../../classes/sol-price-manager"
 import VideoUrlsManager from "../../classes/video-urls-manager"
-import transferSolFunction from "../../utils/exchange/transfer-sol-function"
+import transferSolFunction from "../../utils/solana/transfer-sol-function"
 import retrieveCreatorWalletInfoFromVideo from "../../db-operations/read/video/retrieve-creator-wallet-info-from-video"
 import addExclusiveVideoAcceslPurchase from "../../db-operations/write/exclusive-video-access-purchase/add-exclusive-video-access-purchase"
 

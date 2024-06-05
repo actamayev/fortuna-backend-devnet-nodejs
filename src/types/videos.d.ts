@@ -64,7 +64,6 @@ declare global {
 		videoName: string
 		listingPriceToAccessUsd: number
 		imageUrl: string
-		videoUrl: string | undefined
 		description: string
 		originalContentUrl: string
 		isContentExclusive: boolean

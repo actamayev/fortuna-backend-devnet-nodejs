@@ -1,3 +1,4 @@
+import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function addVideoRecord (
@@ -25,6 +26,19 @@ export default async function addVideoRecord (
 				description: newVideoData.description
 			}
 		})
+
+		if (!_.isEmpty(newVideoData.tierData)) {
+			const tierDataToInsert = newVideoData.tierData.map(singleTierData => ({
+				video_id: addVideoResponse.video_id,
+				tier_number: singleTierData.tierNumber,
+				purchases_allowed_for_this_tier: singleTierData.purchasesInThisTier,
+				percent_discount_at_this_tier: singleTierData.tierDiscount
+			}))
+
+			await prismaClient.video_access_tier.createMany({
+				data: tierDataToInsert
+			})
+		}
 
 		return addVideoResponse.video_id
 	} catch (error) {
