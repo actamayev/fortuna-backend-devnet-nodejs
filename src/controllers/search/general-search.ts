@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import retrieveVideosByTitle from "../../db-operations/read/spl/retrieve-videos-by-title"
+import retrieveVideosByTitle from "../../db-operations/read/video/retrieve-videos-by-title"
 import transformCreatorSearchData from "../../utils/transform/transform-creator-search-data"
 import transformHomePageVideoData from "../../utils/transform/transform-home-page-video-data"
 import retrieveCreatorsByUsername from "../../db-operations/read/credentials/retrieve-creators-by-username"

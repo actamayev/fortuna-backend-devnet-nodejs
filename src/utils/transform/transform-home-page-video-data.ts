@@ -1,39 +1,25 @@
-import EscrowWalletManager from "../../classes/escrow-wallet-manager"
 import checkWhichExclusiveContentUserAllowedToAccess from "../exclusive-content/check-which-exclusive-content-user-allowed-to-access"
 
 export default async function transformHomePageVideoData(
-	retrievedHomePageVideos: RetrievedHomePageVideo[],
+	retrievedHomePageVideos: RetrievedHomePageVideosFromDB[],
 	solanaWalletId: number | undefined
 ): Promise<VideoDataSendingToFrontendLessVideoUrl[]> {
 	try {
-		const publicKeys = retrievedHomePageVideos.map(item => item.public_key_address)
-
-		const tokensRemaining = await EscrowWalletManager.getInstance().retrieveTokenAmountsByPublicKeys(publicKeys)
-
 		const userAllowedToAccessContent = await checkWhichExclusiveContentUserAllowedToAccess(retrievedHomePageVideos, solanaWalletId)
 
 		const results = retrievedHomePageVideos.map(item => {
-			const sharesRemainingForSale = tokensRemaining[item.public_key_address]
-			const isUserAbleToAccessVideo = userAllowedToAccessContent[item.spl_id]
+			const isUserAbleToAccessVideo = userAllowedToAccessContent[item.video_id]
 			return {
-				splName: item.spl_name,
-				splPublicKey: item.public_key_address,
-				listingSharePriceUsd: item.listing_price_per_share_usd,
-				splListingStatus: item.spl_listing_status,
+				videoName: item.video_name,
+				listingPriceToAccessUsd: item.listing_price_to_access_usd,
+				videoListingStatus: item.video_listing_status,
 				description: item.description,
 				imageUrl: item.uploaded_image.image_url,
-				uuid: item.uploaded_video.uuid,
-				totalNumberShares: item.total_number_of_shares,
-				sharesRemainingForSale,
+				uuid: item.uuid,
 				originalContentUrl: item.original_content_url,
-				contentMintDate: item.uploaded_video.created_at,
-				creatorUsername: item.spl_creator_wallet.user.username,
-				creatorProfilePictureUrl: item.spl_creator_wallet.user.profile_picture?.image_url || null,
-				isSplExclusive: item.is_spl_exclusive,
-				valueNeededToAccessExclusiveContentUsd: item.value_needed_to_access_exclusive_content_usd,
-				isContentInstantlyAccessible: item.is_content_instantly_accessible,
-				priceToInstantlyAccessExclusiveContentUsd: item.instant_access_price_to_exclusive_content_usd,
-				allowValueFromSameCreatorTokensForExclusiveContent: item.allow_value_from_same_creator_tokens_for_exclusive_content,
+				creatorUsername: item.video_creator_wallet.user.username,
+				creatorProfilePictureUrl: item.video_creator_wallet.user.profile_picture?.image_url || null,
+				isVideoExclusive: item.is_video_exclusive,
 				isUserAbleToAccessVideo
 			}
 		})

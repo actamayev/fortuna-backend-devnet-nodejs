@@ -6,7 +6,6 @@ import uploadVideoToS3 from "../controllers/upload/upload-video-to-s3"
 import uploadProfilePictureImage from "../controllers/upload/upload-profile-picture"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
-import confirmUserIsCreator from "../middleware/confirmations/confirm-user-is-creator"
 import validateVideoType from "../middleware/request-validation/upload/validate-video-type"
 import validateImageType from "../middleware/request-validation/upload/validate-image-type"
 import validateUploadImageToS3 from "../middleware/request-validation/upload/validate-upload-image-to-s3"
@@ -19,7 +18,6 @@ uploadRoutes.post(
 	upload.single("file"),
 	validateVideoType,
 	jwtVerifyAttachUser,
-	confirmUserIsCreator,
 	uploadVideoToS3
 )
 
@@ -29,7 +27,6 @@ uploadRoutes.post(
 	validateUploadImageToS3,
 	validateImageType,
 	jwtVerifyAttachUser,
-	confirmUserIsCreator,
 	uploadImageToS3
 )
 

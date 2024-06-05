@@ -7,8 +7,7 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const retrievedVideos = await prismaClient.credentials.findUnique({
 			where: {
-				username: creatorUsername,
-				is_approved_to_be_creator: true
+				username: creatorUsername
 			},
 			select: {
 				username: true,
@@ -19,31 +18,21 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 				},
 				solana_wallet: {
 					select: {
-						spl_creator_wallet: {
+						video_creator_wallet: {
 							select: {
-								spl_name: true,
-								listing_price_per_share_usd: true,
-								spl_listing_status: true,
+								video_name: true,
+								listing_price_to_access_usd: true,
+								video_listing_status: true,
 								description: true,
-								total_number_of_shares: true,
-								public_key_address: true,
 								original_content_url: true,
-								is_spl_exclusive: true,
+								is_video_exclusive: true,
 								creator_wallet_id: true,
-								spl_id: true,
-								value_needed_to_access_exclusive_content_usd: true,
-								is_content_instantly_accessible: true,
-								allow_value_from_same_creator_tokens_for_exclusive_content: true,
-								instant_access_price_to_exclusive_content_usd: true,
+								video_id: true,
+								uuid: true,
+								created_at: true,
 								uploaded_image: {
 									select: {
 										image_url: true
-									}
-								},
-								uploaded_video: {
-									select: {
-										created_at: true,
-										uuid: true
 									}
 								}
 							}

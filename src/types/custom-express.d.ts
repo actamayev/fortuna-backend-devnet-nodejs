@@ -7,8 +7,7 @@ declare global {
 			solanaWallet: ExtendedSolanaWallet
 			recipientPublicKey: PublicKey
 
-			splDetails: SplByPublicKeyData
-			exclusiveVideoData: InstantAccessExclusiveVideoData
+			exclusiveVideoData: ExclusiveVideoData
 
 			isRecipientFortunaWallet: boolean
 			recipientSolanaWalletId: number | undefined

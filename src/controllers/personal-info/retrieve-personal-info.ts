@@ -19,7 +19,6 @@ export default async function retrievePersonalInfo(req: Request, res: Response):
 			email,
 			defaultCurrency: user.default_currency,
 			defaultSiteTheme: user.default_site_theme,
-			isApprovedToBeCreator: user.is_approved_to_be_creator,
 			profilePictureUrl,
 			publicKey: solanaWallet.public_key
 		})

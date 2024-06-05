@@ -1,16 +1,13 @@
-export default function transformCreatorContentList(input: RetrievedDBSplData[]): OutputSplData[] {
+export default function transformCreatorContentList(input: RetrievedDBVideoData[]): OutputVideoData[] {
 	try {
 		return input.map(item => ({
-			splId: item.spl_id,
-			numberOfShares: item.total_number_of_shares,
-			listingSharePriceUsd: item.listing_price_per_share_usd,
-			splListingStatus: item.spl_listing_status,
+			videoId: item.video_id,
+			videoName: item.video_name,
+			listingPriceToAccessUsd: item.listing_price_to_access_usd,
+			videoListingStatus: item.video_listing_status,
 			description: item.description,
-			creatorOwnershipPercentage: item.initial_creator_ownership_percentage,
 			imageUrl: item.uploaded_image.image_url,
-			uuid: item.uploaded_video.uuid,
-			splName: item.spl_name,
-			mintAddress: item.public_key_address
+			uuid: item.uuid,
 		}))
 	} catch (error) {
 		console.error(error)

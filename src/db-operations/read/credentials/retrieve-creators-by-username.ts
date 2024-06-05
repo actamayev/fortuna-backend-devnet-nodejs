@@ -10,7 +10,6 @@ export default async function retrieveCreatorsByUsername(username: string): Prom
 					mode: "insensitive",
 					notIn: ["fortunaEscrow", "fortunaBoss"]
 				},
-				is_approved_to_be_creator: true
 			},
 			select: {
 				username: true,
