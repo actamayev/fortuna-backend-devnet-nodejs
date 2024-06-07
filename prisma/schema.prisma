@@ -142,6 +142,7 @@ model exclusive_video_access_purchase {
 	video_id                                                    Int
 	solana_wallet_id                                            Int
 	sol_transfer_id                                             Int     @unique
+	video_access_tier_number									Int
 
 	video                                                       video @relation(fields: [video_id], references: [video_id])
 	solana_wallet                                               solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])

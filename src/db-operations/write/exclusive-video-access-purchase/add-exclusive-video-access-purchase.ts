@@ -1,9 +1,10 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function addExclusiveVideoAcceslPurchase(
+export default async function addExclusiveVideoAccessPurchase(
 	videoId: number,
 	solanaWalletId: number,
-	solTransferId: number
+	solTransferId: number,
+	tierNumber: number
 ): Promise<void> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
@@ -11,7 +12,8 @@ export default async function addExclusiveVideoAcceslPurchase(
 			data: {
 				video_id: videoId,
 				solana_wallet_id: solanaWalletId,
-				sol_transfer_id: solTransferId
+				sol_transfer_id: solTransferId,
+				video_access_tier_number: tierNumber
 			}
 		})
 	} catch (error) {

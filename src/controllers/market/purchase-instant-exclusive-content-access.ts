@@ -4,7 +4,7 @@ import SolPriceManager from "../../classes/sol-price-manager"
 import VideoUrlsManager from "../../classes/video-urls-manager"
 import transferSolFunction from "../../utils/solana/transfer-sol-function"
 import retrieveCreatorWalletInfoFromVideo from "../../db-operations/read/video/retrieve-creator-wallet-info-from-video"
-import addExclusiveVideoAcceslPurchase from "../../db-operations/write/exclusive-video-access-purchase/add-exclusive-video-access-purchase"
+import addExclusiveVideoAccessPurchase from "../../db-operations/write/exclusive-video-access-purchase/add-exclusive-video-access-purchase"
 
 export default async function purchaseInstantExclusiveContentAccess(req: Request, res: Response): Promise<Response> {
 	try {
@@ -31,7 +31,7 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 			}
 		)
 
-		await addExclusiveVideoAcceslPurchase(exclusiveVideoData.video_id, solanaWallet.solana_wallet_id, solTransferId)
+		await addExclusiveVideoAccessPurchase(exclusiveVideoData.video_id, solanaWallet.solana_wallet_id, solTransferId)
 		const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(exclusiveVideoData.uuid)
 
 		return res.status(200).json({ videoUrl })
