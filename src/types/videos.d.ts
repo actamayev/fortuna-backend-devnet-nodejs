@@ -68,7 +68,7 @@ declare global {
 		tierNumber: number
 		purchasesInThisTier: number | null
 		tierDiscount: number
-		tierAccessPriceUsd: number
+		tierAccessPrice: number
 	}
 
 	interface RetrievedDBVideoData {
