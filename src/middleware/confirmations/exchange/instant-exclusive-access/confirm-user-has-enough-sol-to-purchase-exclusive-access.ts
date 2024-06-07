@@ -12,7 +12,7 @@ export default async function confirmUserHasEnoughSolToPurchaseExclusiveAccess(
 		const publicKey = new PublicKey(solanaWallet.public_key)
 		const walletBalance = await getWalletBalanceWithUSD(publicKey)
 
-		const exclusiveListingPrice = exclusiveVideoData.listing_price_to_access_usd
+		const exclusiveListingPrice = 100 // TODO: Change this to the tier listing price
 
 		if (walletBalance.balanceInUsd < exclusiveListingPrice) {
 			return res.status(400).json({ message: "User does not have enough Sol to complete the purchase" })

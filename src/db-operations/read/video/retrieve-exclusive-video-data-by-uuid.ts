@@ -13,7 +13,6 @@ export default async function retrieveExclusiveVideoDataByUUID(videoUUID: string
 				uuid: true,
 				video_id: true,
 				is_video_exclusive: true,
-				listing_price_to_access_usd: true,
 				creator_wallet_id: true
 			}
 		})
@@ -24,7 +23,6 @@ export default async function retrieveExclusiveVideoDataByUUID(videoUUID: string
 			uuid: exclusiveVideoData.uuid,
 			video_id: exclusiveVideoData.video_id,
 			is_video_exclusive: exclusiveVideoData.is_video_exclusive,
-			listing_price_to_access_usd: exclusiveVideoData.listing_price_to_access_usd,
 			creator_wallet_id: exclusiveVideoData.creator_wallet_id
 		}
 

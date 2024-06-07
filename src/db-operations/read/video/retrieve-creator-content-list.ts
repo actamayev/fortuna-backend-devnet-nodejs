@@ -16,7 +16,6 @@ export default async function retrieveCreatorContentList(solanaWalletId: number)
 			select: {
 				video_id: true,
 				video_name: true,
-				listing_price_to_access_usd: true,
 				video_listing_status: true,
 				description: true,
 				uuid: true,

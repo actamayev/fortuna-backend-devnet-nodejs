@@ -9,15 +9,15 @@ const createVideoSchema = Joi.object({
 		uploadedImageId: Joi.number().strict().required(),
 		uploadedVideoId: Joi.number().strict().required(),
 		videoName: Joi.string().required(),
-		listingPriceToAccessUsd: Joi.number().strict().required(),
 		imageUrl: Joi.string().required(),
 		description: Joi.string().required(),
 		isContentExclusive: Joi.boolean().required(),
 		tierData: Joi.array().items(
 			Joi.object({
 				tierNumber: Joi.number().integer().min(1).max(3).required(),
-				purchasesInThisTier: Joi.number().integer().min(1).required(),
-				tierDiscount: Joi.number().integer().min(0).max(90).required()
+				purchasesInThisTier: Joi.number().integer().min(1).allow(null).required(),
+				tierDiscount: Joi.number().integer().min(0).max(90).required(),
+				tierAccessPrice: Joi.number().required()
 			})
 		).max(3).required()
 	}).required()

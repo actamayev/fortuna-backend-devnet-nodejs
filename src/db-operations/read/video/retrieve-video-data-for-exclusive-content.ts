@@ -14,7 +14,6 @@ export default async function retrieveVideoDataForExclusiveContent(
 				video_id: true,
 				creator_wallet_id: true,
 				is_video_exclusive: true,
-				listing_price_to_access_usd: true,
 			}
 		})
 

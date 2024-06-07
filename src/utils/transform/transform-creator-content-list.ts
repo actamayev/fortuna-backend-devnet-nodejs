@@ -3,7 +3,6 @@ export default function transformCreatorContentList(input: RetrievedDBVideoData[
 		return input.map(item => ({
 			videoId: item.video_id,
 			videoName: item.video_name,
-			listingPriceToAccessUsd: item.listing_price_to_access_usd,
 			videoListingStatus: item.video_listing_status,
 			description: item.description,
 			imageUrl: item.uploaded_image.image_url,

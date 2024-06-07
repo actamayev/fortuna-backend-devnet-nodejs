@@ -25,7 +25,6 @@ export default async function transformVideosByCreatorUsername(
 			const isUserAbleToAccessVideo = userAllowedToAccessContent[wallet.video_id]
 			return {
 				videoName: wallet.video_name,
-				listingPriceToAccessUsd: wallet.listing_price_to_access_usd,
 				videoListingStatus: wallet.video_listing_status,
 				description: wallet.description,
 				imageUrl: wallet.uploaded_image.image_url,

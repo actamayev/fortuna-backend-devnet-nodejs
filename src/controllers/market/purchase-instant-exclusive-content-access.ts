@@ -15,9 +15,10 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 
 		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
 
+		// TODO: Change this to the tier listing price
 		const transferCurrencyAmounts = {
-			usdPriceToTransferAt: exclusiveVideoData.listing_price_to_access_usd,
-			solPriceToTransferAt: exclusiveVideoData.listing_price_to_access_usd / solPrice
+			usdPriceToTransferAt: 100,
+			solPriceToTransferAt: 100 / solPrice
 		}
 
 		const solTransferId = await transferSolFunction(

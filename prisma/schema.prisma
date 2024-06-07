@@ -93,7 +93,6 @@ enum VideoListingStatus {
 model video {
 	video_id                                                    Int       @id @default(autoincrement())
 	video_name                                                  String
-	listing_price_to_access_usd                                 Float
 
 	creator_wallet_id                                           Int
 	uploaded_image_id                                           Int     @unique
@@ -127,6 +126,7 @@ model video_access_tier {
 	tier_number                                                 Int // ie. 1, 2, 3.
 	purchases_allowed_for_this_tier                             Int?
 	percent_discount_at_this_tier                               Float
+	tier_access_price_usd										Float
 
 	video                                                       video @relation(fields: [video_id], references: [video_id])
 

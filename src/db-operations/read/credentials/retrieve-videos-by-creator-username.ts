@@ -21,7 +21,6 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 						video_creator_wallet: {
 							select: {
 								video_name: true,
-								listing_price_to_access_usd: true,
 								video_listing_status: true,
 								description: true,
 								is_video_exclusive: true,

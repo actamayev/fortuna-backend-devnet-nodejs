@@ -5,7 +5,6 @@ export default function transformVideoAndImageData(
 ): VideoDataSendingToFrontendWithVideoUrl {
 	const videoDataSendingToFrontEnd: VideoDataSendingToFrontendWithVideoUrl = {
 		videoName: videoData.video_name,
-		listingPriceToAccessUsd: videoData.listing_price_to_access_usd,
 		videoListingStatus: videoData.video_listing_status,
 		description: videoData.description,
 		imageUrl: videoData.uploaded_image.image_url,

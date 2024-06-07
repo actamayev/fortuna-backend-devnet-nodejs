@@ -11,7 +11,6 @@ export default async function addVideoRecord (
 		const addVideoResponse = await prismaClient.video.create({
 			data: {
 				video_name: newVideoData.videoName,
-				listing_price_to_access_usd: newVideoData.listingPriceToAccessUsd,
 
 				creator_wallet_id: creatorWalletId,
 				uploaded_image_id: newVideoData.uploadedImageId,
@@ -31,6 +30,7 @@ export default async function addVideoRecord (
 				video_id: addVideoResponse.video_id,
 				tier_number: singleTierData.tierNumber,
 				percent_discount_at_this_tier: singleTierData.tierDiscount,
+				tier_access_price_usd: singleTierData.tierAccessPriceUsd,
 				...(singleTierData.purchasesInThisTier !== null && {
 					purchases_allowed_for_this_tier: singleTierData.purchasesInThisTier
 				})

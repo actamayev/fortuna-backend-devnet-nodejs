@@ -4,7 +4,6 @@ declare global {
 	interface RetrievedHomePageVideosFromDB {
 		video_id: number
 		video_name: string
-		listing_price_to_access_usd: number
 		description: string
 		creator_wallet_id: number
 		is_video_exclusive: boolean
@@ -30,7 +29,6 @@ declare global {
 			video_creator_wallet: {
 				video_id: number
 				video_name: string
-				listing_price_to_access_usd: number
 				description: string
 				creator_wallet_id: number
 				is_video_exclusive: boolean
@@ -60,7 +58,6 @@ declare global {
 		uploadedImageId: number
 		uploadedVideoId: number
 		videoName: string
-		listingPriceToAccessUsd: number
 		imageUrl: string
 		description: string
 		isContentExclusive: boolean
@@ -71,12 +68,12 @@ declare global {
 		tierNumber: number
 		purchasesInThisTier: number | null
 		tierDiscount: number
+		tierAccessPriceUsd: number
 	}
 
 	interface RetrievedDBVideoData {
 		video_id: number
 		video_name: string
-		listing_price_to_access_usd: number
 		video_listing_status: VideoListingStatus
 		description: string
 		uuid: string
@@ -88,7 +85,6 @@ declare global {
 	interface OutputCreatorVideoData {
 		videoId: number
 		videoName: string
-		listingPriceToAccessUsd: number
 		videoListingStatus: VideoListingStatus
 		description: string
 		imageUrl: string
@@ -99,7 +95,6 @@ declare global {
 		video_id: number
 		creator_wallet_id: number
 		is_video_exclusive: boolean
-		listing_price_to_access_usd: number
 	}
 
 	interface ExclusiveVideoData extends VideoDataNeededToCheckForExclusiveContentAccess {
@@ -124,7 +119,6 @@ declare global {
 
 	interface VideoDataSendingToFrontendLessVideoUrl {
 		videoName: string
-		listingPriceToAccessUsd: number
 		videoListingStatus: VideoListingStatus
 		description: string
 		imageUrl: string
