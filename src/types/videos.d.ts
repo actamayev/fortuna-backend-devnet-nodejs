@@ -64,11 +64,13 @@ declare global {
 		imageUrl: string
 		description: string
 		isContentExclusive: boolean
-		tierData: {
-			tierNumber: number
-			purchasesInThisTier: number
-			tierDiscount: number
-		}[]
+		tierData: TierData[]
+	}
+
+	interface TierData {
+		tierNumber: number
+		purchasesInThisTier: number | null
+		tierDiscount: number
 	}
 
 	interface RetrievedDBVideoData {

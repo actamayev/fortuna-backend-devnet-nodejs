@@ -30,8 +30,10 @@ export default async function addVideoRecord (
 			const tierDataToInsert = newVideoData.tierData.map(singleTierData => ({
 				video_id: addVideoResponse.video_id,
 				tier_number: singleTierData.tierNumber,
-				purchases_allowed_for_this_tier: singleTierData.purchasesInThisTier,
-				percent_discount_at_this_tier: singleTierData.tierDiscount
+				percent_discount_at_this_tier: singleTierData.tierDiscount,
+				...(singleTierData.purchasesInThisTier !== null && {
+					purchases_allowed_for_this_tier: singleTierData.purchasesInThisTier
+				})
 			}))
 
 			await prismaClient.video_access_tier.createMany({

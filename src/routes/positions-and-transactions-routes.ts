@@ -9,6 +9,6 @@ const positionsAndTransactionsRoutes = express.Router()
 
 positionsAndTransactionsRoutes.get("/get-transactions", jwtVerifyAttachSolanaWallet, getTransactions)
 
-positionsAndTransactionsRoutes.get("/get-my-ownership", jwtVerifyAttachSolanaWallet, getMyOwnership)
+positionsAndTransactionsRoutes.get("/get-my-purchased-exclusive-content", jwtVerifyAttachSolanaWallet, getMyOwnership)
 
 export default positionsAndTransactionsRoutes

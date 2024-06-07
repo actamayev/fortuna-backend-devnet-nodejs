@@ -8,9 +8,9 @@ export default async function getMyOwnership(req: Request, res: Response): Promi
 		const { solanaWallet } = req
 
 		const myExclusiveContent = await retrieveExclusiveAccessByWalletId(solanaWallet.solana_wallet_id)
-		const myExclusiveContentList = transformExclusiveContentList(myExclusiveContent)
+		const myPurchasedExclusiveContent = transformExclusiveContentList(myExclusiveContent)
 
-		return res.status(200).json({ myExclusiveContentList })
+		return res.status(200).json({ myPurchasedExclusiveContent })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Retrieve my ownership" })
