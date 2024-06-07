@@ -2,7 +2,7 @@ import _ from "lodash"
 import { Response, Request } from "express"
 import VideoUrlsManager from "../../classes/video-urls-manager"
 import retrieveVideoByUUID from "../../db-operations/read/video/retrieve-video-by-uuid"
-import transformVideoAndImageData from "../../utils/transform/transform-video-and-image-data"
+import transformVideoAndImageData from "../../utils/transform/videos/transform-video-and-image-data"
 import checkIfUserAllowedToAccessContent from "../../utils/exclusive-content/check-if-user-allowed-to-access-content"
 
 export default async function getVideoByUUID (req: Request, res: Response): Promise<Response> {
