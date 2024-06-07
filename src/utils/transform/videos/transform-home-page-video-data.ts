@@ -1,4 +1,4 @@
-import checkWhichExclusiveContentUserAllowedToAccess from "../exclusive-content/check-which-exclusive-content-user-allowed-to-access"
+import checkWhichExclusiveContentUserAllowedToAccess from "../../exclusive-content/check-which-exclusive-content-user-allowed-to-access"
 
 export default async function transformHomePageVideoData(
 	retrievedHomePageVideos: RetrievedHomePageVideosFromDB[],
@@ -19,7 +19,14 @@ export default async function transformHomePageVideoData(
 				creatorProfilePictureUrl: item.video_creator_wallet.user.profile_picture?.image_url || null,
 				isVideoExclusive: item.is_video_exclusive,
 				isUserAbleToAccessVideo,
-				createdAt: item.created_at
+				createdAt: item.created_at,
+				tierData: item.video_access_tier.map(tier => ({
+					tierNumber: tier.tier_number,
+					purchasesInThisTier: tier.purchases_allowed_for_this_tier,
+					tierDiscount: tier.percent_discount_at_this_tier,
+					tierAccessPrice: tier.tier_access_price_usd
+				})),
+				numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar
 			}
 		})
 

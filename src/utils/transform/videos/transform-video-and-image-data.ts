@@ -13,7 +13,14 @@ export default function transformVideoAndImageData(
 		creatorProfilePictureUrl: videoData.video_creator_wallet.user.profile_picture?.image_url || null,
 		isVideoExclusive: videoData.is_video_exclusive,
 		createdAt: videoData.created_at,
-		isUserAbleToAccessVideo: !_.isUndefined(videoData.videoUrl)
+		isUserAbleToAccessVideo: !_.isUndefined(videoData.videoUrl),
+		numberOfExclusivePurchasesSoFar: videoData.numberOfExclusivePurchasesSoFar,
+		tierData: videoData.video_access_tier.map(tier => ({
+			tierNumber: tier.tier_number,
+			purchasesInThisTier: tier.purchases_allowed_for_this_tier,
+			tierDiscount: tier.percent_discount_at_this_tier,
+			tierAccessPrice: tier.tier_access_price_usd
+		}))
 	}
 
 	if (!_.isUndefined(videoData.videoUrl)) {

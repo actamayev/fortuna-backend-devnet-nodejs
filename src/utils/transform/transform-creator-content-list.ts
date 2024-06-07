@@ -1,4 +1,4 @@
-export default function transformCreatorContentList(input: RetrievedDBVideoData[]): OutputCreatorVideoData[] {
+export default function transformCreatorContentList(input: RetrievedCreatorDBVideoData[]): OutputCreatorVideoData[] {
 	try {
 		return input.map(item => ({
 			videoId: item.video_id,
@@ -7,6 +7,14 @@ export default function transformCreatorContentList(input: RetrievedDBVideoData[
 			description: item.description,
 			imageUrl: item.uploaded_image.image_url,
 			uuid: item.uuid,
+			numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar,
+			tierData: item.video_access_tier.map(tier => ({
+				tierNumber: tier.tier_number,
+				purchasesInThisTier: tier.purchases_allowed_for_this_tier,
+				tierDiscount: tier.percent_discount_at_this_tier,
+				tierAccessPrice: tier.tier_access_price_usd
+			})),
+			isContentExclusive: item.is_video_exclusive
 		}))
 	} catch (error) {
 		console.error(error)

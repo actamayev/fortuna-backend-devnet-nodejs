@@ -1,6 +1,7 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function retrieveCreatorContentList(solanaWalletId: number): Promise<RetrievedDBVideoData[]> {
+// eslint-disable-next-line max-lines-per-function
+export default async function retrieveCreatorContentList(solanaWalletId: number): Promise<RetrievedCreatorDBVideoData[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const creatorVideoData = await prismaClient.video.findMany({
@@ -19,16 +20,37 @@ export default async function retrieveCreatorContentList(solanaWalletId: number)
 				video_listing_status: true,
 				description: true,
 				uuid: true,
+				is_video_exclusive: true,
 				uploaded_image: {
 					select: {
 						image_url: true
 					}
 				},
-
+				video_access_tier: {
+					select: {
+						tier_number: true,
+						purchases_allowed_for_this_tier: true,
+						percent_discount_at_this_tier: true,
+						tier_access_price_usd: true
+					}
+				},
+				_count: {
+					select: {
+						exclusive_video_access_purchase: true
+					}
+				}
 			}
 		})
 
-		return creatorVideoData
+		const filteredVideo = creatorVideoData
+			.map(video => ({
+				...video,
+				numberOfExclusivePurchasesSoFar: video._count.exclusive_video_access_purchase
+			}))
+			// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
+			.map(({ _count, ...rest }) => rest) // Remove _count property
+
+		return filteredVideo as RetrievedCreatorDBVideoData[]
 	} catch (error) {
 		console.error(error)
 		throw error

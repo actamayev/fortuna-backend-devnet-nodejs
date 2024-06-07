@@ -1,11 +1,11 @@
 import express from "express"
 
-import createVideo from "../controllers/videos/create-video"
+import createVideo from "../controllers/creator/create-video"
+import getCreatorContentList from "../controllers/creator/get-creator-content-list"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
 import validateCreateVideo from "../middleware/request-validation/videos/validate-create-video"
-import getCreatorContentList from "../controllers/solana/get-creator-content-list"
 
 const creatorRoutes = express.Router()
 

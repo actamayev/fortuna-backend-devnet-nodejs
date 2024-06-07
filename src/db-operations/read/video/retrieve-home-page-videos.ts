@@ -24,6 +24,14 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 						image_url: true
 					}
 				},
+				video_access_tier: {
+					select: {
+						tier_number: true,
+						purchases_allowed_for_this_tier: true,
+						percent_discount_at_this_tier: true,
+						tier_access_price_usd: true
+					}
+				},
 				video_creator_wallet: {
 					select: {
 						user: {
@@ -37,15 +45,25 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 							}
 						}
 					}
+				},
+				_count: {
+					select: {
+						exclusive_video_access_purchase: true
+					}
 				}
 			}
 		})
 
-		const filteredVideos = mediaDetails.filter(video =>
-			video.video_creator_wallet.user.username !== null
-		) as RetrievedHomePageVideosFromDB[]
+		const filteredVideos = mediaDetails
+			.filter(video => video.video_creator_wallet.user.username !== null)
+			.map(video => ({
+				...video,
+				numberOfExclusivePurchasesSoFar: video._count.exclusive_video_access_purchase
+			}))
+			// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
+			.map(({ _count, ...rest }) => rest) // Remove _count property
 
-		return filteredVideos
+		return filteredVideos as RetrievedHomePageVideosFromDB[]
 	} catch (error) {
 		console.error(error)
 		throw error

@@ -13,6 +13,12 @@ declare global {
 		uploaded_image: {
 			image_url: string
 		}
+		video_access_tier: {
+			tier_number: number
+			purchases_allowed_for_this_tier: number | null
+			percent_discount_at_this_tier: number
+			tier_access_price_usd: number
+		}[]
 		video_creator_wallet: {
 			user: {
 				username: string
@@ -21,6 +27,7 @@ declare global {
 				} | null
 			}
 		}
+		numberOfExclusivePurchasesSoFar: number
 		videoUrl?: string
 	}
 
@@ -38,6 +45,13 @@ declare global {
 				uploaded_image: {
 					image_url: string
 				}
+				video_access_tier: {
+					tier_number: number
+					purchases_allowed_for_this_tier: number | null
+					percent_discount_at_this_tier: number
+					tier_access_price_usd: number
+				}[]
+				numberOfExclusivePurchasesSoFar: number
 			}[]
 		} | null
 		username: string
@@ -51,44 +65,6 @@ declare global {
 		profile_picture: {
 			image_url: string
 		} | null
-	}
-
-	interface IncomingNewVideoData {
-		uuid: string
-		uploadedImageId: number
-		uploadedVideoId: number
-		videoName: string
-		imageUrl: string
-		description: string
-		isContentExclusive: boolean
-		tierData: TierData[]
-	}
-
-	interface TierData {
-		tierNumber: number
-		purchasesInThisTier: number | null
-		tierDiscount: number
-		tierAccessPrice: number
-	}
-
-	interface RetrievedDBVideoData {
-		video_id: number
-		video_name: string
-		video_listing_status: VideoListingStatus
-		description: string
-		uuid: string
-		uploaded_image: {
-			image_url: string
-		}
-	}
-
-	interface OutputCreatorVideoData {
-		videoId: number
-		videoName: string
-		videoListingStatus: VideoListingStatus
-		description: string
-		imageUrl: string
-		uuid: string
 	}
 
 	interface VideoDataNeededToCheckForExclusiveContentAccess {
@@ -128,6 +104,8 @@ declare global {
 		isVideoExclusive: boolean
 		isUserAbleToAccessVideo: boolean
 		createdAt: Date
+		tierData: TierData[]
+		numberOfExclusivePurchasesSoFar: number | null
 	}
 
 	interface VideoDataSendingToFrontendWithVideoUrl extends VideoDataSendingToFrontendLessVideoUrl {

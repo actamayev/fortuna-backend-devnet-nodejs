@@ -26,6 +26,14 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 						image_url: true
 					}
 				},
+				video_access_tier: {
+					select: {
+						tier_number: true,
+						purchases_allowed_for_this_tier: true,
+						percent_discount_at_this_tier: true,
+						tier_access_price_usd: true
+					}
+				},
 				video_creator_wallet: {
 					select: {
 						user: {
@@ -39,16 +47,28 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 							}
 						}
 					}
+				},
+				_count: {
+					select: {
+						exclusive_video_access_purchase: true
+					}
 				}
 			}
 		})
 
-		if (
-			_.isNull(retrievedVideo) ||
-			_.isNull(retrievedVideo.video_creator_wallet.user.username)
-		) return null
+		if (_.isNull(retrievedVideo) || _.isNull(retrievedVideo.video_creator_wallet.user.username)) {
+			return null
+		}
 
-		return retrievedVideo as RetrievedHomePageVideosFromDB
+		const videoWithPurchaseCount = {
+			...retrievedVideo,
+			numberOfExclusivePurchasesSoFar: retrievedVideo._count.exclusive_video_access_purchase
+		}
+
+		// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
+		const { _count, ...videoWithoutCount } = videoWithPurchaseCount
+
+		return videoWithoutCount as RetrievedHomePageVideosFromDB
 	} catch (error) {
 		console.error(error)
 		throw error
