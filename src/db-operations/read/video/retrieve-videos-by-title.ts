@@ -62,7 +62,7 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 			.filter(video => video.video_creator_wallet.user.username !== null)
 			.map(video => ({
 				...video,
-				numberOfExclusivePurchasesSoFar: video._count.exclusive_video_access_purchase
+				numberOfExclusivePurchasesSoFar: video.is_video_exclusive ? video._count.exclusive_video_access_purchase : null
 			}))
 			// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
 			.map(({ _count, ...rest }) => rest) // Remove _count property

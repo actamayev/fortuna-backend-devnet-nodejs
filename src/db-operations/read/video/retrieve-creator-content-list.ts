@@ -45,7 +45,7 @@ export default async function retrieveCreatorContentList(solanaWalletId: number)
 		const filteredVideo = creatorVideoData
 			.map(video => ({
 				...video,
-				numberOfExclusivePurchasesSoFar: video._count.exclusive_video_access_purchase
+				numberOfExclusivePurchasesSoFar: video.is_video_exclusive ? video._count.exclusive_video_access_purchase : null
 			}))
 			// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
 			.map(({ _count, ...rest }) => rest) // Remove _count property

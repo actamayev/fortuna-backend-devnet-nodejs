@@ -62,7 +62,8 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 
 		const videoWithPurchaseCount = {
 			...retrievedVideo,
-			numberOfExclusivePurchasesSoFar: retrievedVideo._count.exclusive_video_access_purchase
+			// eslint-disable-next-line max-len
+			numberOfExclusivePurchasesSoFar: retrievedVideo.is_video_exclusive ? retrievedVideo._count.exclusive_video_access_purchase : null
 		}
 
 		// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
