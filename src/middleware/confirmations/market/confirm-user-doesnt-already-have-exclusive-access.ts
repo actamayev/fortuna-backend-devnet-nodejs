@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import checkIfUserAllowedToAccessContent from "../../../../utils/exclusive-content/check-if-user-allowed-to-access-content"
+import checkIfUserAllowedToAccessContent from "../../../utils/exclusive-content/check-if-user-allowed-to-access-content"
 
 export default async function confirmUserDoesntAlreadyHaveExclusiveAccess(
 	req: Request,

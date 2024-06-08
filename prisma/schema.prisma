@@ -127,6 +127,7 @@ model video_access_tier {
 	purchases_allowed_for_this_tier                             Int?
 	percent_discount_at_this_tier                               Float
 	tier_access_price_usd										Float
+	is_sold_out													Boolean @default(false)
 
 	video                                                       video @relation(fields: [video_id], references: [video_id])
 
