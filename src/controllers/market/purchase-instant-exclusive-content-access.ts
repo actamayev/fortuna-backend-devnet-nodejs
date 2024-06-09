@@ -33,10 +33,10 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 		)
 
 		await addExclusiveVideoAccessPurchase(exclusiveVideoData.video_id, solanaWallet.solana_wallet_id, solTransferId, tierNumber)
-		await updateCheckIfVideoAccessTierSoldOut(exclusiveVideoData, tierNumber)
+		const isTierSoldOut = await updateCheckIfVideoAccessTierSoldOut(exclusiveVideoData, tierNumber)
 		const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(exclusiveVideoData.uuid)
 
-		return res.status(200).json({ videoUrl })
+		return res.status(200).json({ videoUrl, isTierSoldOut })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to purchase exclusive content" })

@@ -41,7 +41,7 @@ export default async function retrieveExclusiveVideoDataByUUID(
 
 		const tierData = exclusiveVideoData.video_access_tier[0]
 
-		if (_.isNull(tierData.purchases_allowed_for_this_tier) || _.isNull(tierData.tier_access_price_usd)) return null
+		if (_.isNull(tierData.tier_access_price_usd)) return null
 
 		const result: ExclusiveVideoData = {
 			uuid: exclusiveVideoData.uuid,
@@ -50,7 +50,7 @@ export default async function retrieveExclusiveVideoDataByUUID(
 			creator_wallet_id: exclusiveVideoData.creator_wallet_id,
 			purchases_allowed_for_this_tier: tierData.purchases_allowed_for_this_tier,
 			tier_access_price_usd: tierData.tier_access_price_usd,
-			is_tier_sold_out: tierData.is_sold_out,
+			is_sold_out: tierData.is_sold_out,
 			video_access_tier_id: tierData.video_access_tier_id
 		}
 

@@ -18,6 +18,7 @@ declare global {
 			purchases_allowed_for_this_tier: number | null
 			percent_discount_at_this_tier: number
 			tier_access_price_usd: number
+			is_sold_out: boolean
 		}[]
 		video_creator_wallet: {
 			user: {
@@ -50,6 +51,7 @@ declare global {
 					purchases_allowed_for_this_tier: number | null
 					percent_discount_at_this_tier: number
 					tier_access_price_usd: number
+					is_sold_out: boolean
 				}[]
 				numberOfExclusivePurchasesSoFar: number
 			}[]
@@ -75,9 +77,9 @@ declare global {
 
 	interface ExclusiveVideoData extends VideoDataNeededToCheckForExclusiveContentAccess {
 		uuid: string
-		purchases_allowed_for_this_tier: number
+		purchases_allowed_for_this_tier: number | null
 		tier_access_price_usd: number
-		is_tier_sold_out: boolean
+		is_sold_out: boolean
 		video_access_tier_id: number
 	}
 
@@ -108,7 +110,7 @@ declare global {
 		isVideoExclusive: boolean
 		isUserAbleToAccessVideo: boolean
 		createdAt: Date
-		tierData: TierData[]
+		tierData: VideoTierData[]
 		numberOfExclusivePurchasesSoFar: number | null
 	}
 

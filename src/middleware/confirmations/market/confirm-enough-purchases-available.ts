@@ -4,7 +4,7 @@ export default function confirmEnoughPurchasesAvailable(req: Request, res: Respo
 	try {
 		const { exclusiveVideoData } = req
 
-		if (exclusiveVideoData.is_tier_sold_out === true) {
+		if (exclusiveVideoData.is_sold_out === true) {
 			return res.status(400).json({ message: "This tier is sold out" })
 		}
 

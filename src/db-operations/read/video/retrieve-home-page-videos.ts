@@ -29,7 +29,8 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 						tier_number: true,
 						purchases_allowed_for_this_tier: true,
 						percent_discount_at_this_tier: true,
-						tier_access_price_usd: true
+						tier_access_price_usd: true,
+						is_sold_out: true
 					}
 				},
 				video_creator_wallet: {

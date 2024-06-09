@@ -7,14 +7,18 @@ declare global {
 		imageUrl: string
 		description: string
 		isContentExclusive: boolean
-		tierData: TierData[]
+		tierData: IncomingNewVideoTierData[]
 	}
 
-	interface TierData {
+	interface IncomingNewVideoTierData {
 		tierNumber: number
 		purchasesInThisTier: number | null
 		tierDiscount: number
 		tierAccessPrice: number
+	}
+
+	interface VideoTierData extends IncomingNewVideoTierData {
+		isTierSoldOut: boolean
 	}
 
 	interface RetrievedCreatorDBVideoData {
