@@ -24,7 +24,7 @@ export default async function youtubeAuthCallback(req: Request, res: Response): 
 
 		const subscriberCount = await retrieveYouTubeSubscriberCount(tokens.access_token)
 
-		return res.status(200).json({ subscriberCount: subscriberCount || 0 } as UserYouTubeData)
+		return res.status(200).json({ subscriberCount: subscriberCount || 0 })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Login with YouTube" })

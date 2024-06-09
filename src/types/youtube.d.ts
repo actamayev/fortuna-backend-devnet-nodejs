@@ -8,10 +8,6 @@ declare global {
 	interface TypedRetrievedYouTubeAccessTokensData extends RetrievedYouTubeAccessTokensData {
 		refresh_token__encrypted: NonDeterministicEncryptedString
 	}
-
-	interface UserYouTubeData {
-		subscriberCount: number
-	}
 }
 
 export {}

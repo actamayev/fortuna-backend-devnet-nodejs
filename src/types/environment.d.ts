@@ -7,7 +7,6 @@ declare namespace NodeJS {
 		PRIVATE_S3_BUCKET: string
 
 		// Solana:
-		FORTUNA_FEE_PAYER_PUBLIC_KEY: string
 		FORTUNA_FEE_PAYER_SECRET_KEY: string
 
 		// The ID_DB fields are actually numbers, but interpreted as a string when read from .env
@@ -16,8 +15,6 @@ declare namespace NodeJS {
 		// Google Auth:
 		GOOGLE_CLIENT_ID: string
 		GOOGLE_CLIENT_SECRET: string
-
-		MIN_NUMBER_YOUTUBE_SUBS_TO_BE_FORTUNA_CREATOR: string
 
 		// Encryption:
 		SECRET_KEY_ENCRYPTION_KEY: NonDeterministicEncryptionKeys
