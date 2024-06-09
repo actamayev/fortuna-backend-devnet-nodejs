@@ -12,7 +12,8 @@ export default function transformCreatorContentList(input: RetrievedCreatorDBVid
 				tierNumber: tier.tier_number,
 				purchasesInThisTier: tier.purchases_allowed_for_this_tier,
 				tierDiscount: tier.percent_discount_at_this_tier,
-				tierAccessPrice: tier.tier_access_price_usd
+				tierAccessPrice: tier.tier_access_price_usd,
+				isTierSoldOut: tier.is_sold_out
 			})),
 			isContentExclusive: item.is_video_exclusive
 		}))

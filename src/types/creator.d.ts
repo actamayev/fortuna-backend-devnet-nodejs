@@ -35,6 +35,7 @@ declare global {
 			purchases_allowed_for_this_tier: number | null
 			percent_discount_at_this_tier: number
 			tier_access_price_usd: number
+			is_sold_out: boolean
 		}[]
 		numberOfExclusivePurchasesSoFar: number
 		is_video_exclusive: boolean
@@ -48,7 +49,7 @@ declare global {
 		imageUrl: string
 		uuid: string
 		isContentExclusive: boolean
-		tierData: TierData[]
+		tierData: VideoTierData[]
 		numberOfExclusivePurchasesSoFar: number | null
 	}
 }
