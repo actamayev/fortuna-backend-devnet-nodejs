@@ -4,7 +4,6 @@ declare global {
 		uploadedImageId: number
 		uploadedVideoId: number
 		videoName: string
-		imageUrl: string
 		description: string
 		isContentExclusive: boolean
 		tierData: IncomingNewVideoTierData[]

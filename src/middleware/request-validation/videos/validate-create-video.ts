@@ -9,7 +9,6 @@ const createVideoSchema = Joi.object({
 		uploadedImageId: Joi.number().strict().required(),
 		uploadedVideoId: Joi.number().strict().required(),
 		videoName: Joi.string().required(),
-		imageUrl: Joi.string().required(),
 		description: Joi.string().required(),
 		isContentExclusive: Joi.boolean().required(),
 		tierData: Joi.array().items(
