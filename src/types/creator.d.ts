@@ -15,7 +15,7 @@ declare global {
 		tierNumber: number
 		purchasesInThisTier: number | null
 		tierDiscount: number
-		tierAccessPrice: number
+		tierAccessPriceUsd: number
 	}
 
 	interface VideoTierData extends IncomingNewVideoTierData {

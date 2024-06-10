@@ -32,7 +32,7 @@ export default async function addVideoRecord (
 					video_id: video.video_id,
 					tier_number: singleTierData.tierNumber,
 					percent_discount_at_this_tier: singleTierData.tierDiscount,
-					tier_access_price_usd: singleTierData.tierAccessPrice,
+					tier_access_price_usd: singleTierData.tierAccessPriceUsd,
 					...(singleTierData.purchasesInThisTier !== null && {
 						purchases_allowed_for_this_tier: singleTierData.purchasesInThisTier
 					})
