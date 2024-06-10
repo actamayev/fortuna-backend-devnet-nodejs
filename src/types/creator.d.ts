@@ -38,7 +38,7 @@ declare global {
 			tier_access_price_usd: number
 			is_sold_out: boolean
 		}[]
-		numberOfExclusivePurchasesSoFar: number
+		numberOfExclusivePurchasesSoFar: number | null
 		is_video_exclusive: boolean
 	}
 

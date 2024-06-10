@@ -48,7 +48,7 @@ export default async function retrieveCreatorContentList(solanaWalletId: number)
 			// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
 			.map(({ _count, ...rest }) => rest) // Remove _count property
 
-		return filteredVideo as RetrievedCreatorDBVideoData[]
+		return filteredVideo
 	} catch (error) {
 		console.error(error)
 		throw error

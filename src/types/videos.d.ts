@@ -28,7 +28,7 @@ declare global {
 				} | null
 			}
 		}
-		numberOfExclusivePurchasesSoFar: number
+		numberOfExclusivePurchasesSoFar: number | null
 		videoUrl?: string
 	}
 
