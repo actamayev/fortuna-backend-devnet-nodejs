@@ -9,6 +9,7 @@ export default function transformCreatorContentList(input: RetrievedCreatorDBVid
 			uuid: item.uuid,
 			isContentExclusive: item.is_video_exclusive,
 			numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar,
+			createdAt: item.created_at,
 			tierData: item.video_access_tier.map(tier => ({
 				tierNumber: tier.tier_number,
 				purchasesInThisTier: tier.purchases_allowed_for_this_tier,

@@ -29,6 +29,7 @@ declare global {
 		is_video_exclusive: boolean
 		video_listing_status: VideoListingStatus
 		uuid: string
+		created_at: Date
 		uploaded_image: {
 			image_url: string
 		}
@@ -51,6 +52,7 @@ declare global {
 		uuid: string
 		isContentExclusive: boolean
 		numberOfExclusivePurchasesSoFar: number | null
+		createdAt: Date
 		tierData: VideoTierData[]
 	}
 }
