@@ -52,16 +52,8 @@ solanaRoutes.post("/get-transaction-fees", validateTransactionSignatures, getTra
 
 solanaRoutes.post("/get-transaction-details", validateTransactionSignatures, getTransactionDetails)
 
-solanaRoutes.get(
-	"/get-wallet-balance",
-	jwtVerifyAttachSolanaWallet,
-	getSolanaWalletBalance
-)
+solanaRoutes.get("/get-wallet-balance", jwtVerifyAttachSolanaWallet, getSolanaWalletBalance)
 
-solanaRoutes.post(
-	"/request-airdrop",
-	jwtVerifyAttachSolanaWallet,
-	requestSolanaAirdrop
-)
+solanaRoutes.post("/request-airdrop", jwtVerifyAttachSolanaWallet, requestSolanaAirdrop)
 
 export default solanaRoutes
