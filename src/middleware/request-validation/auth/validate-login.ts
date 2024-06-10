@@ -5,7 +5,7 @@ import passwordValidatorSchema from "../../joi/password-validator"
 
 const loginInformationSchema = Joi.object({
 	loginInformation: Joi.object({
-		contact: Joi.string().required(),
+		contact: Joi.string().required().min(3),
 		password: passwordValidatorSchema.required(),
 	}).required()
 }).required()
