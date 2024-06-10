@@ -6,27 +6,34 @@ export default async function updateCheckIfVideoAccessTierSoldOut(
 	tierNumber: number
 ): Promise<boolean> {
 	try {
-		if (_.isNull(exclusiveVideoData.purchases_allowed_for_this_tier)) return false
+		const purchasesAllowedForThisTier = exclusiveVideoData.purchases_allowed_for_this_tier
+		if (_.isNull(purchasesAllowedForThisTier)) return false
+
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		const numberPurchases = await prismaClient.video_access_tier.count({
-			where: {
-				video_id: exclusiveVideoData.video_id,
-				tier_number: tierNumber
-			}
+		const result = await prismaClient.$transaction(async (prisma) => {
+			const numberPurchases = await prisma.video_access_tier.count({
+				where: {
+					video_id: exclusiveVideoData.video_id,
+					tier_number: tierNumber
+				}
+			})
+
+			if (numberPurchases < purchasesAllowedForThisTier) return false
+
+			await prisma.video_access_tier.update({
+				where: {
+					video_access_tier_id: exclusiveVideoData.video_access_tier_id
+				},
+				data: {
+					is_sold_out: true
+				}
+			})
+
+			return true
 		})
 
-		if (numberPurchases < exclusiveVideoData.purchases_allowed_for_this_tier) return false
-
-		await prismaClient.video_access_tier.update({
-			where: {
-				video_access_tier_id: exclusiveVideoData.video_access_tier_id
-			},
-			data: {
-				is_sold_out: true
-			}
-		})
-		return true
+		return result
 	} catch (error) {
 		console.error(error)
 		throw error

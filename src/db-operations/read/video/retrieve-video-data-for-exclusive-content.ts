@@ -1,4 +1,3 @@
-import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function retrieveVideoDataForExclusiveContent(
@@ -16,8 +15,6 @@ export default async function retrieveVideoDataForExclusiveContent(
 				is_video_exclusive: true
 			}
 		})
-
-		if (_.isNull(retrievedVideoWithExclusiveInfo)) return null
 
 		return retrievedVideoWithExclusiveInfo
 	} catch (error) {
