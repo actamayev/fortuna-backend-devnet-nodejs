@@ -1,9 +1,7 @@
 import _ from "lodash"
 import { google } from "googleapis"
 
-export default async function retrieveYouTubeSubscriberCount(
-	accessToken: string
-): Promise<number| null> {
+export default async function retrieveYouTubeSubscriberCount(accessToken: string): Promise<number | null> {
 	try {
 		const auth = new google.auth.OAuth2()
 		auth.setCredentials({ access_token: accessToken })
@@ -18,7 +16,6 @@ export default async function retrieveYouTubeSubscriberCount(
 
 		const subscribers = creatorYouTubeData.data.items[0].statistics?.subscriberCount
 
-		if (_.isEqual(subscribers, 0)) return 0
 		if (_.isNil(subscribers)) return null
 
 		return parseInt(subscribers, 10)

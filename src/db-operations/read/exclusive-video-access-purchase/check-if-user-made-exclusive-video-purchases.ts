@@ -20,7 +20,7 @@ export default async function checkIfUserMadeExclusiveVideoPurchases(
 
 		return result
 	} catch (error) {
-		console.error("Error finding user:", error)
+		console.error("Error checking if the user made exclusive video purchases:", error)
 		throw error
 	}
 }

@@ -37,12 +37,12 @@ declare global {
 			video_creator_wallet: {
 				video_id: number
 				video_name: string
+				video_listing_status: VideoListingStatus
 				description: string
 				creator_wallet_id: number
 				is_video_exclusive: boolean
 				uuid: string
 				created_at: Date
-				video_listing_status: VideoListingStatus
 				uploaded_image: {
 					image_url: string
 				}
@@ -53,7 +53,7 @@ declare global {
 					tier_access_price_usd: number
 					is_sold_out: boolean
 				}[]
-				numberOfExclusivePurchasesSoFar: number
+				numberOfExclusivePurchasesSoFar: number | null
 			}[]
 		} | null
 		username: string

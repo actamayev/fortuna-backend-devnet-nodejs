@@ -9,9 +9,6 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 				video_name: {
 					contains: videoTitle,
 					mode: "insensitive"
-				},
-				video_listing_status: {
-					notIn: ["PRELISTING", "REMOVED"]
 				}
 			},
 			select: {

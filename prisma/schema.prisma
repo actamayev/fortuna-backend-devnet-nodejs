@@ -84,10 +84,8 @@ model solana_wallet {
 }
 
 enum VideoListingStatus {
-	PRELISTING
 	LISTED
 	SOLDOUT
-	REMOVED
 }
 
 model video {

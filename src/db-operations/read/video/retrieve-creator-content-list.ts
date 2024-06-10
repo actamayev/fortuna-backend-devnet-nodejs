@@ -6,10 +6,7 @@ export default async function retrieveCreatorContentList(solanaWalletId: number)
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const creatorVideoData = await prismaClient.video.findMany({
 			where: {
-				creator_wallet_id: solanaWalletId,
-				video_listing_status: {
-					notIn: ["PRELISTING", "REMOVED"]
-				}
+				creator_wallet_id: solanaWalletId
 			},
 			orderBy: {
 				created_at: "desc"

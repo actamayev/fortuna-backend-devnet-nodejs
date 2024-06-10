@@ -1,3 +1,5 @@
+import { VideoListingStatus } from "@prisma/client"
+
 declare global {
 	interface IncomingNewVideoData {
 		uuid: string

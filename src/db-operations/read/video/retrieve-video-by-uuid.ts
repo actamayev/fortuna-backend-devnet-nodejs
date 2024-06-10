@@ -7,10 +7,7 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const retrievedVideo = await prismaClient.video.findFirst({
 			where: {
-				uuid: videoUUID,
-				video_listing_status: {
-					notIn: ["PRELISTING", "REMOVED"]
-				}
+				uuid: videoUUID
 			},
 			select: {
 				video_id: true,
