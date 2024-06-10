@@ -16,8 +16,7 @@ export default async function refreshGoogleAccessToken(youtubeAccessTokensId: nu
 			_.isNil(credentials.expiry_date)
 		) throw Error("Unable to refresh access token")
 
-		const newAccessToken = await updateYouTubeAccessToken(youtubeAccessTokensId, credentials)
-		return newAccessToken
+		return await updateYouTubeAccessToken(youtubeAccessTokensId, credentials)
 	} catch (error) {
 		console.error(error)
 		throw error
