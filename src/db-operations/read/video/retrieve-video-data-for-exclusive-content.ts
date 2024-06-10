@@ -13,7 +13,7 @@ export default async function retrieveVideoDataForExclusiveContent(
 			select: {
 				video_id: true,
 				creator_wallet_id: true,
-				is_video_exclusive: true,
+				is_video_exclusive: true
 			}
 		})
 

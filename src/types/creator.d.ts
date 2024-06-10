@@ -26,6 +26,7 @@ declare global {
 		video_id: number
 		video_name: string
 		description: string
+		is_video_exclusive: boolean
 		video_listing_status: VideoListingStatus
 		uuid: string
 		uploaded_image: {
@@ -39,7 +40,6 @@ declare global {
 			is_sold_out: boolean
 		}[]
 		numberOfExclusivePurchasesSoFar: number | null
-		is_video_exclusive: boolean
 	}
 
 	interface OutputCreatorVideoData {
