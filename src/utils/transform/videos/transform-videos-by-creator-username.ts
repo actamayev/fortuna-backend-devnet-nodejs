@@ -8,17 +8,17 @@ interface VideosAndCreatorData {
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transformVideosByCreatorUsername(
-	input: RetrievedVideosByCreatorUsername,
+	retrievedVideoData: RetrievedVideosByCreatorUsername,
 	walletId: number | undefined
 ): Promise<VideosAndCreatorData | null> {
 	try {
-		if (_.isNull(input.solana_wallet)) return null
+		if (_.isNull(retrievedVideoData.solana_wallet)) return null
 
-		const validEntries = input.solana_wallet.video_creator_wallet
+		const validEntries = retrievedVideoData.solana_wallet.video_creator_wallet
 
 		// Fetch remaining tokens for these public keys
 		const userAllowedToAccessContent = await checkWhichExclusiveContentUserAllowedToAccess(
-			input.solana_wallet.video_creator_wallet,
+			retrievedVideoData.solana_wallet.video_creator_wallet,
 			walletId
 		)
 		// Transform data using validated and filtered entries
@@ -30,8 +30,8 @@ export default async function transformVideosByCreatorUsername(
 				description: wallet.description,
 				imageUrl: wallet.uploaded_image.image_url,
 				uuid: wallet.uuid,
-				creatorUsername: input.username,
-				creatorProfilePictureUrl: input.profile_picture?.image_url || null,
+				creatorUsername: retrievedVideoData.username,
+				creatorProfilePictureUrl: retrievedVideoData.profile_picture?.image_url || null,
 				isVideoExclusive: wallet.is_video_exclusive,
 				isUserAbleToAccessVideo,
 				createdAt: wallet.created_at,
@@ -48,8 +48,8 @@ export default async function transformVideosByCreatorUsername(
 
 		// Prepare creator data
 		const creatorData: CreatorSearchDataSendingToFrontend = {
-			creatorUsername: input.username,
-			creatorProfilePictureUrl: input.profile_picture?.image_url || null
+			creatorUsername: retrievedVideoData.username,
+			creatorProfilePictureUrl: retrievedVideoData.profile_picture?.image_url || null
 		}
 
 		return { videoData, creatorData }
