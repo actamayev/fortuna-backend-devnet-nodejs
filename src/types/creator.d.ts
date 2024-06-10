@@ -50,8 +50,8 @@ declare global {
 		imageUrl: string
 		uuid: string
 		isContentExclusive: boolean
-		tierData: VideoTierData[]
 		numberOfExclusivePurchasesSoFar: number | null
+		tierData: VideoTierData[]
 	}
 }
 

@@ -7,6 +7,7 @@ export default function transformCreatorContentList(input: RetrievedCreatorDBVid
 			description: item.description,
 			imageUrl: item.uploaded_image.image_url,
 			uuid: item.uuid,
+			isContentExclusive: item.is_video_exclusive,
 			numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar,
 			tierData: item.video_access_tier.map(tier => ({
 				tierNumber: tier.tier_number,
@@ -14,8 +15,7 @@ export default function transformCreatorContentList(input: RetrievedCreatorDBVid
 				tierDiscount: tier.percent_discount_at_this_tier,
 				tierAccessPrice: tier.tier_access_price_usd,
 				isTierSoldOut: tier.is_sold_out
-			})),
-			isContentExclusive: item.is_video_exclusive
+			}))
 		}))
 	} catch (error) {
 		console.error(error)

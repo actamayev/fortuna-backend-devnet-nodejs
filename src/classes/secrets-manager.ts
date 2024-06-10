@@ -51,26 +51,31 @@ export default class SecretsManager {
 	}
 
 	public async getSecrets(keys: SecretKeys[]): Promise<SecretsObject> {
-		const secrets: Partial<SecretsObject> = {}
+		try {
+			const secrets: Partial<SecretsObject> = {}
 
-		if (process.env.NODE_ENV !== "production") {
-			for (const key of keys) {
-				const secret = process.env[key]
-				secrets[key] = secret
-			}
-		} else {
-			const missingKeys = keys.filter(key => !this.secrets.has(key))
-			if (!_.isEmpty(missingKeys)) await this.fetchAllSecretsFromAWS()
-			for (const key of keys) {
-				const secret = this.secrets.get(key)
-				if (_.isUndefined(secret)) {
-					throw new Error(`Unable to retrieve secret for key: ${key}`)
+			if (process.env.NODE_ENV !== "production") {
+				for (const key of keys) {
+					const secret = process.env[key]
+					secrets[key] = secret
 				}
-				secrets[key] = secret
+			} else {
+				const missingKeys = keys.filter(key => !this.secrets.has(key))
+				if (!_.isEmpty(missingKeys)) await this.fetchAllSecretsFromAWS()
+				for (const key of keys) {
+					const secret = this.secrets.get(key)
+					// eslint-disable-next-line max-depth
+					if (_.isUndefined(secret)) {
+						throw new Error(`Unable to retrieve secret for key: ${key}`)
+					}
+					secrets[key] = secret
+				}
 			}
+			return secrets as SecretsObject
+		} catch (error) {
+			console.error(error)
+			throw error
 		}
-
-		return secrets as SecretsObject
 	}
 
 	private async fetchSecretFromAWS(key: SecretKeys): Promise<string> {
@@ -88,15 +93,14 @@ export default class SecretsManager {
 	}
 
 	private async fetchAllSecretsFromAWS(): Promise<void> {
-		const command = new GetSecretValueCommand({
-			SecretId: "new_devnet_secrets"
-		})
-
-		if (_.isUndefined(this.secretsManager)) {
-			throw new Error("Secrets Manager client is not initialized!")
-		}
-
 		try {
+			const command = new GetSecretValueCommand({
+				SecretId: "new_devnet_secrets"
+			})
+
+			if (_.isUndefined(this.secretsManager)) {
+				throw new Error("Secrets Manager client is not initialized!")
+			}
 			const response = await this.secretsManager.send(command)
 
 			if (_.isUndefined(response.SecretString)) {
@@ -111,15 +115,21 @@ export default class SecretsManager {
 	}
 
 	private updateSecretsMap(secretsString: string): void {
-		const secrets = JSON.parse(secretsString)
-		Object.keys(secrets).forEach(key => {
-			const secretKey = key as SecretKeys
-			const value = secrets[key]
-			if (!_.isUndefined(value)) {
-				this.secrets.set(secretKey, value)
-			} else {
-				console.error(`Value for key ${key} is undefined.`)
-			}
-		})
+		try {
+			const secrets = JSON.parse(secretsString)
+			Object.keys(secrets).forEach(key => {
+				const secretKey = key as SecretKeys
+				const value = secrets[key]
+				if (!_.isUndefined(value)) {
+					this.secrets.set(secretKey, value)
+				} else {
+					console.error(`Value for key ${key} is undefined.`)
+				}
+			})
+		}
+		catch (error) {
+			console.error(error)
+			throw error
+		}
 	}
 }
