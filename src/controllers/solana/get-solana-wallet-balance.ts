@@ -8,12 +8,7 @@ export default async function getSolanaWalletBalance(req: Request, res: Response
 		const publicKey = new PublicKey(solanaWallet.public_key)
 		const walletBalanceInfo = await getWalletBalanceWithUSD(publicKey)
 
-		return res.status(200).json({
-			balanceInSol: walletBalanceInfo.balanceInSol,
-			balanceInUsd: walletBalanceInfo.balanceInUsd,
-			solPriceInUSD: walletBalanceInfo.solPriceInUSD,
-			solPriceRetrievedTime: walletBalanceInfo.solPriceRetrievedTime
-		})
+		return res.status(200).json({ ...walletBalanceInfo })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Retrieve Solana Wallet Balance" })

@@ -18,14 +18,9 @@ export default async function requestSolanaAirdrop(req: Request, res: Response):
 			lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
 			signature
 		})
-		const walletBalance = await getWalletBalanceWithUSD(publicKey)
+		const walletBalanceInfo = await getWalletBalanceWithUSD(publicKey)
 
-		return res.status(200).json({
-			balanceInSol: walletBalance.balanceInSol,
-			balanceInUsd: walletBalance.balanceInUsd,
-			solPriceInUSD: walletBalance.solPriceInUSD,
-			solPriceRetrievedTime: walletBalance.solPriceRetrievedTime
-		})
+		return res.status(200).json({ ...walletBalanceInfo })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to Request Solana Airdrop" })
