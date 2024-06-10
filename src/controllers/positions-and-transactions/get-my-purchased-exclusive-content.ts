@@ -3,7 +3,7 @@ import transformExclusiveContentList from "../../utils/transform/videos/transfor
 import retrieveExclusiveAccessByWalletId
 	from "../../db-operations/read/exclusive-video-access-purchase/retrieve-exclusive-access-by-wallet-id"
 
-export default async function getMyOwnership(req: Request, res: Response): Promise<Response> {
+export default async function getMyPurchasedExclusiveContent(req: Request, res: Response): Promise<Response> {
 	try {
 		const { solanaWallet } = req
 
