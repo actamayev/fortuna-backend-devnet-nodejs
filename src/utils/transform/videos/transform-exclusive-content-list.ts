@@ -1,4 +1,4 @@
-export function transformExclusiveContentList(myExclusiveContentList: RetrievedMyExclusiveContentData[]): MyExclusiveContentData[] {
+export default function transformExclusiveContentList(myExclusiveContentList: RetrievedMyExclusiveContentData[]): MyExclusiveContentData[] {
 	try {
 		const transformedExclusiveContentList: MyExclusiveContentData[] = myExclusiveContentList.map(exclusiveContent => ({
 			videoName: exclusiveContent.video.video_name,

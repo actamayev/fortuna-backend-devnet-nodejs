@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { transformExclusiveContentList } from "../../utils/transform/videos/transform-exclusive-content-list"
+import transformExclusiveContentList from "../../utils/transform/videos/transform-exclusive-content-list"
 import retrieveExclusiveAccessByWalletId
 	from "../../db-operations/read/exclusive-video-access-purchase/retrieve-exclusive-access-by-wallet-id"
 

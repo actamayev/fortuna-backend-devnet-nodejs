@@ -5,7 +5,7 @@ export default async function addUploadVideoRecord (fileName: string): Promise<n
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const uploadImageResponse = await prismaClient.uploaded_video.create({
 			data: {
-				file_name: fileName,
+				file_name: fileName
 			}
 		})
 

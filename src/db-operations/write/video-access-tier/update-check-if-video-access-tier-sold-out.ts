@@ -3,10 +3,12 @@ import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function updateCheckIfVideoAccessTierSoldOut(
 	exclusiveVideoData: ExclusiveVideoData,
-	tierNumber: number,
+	tierNumber: number
 ): Promise<boolean> {
 	try {
+		if (_.isNull(exclusiveVideoData.purchases_allowed_for_this_tier)) return false
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const numberPurchases = await prismaClient.video_access_tier.count({
 			where: {
 				video_id: exclusiveVideoData.video_id,
@@ -14,10 +16,7 @@ export default async function updateCheckIfVideoAccessTierSoldOut(
 			}
 		})
 
-		if (
-			_.isNull(exclusiveVideoData.purchases_allowed_for_this_tier) ||
-			numberPurchases < exclusiveVideoData.purchases_allowed_for_this_tier
-		) return false
+		if (numberPurchases < exclusiveVideoData.purchases_allowed_for_this_tier) return false
 
 		await prismaClient.video_access_tier.update({
 			where: {

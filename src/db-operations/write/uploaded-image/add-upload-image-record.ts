@@ -6,7 +6,7 @@ export default async function addUploadImageRecord (imageUploadUrl: string, file
 		const uploadImageResponse = await prismaClient.uploaded_image.create({
 			data: {
 				image_url: imageUploadUrl,
-				file_name: fileName,
+				file_name: fileName
 			}
 		})
 
