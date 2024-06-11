@@ -6,12 +6,12 @@ import attachExclusiveVideoData from "../middleware/attach/attach-exclusive-vide
 import jwtVerifyAttachSolanaWallet from "../middleware/jwt/jwt-verify-attach-solana-wallet"
 import confirmUserDoesntAlreadyHaveExclusiveAccess
 	from "../middleware/confirmations/market/confirm-user-doesnt-already-have-exclusive-access"
+import confirmTierNotSoldOut from "../middleware/confirmations/market/confirm-tier-not-sold-out"
 import confirmUserHasEnoughSolToPurchaseExclusiveAccess
 	from "../middleware/confirmations/market/confirm-user-has-enough-sol-to-purchase-exclusive-access"
 import confirmCreatorNotBuyingInstantAccessToOwnExclusiveContent
 	from "../middleware/confirmations/market/confirm-creator-not-buying-instant-access-to-own-exclusive-content"
 import validatePurchaseInstantAccess from "../middleware/request-validation/videos/validate-puchase-instant-access"
-import confirmEnoughPurchasesAvailable from "../middleware/confirmations/market/confirm-enough-purchases-available"
 
 const marketRoutes = express.Router()
 
@@ -20,7 +20,7 @@ marketRoutes.post(
 	validatePurchaseInstantAccess,
 	jwtVerifyAttachSolanaWallet,
 	attachExclusiveVideoData,
-	confirmEnoughPurchasesAvailable,
+	confirmTierNotSoldOut,
 	confirmCreatorNotBuyingInstantAccessToOwnExclusiveContent,
 	confirmUserDoesntAlreadyHaveExclusiveAccess,
 	confirmUserHasEnoughSolToPurchaseExclusiveAccess,

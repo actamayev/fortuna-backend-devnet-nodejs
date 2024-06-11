@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 
-export default function confirmEnoughPurchasesAvailable(req: Request, res: Response, next: NextFunction): Response | void {
+export default function confirmTierNotSoldOut(req: Request, res: Response, next: NextFunction): Response | void {
 	try {
 		const { exclusiveVideoData } = req
 
@@ -11,6 +11,6 @@ export default function confirmEnoughPurchasesAvailable(req: Request, res: Respo
 		next()
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to confirm there are enough purchases available" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to confirm that tier isn't already sold out." })
 	}
 }
