@@ -76,7 +76,7 @@
 				"selector": "variable",
 				"modifiers": ["destructured"],
 				"filter": {
-					"regex": "GOOGLE_CLIENT_ID|GOOGLE_CLIENT_SECRET|FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_ID_DB|FORTUNA_TOKENS_WALLET_ID_DB|FORTUNA_ESCROW_TOKEN_HOLDER_WALLET_PUBLIC_KEY|FORTUNA_TOKENS_WALLET_PUBLIC_KEY",
+					"regex": "GOOGLE_CLIENT_ID|GOOGLE_CLIENT_SECRET",
 					"match": true
 				},
 				"format": null

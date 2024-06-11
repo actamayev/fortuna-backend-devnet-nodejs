@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { Response, Request } from "express"
-import transformVideosByCreatorUsername from "../../utils/transform/transform-videos-by-creator-username"
+import transformVideosByCreatorUsername from "../../utils/transform/videos/transform-videos-by-creator-username"
 import retrieveVideosByCreatorUsername from "../../db-operations/read/credentials/retrieve-videos-by-creator-username"
 
 export default async function getVideosByCreatorUsername (req: Request, res: Response): Promise<Response> {

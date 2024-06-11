@@ -1,45 +1,25 @@
 -- select * from credentials;
 -- select * from login_history;
 -- select * from solana_wallet;
--- select * from spl;
--- select * from spl_mint;
+-- select * from video;
+-- select * from exclusive_video_access_purchase;
+-- select * from video_access_tier;
 -- Select solana_wallet.user_id, solana_wallet.public_key,
 -- 	solana_wallet.solana_wallet_id, username, solana_wallet.secret_key__encrypted from credentials join solana_wallet on credentials.user_id = solana_wallet.user_id;
 
--- select spl_ownership_id, spl_id, number_of_shares, credentials.username, purchase_price_per_share_usd from spl_ownership
--- 	join solana_wallet on spl_ownership.solana_wallet_id = solana_wallet.solana_wallet_id
--- 	join credentials on solana_wallet.user_id = credentials.user_id;
-
-select * from spl_ownership where spl_id = 56;
-
 -- select
--- 	spl_id,
+-- 	video_id,
 -- 	uploaded_video.uuid,
 -- 	allow_value_from_same_creator_tokens_for_exclusive_content,
 -- 	value_needed_to_access_exclusive_content_usd,
 -- 	listing_price_per_share_usd
--- 	from spl join uploaded_video on uploaded_video.uploaded_video_id = spl.uploaded_video_id;
+-- 	from video join uploaded_video on uploaded_video.uploaded_video_id = video.uploaded_video_id;
 
--- select * from token_account;
 -- select * from uploaded_image;
 -- select * from uploaded_video;
 -- select * from sol_transfer;
--- select * from spl_purchase;
--- select * from spl_transfer;
 -- select * from youtube_access_tokens;
 -- SELECT * FROM "_prisma_migrations" ORDER BY "finished_at" ASC;
 
--- SELECT * FROM secondary_market_bid;
--- SELECT * FROM secondary_market_ask;
--- SELECT * FROM secondary_market_transaction;
 
--- select
--- 	secondary_market_transaction_id,
--- 	secondary_market_bid_id,
--- 	secondary_market_ask_id,
--- 	sol_transfer.usd_amount_transferred,
--- 	sol_transfer.transfer_fee_sol,
--- 	secondary_market_transaction.created_at
--- 	from 
--- 	secondary_market_transaction
--- 	join sol_transfer on secondary_market_transaction.sol_transfer_id = sol_transfer.sol_transfer_id;
+

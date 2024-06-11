@@ -21,7 +21,7 @@ export default async function retrieveIncomingTransactionsList(publicKey: string
 				transfer_fee_sol: true,
 				transfer_fee_usd: true,
 				created_at: true,
-				is_spl_purchase: true,
+				is_exclusive_video_access_purchase: true,
 				recipient_solana_wallet: {
 					select: {
 						user: {

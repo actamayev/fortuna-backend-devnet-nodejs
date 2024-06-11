@@ -14,7 +14,7 @@ export default async function addSolTransferRecord (
 	transferFeeSol: number,
 	senderWalletId: number,
 	recipientSolanaWalletId: number | undefined,
-	isSplPurchase: boolean,
+	isExclusiveVideoAccessPurchase: boolean,
 	feePayerSolanaWalletId?: number
 ): Promise<AddSolTransferToDB> {
 	try {
@@ -34,7 +34,7 @@ export default async function addSolTransferRecord (
 				sol_amount_transferred: transferDetails.solToTransfer,
 				usd_amount_transferred: transferDetails.usdToTransfer,
 				transfer_by_currency: transferDetails.defaultCurrency,
-				is_spl_purchase: isSplPurchase,
+				is_exclusive_video_access_purchase: isExclusiveVideoAccessPurchase,
 				transfer_fee_sol: transferFeeSol,
 				transfer_fee_usd: transferFeeSol * solPriceDetails.price,
 				sender_solana_wallet_id: senderWalletId,

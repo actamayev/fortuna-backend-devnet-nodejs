@@ -1,0 +1,39 @@
+import checkWhichExclusiveContentUserAllowedToAccess from "../../exclusive-content/check-which-exclusive-content-user-allowed-to-access"
+
+export default async function transformHomePageVideoData(
+	retrievedHomePageVideos: RetrievedHomePageVideosFromDB[],
+	solanaWalletId: number | undefined
+): Promise<VideoDataSendingToFrontendLessVideoUrl[]> {
+	try {
+		const userAllowedToAccessContent = await checkWhichExclusiveContentUserAllowedToAccess(retrievedHomePageVideos, solanaWalletId)
+
+		const results = retrievedHomePageVideos.map(item => {
+			const isUserAbleToAccessVideo = userAllowedToAccessContent[item.video_id]
+			return {
+				videoName: item.video_name,
+				videoListingStatus: item.video_listing_status,
+				description: item.description,
+				imageUrl: item.uploaded_image.image_url,
+				uuid: item.uuid,
+				creatorUsername: item.video_creator_wallet.user.username,
+				creatorProfilePictureUrl: item.video_creator_wallet.user.profile_picture?.image_url || null,
+				isVideoExclusive: item.is_video_exclusive,
+				isUserAbleToAccessVideo,
+				createdAt: item.created_at,
+				tierData: item.video_access_tier.map(tier => ({
+					tierNumber: tier.tier_number,
+					purchasesInThisTier: tier.purchases_allowed_for_this_tier,
+					tierDiscount: tier.percent_discount_at_this_tier,
+					tierAccessPriceUsd: tier.tier_access_price_usd,
+					isTierSoldOut: tier.is_sold_out
+				})),
+				numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar,
+			}
+		})
+
+		return results
+	} catch (error) {
+		console.error(error)
+		throw error
+	}
+}

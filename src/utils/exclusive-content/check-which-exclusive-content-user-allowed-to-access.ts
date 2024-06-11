@@ -1,94 +1,39 @@
 import _ from "lodash"
-import retrieveSplOwnershipsByWalletIdAndSplIds
-	from "../../db-operations/read/spl-ownership/retrieve-spl-ownerships-by-wallet-id-and-spl-id"
-import checkIfUserMadeExclusiveSplPurchases
-	from "../../db-operations/read/exclusive-spl-purchase/check-if-user-made-exclusive-spl-purchases"
-import retrieveSplOwnershipsByWalletIdAndCreatorIds
-	from "../../db-operations/read/spl-ownership/retrieve-spl-ownerships-by-wallet-id-and-creator-ids"
+import checkIfUserMadeExclusiveVideoPurchases
+	from "../../db-operations/read/exclusive-video-access-purchase/check-if-user-made-exclusive-video-purchases"
 
 interface ExclusiveVideoAccessRecord {
-	[splId: number]: boolean
+	[videoId: number]: boolean
 }
 
-// eslint-disable-next-line max-lines-per-function, complexity
 export default async function checkWhichExclusiveContentUserAllowedToAccess(
-	retrievedSpls: SplDataNeededToCheckForExclusiveContentAccess[],
+	retirevedVideos: VideoDataNeededToCheckForExclusiveContentAccess[],
 	userSolanaWalletId: number | undefined
 ): Promise<ExclusiveVideoAccessRecord> {
 	try {
 		const accessRecord: ExclusiveVideoAccessRecord = {}
-		retrievedSpls = retrievedSpls.filter(retrievedSpl => {
-			if (retrievedSpl.is_spl_exclusive === false || retrievedSpl.creator_wallet_id === userSolanaWalletId) {
-				accessRecord[retrievedSpl.spl_id] = true
+		retirevedVideos = retirevedVideos.filter(retrievedVideo => {
+			if (retrievedVideo.is_video_exclusive === false || retrievedVideo.creator_wallet_id === userSolanaWalletId) {
+				accessRecord[retrievedVideo.video_id] = true
 				return false
 			}
 			return true
 		})
 
-		if (_.isEmpty(retrievedSpls)) return accessRecord
+		if (_.isEmpty(retirevedVideos)) return accessRecord
 
 		if (_.isUndefined(userSolanaWalletId)) {
-			retrievedSpls.forEach(spl => accessRecord[spl.spl_id] = false)
+			retirevedVideos.forEach(video => accessRecord[video.video_id] = false)
 			return accessRecord
 		}
 
-		let splIds = retrievedSpls.map(spl => spl.spl_id)
-		const exclusiveSplData = await checkIfUserMadeExclusiveSplPurchases(splIds, userSolanaWalletId)
+		const videoIds = retirevedVideos.map(video => video.video_id)
+		const exclusiveVideoData = await checkIfUserMadeExclusiveVideoPurchases(videoIds, userSolanaWalletId)
 
-		retrievedSpls = retrievedSpls.filter(retrievedSpl => {
-			const didUserPurchaseSplAccess = exclusiveSplData[retrievedSpl.spl_id]
-			if (didUserPurchaseSplAccess === true) {
-				accessRecord[retrievedSpl.spl_id] = true
-				return false
-			}
-			if (
-				_.isNull(retrievedSpl.value_needed_to_access_exclusive_content_usd) ||
-				_.isNull(retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content)
-			) {
-				accessRecord[retrievedSpl.spl_id] = false
-				return false
-			}
-			return true
+		retirevedVideos.map(retrievedVideo => {
+			const didUserPurchaseVideoAccess = exclusiveVideoData[retrievedVideo.video_id]
+			accessRecord[retrievedVideo.video_id] = didUserPurchaseVideoAccess
 		})
-
-		if (_.isEmpty(retrievedSpls)) return accessRecord
-
-		const splsThatDontAllowForValueFromSameCreatorForExclusiveContent = retrievedSpls.filter(
-			retrievedSpl => retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content === false
-		)
-
-		splIds = splsThatDontAllowForValueFromSameCreatorForExclusiveContent.map(spl => spl.spl_id)
-
-		if (!_.isEmpty(splsThatDontAllowForValueFromSameCreatorForExclusiveContent)) {
-			const splOwnershipsByWalletIdAndSplIds = await retrieveSplOwnershipsByWalletIdAndSplIds(userSolanaWalletId, splIds)
-			for (const retrievedSpl of splsThatDontAllowForValueFromSameCreatorForExclusiveContent) {
-				const numberSharesNeededToAccessExclusiveContent =
-					(retrievedSpl.value_needed_to_access_exclusive_content_usd as number) / retrievedSpl.listing_price_per_share_usd
-
-				const numberSharesUserOwns = splOwnershipsByWalletIdAndSplIds[retrievedSpl.spl_id] || 0
-				accessRecord[retrievedSpl.spl_id] = numberSharesUserOwns >= numberSharesNeededToAccessExclusiveContent
-			}
-		}
-
-		if (_.isEmpty(retrievedSpls)) return accessRecord
-
-		const splsThatAllowForValueFromSameCreatorForExclusiveContent = retrievedSpls.filter(
-			retrievedSpl => retrievedSpl.allow_value_from_same_creator_tokens_for_exclusive_content === true
-		)
-
-		const creatorIds = splsThatAllowForValueFromSameCreatorForExclusiveContent.map(spl => spl.creator_wallet_id)
-
-		if (!_.isEmpty(splsThatAllowForValueFromSameCreatorForExclusiveContent)) {
-			const splOwnershipsByWalletIdAndCreatorIds = await retrieveSplOwnershipsByWalletIdAndCreatorIds(
-				userSolanaWalletId,
-				creatorIds
-			)
-			for (const retrievedSpl of splsThatAllowForValueFromSameCreatorForExclusiveContent) {
-				const userOwnershipValue = splOwnershipsByWalletIdAndCreatorIds[retrievedSpl.creator_wallet_id] || 0
-				accessRecord[retrievedSpl.spl_id] =
-					userOwnershipValue >= (retrievedSpl.value_needed_to_access_exclusive_content_usd as number)
-			}
-		}
 
 		return accessRecord
 	} catch (error) {
