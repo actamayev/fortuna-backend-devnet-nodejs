@@ -11,9 +11,10 @@ import searchRoutes from "./routes/search-routes"
 import solanaRoutes from "./routes/solana-routes"
 import uploadRoutes from "./routes/upload-routes"
 import videosRoutes from "./routes/videos-routes"
+import marketRoutes from "./routes/market-routes"
 import authRoutes from "./routes/auth/auth-routes"
 import youtubeRoutes from "./routes/youtube-routes"
-import exchangeRoutes from "./routes/exchange-routes"
+import creatorRoutes from "./routes/creator-routes"
 import encryptionRoutes from "./routes/encryption-routes"
 import personalInfoRoutes from "./routes/personal-info-routes"
 import positionsAndTransactionsRoutes from "./routes/positions-and-transactions-routes"
@@ -48,7 +49,8 @@ app.use(cookieParser())
 app.use(express.json())
 
 app.use("/auth", authRoutes)
-app.use("/exchange", exchangeRoutes)
+app.use("/creator", creatorRoutes)
+app.use("/market", marketRoutes)
 app.use("/personal-info", personalInfoRoutes)
 app.use("/positions-and-transactions", positionsAndTransactionsRoutes)
 app.use("/search", searchRoutes)

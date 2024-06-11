@@ -7,7 +7,7 @@ import passwordValidatorSchema from "../../joi/password-validator"
 const registerInformationSchema = Joi.object({
 	registerInformation: Joi.object({
 		contact: Joi.string().required(),
-		username: usernameValidator.required().trim(),
+		username: usernameValidator.required().trim().min(3),
 		password: passwordValidatorSchema.required(),
 		siteTheme: Joi.string().required().trim().valid("light", "dark")
 	}).required()

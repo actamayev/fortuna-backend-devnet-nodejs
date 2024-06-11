@@ -1,62 +1,26 @@
-import { SPLListingStatus } from "@prisma/client"
+import { VideoListingStatus } from "@prisma/client"
 
 declare global {
-	interface HomePageVideoRetrievedFromDBByUUID {
-		created_at: Date
-		uuid: string
-		videoUrl?: string
-		spl: {
-			spl_name: string
-			listing_price_per_share_usd: number
-			spl_listing_status: SPLListingStatus
-			description: string
-			total_number_of_shares: number
-			public_key_address: string
-			original_content_url: string
-			is_spl_exclusive: boolean
-			creator_wallet_id: number
-			spl_id: number
-			value_needed_to_access_exclusive_content_usd: number | null
-			is_content_instantly_accessible: boolean | null
-			instant_access_price_to_exclusive_content_usd: number | null
-			allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
-			uploaded_image: {
-				image_url: string
-			}
-			spl_creator_wallet: {
-				user: {
-					username: string
-					profile_picture: {
-						image_url: string
-					} | null
-				}
-			}
-		}
-	}
-
-	interface RetrievedHomePageVideo {
-		spl_name: string
-		public_key_address: string
-		listing_price_per_share_usd: number
-		spl_listing_status: SPLListingStatus
-		total_number_of_shares: number
+	interface RetrievedHomePageVideosFromDB {
+		video_id: number
+		video_name: string
 		description: string
-		original_content_url: string
-		is_spl_exclusive: boolean
 		creator_wallet_id: number
-		spl_id: number
-		value_needed_to_access_exclusive_content_usd: number | null
-		is_content_instantly_accessible: boolean | null
-		instant_access_price_to_exclusive_content_usd: number | null
-		allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
+		is_video_exclusive: boolean
+		uuid: string
+		created_at: Date
+		video_listing_status: VideoListingStatus
 		uploaded_image: {
 			image_url: string
 		}
-		uploaded_video: {
-			created_at: Date
-			uuid: string
-		}
-		spl_creator_wallet: {
+		video_access_tier: {
+			tier_number: number
+			purchases_allowed_for_this_tier: number | null
+			percent_discount_at_this_tier: number
+			tier_access_price_usd: number
+			is_sold_out: boolean
+		}[]
+		video_creator_wallet: {
 			user: {
 				username: string
 				profile_picture: {
@@ -64,33 +28,32 @@ declare global {
 				} | null
 			}
 		}
+		numberOfExclusivePurchasesSoFar: number | null
+		videoUrl?: string
 	}
 
 	interface RetrievedVideosByCreatorUsername {
 		solana_wallet: {
-			spl_creator_wallet: {
-				spl_name: string
-				public_key_address: string
-				listing_price_per_share_usd: number
-				spl_listing_status: SPLListingStatus
-				total_number_of_shares: number
-				original_content_url: string
+			video_creator_wallet: {
+				video_id: number
+				video_name: string
+				video_listing_status: VideoListingStatus
 				description: string
-				is_spl_exclusive: boolean
 				creator_wallet_id: number
-				spl_id: number
-				value_needed_to_access_exclusive_content_usd: number | null
-				is_content_instantly_accessible: boolean | null
-				allow_value_from_same_creator_tokens_for_exclusive_content: boolean | null
-				instant_access_price_to_exclusive_content_usd: number | null
+				is_video_exclusive: boolean
+				uuid: string
+				created_at: Date
 				uploaded_image: {
 					image_url: string
 				}
-				uploaded_video: {
-					created_at: Date
-					uuid: string
-					videoUrl?: string
-				}
+				video_access_tier: {
+					tier_number: number
+					purchases_allowed_for_this_tier: number | null
+					percent_discount_at_this_tier: number
+					tier_access_price_usd: number
+					is_sold_out: boolean
+				}[]
+				numberOfExclusivePurchasesSoFar: number | null
 			}[]
 		} | null
 		username: string
@@ -106,39 +69,50 @@ declare global {
 		} | null
 	}
 
-	interface ExclusiveVideoData extends SplDataNeededToCheckForExclusiveContentAccess {
-		uuid: string
-		value_needed_to_access_exclusive_content_usd: number
-		allow_value_from_same_creator_tokens_for_exclusive_content: boolean
-		instant_access_price_to_exclusive_content_usd: number | null
-		is_content_instantly_accessible: boolean | null
+	interface VideoDataNeededToCheckForExclusiveContentAccess {
+		video_id: number
+		creator_wallet_id: number
+		is_video_exclusive: boolean
 	}
 
-	interface InstantAccessExclusiveVideoData extends ExclusiveVideoData {
-		is_content_instantly_accessible: boolean
-		instant_access_price_to_exclusive_content_usd: number
+	interface ExclusiveVideoData extends VideoDataNeededToCheckForExclusiveContentAccess {
+		uuid: string
+		purchases_allowed_for_this_tier: number | null
+		tier_access_price_usd: number
+		is_tier_sold_out: boolean
+		video_access_tier_id: number
+		total_number_video_tiers: number
+	}
+
+	interface MyExclusiveContentData {
+		videoName: string
+		imageUrl: string
+		uuid: string
+	}
+
+	interface RetrievedMyExclusiveContentData {
+		video: {
+			video_name: string
+			uuid: string
+			uploaded_image: {
+				image_url: string
+			}
+		}
 	}
 
 	interface VideoDataSendingToFrontendLessVideoUrl {
-		splName: string
-		splPublicKey: string
-		listingSharePriceUsd: number
-		splListingStatus: SPLListingStatus
+		videoName: string
+		videoListingStatus: VideoListingStatus
 		description: string
 		imageUrl: string
 		uuid: string
-		totalNumberShares: number
-		sharesRemainingForSale: number
-		originalContentUrl: string
-		contentMintDate: Date
 		creatorUsername: string
 		creatorProfilePictureUrl: string | null
-		isSplExclusive: boolean
-		valueNeededToAccessExclusiveContentUsd: number | null
-		isContentInstantlyAccessible: boolean | null
-		priceToInstantlyAccessExclusiveContentUsd: number | null
-		allowValueFromSameCreatorTokensForExclusiveContent: boolean | null
+		isVideoExclusive: boolean
 		isUserAbleToAccessVideo: boolean
+		createdAt: Date
+		tierData: VideoTierData[]
+		numberOfExclusivePurchasesSoFar: number | null
 	}
 
 	interface VideoDataSendingToFrontendWithVideoUrl extends VideoDataSendingToFrontendLessVideoUrl {

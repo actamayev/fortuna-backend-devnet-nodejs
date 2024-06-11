@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from "express"
 import uuidValidator from "../../joi/uuid-validator"
 
 const uploadImageToS3Schema = Joi.object({
-	uuid: uuidValidator.required(),
+	uuid: uuidValidator.required()
 }).required()
 
 export default function validateUploadImageToS3 (req: Request, res: Response, next: NextFunction): Response | void {

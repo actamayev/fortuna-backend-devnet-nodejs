@@ -1,5 +1,5 @@
 import _ from "lodash"
-import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
 import SecretsManager from "./secrets-manager"
 
 export default class AwsS3 {
@@ -25,65 +25,6 @@ export default class AwsS3 {
 			AwsS3.instance = new AwsS3()
 		}
 		return AwsS3.instance
-	}
-
-	public async uploadJSON(jsonData: SPLDataSavedToS3, key: string): Promise<string> {
-		try {
-			const jsonBuffer = Buffer.from(JSON.stringify(jsonData))
-			const publicS3Bucket = await this.secretsManagerInstance.getSecret("PUBLIC_S3_BUCKET")
-
-			const command = new PutObjectCommand({
-				Bucket: publicS3Bucket,
-				Key: key,
-				Body: jsonBuffer,
-				ContentType: "application/json"
-			})
-			await this.s3.send(command)
-			const url = `https://${publicS3Bucket}.s3.us-east-1.amazonaws.com/${key}`
-			return url
-		} catch (error) {
-			console.error("Error uploading JSON to S3:", error)
-			throw error
-		}
-	}
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private async getJSONFromS3(key: string): Promise<any> {
-		try {
-			const publicS3Bucket = await this.secretsManagerInstance.getSecret("PUBLIC_S3_BUCKET")
-
-			const command = new GetObjectCommand({
-				Bucket: publicS3Bucket,
-				Key: key
-			})
-			// eslint-disable-next-line @typescript-eslint/naming-convention
-			const { Body } = await this.s3.send(command)
-			const bodyText = await new Response(Body as ReadableStream).text()
-			return JSON.parse(bodyText)
-		} catch (error) {
-			console.error("Error getting JSON from S3:", error)
-			throw error
-		}
-	}
-
-	public async updateJSONInS3(key: string, updates: Record<string, string>): Promise<void> {
-		try {
-			const currentData = await this.getJSONFromS3(key)
-			const updatedData = { ...currentData, ...updates }
-			const publicS3Bucket = await this.secretsManagerInstance.getSecret("PUBLIC_S3_BUCKET")
-
-			const command = new PutObjectCommand({
-				Bucket: publicS3Bucket,
-				Key: key,
-				Body: JSON.stringify(updatedData),
-				ContentType: "application/json"
-			})
-
-			await this.s3.send(command)
-		} catch (error) {
-			console.error("Error updating JSON in S3:", error)
-			throw error
-		}
 	}
 
 	public async uploadImage(fileBuffer: Buffer, key: string): Promise<string> {

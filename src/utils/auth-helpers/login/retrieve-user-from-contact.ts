@@ -21,9 +21,7 @@ export default async function retrieveUserFromContact(
 			}
 		}
 
-		const user = await findUserByWhereCondition(whereCondition)
-
-		return user
+		return await findUserByWhereCondition(whereCondition)
 	} catch (error) {
 		console.error(error)
 		throw error

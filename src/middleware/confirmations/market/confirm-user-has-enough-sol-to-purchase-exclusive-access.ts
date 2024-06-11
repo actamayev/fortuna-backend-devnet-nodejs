@@ -1,0 +1,25 @@
+import { PublicKey } from "@solana/web3.js"
+import { Request, Response, NextFunction } from "express"
+import { getWalletBalanceWithUSD } from "../../../utils/solana/get-wallet-balance"
+
+export default async function confirmUserHasEnoughSolToPurchaseExclusiveAccess(
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<Response | void> {
+	try {
+		const { solanaWallet, exclusiveVideoData } = req
+		const publicKey = new PublicKey(solanaWallet.public_key)
+		const { balanceInUsd } = await getWalletBalanceWithUSD(publicKey)
+
+		const tierAccessPriceUsd = exclusiveVideoData.tier_access_price_usd
+		if (balanceInUsd < tierAccessPriceUsd) {
+			return res.status(400).json({ message: "User does not have enough Sol to complete the purchase" })
+		}
+
+		next()
+	} catch (error) {
+		console.error(error)
+		return res.status(500).json({ error: "Internal Server Error: Unable to Check if User has enough Sol to purchase exclusive content"})
+	}
+}

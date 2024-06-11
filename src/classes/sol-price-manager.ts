@@ -38,8 +38,8 @@ export default class SolPriceManager {
 	}
 
 	private async fetchPrice(): Promise<number> {
-		const url = "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
 		try {
+			const url = "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
 			const response = await fetch(url)
 			const data = await response.json()
 			return data.solana.usd
