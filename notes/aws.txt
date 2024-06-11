@@ -38,3 +38,6 @@ Other:
 	export DATABASE_URL='your-database-url'.
 	Save, and run `source ~/.bashrc`
 	Run `echo $DATABASE_URL` to make sure the command ran correctly
+
+- Update linux packages
+	sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
