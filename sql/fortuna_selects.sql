@@ -3,7 +3,7 @@
 -- select * from solana_wallet;
 -- select * from video;
 -- select * from exclusive_video_access_purchase;
-select * from video_access_tier;
+-- select * from video_access_tier;
 -- Select solana_wallet.user_id, solana_wallet.public_key,
 -- 	solana_wallet.solana_wallet_id, username, solana_wallet.secret_key__encrypted from credentials join solana_wallet on credentials.user_id = solana_wallet.user_id;
 
@@ -13,10 +13,13 @@ select * from video_access_tier;
 -- 	allow_value_from_same_creator_tokens_for_exclusive_content,
 -- 	value_needed_to_access_exclusive_content_usd,
 -- 	listing_price_per_share_usd
--- 	from vdideo join uploaded_video on uploaded_video.uploaded_video_id = video.uploaded_video_id;
+-- 	from video join uploaded_video on uploaded_video.uploaded_video_id = video.uploaded_video_id;
 
 -- select * from uploaded_image;
 -- select * from uploaded_video;
 -- select * from sol_transfer;
 -- select * from youtube_access_tokens;
 -- SELECT * FROM "_prisma_migrations" ORDER BY "finished_at" ASC;
+
+
+
