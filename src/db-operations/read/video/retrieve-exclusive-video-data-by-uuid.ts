@@ -25,13 +25,11 @@ export default async function retrieveExclusiveVideoDataByUUID(
 				creator_wallet_id: true,
 				video_access_tier: {
 					select: {
+						tier_number: true,
 						video_access_tier_id: true,
 						purchases_allowed_for_this_tier: true,
 						tier_access_price_usd: true,
 						is_sold_out: true
-					},
-					where: {
-						tier_number: tierNumber
 					}
 				}
 			}
@@ -39,9 +37,9 @@ export default async function retrieveExclusiveVideoDataByUUID(
 
 		if (_.isNull(exclusiveVideoData)) return null
 
-		const tierData = exclusiveVideoData.video_access_tier[0]
+		const tierData = exclusiveVideoData.video_access_tier.find(videoAccessTier => videoAccessTier.tier_number === tierNumber)
 
-		if (_.isNull(tierData.tier_access_price_usd)) return null
+		if (_.isUndefined(tierData?.tier_access_price_usd)) return null
 
 		const result: ExclusiveVideoData = {
 			uuid: exclusiveVideoData.uuid,
@@ -50,8 +48,9 @@ export default async function retrieveExclusiveVideoDataByUUID(
 			creator_wallet_id: exclusiveVideoData.creator_wallet_id,
 			purchases_allowed_for_this_tier: tierData.purchases_allowed_for_this_tier,
 			tier_access_price_usd: tierData.tier_access_price_usd,
-			is_sold_out: tierData.is_sold_out,
-			video_access_tier_id: tierData.video_access_tier_id
+			is_tier_sold_out: tierData.is_sold_out,
+			video_access_tier_id: tierData.video_access_tier_id,
+			total_number_video_tiers: exclusiveVideoData.video_access_tier.length
 		}
 
 		return result

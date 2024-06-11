@@ -79,8 +79,9 @@ declare global {
 		uuid: string
 		purchases_allowed_for_this_tier: number | null
 		tier_access_price_usd: number
-		is_sold_out: boolean
+		is_tier_sold_out: boolean
 		video_access_tier_id: number
+		total_number_video_tiers: number
 	}
 
 	interface MyExclusiveContentData {
