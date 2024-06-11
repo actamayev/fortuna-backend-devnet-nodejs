@@ -5,15 +5,12 @@ import cookieParser from "cookie-parser"
 
 import checkHealth from "./controllers/health-checks/check-health"
 
-import jwtVerifyAttachUser from "./middleware/jwt/jwt-verify-attach-user"
-
 import searchRoutes from "./routes/search-routes"
 import solanaRoutes from "./routes/solana-routes"
 import uploadRoutes from "./routes/upload-routes"
 import videosRoutes from "./routes/videos-routes"
 import marketRoutes from "./routes/market-routes"
 import authRoutes from "./routes/auth/auth-routes"
-import youtubeRoutes from "./routes/youtube-routes"
 import creatorRoutes from "./routes/creator-routes"
 import encryptionRoutes from "./routes/encryption-routes"
 import personalInfoRoutes from "./routes/personal-info-routes"
@@ -57,7 +54,6 @@ app.use("/search", searchRoutes)
 app.use("/solana", solanaRoutes)
 app.use("/upload", uploadRoutes)
 app.use("/videos", videosRoutes)
-app.use("/youtube", jwtVerifyAttachUser, youtubeRoutes)
 
 // Internal use:
 app.use("/encryption", encryptionRoutes)
