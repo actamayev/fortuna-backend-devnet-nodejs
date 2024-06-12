@@ -73,16 +73,18 @@ model solana_wallet {
 
 	user                                                        credentials @relation(fields: [user_id], references: [user_id])
 
-	video_creator_wallet                                        video[] @relation("video_creator_wallet")
+	video_creator_wallet                                        video[]
 	exclusive_video_access_purchase                             exclusive_video_access_purchase[]
 
 	sol_transfer_sender_solana_wallet                           sol_transfer[] @relation("sender_solana_wallet")
-	sol_transfer_fee_payer_solana_wallet                        blockchain_fees_paid_by_fortuna[] @relation("fee_payer_solana_wallet")
 	sol_transfer_recipient_solana_wallet                        sol_transfer[] @relation("recipient_solana_wallet")
+	sol_transfer_fee_payer_solana_wallet                        blockchain_fees_paid_by_fortuna[]
 
 	fortuna_take_sender_solana_wallet                        	exclusive_video_access_purchase_fortuna_take[] @relation("fortuna_take_sender_solana_wallet")
 	fortuna_take_recipient_solana_wallet                        exclusive_video_access_purchase_fortuna_take[] @relation("fortuna_take_recipient_solana_wallet")
 
+	fan_solana_wallet											exclusive_video_access_purchase_sol_transfer[] @relation("fan_solana_wallet")
+	content_creator_solana_wallet								exclusive_video_access_purchase_sol_transfer[] @relation("content_creator_solana_wallet")
 
 	@@index([user_id], name: "solana_wallet__user_id_idx")
 }
@@ -111,7 +113,7 @@ model video {
 	created_at                                                  DateTime  @default(now())
 	updated_at                                                  DateTime  @default(now()) @updatedAt
 
-	video_creator_wallet                                        solana_wallet @relation(name: "video_creator_wallet", fields: [creator_wallet_id], references: [solana_wallet_id])
+	video_creator_wallet                                        solana_wallet @relation(fields: [creator_wallet_id], references: [solana_wallet_id])
 	uploaded_image                                              uploaded_image @relation(fields: [uploaded_image_id], references: [uploaded_image_id])
 	uploaded_video                                              uploaded_video @relation(fields: [uploaded_video_id], references: [uploaded_video_id])
 
@@ -145,20 +147,22 @@ model exclusive_video_access_purchase {
 	exclusive_video_access_purchase_id                          Int  @id @default(autoincrement())
 	video_id                                                    Int
 	solana_wallet_id                                            Int
-	sol_transfer_id                                             Int     @unique
 	video_access_tier_number									Int
+	exclusive_video_access_purchase_sol_transfer_id             Int @unique(map: "unique_sol_transfer_id")
+	exclusive_video_access_purchase_fortuna_take_id             Int @unique(map: "unique_fortuna_take_id")
 
 	created_at                                                  DateTime  @default(now())
 	updated_at                                                  DateTime  @default(now()) @updatedAt
 
 	video                                                       video @relation(fields: [video_id], references: [video_id])
 	solana_wallet                                               solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
-	sol_transfer                                                sol_transfer   @relation(fields: [sol_transfer_id], references: [sol_transfer_id])
-	exclusive_video_access_purchase_fortuna_take				exclusive_video_access_purchase_fortuna_take?
+	exclusive_video_access_purchase_sol_transfer                exclusive_video_access_purchase_sol_transfer @relation(fields: [exclusive_video_access_purchase_sol_transfer_id], references: [exclusive_video_access_purchase_sol_transfer_id], map: "exclusive_video_access_purchase_sol_transfer_fkey")
+	exclusive_video_access_purchase_fortuna_take                exclusive_video_access_purchase_fortuna_take @relation(fields: [exclusive_video_access_purchase_fortuna_take_id], references: [exclusive_video_access_purchase_fortuna_take_id], map: "exclusive_video_access_purchase_fortuna_take_fkey")
 
 	@@index([video_id], name: "exclusive_video_access_purchase__video_id_idx")
 	@@index([solana_wallet_id], name: "exclusive_video_access_purchase__solana_wallet_id_idx")
-	@@index([sol_transfer_id], name: "exclusive_video_access_purchase__sol_transfer_id_idx")
+	@@index([exclusive_video_access_purchase_sol_transfer_id], name: "exclusive_video_access__sol_transfer_id_idx")
+	@@index([exclusive_video_access_purchase_fortuna_take_id], name: "exclusive_video_access__take_id_idx")
 	@@unique([video_id, solana_wallet_id])
 }
 
@@ -173,7 +177,7 @@ model uploaded_image {
 	video                                                       video?
 }
 
-model uploaded_video {          
+model uploaded_video {
 	uploaded_video_id                                           Int @id @default(autoincrement())
 	file_name                                                   String
 
@@ -183,13 +187,12 @@ model uploaded_video {
 	video                                                       video?
 }
 
-model sol_transfer {            
+model sol_transfer {
 	sol_transfer_id                                             Int @id @default(autoincrement())
 	recipient_public_key                                        String       @db.VarChar(255)
 	recipient_solana_wallet_id                                  Int?
 	is_recipient_fortuna_wallet                                 Boolean
 	transaction_signature                                       String
-	is_exclusive_video_access_purchase                          Boolean
 
 	sol_amount_transferred                                      Float
 	usd_amount_transferred                                      Float
@@ -205,11 +208,34 @@ model sol_transfer {
 	recipient_solana_wallet                                     solana_wallet? @relation(name: "recipient_solana_wallet", fields: [recipient_solana_wallet_id], references: [solana_wallet_id])
 	blockchain_fee_paid_by_fortuna								blockchain_fees_paid_by_fortuna @relation(fields: [blockchain_fees_paid_by_fortuna_id], references: [blockchain_fees_paid_by_fortuna_id])
 
-	exclusive_video_access_purchase                             exclusive_video_access_purchase?
-
 	@@index([sender_solana_wallet_id], name: "sol_transfer__sender_solana_wallet_id_idx")
 	@@index([recipient_solana_wallet_id], name: "sol_transfer__recipient_solana_wallet_id_idx")
 	@@index([blockchain_fees_paid_by_fortuna_id], name: "sol_transfer__blockchain_fees_paid_by_fortuna_id_idx")
+}
+
+model exclusive_video_access_purchase_sol_transfer {    
+	exclusive_video_access_purchase_sol_transfer_id             Int @id @default(autoincrement())
+	fan_solana_wallet_id          	                            Int
+	content_creator_solana_wallet_id                            Int
+	transaction_signature                                       String
+
+	sol_amount_transferred                                      Float
+	usd_amount_transferred                                      Float
+
+	blockchain_fees_paid_by_fortuna_id							Int @unique
+
+	created_at                                                  DateTime  @default(now())
+	updated_at                                                  DateTime  @default(now()) @updatedAt
+
+	fan_solana_wallet                     		                solana_wallet @relation(name: "fan_solana_wallet", fields: [fan_solana_wallet_id], references: [solana_wallet_id])
+	content_creator_solana_wallet                               solana_wallet @relation(name: "content_creator_solana_wallet", fields: [content_creator_solana_wallet_id], references: [solana_wallet_id])
+	blockchain_fee_paid_by_fortuna								blockchain_fees_paid_by_fortuna @relation(fields: [blockchain_fees_paid_by_fortuna_id], references: [blockchain_fees_paid_by_fortuna_id])
+
+	exclusive_video_access_purchase                             exclusive_video_access_purchase?
+
+	@@index([fan_solana_wallet_id], name: "exc_vid_purchase_sol_transfer__fan_solana_wallet_id_idx")
+	@@index([content_creator_solana_wallet_id], name: "exc_vid_purchase__content_creator_solana_wallet_id_idx")
+	@@index([blockchain_fees_paid_by_fortuna_id], name: "exc_vid_purchase__blockchain_fees_paid_by_fortuna_id_idx")
 }
 
 model exclusive_video_access_purchase_fortuna_take {
@@ -221,7 +247,6 @@ model exclusive_video_access_purchase_fortuna_take {
 	sol_amount_transferred                                      Float
 	usd_amount_transferred                                      Float
 
-	exclusive_video_access_purchase_id							Int @unique
 	blockchain_fees_paid_by_fortuna_id							Int @unique
 
 	created_at                                                  DateTime  @default(now())
@@ -229,12 +254,11 @@ model exclusive_video_access_purchase_fortuna_take {
 
 	sender_solana_wallet                                        solana_wallet @relation(name: "fortuna_take_sender_solana_wallet", fields: [sender_solana_wallet_id], references: [solana_wallet_id])
 	fortuna_recipient_solana_wallet								solana_wallet @relation(name: "fortuna_take_recipient_solana_wallet", fields: [fortuna_recipient_solana_wallet_id], references: [solana_wallet_id])
-	exclusive_video_access_purchase								exclusive_video_access_purchase @relation(fields: [exclusive_video_access_purchase_id], references: [exclusive_video_access_purchase_id])
 	blockchain_fee_paid_by_fortuna								blockchain_fees_paid_by_fortuna @relation(fields: [blockchain_fees_paid_by_fortuna_id], references: [blockchain_fees_paid_by_fortuna_id])
+	exclusive_video_access_purchase								exclusive_video_access_purchase?
 
 	@@index([sender_solana_wallet_id], name: "fortuna_take__sender_solana_wallet_id_idx")
 	@@index([fortuna_recipient_solana_wallet_id], name: "fortuna_take__fortuna_recipient_solana_wallet_id_idx")
-	@@index([exclusive_video_access_purchase_id], name: "fortuna_take__exclusive_video_access_purchase_id_idx")
 	@@index([blockchain_fees_paid_by_fortuna_id], name: "fortuna_take__blockchain_fees_paid_by_fortuna_id_idx")
 }
 
@@ -249,9 +273,10 @@ model blockchain_fees_paid_by_fortuna {
 	created_at                                                  DateTime  @default(now())
 	updated_at                                                  DateTime  @default(now()) @updatedAt
 
-	fee_payer_solana_wallet                                     solana_wallet @relation(name: "fee_payer_solana_wallet", fields: [fee_payer_solana_wallet_id], references: [solana_wallet_id])
+	fee_payer_solana_wallet                                     solana_wallet @relation(fields: [fee_payer_solana_wallet_id], references: [solana_wallet_id])
 	exclusive_video_access_purchase_fortuna_take				exclusive_video_access_purchase_fortuna_take?
 	sol_transfer												sol_transfer?
+	exclusive_video_access_purchase_sol_transfer				exclusive_video_access_purchase_sol_transfer?
 
 	@@index([fee_payer_solana_wallet_id], name: "blockchain_fees_paid_by_fortuna__fee_payer_solana_wallet_idx")
 }
