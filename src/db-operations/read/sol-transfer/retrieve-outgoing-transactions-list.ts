@@ -18,8 +18,6 @@ export default async function retrieveOutgoingTransactionsList(solanaWalletId: n
 				sol_amount_transferred: true,
 				usd_amount_transferred: true,
 				transfer_by_currency: true,
-				transfer_fee_sol: true,
-				transfer_fee_usd: true,
 				created_at: true,
 				is_exclusive_video_access_purchase: true,
 				recipient_solana_wallet: {

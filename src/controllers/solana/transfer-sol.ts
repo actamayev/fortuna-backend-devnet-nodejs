@@ -2,12 +2,12 @@ import _ from "lodash"
 import { Request, Response } from "express"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction,
 	clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
-import SecretsManager from "../../classes/secrets-manager"
 import SolPriceManager from "../../classes/sol-price-manager"
 import calculateTransactionFee from "../../utils/solana/calculate-transaction-fee"
 import GetKeypairFromSecretKey from "../../utils/solana/get-keypair-from-secret-key"
 import { transformTransaction } from "../../utils/transform/transform-transactions-list"
 import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
+import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blochain-fees-paid-by-fortuna/add-blochain-fees-paid-by-fortuna"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
@@ -47,22 +47,19 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
-		let feePayerSolanaWalletId = solanaWallet.solana_wallet_id
-		if (isRecipientFortunaWallet === true) {
-			const fortunaFeePayerSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_FEE_PAYER_WALLET_ID_DB")
-			feePayerSolanaWalletId = parseInt(fortunaFeePayerSolanaWalletIdDb, 10)
-		}
+		let feePayerSolanaWalletId
+		if (isRecipientFortunaWallet === false) feePayerSolanaWalletId = solanaWallet.solana_wallet_id
+
+		const paidBlockchainFeeId = await addBlockchainFeesPaidByFortuna(transactionFeeInSol, feePayerSolanaWalletId)
 
 		const solTransferRecord = await addSolTransferRecord(
 			recipientPublicKey,
 			isRecipientFortunaWallet,
 			transactionSignature,
 			transferCurrencyAmounts,
-			transactionFeeInSol,
 			solanaWallet.solana_wallet_id,
 			recipientSolanaWalletId,
-			false,
-			feePayerSolanaWalletId
+			paidBlockchainFeeId
 		)
 
 		const transactionToTransform: RetrievedDBTransactionListData = {

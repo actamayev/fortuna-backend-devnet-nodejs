@@ -17,9 +17,6 @@ declare global {
 		transfer_by_currency: Currencies
 		is_exclusive_video_access_purchase: boolean
 
-		transfer_fee_sol: number
-		transfer_fee_usd: number
-
 		created_at: Date
 		recipient_username?: string
 		sender_username: string
@@ -34,9 +31,6 @@ declare global {
 		usd_amount_transferred: number
 		transfer_by_currency: Currencies
 		is_exclusive_video_access_purchase: boolean
-
-		transfer_fee_sol: number
-		transfer_fee_usd: number
 
 		created_at: Date
 		username?: string
@@ -53,8 +47,6 @@ declare global {
 		transferToUsername?: string
 		transferToPublicKey?: string
 		transferFromUsername: string
-		transferFeeSol?: number
-		transferFeeUsd?: number
 		createdAt: Date
 	}
 }

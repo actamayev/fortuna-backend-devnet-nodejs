@@ -10,9 +10,8 @@
 -- delete from credentials where email = '';
 
 -- delete from login_history;
--- delete from solana_wallet;
--- delete from credentials;
 -- delete from uploaded_image;
+-- delete from exclusive_video_access_purchase;
 -- delete from sol_transfer;
 -- delete from upoaded_video;
 

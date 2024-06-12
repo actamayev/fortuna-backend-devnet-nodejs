@@ -5,6 +5,7 @@ import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram,
 import calculateTransactionFee from "./calculate-transaction-fee"
 import GetKeypairFromSecretKey from "./get-keypair-from-secret-key"
 import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
+import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blochain-fees-paid-by-fortuna/add-blochain-fees-paid-by-fortuna"
 
 export default async function transferSolFunction(
 	senderSolanaWallet: ExtendedSolanaWallet,
@@ -34,14 +35,16 @@ export default async function transferSolFunction(
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
+		const paidBlockchainFeeId = await addBlockchainFeesPaidByFortuna(transactionFeeInSol)
+
 		const solTransferRecord = await addSolTransferRecord(
 			recipientPublicKeyAndWalletId.public_key,
 			true,
 			transactionSignature,
 			transferDetails,
-			transactionFeeInSol,
 			senderSolanaWallet.solana_wallet_id,
 			recipientPublicKeyAndWalletId.solana_wallet_id,
+			paidBlockchainFeeId,
 			true
 		)
 
