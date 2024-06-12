@@ -16,21 +16,25 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const transferData = req.body.transferSolData as TransferSolData
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const transaction = new Transaction()
-		const transferCurrencyAmounts = { solToTransfer: 0, usdToTransfer: 0, defaultCurrency: transferData.transferCurrency }
+		const transferDetails: TransferDetails = {
+			solToTransfer: 0,
+			usdToTransfer: 0,
+			defaultCurrency: transferData.transferCurrency
+		}
 
 		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
 		if (transferData.transferCurrency === "sol") {
-			transferCurrencyAmounts.solToTransfer = transferData.transferAmount
-			transferCurrencyAmounts.usdToTransfer = transferData.transferAmount * solPrice
+			transferDetails.solToTransfer = transferData.transferAmount
+			transferDetails.usdToTransfer = transferData.transferAmount * solPrice
 		} else {
-			transferCurrencyAmounts.solToTransfer = transferData.transferAmount / solPrice
-			transferCurrencyAmounts.usdToTransfer = transferData.transferAmount
+			transferDetails.solToTransfer = transferData.transferAmount / solPrice
+			transferDetails.usdToTransfer = transferData.transferAmount
 		}
 		transaction.add(
 			SystemProgram.transfer({
 				fromPubkey: new PublicKey(solanaWallet.public_key),
 				toPubkey: recipientPublicKey,
-				lamports: _.round(transferCurrencyAmounts.solToTransfer * LAMPORTS_PER_SOL)
+				lamports: _.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL)
 			})
 		)
 		// FUTURE TODO: Fix the double-charge problem (when having 2 signers, the fee is doubled)
@@ -56,7 +60,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			recipientPublicKey,
 			isRecipientFortunaWallet,
 			transactionSignature,
-			transferCurrencyAmounts,
+			transferDetails,
 			solanaWallet.solana_wallet_id,
 			recipientSolanaWalletId,
 			paidBlockchainFeeId

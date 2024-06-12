@@ -49,6 +49,24 @@ declare global {
 		transferFromUsername: string
 		createdAt: Date
 	}
+
+	interface TransferDetailsLessDefaultCurrency {
+		solToTransfer: number
+		usdToTransfer: number
+	}
+
+	interface TransferDetails extends TransferDetailsLessDefaultCurrency {
+		defaultCurrency: Currencies
+	}
+
+	interface CreatorWalletDataLessSecretKey {
+		public_key: PublicKey
+		solana_wallet_id: number
+	}
+
+	interface CreatorWalletData extends CreatorWalletDataLessSecretKey {
+		secret_key__encrypted: NonDeterministicEncryptedString
+	}
 }
 
 export {}

@@ -2,12 +2,14 @@ import _ from "lodash"
 import { Request, Response } from "express"
 import SolPriceManager from "../../classes/sol-price-manager"
 import VideoUrlsManager from "../../classes/video-urls-manager"
-import transferSolFunction from "../../utils/solana/transfer-sol-function"
 import markVideoSoldOut from "../../db-operations/write/video/mark-video-sold-out"
+import transferSolFromFanToCreator from "../../utils/solana/transfer-sol-from-fan-to-creator"
+import transferSolFromCreatorToFortuna from "../../utils/solana/transfer-sol-from-creator-to-fortuna"
 import retrieveCreatorWalletInfoFromVideo from "../../db-operations/read/video/retrieve-creator-wallet-info-from-video"
 import updateCheckIfVideoAccessTierSoldOut from "../../db-operations/write/video-access-tier/update-check-if-video-access-tier-sold-out"
 import addExclusiveVideoAccessPurchase from "../../db-operations/write/exclusive-video-access-purchase/add-exclusive-video-access-purchase"
 
+// eslint-disable-next-line max-lines-per-function
 export default async function purchaseInstantExclusiveContentAccess(req: Request, res: Response): Promise<Response> {
 	try {
 		const { solanaWallet, exclusiveVideoData } = req
@@ -18,22 +20,34 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 
 		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
 
-		const transferCurrencyAmounts = {
-			usdPriceToTransferAt: exclusiveVideoData.tier_access_price_usd,
-			solPriceToTransferAt: exclusiveVideoData.tier_access_price_usd / solPrice
+		const transferDetails: TransferDetails = {
+			usdToTransfer: exclusiveVideoData.tier_access_price_usd,
+			solToTransfer: exclusiveVideoData.tier_access_price_usd / solPrice,
+			defaultCurrency: "usd"
 		}
 
-		const solTransferId = await transferSolFunction(
+		const solTransferId = await transferSolFromFanToCreator(
 			solanaWallet,
 			creatorWalletInfo,
-			{
-				solToTransfer: transferCurrencyAmounts.solPriceToTransferAt,
-				usdToTransfer: transferCurrencyAmounts.usdPriceToTransferAt,
-				defaultCurrency: "usd"
-			}
+			transferDetails
 		)
 
-		await addExclusiveVideoAccessPurchase(exclusiveVideoData.video_id, solanaWallet.solana_wallet_id, solTransferId, tierNumber)
+		const exclusiveVideoAccessPurchaseId = await addExclusiveVideoAccessPurchase(
+			exclusiveVideoData.video_id,
+			solanaWallet.solana_wallet_id,
+			solTransferId,
+			tierNumber
+		)
+
+		await transferSolFromCreatorToFortuna(
+			creatorWalletInfo,
+			{
+				solToTransfer: transferDetails.solToTransfer * 0.025,
+				usdToTransfer: transferDetails.usdToTransfer * 0.025
+			},
+			exclusiveVideoAccessPurchaseId
+		)
+
 		const isTierSoldOut = await updateCheckIfVideoAccessTierSoldOut(exclusiveVideoData, tierNumber)
 		let isVideoSoldOut = false
 		if (isTierSoldOut === true && tierNumber === exclusiveVideoData.total_number_video_tiers) {

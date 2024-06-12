@@ -1,5 +1,4 @@
 import { PublicKey } from "@solana/web3.js"
-import { Currencies } from "@prisma/client"
 import PrismaClientClass from "../../../classes/prisma-client"
 
 // eslint-disable-next-line max-params
@@ -7,7 +6,7 @@ export default async function addSolTransferRecord (
 	recipientPublicKey: PublicKey,
 	isRecipientFortunaWallet: boolean,
 	transactionSignature: string,
-	transferDetails: { solToTransfer: number, usdToTransfer: number, defaultCurrency: Currencies },
+	transferDetails: TransferDetails,
 	senderWalletId: number,
 	recipientSolanaWalletId: number | undefined,
 	blockchainFeesPaidByFortunaId: number,

@@ -5,10 +5,10 @@ export default async function addExclusiveVideoAccessPurchase(
 	solanaWalletId: number,
 	solTransferId: number,
 	tierNumber: number
-): Promise<void> {
+): Promise<number> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
-		await prismaClient.exclusive_video_access_purchase.create({
+		const exclusiveVideoAccessPurchase = await prismaClient.exclusive_video_access_purchase.create({
 			data: {
 				video_id: videoId,
 				solana_wallet_id: solanaWalletId,
@@ -16,6 +16,8 @@ export default async function addExclusiveVideoAccessPurchase(
 				video_access_tier_number: tierNumber
 			}
 		})
+
+		return exclusiveVideoAccessPurchase.exclusive_video_access_purchase_id
 	} catch (error) {
 		console.error(error)
 		throw error
