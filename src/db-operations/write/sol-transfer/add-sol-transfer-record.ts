@@ -9,8 +9,7 @@ export default async function addSolTransferRecord (
 	transferDetails: TransferDetails,
 	senderWalletId: number,
 	recipientSolanaWalletId: number | undefined,
-	blockchainFeesPaidByFortunaId: number,
-	isExclusiveVideoAccessPurchase: boolean = false
+	blockchainFeesPaidByFortunaId: number
 ): Promise<AddSolTransferToDB> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
@@ -24,7 +23,6 @@ export default async function addSolTransferRecord (
 				sol_amount_transferred: transferDetails.solToTransfer,
 				usd_amount_transferred: transferDetails.usdToTransfer,
 				transfer_by_currency: transferDetails.defaultCurrency,
-				is_exclusive_video_access_purchase: isExclusiveVideoAccessPurchase,
 				sender_solana_wallet_id: senderWalletId,
 				blockchain_fees_paid_by_fortuna_id: blockchainFeesPaidByFortunaId
 			}

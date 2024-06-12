@@ -32,21 +32,22 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 			transferDetails
 		)
 
-		const exclusiveVideoAccessPurchaseId = await addExclusiveVideoAccessPurchase(
-			exclusiveVideoData.video_id,
-			solanaWallet.solana_wallet_id,
-			solTransferId,
-			tierNumber
-		)
-
-		await transferSolFromCreatorToFortuna(
+		const fortunaTakeId = await transferSolFromCreatorToFortuna(
 			creatorWalletInfo,
 			{
 				solToTransfer: transferDetails.solToTransfer * 0.025,
 				usdToTransfer: transferDetails.usdToTransfer * 0.025
-			},
-			exclusiveVideoAccessPurchaseId
+			}
 		)
+
+		await addExclusiveVideoAccessPurchase(
+			exclusiveVideoData.video_id,
+			solanaWallet.solana_wallet_id,
+			solTransferId,
+			tierNumber,
+			fortunaTakeId
+		)
+
 
 		const isTierSoldOut = await updateCheckIfVideoAccessTierSoldOut(exclusiveVideoData, tierNumber)
 		let isVideoSoldOut = false

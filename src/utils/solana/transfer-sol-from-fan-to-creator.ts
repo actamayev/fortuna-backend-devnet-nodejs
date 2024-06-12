@@ -3,7 +3,8 @@ import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram,
 	Transaction, clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
 import calculateTransactionFee from "./calculate-transaction-fee"
 import GetKeypairFromSecretKey from "./get-keypair-from-secret-key"
-import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
+import addExclusiveVideoAccessPurchaseSolTransfer
+	from "../../db-operations/write/exclusive-video-access-purchase-sol-transfer/add-exclusive-video-access-purchase-sol-transfer"
 import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blochain-fees-paid-by-fortuna/add-blochain-fees-paid-by-fortuna"
 
 export default async function transferSolFromFanToCreator(
@@ -36,18 +37,15 @@ export default async function transferSolFromFanToCreator(
 
 		const paidBlockchainFeeId = await addBlockchainFeesPaidByFortuna(transactionFeeInSol)
 
-		const solTransferRecord = await addSolTransferRecord(
-			contentCreatorPublicKeyAndWalletId.public_key,
-			true,
-			transactionSignature,
-			transferDetails,
+		const exclusiveVideoAccessPurchaseSolTransferId = await addExclusiveVideoAccessPurchaseSolTransfer(
 			fanSolanaWallet.solana_wallet_id,
 			contentCreatorPublicKeyAndWalletId.solana_wallet_id,
+			transactionSignature,
+			transferDetails,
 			paidBlockchainFeeId,
-			true
 		)
 
-		return solTransferRecord.sol_transfer_id
+		return exclusiveVideoAccessPurchaseSolTransferId
 	} catch (error) {
 		console.error(error)
 		throw error

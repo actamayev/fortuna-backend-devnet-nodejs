@@ -15,7 +15,6 @@ declare global {
 		sol_amount_transferred: number
 		usd_amount_transferred: number
 		transfer_by_currency: Currencies
-		is_exclusive_video_access_purchase: boolean
 
 		created_at: Date
 		recipient_username?: string
@@ -30,7 +29,6 @@ declare global {
 		sol_amount_transferred: number
 		usd_amount_transferred: number
 		transfer_by_currency: Currencies
-		is_exclusive_video_access_purchase: boolean
 
 		created_at: Date
 		username?: string

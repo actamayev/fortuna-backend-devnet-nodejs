@@ -11,8 +11,7 @@ import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blochain-f
 export default async function transferSolFromCreatorToFortuna(
 	contentCreatorPublicKeyAndWalletId: CreatorWalletData,
 	transferDetails: TransferDetailsLessDefaultCurrency,
-	exclusiveVideoAccessPurchaseId: number
-): Promise<void> {
+): Promise<number> {
 	try {
 		const fortunaFeePayerWalletKeypair = await GetKeypairFromSecretKey.getFortunaFeePayerWalletKeypair()
 		const transaction = new Transaction()
@@ -40,14 +39,15 @@ export default async function transferSolFromCreatorToFortuna(
 		const fortunaFeePayerSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_FEE_PAYER_WALLET_ID_DB")
 		const feePayerSolanaWalletId = parseInt(fortunaFeePayerSolanaWalletIdDb, 10)
 
-		await addExclusiveVideoAccessPurchaseTake(
+		const fortunaTakeId = await addExclusiveVideoAccessPurchaseTake(
 			contentCreatorPublicKeyAndWalletId.solana_wallet_id,
 			feePayerSolanaWalletId,
 			transactionSignature,
 			transferDetails,
-			exclusiveVideoAccessPurchaseId,
 			paidBlockchainFeeId
 		)
+
+		return fortunaTakeId
 	} catch (error) {
 		console.error(error)
 		throw error
