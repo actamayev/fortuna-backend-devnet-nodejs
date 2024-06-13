@@ -7,7 +7,7 @@ import calculateTransactionFee from "../../utils/solana/calculate-transaction-fe
 import GetKeypairFromSecretKey from "../../utils/solana/get-keypair-from-secret-key"
 import { transformTransaction } from "../../utils/transform/transform-transactions-list"
 import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
-import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blochain-fees-paid-by-fortuna/add-blockchain-fees-paid-by-fortuna"
+import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blockchain-fees-paid-by-fortuna"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
