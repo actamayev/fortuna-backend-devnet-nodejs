@@ -1,13 +1,13 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function retrieveVideoDataForExclusiveContent(
-	videoUUID: string
+export default async function retrieveVideoDataForExclusiveContentCheckById(
+	videoId: number
 ): Promise<VideoDataNeededToCheckForExclusiveContentAccess | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
-		const retrievedVideoWithExclusiveInfo = await prismaClient.video.findFirst({
+		const exclusiveVideoData = await prismaClient.video.findUnique({
 			where: {
-				uuid: videoUUID
+				video_id: videoId
 			},
 			select: {
 				video_id: true,
@@ -16,7 +16,7 @@ export default async function retrieveVideoDataForExclusiveContent(
 			}
 		})
 
-		return retrievedVideoWithExclusiveInfo
+		return exclusiveVideoData
 	} catch (error) {
 		console.error(error)
 		throw error

@@ -1,8 +1,8 @@
 import _ from "lodash"
 import { NextFunction, Request, Response } from "express"
-import retrieveExclusiveVideoDataByUUID from "../../db-operations/read/video/retrieve-exclusive-video-data-by-uuid"
+import retrieveExclusiveVideoDataByUUID from "../../../db-operations/read/video/retrieve-exclusive-video-data-by-uuid"
 
-export default async function attachExclusiveVideoData(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+export default async function attachExclusiveVideoDataByUUID(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {
 		const { videoUUID, tierNumber } = req.body
 		const exclusiveVideoData = await retrieveExclusiveVideoDataByUUID(videoUUID, tierNumber)

@@ -7,6 +7,7 @@ declare global {
 			solanaWallet: ExtendedSolanaWallet
 			recipientPublicKey: PublicKey
 
+			minimalDataNeededToCheckForExclusiveContentAccess: VideoDataNeededToCheckForExclusiveContentAccess
 			exclusiveVideoData: ExclusiveVideoData
 
 			isRecipientFortunaWallet: boolean
