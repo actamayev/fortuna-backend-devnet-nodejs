@@ -34,6 +34,7 @@ export default async function transformVideosByCreatorUsername(
 				if (videoLikeStatus.user_id === userId) userLikeStatus = videoLikeStatus.like_status
 			})
 			return {
+				videoId: item.video_id,
 				videoName: item.video_name,
 				videoListingStatus: item.video_listing_status,
 				description: item.description,

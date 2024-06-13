@@ -42,7 +42,7 @@ videosRoutes.get(
 	getVideoUrl
 )
 
-videosRoutes.get(
+videosRoutes.post(
 	"/like-or-dislike-video",
 	validateLikeOrDislikeVideo,
 	jwtVerifyAttachSolanaWallet,
@@ -51,7 +51,7 @@ videosRoutes.get(
 	likeOrDislikeVideo
 )
 
-videosRoutes.get(
+videosRoutes.post(
 	"/remove-like-or-dislike-from-video/:videoId",
 	validateVideoIdInParams,
 	jwtVerifyAttachUser,
