@@ -1,5 +1,6 @@
 -- To delete a video:
 -- delete from video_access_tier;
+-- delete from exclusive_video_access_purchase_fortuna_take;
 -- delete from exclusive_video_access_purchase;
 -- delete from video;
 
@@ -10,9 +11,8 @@
 -- delete from credentials where email = '';
 
 -- delete from login_history;
--- delete from solana_wallet;
--- delete from credentials;
 -- delete from uploaded_image;
+-- delete from exclusive_video_access_purchase;
 -- delete from sol_transfer;
 -- delete from upoaded_video;
 

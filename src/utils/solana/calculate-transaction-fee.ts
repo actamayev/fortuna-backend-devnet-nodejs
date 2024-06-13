@@ -1,6 +1,10 @@
+/* eslint-disable max-len */
 import _ from "lodash"
 import { Connection, LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js"
 
+// Consider holding the failed transactions in a class.
+// If calculating the fee fails, return 0, and add the transaction signature to a class that will periodically re-try to calculte the transaction fee.
+// If the transaction fee is succssfully retrieved, it should re-update the database with the correct amount.
 export default async function calculateTransactionFee(signature: string): Promise<number> {
 	try {
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")

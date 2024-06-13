@@ -1,23 +1,24 @@
 import _ from "lodash"
-import { Currencies } from "@prisma/client"
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram,
 	Transaction, clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
 import calculateTransactionFee from "./calculate-transaction-fee"
 import GetKeypairFromSecretKey from "./get-keypair-from-secret-key"
-import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
+import addExclusiveVideoAccessPurchaseSolTransfer
+	from "../../db-operations/write/exclusive-video-access-purchase-sol-transfer/add-exclusive-video-access-purchase-sol-transfer"
+import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blockchain-fees-paid-by-fortuna"
 
-export default async function transferSolFunction(
-	senderSolanaWallet: ExtendedSolanaWallet,
-	recipientPublicKeyAndWalletId: { public_key: PublicKey, solana_wallet_id: number },
-	transferDetails: { solToTransfer: number, usdToTransfer: number, defaultCurrency: Currencies },
+export default async function transferSolFromFanToCreator(
+	fanSolanaWallet: ExtendedSolanaWallet,
+	contentCreatorPublicKeyAndWalletId: CreatorWalletDataLessSecretKey,
+	transferDetails: TransferDetailsLessDefaultCurrency
 ): Promise<number> {
 	try {
 		const transaction = new Transaction()
 
 		transaction.add(
 			SystemProgram.transfer({
-				fromPubkey: new PublicKey(senderSolanaWallet.public_key),
-				toPubkey: recipientPublicKeyAndWalletId.public_key,
+				fromPubkey: new PublicKey(fanSolanaWallet.public_key),
+				toPubkey: contentCreatorPublicKeyAndWalletId.public_key,
 				lamports: _.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL)
 			})
 		)
@@ -25,27 +26,26 @@ export default async function transferSolFunction(
 		// May be possible to fix by making Fortuna a co-signer, if all Fortuna wallets are made to be multi-signature accounts.
 		// Would have to think about wheather or not we want this.
 
-		const senderKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(senderSolanaWallet.secret_key__encrypted)
+		const fanKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(fanSolanaWallet.secret_key__encrypted)
 		const fortunaFeePayerWalletKeypair = await GetKeypairFromSecretKey.getFortunaFeePayerWalletKeypair()
-		const keypairs: Keypair[] = [fortunaFeePayerWalletKeypair, senderKeypair]
+		const keypairs: Keypair[] = [fortunaFeePayerWalletKeypair, fanKeypair]
 
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
-		const solTransferRecord = await addSolTransferRecord(
-			recipientPublicKeyAndWalletId.public_key,
-			true,
+		const paidBlockchainFeeId = await addBlockchainFeesPaidByFortuna(transactionFeeInSol)
+
+		const exclusiveVideoAccessPurchaseSolTransferId = await addExclusiveVideoAccessPurchaseSolTransfer(
+			fanSolanaWallet.solana_wallet_id,
+			contentCreatorPublicKeyAndWalletId.solana_wallet_id,
 			transactionSignature,
 			transferDetails,
-			transactionFeeInSol,
-			senderSolanaWallet.solana_wallet_id,
-			recipientPublicKeyAndWalletId.solana_wallet_id,
-			true
+			paidBlockchainFeeId,
 		)
 
-		return solTransferRecord.sol_transfer_id
+		return exclusiveVideoAccessPurchaseSolTransferId
 	} catch (error) {
 		console.error(error)
 		throw error

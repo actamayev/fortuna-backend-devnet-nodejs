@@ -30,8 +30,6 @@ export function transformTransaction(
 			transferToUsername: transaction.recipient_username,
 			transferToPublicKey: transaction.recipient_public_key,
 			transferFromUsername: transaction.sender_username,
-			transferFeeSol: transaction.transfer_fee_sol,
-			transferFeeUsd: transaction.transfer_fee_usd,
 			outgoingOrIncoming: transaction.recipient_public_key === solanaWalletPublicKey ? "incoming" : "outgoing",
 			createdAt: transaction.created_at
 		}

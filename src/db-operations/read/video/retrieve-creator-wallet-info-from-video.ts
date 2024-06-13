@@ -2,12 +2,10 @@ import _ from "lodash"
 import { PublicKey } from "@solana/web3.js"
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function retrieveCreatorWalletInfoFromVideo(
-	videoId: number
-): Promise<{ public_key: PublicKey, solana_wallet_id: number } | null> {
+export default async function retrieveCreatorWalletInfoFromVideo(videoId: number): Promise<CreatorWalletData | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
-		const creatorVideoData = await prismaClient.video.findFirst({
+		const creatorWalletData = await prismaClient.video.findFirst({
 			where: {
 				video_id: videoId
 			},
@@ -18,17 +16,19 @@ export default async function retrieveCreatorWalletInfoFromVideo(
 				video_creator_wallet: {
 					select: {
 						public_key: true,
-						solana_wallet_id: true
+						solana_wallet_id: true,
+						secret_key__encrypted: true
 					}
 				}
 			}
 		})
 
-		if (_.isNull(creatorVideoData)) return null
+		if (_.isNull(creatorWalletData)) return null
 
 		return {
-			public_key: new PublicKey(creatorVideoData.video_creator_wallet.public_key),
-			solana_wallet_id: creatorVideoData.video_creator_wallet.solana_wallet_id
+			public_key: new PublicKey(creatorWalletData.video_creator_wallet.public_key),
+			secret_key__encrypted: creatorWalletData.video_creator_wallet.secret_key__encrypted as NonDeterministicEncryptedString,
+			solana_wallet_id: creatorWalletData.video_creator_wallet.solana_wallet_id
 		}
 	} catch (error) {
 		console.error(error)
