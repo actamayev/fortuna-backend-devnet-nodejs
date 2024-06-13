@@ -15,6 +15,7 @@ export default function transformVideoByUUIDData(
 			if (videoLikeStatus.user_id === userId) userLikeStatus = videoLikeStatus.like_status
 		})
 		const videoDataSendingToFrontEnd: VideoDataSendingToFrontendWithVideoUrl = {
+			videoId: videoData.video_id,
 			videoName: videoData.video_name,
 			videoListingStatus: videoData.video_listing_status,
 			description: videoData.description,
