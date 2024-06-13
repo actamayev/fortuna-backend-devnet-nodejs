@@ -2,7 +2,6 @@ import express from "express"
 
 import generalSearch from "../controllers/search/general-search"
 import searchForUsername from "../controllers/search/search-for-username"
-import checkIfPublicKeyExistsOnSolana from "../controllers/search/check-if-public-key-exists-on-solana"
 import checkIfPublicKeyExistsWithFortuna from "../controllers/search/check-if-public-key-exists-with-fortuna"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
@@ -25,13 +24,6 @@ searchRoutes.get(
 	validatePublicKey,
 	jwtVerifyAttachUser,
 	checkIfPublicKeyExistsWithFortuna
-)
-
-searchRoutes.get(
-	"/check-if-public-key-exists-on-solana/:publicKey",
-	validatePublicKey,
-	jwtVerifyAttachUser,
-	checkIfPublicKeyExistsOnSolana
 )
 
 searchRoutes.get("/general-search/:searchTerm", validateSearchTerm, optionalJwtVerifyWithWalletAttachment, generalSearch)
