@@ -46,6 +46,9 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 									select: {
 										like_status: true,
 										user_id: true
+									},
+									where: {
+										is_active: true
 									}
 								},
 								_count: {

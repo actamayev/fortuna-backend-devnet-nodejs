@@ -1,5 +1,5 @@
-import _ from "lodash"
 import Joi from "joi"
+import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 
 const videoIdInParamsSchema = Joi.object({
@@ -8,7 +8,9 @@ const videoIdInParamsSchema = Joi.object({
 
 export default function validateVideoIdInParams (req: Request, res: Response, next: NextFunction): Response | void {
 	try {
-		const { error } = videoIdInParamsSchema.validate(req.params)
+		const params = { videoId: Number(req.params.videoId) }
+
+		const { error } = videoIdInParamsSchema.validate(params)
 
 		if (!_.isUndefined(error)) return res.status(400).json({ validationError: error.details[0].message })
 
