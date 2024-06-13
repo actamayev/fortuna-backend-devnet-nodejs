@@ -7,8 +7,8 @@ import jwtVerifyAttachSolanaWallet from "../middleware/jwt/jwt-verify-attach-sol
 import confirmUserDoesntAlreadyHaveExclusiveAccess
 	from "../middleware/confirmations/market/confirm-user-doesnt-already-have-exclusive-access"
 import confirmTierNotSoldOut from "../middleware/confirmations/market/confirm-tier-not-sold-out"
-import confirmUserHasEnoughSolToPurchaseExclusiveAccess
-	from "../middleware/confirmations/market/confirm-user-has-enough-sol-to-purchase-exclusive-access"
+import confirmUserHasSufficientFundsToPurchaseExclusiveAccess
+	from "../middleware/confirmations/market/confirm-user-has-sufficient-funds-to-purchase-exclusive-access"
 import confirmCreatorNotBuyingInstantAccessToOwnExclusiveContent
 	from "../middleware/confirmations/market/confirm-creator-not-buying-instant-access-to-own-exclusive-content"
 import validatePurchaseInstantAccess from "../middleware/request-validation/videos/validate-puchase-instant-access"
@@ -23,7 +23,7 @@ marketRoutes.post(
 	confirmTierNotSoldOut,
 	confirmCreatorNotBuyingInstantAccessToOwnExclusiveContent,
 	confirmUserDoesntAlreadyHaveExclusiveAccess,
-	confirmUserHasEnoughSolToPurchaseExclusiveAccess,
+	confirmUserHasSufficientFundsToPurchaseExclusiveAccess,
 	purchaseInstantExclusiveContentAccess
 )
 

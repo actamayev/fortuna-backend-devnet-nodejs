@@ -13,7 +13,7 @@ import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blockchain
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
 	try {
 		const { user, solanaWallet, recipientPublicKey, isRecipientFortunaWallet, recipientSolanaWalletId } = req
-		const transferData = req.body.transferSolData as TransferSolData
+		const transferData = req.body.transferFundsData as TransferFundsData
 		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 		const transaction = new Transaction()
 		const transferDetails: TransferDetails = {
