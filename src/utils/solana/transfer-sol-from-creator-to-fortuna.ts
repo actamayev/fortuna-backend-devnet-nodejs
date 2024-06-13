@@ -6,7 +6,7 @@ import calculateTransactionFee from "./calculate-transaction-fee"
 import GetKeypairFromSecretKey from "./get-keypair-from-secret-key"
 import addExclusiveVideoAccessPurchaseTake
 	from "../../db-operations/write/exclusive-video-access-purchase-fortuna-take/add-exclusive-video-access-purchase-take"
-import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blochain-fees-paid-by-fortuna/add-blochain-fees-paid-by-fortuna"
+import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blochain-fees-paid-by-fortuna/add-blockchain-fees-paid-by-fortuna"
 
 export default async function transferSolFromCreatorToFortuna(
 	contentCreatorPublicKeyAndWalletId: CreatorWalletData,

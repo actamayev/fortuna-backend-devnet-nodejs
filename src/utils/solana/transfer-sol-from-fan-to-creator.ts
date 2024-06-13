@@ -5,7 +5,7 @@ import calculateTransactionFee from "./calculate-transaction-fee"
 import GetKeypairFromSecretKey from "./get-keypair-from-secret-key"
 import addExclusiveVideoAccessPurchaseSolTransfer
 	from "../../db-operations/write/exclusive-video-access-purchase-sol-transfer/add-exclusive-video-access-purchase-sol-transfer"
-import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blochain-fees-paid-by-fortuna/add-blochain-fees-paid-by-fortuna"
+import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blochain-fees-paid-by-fortuna/add-blockchain-fees-paid-by-fortuna"
 
 export default async function transferSolFromFanToCreator(
 	fanSolanaWallet: ExtendedSolanaWallet,
