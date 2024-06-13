@@ -23,13 +23,12 @@ export default async function transferSolFromCreatorToFortuna(
 				lamports: _.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL)
 			})
 		)
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-
 		const creatorKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(
 			contentCreatorPublicKeyAndWalletId.secret_key__encrypted
 		)
-
 		const keypairs: Keypair[] = [fortunaFeePayerWalletKeypair, creatorKeypair]
+
+		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
