@@ -17,31 +17,31 @@ import validateTransactionSignatures from "../middleware/request-validation/sola
 import validateTransferSolToUsername from "../middleware/request-validation/solana/validate-transfer-sol-to-username"
 import checkIfPublicKeyPartOfFortuna from "../middleware/request-validation/solana/check-if-public-key-part-of-fortuna"
 import validateTransferSolToPublicKey from "../middleware/request-validation/solana/validate-transfer-sol-to-public-key"
-import confirmUserHasEnoughSolToTransfer from "../middleware/confirmations/solana/confirm-user-has-enough-sol-to-transfer"
+import confirmUserHasSufficientFundsToTransfer from "../middleware/confirmations/solana/confirm-user-has-sufficient-funds-to-transfer"
 
 const solanaRoutes = express.Router()
 
 solanaRoutes.post(
-	"/transfer-sol-to-username",
+	"/transfer-funds-to-username",
 	validateTransferSolToUsername,
 	jwtVerifyAttachUser,
 	attachPublicKeyByTransferToUsername,
 	confirmPublicKeyExists,
 	attachSolanaWalletByUserId,
 	confirmNotSendingSolToSelf,
-	confirmUserHasEnoughSolToTransfer,
+	confirmUserHasSufficientFundsToTransfer,
 	transferSol
 )
 
 solanaRoutes.post(
-	"/transfer-sol-to-public-key",
+	"/transfer-funds-to-public-key",
 	validateTransferSolToPublicKey,
 	confirmPublicKeyExists,
 	jwtVerifyAttachUser,
 	checkIfPublicKeyPartOfFortuna,
 	attachSolanaWalletByUserId,
 	confirmNotSendingSolToSelf,
-	confirmUserHasEnoughSolToTransfer,
+	confirmUserHasSufficientFundsToTransfer,
 	transferSol
 )
 

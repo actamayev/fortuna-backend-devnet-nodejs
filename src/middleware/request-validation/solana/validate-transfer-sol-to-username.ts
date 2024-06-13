@@ -5,7 +5,7 @@ import usernameValidator from "../../joi/username-validator"
 import currencyValidatorSchema from "../../joi/currency-validator"
 
 const transferSolToUsernameSchema = Joi.object({
-	transferSolData: Joi.object({
+	transferFundsData: Joi.object({
 		sendingTo: usernameValidator.required().trim(),
 		transferAmount: Joi.number().strict().required(),
 		transferCurrency: currencyValidatorSchema

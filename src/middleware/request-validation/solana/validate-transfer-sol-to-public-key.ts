@@ -6,7 +6,7 @@ import publicKeyValidator from "../../joi/public-key-validator"
 import currencyValidatorSchema from "../../joi/currency-validator"
 
 const transferSolToPublicKeySchema = Joi.object({
-	transferSolData: Joi.object({
+	transferFundsData: Joi.object({
 		sendingTo: publicKeyValidator.required().trim(),
 		transferAmount: Joi.number().strict().required(),
 		transferCurrency: currencyValidatorSchema
@@ -18,9 +18,9 @@ export default function validateTransferSolToPublicKey (req: Request, res: Respo
 		const { error } = transferSolToPublicKeySchema.validate(req.body)
 
 		if (!_.isUndefined(error)) return res.status(400).json({ validationError: error.details[0].message })
-		const transferSolData = req.body.transferSolData as TransferSolData
+		const transferFundsData = req.body.transferFundsData as TransferFundsData
 
-		const recipientPublicKey = new PublicKey(transferSolData.sendingTo)
+		const recipientPublicKey = new PublicKey(transferFundsData.sendingTo)
 
 		req.recipientPublicKey = recipientPublicKey
 		next()
