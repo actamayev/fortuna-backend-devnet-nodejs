@@ -3,11 +3,13 @@ import checkWhichExclusiveContentUserAllowedToAccess from "../../exclusive-conte
 // eslint-disable-next-line max-lines-per-function
 export default async function transformHomePageVideoData(
 	retrievedHomePageVideos: RetrievedHomePageVideosFromDB[],
-	solanaWalletId: number | undefined,
-	userId: number | undefined
+	optionallyAttachedSolanaWallet: ExtendedSolanaWallet | undefined
 ): Promise<VideoDataSendingToFrontendLessVideoUrl[]> {
 	try {
-		const userAllowedToAccessContent = await checkWhichExclusiveContentUserAllowedToAccess(retrievedHomePageVideos, solanaWalletId)
+		const userAllowedToAccessContent = await checkWhichExclusiveContentUserAllowedToAccess(
+			retrievedHomePageVideos,
+			optionallyAttachedSolanaWallet?.solana_wallet_id
+		)
 
 		const results = retrievedHomePageVideos.map(item => {
 			const isUserAbleToAccessVideo = userAllowedToAccessContent[item.video_id]
@@ -17,7 +19,9 @@ export default async function transformHomePageVideoData(
 			item.video_like_status.map(videoLikeStatus => {
 				if (videoLikeStatus.like_status === true) numberOfLikes += 1
 				else numberOfDislikes += 1
-				if (videoLikeStatus.user_id === userId) userLikeStatus = videoLikeStatus.like_status
+				if (videoLikeStatus.user_id === optionallyAttachedSolanaWallet?.user_id) {
+					userLikeStatus = videoLikeStatus.like_status
+				}
 			})
 			return {
 				videoId: item.video_id,

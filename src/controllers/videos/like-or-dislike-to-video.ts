@@ -3,10 +3,10 @@ import upsertVideoLikeStatus from "../../db-operations/write/video-like-status/u
 
 export default async function likeOrDislikeVideo(req: Request, res: Response): Promise<Response> {
 	try {
-		const { user } = req
+		const { solanaWallet } = req
 		const { videoId, likeStatus } = req.body
 
-		await upsertVideoLikeStatus(videoId, user.user_id, likeStatus)
+		await upsertVideoLikeStatus(videoId, solanaWallet.user_id, likeStatus)
 
 		return res.status(200).json({ success: "" })
 	} catch (error) {

@@ -7,7 +7,7 @@ import checkIfUserAllowedToAccessContent from "../../utils/exclusive-content/che
 
 export default async function getVideoByUUID (req: Request, res: Response): Promise<Response> {
 	try {
-		const { userId, optionallyAttachedSolanaWallet } = req
+		const { optionallyAttachedSolanaWallet } = req
 		const { videoUUID } = req.params
 
 		const videoData = await retrieveVideoByUUID(videoUUID)
@@ -26,7 +26,7 @@ export default async function getVideoByUUID (req: Request, res: Response): Prom
 			}
 		}
 
-		const transformedVideoData = transformVideoByUUIDData(videoData, userId)
+		const transformedVideoData = transformVideoByUUIDData(videoData, optionallyAttachedSolanaWallet?.user_id)
 
 		return res.status(200).json({ videoData: transformedVideoData })
 	} catch (error) {

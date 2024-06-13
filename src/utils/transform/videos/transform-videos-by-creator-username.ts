@@ -9,8 +9,7 @@ interface VideosAndCreatorData {
 // eslint-disable-next-line max-lines-per-function
 export default async function transformVideosByCreatorUsername(
 	retrievedVideoData: RetrievedVideosByCreatorUsername,
-	walletId: number | undefined,
-	userId: number | undefined
+	optionallyAttachedSolanaWallet: ExtendedSolanaWallet | undefined
 ): Promise<VideosAndCreatorData | null> {
 	try {
 		if (_.isNull(retrievedVideoData.solana_wallet)) return null
@@ -20,7 +19,7 @@ export default async function transformVideosByCreatorUsername(
 		// Fetch remaining tokens for these public keys
 		const userAllowedToAccessContent = await checkWhichExclusiveContentUserAllowedToAccess(
 			retrievedVideoData.solana_wallet.video_creator_wallet,
-			walletId
+			optionallyAttachedSolanaWallet?.solana_wallet_id
 		)
 		// Transform data using validated and filtered entries
 		const videoData = validEntries.map(item => {
@@ -31,7 +30,9 @@ export default async function transformVideosByCreatorUsername(
 			item.video_like_status.map(videoLikeStatus => {
 				if (videoLikeStatus.like_status === true) numberOfLikes += 1
 				else numberOfDislikes += 1
-				if (videoLikeStatus.user_id === userId) userLikeStatus = videoLikeStatus.like_status
+				if (videoLikeStatus.user_id === optionallyAttachedSolanaWallet?.user_id) {
+					userLikeStatus = videoLikeStatus.like_status
+				}
 			})
 			return {
 				videoId: item.video_id,

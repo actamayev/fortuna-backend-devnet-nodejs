@@ -22,7 +22,6 @@ export default async function optionalJwtVerifyWithWalletAttachment(
 		if (_.isNull(solanaWallet)) return res.status(400).json({ message: "Cannot find Solana Wallet" })
 
 		req.optionallyAttachedSolanaWallet = solanaWallet
-		req.userId = userId
 		next()
 	} catch (error) {
 		console.error(error)
