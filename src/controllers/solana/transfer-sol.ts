@@ -51,7 +51,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
-		let feePayerSolanaWalletId
+		let feePayerSolanaWalletId: undefined | number
 		if (isRecipientFortunaWallet === false) feePayerSolanaWalletId = solanaWallet.solana_wallet_id
 
 		const paidBlockchainFeeId = await addBlockchainFeesPaidByFortuna(transactionFeeInSol, feePayerSolanaWalletId)

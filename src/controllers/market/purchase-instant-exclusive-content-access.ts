@@ -20,10 +20,9 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 
 		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
 
-		const transferDetails: TransferDetails = {
+		const transferDetails: TransferDetailsLessDefaultCurrency = {
 			usdToTransfer: exclusiveVideoData.tier_access_price_usd,
-			solToTransfer: exclusiveVideoData.tier_access_price_usd / solPrice,
-			defaultCurrency: "usd"
+			solToTransfer: exclusiveVideoData.tier_access_price_usd / solPrice
 		}
 
 		const solTransferId = await transferSolFromFanToCreator(
@@ -47,7 +46,6 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 			solTransferId,
 			fortunaTakeId
 		)
-
 
 		const isTierSoldOut = await updateCheckIfVideoAccessTierSoldOut(exclusiveVideoData, tierNumber)
 		let isVideoSoldOut = false

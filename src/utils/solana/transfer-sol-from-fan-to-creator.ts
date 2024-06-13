@@ -10,7 +10,7 @@ import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blochain-f
 export default async function transferSolFromFanToCreator(
 	fanSolanaWallet: ExtendedSolanaWallet,
 	contentCreatorPublicKeyAndWalletId: CreatorWalletDataLessSecretKey,
-	transferDetails: TransferDetails
+	transferDetails: TransferDetailsLessDefaultCurrency
 ): Promise<number> {
 	try {
 		const transaction = new Transaction()

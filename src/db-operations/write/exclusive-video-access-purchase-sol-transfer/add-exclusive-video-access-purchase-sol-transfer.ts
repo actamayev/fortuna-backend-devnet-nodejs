@@ -5,7 +5,7 @@ export default async function addExclusiveVideoAccessPurchaseSolTransfer (
 	fanSolanaWalletId: number,
 	contentCreatorSolanaWalletId: number,
 	transactionSignature: string,
-	transferDetails: TransferDetails,
+	transferDetails: TransferDetailsLessDefaultCurrency,
 	blockchainFeesPaidByFortunaId: number
 ): Promise<number> {
 	try {
