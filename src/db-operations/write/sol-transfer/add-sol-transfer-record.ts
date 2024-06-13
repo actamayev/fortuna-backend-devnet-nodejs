@@ -8,8 +8,8 @@ export default async function addSolTransferRecord (
 	transactionSignature: string,
 	transferDetails: TransferDetails,
 	senderWalletId: number,
-	recipientSolanaWalletId: number | undefined,
-	blockchainFeesPaidByFortunaId: number
+	blockchainFeesPaidByFortunaId: number,
+	recipientSolanaWalletId: number | undefined
 ): Promise<AddSolTransferToDB> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()

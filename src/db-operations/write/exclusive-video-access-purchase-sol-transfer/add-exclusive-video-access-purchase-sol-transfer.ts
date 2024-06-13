@@ -1,6 +1,5 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-// eslint-disable-next-line max-params
 export default async function addExclusiveVideoAccessPurchaseSolTransfer (
 	fanSolanaWalletId: number,
 	contentCreatorSolanaWalletId: number,

@@ -62,8 +62,8 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			transactionSignature,
 			transferDetails,
 			solanaWallet.solana_wallet_id,
-			recipientSolanaWalletId,
-			paidBlockchainFeeId
+			paidBlockchainFeeId,
+			recipientSolanaWalletId
 		)
 
 		const transactionToTransform: RetrievedDBTransactionListData = {
