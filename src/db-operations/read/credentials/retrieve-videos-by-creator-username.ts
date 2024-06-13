@@ -42,6 +42,12 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 										is_sold_out: true
 									}
 								},
+								video_like_status: {
+									select: {
+										like_status: true,
+										user_id: true
+									}
+								},
 								_count: {
 									select: {
 										exclusive_video_access_purchase: true

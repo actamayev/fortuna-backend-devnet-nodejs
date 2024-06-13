@@ -48,6 +48,12 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 						}
 					}
 				},
+				video_like_status: {
+					select: {
+						like_status: true,
+						user_id: true
+					}
+				},
 				_count: {
 					select: {
 						exclusive_video_access_purchase: true

@@ -7,7 +7,7 @@ import retrieveVideoDataForExclusiveContentCheckByUUID
 
 export default async function getVideoUrl(req: Request, res: Response): Promise<Response> {
 	try {
-		const solanaWallet = req.solanaWallet as ExtendedSolanaWallet | undefined
+		const { optionallyAttachedSolanaWallet } = req
 		const { videoUUID } = req.params
 
 		const videoData = await retrieveVideoDataForExclusiveContentCheckByUUID(videoUUID)
@@ -16,8 +16,10 @@ export default async function getVideoUrl(req: Request, res: Response): Promise<
 		let videoUrl
 		if (videoData.is_video_exclusive === false) {
 			videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoUUID)
-		} else if (!_.isUndefined(solanaWallet)) {
-			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(videoData, solanaWallet.solana_wallet_id)
+		} else if (!_.isUndefined(optionallyAttachedSolanaWallet)) {
+			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(
+				videoData, optionallyAttachedSolanaWallet.solana_wallet_id
+			)
 			if (isUserAbleToAccessVideo === true) {
 				videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoUUID)
 			}

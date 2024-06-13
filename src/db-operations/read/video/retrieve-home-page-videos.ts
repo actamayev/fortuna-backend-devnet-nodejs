@@ -44,6 +44,12 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 						}
 					}
 				},
+				video_like_status: {
+					select: {
+						like_status: true,
+						user_id: true
+					}
+				},
 				_count: {
 					select: {
 						exclusive_video_access_purchase: true

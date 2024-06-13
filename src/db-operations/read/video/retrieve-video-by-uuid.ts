@@ -46,6 +46,12 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 						}
 					}
 				},
+				video_like_status: {
+					select: {
+						like_status: true,
+						user_id: true
+					}
+				},
 				_count: {
 					select: {
 						exclusive_video_access_purchase: true

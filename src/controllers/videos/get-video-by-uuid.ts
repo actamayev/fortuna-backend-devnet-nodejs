@@ -2,12 +2,12 @@ import _ from "lodash"
 import { Response, Request } from "express"
 import VideoUrlsManager from "../../classes/video-urls-manager"
 import retrieveVideoByUUID from "../../db-operations/read/video/retrieve-video-by-uuid"
-import transformVideoAndImageData from "../../utils/transform/videos/transform-video-and-image-data"
+import transformVideoByUUIDData from "../../utils/transform/videos/transform-video-by-uuid-data"
 import checkIfUserAllowedToAccessContent from "../../utils/exclusive-content/check-if-user-allowed-to-access-content"
 
 export default async function getVideoByUUID (req: Request, res: Response): Promise<Response> {
 	try {
-		const solanaWallet = req.solanaWallet as ExtendedSolanaWallet | undefined
+		const { userId, optionallyAttachedSolanaWallet } = req
 		const { videoUUID } = req.params
 
 		const videoData = await retrieveVideoByUUID(videoUUID)
@@ -16,15 +16,17 @@ export default async function getVideoByUUID (req: Request, res: Response): Prom
 		if (videoData.is_video_exclusive === false) {
 			const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoData.uuid)
 			videoData.videoUrl = videoUrl
-		} else if (!_.isUndefined(solanaWallet)) {
-			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(videoData, solanaWallet.solana_wallet_id)
+		} else if (!_.isUndefined(optionallyAttachedSolanaWallet)) {
+			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(
+				videoData, optionallyAttachedSolanaWallet.solana_wallet_id
+			)
 			if (isUserAbleToAccessVideo === true) {
 				const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoData.uuid)
 				videoData.videoUrl = videoUrl
 			}
 		}
 
-		const transformedVideoData = transformVideoAndImageData(videoData)
+		const transformedVideoData = transformVideoByUUIDData(videoData, userId)
 
 		return res.status(200).json({ videoData: transformedVideoData })
 	} catch (error) {

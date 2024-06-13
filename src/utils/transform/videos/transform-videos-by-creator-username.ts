@@ -9,7 +9,8 @@ interface VideosAndCreatorData {
 // eslint-disable-next-line max-lines-per-function
 export default async function transformVideosByCreatorUsername(
 	retrievedVideoData: RetrievedVideosByCreatorUsername,
-	walletId: number | undefined
+	walletId: number | undefined,
+	userId: number | undefined
 ): Promise<VideosAndCreatorData | null> {
 	try {
 		if (_.isNull(retrievedVideoData.solana_wallet)) return null
@@ -22,27 +23,38 @@ export default async function transformVideosByCreatorUsername(
 			walletId
 		)
 		// Transform data using validated and filtered entries
-		const videoData = validEntries.map(wallet => {
-			const isUserAbleToAccessVideo = userAllowedToAccessContent[wallet.video_id]
+		const videoData = validEntries.map(item => {
+			const isUserAbleToAccessVideo = userAllowedToAccessContent[item.video_id]
+			let numberOfLikes = 0
+			let numberOfDislikes = 0
+			let userLikeStatus: null | boolean = null
+			item.video_like_status.map(videoLikeStatus => {
+				if (videoLikeStatus.like_status === true) numberOfLikes += 1
+				else numberOfDislikes += 1
+				if (videoLikeStatus.user_id === userId) userLikeStatus = videoLikeStatus.like_status
+			})
 			return {
-				videoName: wallet.video_name,
-				videoListingStatus: wallet.video_listing_status,
-				description: wallet.description,
-				imageUrl: wallet.uploaded_image.image_url,
-				uuid: wallet.uuid,
+				videoName: item.video_name,
+				videoListingStatus: item.video_listing_status,
+				description: item.description,
+				imageUrl: item.uploaded_image.image_url,
+				uuid: item.uuid,
 				creatorUsername: retrievedVideoData.username,
 				creatorProfilePictureUrl: retrievedVideoData.profile_picture?.image_url || null,
-				isVideoExclusive: wallet.is_video_exclusive,
+				isVideoExclusive: item.is_video_exclusive,
 				isUserAbleToAccessVideo,
-				createdAt: wallet.created_at,
-				numberOfExclusivePurchasesSoFar: wallet.numberOfExclusivePurchasesSoFar,
-				tierData: wallet.video_access_tier.map(tier => ({
+				createdAt: item.created_at,
+				numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar,
+				tierData: item.video_access_tier.map(tier => ({
 					tierNumber: tier.tier_number,
 					purchasesInThisTier: tier.purchases_allowed_for_this_tier,
 					tierDiscount: tier.percent_discount_at_this_tier,
 					tierAccessPriceUsd: tier.tier_access_price_usd,
 					isTierSoldOut: tier.is_sold_out
-				}))
+				})),
+				numberOfLikes,
+				numberOfDislikes,
+				userLikeStatus,
 			}
 		})
 
