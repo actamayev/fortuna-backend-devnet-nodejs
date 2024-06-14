@@ -9,6 +9,7 @@ export default async function addExclusiveVideoAccessPurchase(
 ): Promise<void> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		await prismaClient.exclusive_video_access_purchase.create({
 			data: {
 				video_id: videoId,

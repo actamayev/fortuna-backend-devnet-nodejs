@@ -9,7 +9,7 @@ export default async function addUserWithWallet(
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		const result = await prismaClient.$transaction(async (prisma) => {
+		return await prismaClient.$transaction(async (prisma) => {
 			const user = await prisma.credentials.create({
 				data: userFields
 			})
@@ -24,8 +24,6 @@ export default async function addUserWithWallet(
 
 			return user.user_id
 		})
-
-		return result
 	} catch (error) {
 		console.error(error)
 		throw error

@@ -3,13 +3,13 @@ import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 import uuidValidator from "../../joi/uuid-validator"
 
-const videoUUIDInParamsSchema = Joi.object({
+const videoUUIDInBodySchema = Joi.object({
 	videoUUID: uuidValidator.required()
 }).required()
 
-export default function validateVideoUUIDInParams (req: Request, res: Response, next: NextFunction): Response | void {
+export default function validateVideoUUIDInBody (req: Request, res: Response, next: NextFunction): Response | void {
 	try {
-		const { error } = videoUUIDInParamsSchema.validate(req.params)
+		const { error } = videoUUIDInBodySchema.validate(req.body)
 
 		if (!_.isUndefined(error)) return res.status(400).json({ validationError: error.details[0].message })
 

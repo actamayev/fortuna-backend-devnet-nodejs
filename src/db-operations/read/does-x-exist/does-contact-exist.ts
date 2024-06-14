@@ -19,6 +19,7 @@ export default async function doesContactExist(
 async function doesEmailExist(encryptedEmail: DeterministicEncryptedString): Promise<boolean> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const user = await prismaClient.credentials.findFirst({
 			where: {
 				email__encrypted: encryptedEmail
@@ -34,6 +35,7 @@ async function doesEmailExist(encryptedEmail: DeterministicEncryptedString): Pro
 async function doesPhoneExist(encryptedPhoneNumber: DeterministicEncryptedString): Promise<boolean> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const user = await prismaClient.credentials.findFirst({
 			where: {
 				phone_number__encrypted: encryptedPhoneNumber

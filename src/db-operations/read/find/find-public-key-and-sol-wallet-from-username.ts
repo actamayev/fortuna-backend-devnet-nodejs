@@ -6,6 +6,7 @@ export default async function findPublicKeyAndSolWalletFromUsername(
 ): Promise<{ solana_wallet_id: number, public_key: string } | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const solanaWalletDetails = await prismaClient.credentials.findFirst({
 			where: {
 				username: {

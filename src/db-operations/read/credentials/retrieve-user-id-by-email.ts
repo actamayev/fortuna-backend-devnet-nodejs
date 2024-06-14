@@ -4,6 +4,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 export default async function retrieveUserIdByEmail(encryptedEmail: DeterministicEncryptedString): Promise<number | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const user = await prismaClient.credentials.findFirst({
 			select: {
 				user_id: true

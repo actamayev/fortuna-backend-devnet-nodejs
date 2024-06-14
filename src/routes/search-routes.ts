@@ -26,6 +26,11 @@ searchRoutes.get(
 	checkIfPublicKeyExistsWithFortuna
 )
 
-searchRoutes.get("/general-search/:searchTerm", validateSearchTerm, optionalJwtVerifyWithWalletAttachment, generalSearch)
+searchRoutes.get(
+	"/general-search/:searchTerm",
+	validateSearchTerm,
+	optionalJwtVerifyWithWalletAttachment,
+	generalSearch
+)
 
 export default searchRoutes

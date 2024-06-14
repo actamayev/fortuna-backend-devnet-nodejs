@@ -14,7 +14,7 @@ export default async function addSolTransferRecord (
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		const solTransfer = await prismaClient.sol_transfer.create({
+		return await prismaClient.sol_transfer.create({
 			data: {
 				recipient_public_key: recipientPublicKey.toString(),
 				is_recipient_fortuna_wallet: isRecipientFortunaWallet,
@@ -27,8 +27,6 @@ export default async function addSolTransferRecord (
 				blockchain_fees_paid_by_fortuna_id: blockchainFeesPaidByFortunaId
 			}
 		})
-
-		return solTransfer
 	} catch (error) {
 		console.error(error)
 		throw error

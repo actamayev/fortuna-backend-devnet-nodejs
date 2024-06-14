@@ -28,6 +28,10 @@ declare global {
 				} | null
 			}
 		}
+		video_like_status: {
+			like_status: boolean
+			user_id: number
+		}[]
 		numberOfExclusivePurchasesSoFar: number | null
 		videoUrl?: string
 	}
@@ -52,6 +56,10 @@ declare global {
 					percent_discount_at_this_tier: number
 					tier_access_price_usd: number
 					is_sold_out: boolean
+				}[]
+				video_like_status: {
+					like_status: boolean
+					user_id: number
 				}[]
 				numberOfExclusivePurchasesSoFar: number | null
 			}[]
@@ -113,6 +121,9 @@ declare global {
 		createdAt: Date
 		tierData: VideoTierData[]
 		numberOfExclusivePurchasesSoFar: number | null
+		numberOfLikes: number
+		numberOfDislikes: number
+		userLikeStatus: boolean | null
 	}
 
 	interface VideoDataSendingToFrontendWithVideoUrl extends VideoDataSendingToFrontendLessVideoUrl {

@@ -5,6 +5,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 export default async function retrieveVideosByCreatorUsername(creatorUsername: string): Promise<RetrievedVideosByCreatorUsername | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const retrievedVideos = await prismaClient.credentials.findUnique({
 			where: {
 				username: creatorUsername
@@ -40,6 +41,15 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 										percent_discount_at_this_tier: true,
 										tier_access_price_usd: true,
 										is_sold_out: true
+									}
+								},
+								video_like_status: {
+									select: {
+										like_status: true,
+										user_id: true
+									},
+									where: {
+										is_active: true
 									}
 								},
 								_count: {

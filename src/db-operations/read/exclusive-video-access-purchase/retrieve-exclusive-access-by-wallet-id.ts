@@ -5,7 +5,8 @@ export default async function retrieveExclusiveAccessByWalletId(
 ): Promise<RetrievedMyExclusiveContentData[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
-		const exclusiveContentOwnership = await prismaClient.exclusive_video_access_purchase.findMany({
+
+		return await prismaClient.exclusive_video_access_purchase.findMany({
 			where: {
 				solana_wallet_id: solanaWalletId,
 			},
@@ -23,8 +24,6 @@ export default async function retrieveExclusiveAccessByWalletId(
 				}
 			}
 		})
-
-		return exclusiveContentOwnership
 	} catch (error) {
 		console.error(error)
 		throw error
