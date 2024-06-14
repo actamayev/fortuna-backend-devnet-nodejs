@@ -1,9 +1,10 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import uuidValidator from "../../joi/uuid-validator"
 
 const likeOrDislikeVideoSchema = Joi.object({
-	videoId: Joi.number().strict().required(),
+	videoUUID: uuidValidator.required(),
 	likeStatus: Joi.boolean().required()
 }).required()
 
@@ -16,6 +17,6 @@ export default function validateLikeOrDislikeVideo (req: Request, res: Response,
 		next()
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to validate like of dislike video" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to validate like or dislike video" })
 	}
 }

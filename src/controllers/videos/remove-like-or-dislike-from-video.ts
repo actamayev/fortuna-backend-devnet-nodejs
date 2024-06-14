@@ -3,10 +3,9 @@ import removeLikeStatus from "../../db-operations/write/video-like-status/remove
 
 export default async function removeLikeOrDislikeFromVideo(req: Request, res: Response): Promise<Response> {
 	try {
-		const { user } = req
-		const { videoId } = req.params
+		const { solanaWallet, minimalDataNeededToCheckForExclusiveContentAccess } = req
 
-		await removeLikeStatus(parseInt(videoId, 10), user.user_id)
+		await removeLikeStatus(minimalDataNeededToCheckForExclusiveContentAccess.video_id, solanaWallet.user_id)
 
 		return res.status(200).json({ success: "Removed like/dislike from video" })
 	} catch (error) {

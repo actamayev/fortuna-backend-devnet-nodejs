@@ -24,7 +24,6 @@ export default async function transformHomePageVideoData(
 				}
 			})
 			return {
-				videoId: item.video_id,
 				videoName: item.video_name,
 				videoListingStatus: item.video_listing_status,
 				description: item.description,
