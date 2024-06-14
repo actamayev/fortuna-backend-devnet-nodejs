@@ -44,6 +44,7 @@ model credentials {
 
 	login_history                                               login_history[]
 	solana_wallet                                               solana_wallet?
+	video_like_status											video_like_status[]
 
 	profile_picture                                             profile_picture? @relation(fields: [profile_picture_id], references: [profile_picture_id])
 	youtube_access_tokens                                       youtube_access_tokens? @relation(fields: [youtube_access_tokens_id], references: [youtube_access_tokens_id])
@@ -119,6 +120,7 @@ model video {
 
 	exclusive_video_access_purchase                             exclusive_video_access_purchase[]
 	video_access_tier                                           video_access_tier[]
+	video_like_status											video_like_status[]
 
 	@@index([creator_wallet_id], name: "video__creator_wallet_id_idx")
 	@@index([uploaded_image_id], name: "video__uploaded_image_id_idx")
@@ -303,4 +305,23 @@ model youtube_access_tokens {
 	updated_at                                                  DateTime  @default(now()) @updatedAt
 
 	user                                                        credentials?
+}
+
+model video_like_status {
+	video_like_status_id										Int @id @default(autoincrement())
+	like_status													Boolean // true means like, false dislike
+	video_id													Int
+	user_id														Int
+
+	is_active                                                   Boolean  @default(true)
+
+	created_at                                                  DateTime  @default(now())
+	updated_at                                                  DateTime  @default(now()) @updatedAt
+
+	video                                                       video @relation(fields: [video_id], references: [video_id])
+	user                                                        credentials @relation(fields: [user_id], references: [user_id])
+
+	@@index([video_id], name: "video_like_status__video_id_idx")
+	@@index([user_id], name: "video_like_status__user_id_idx")
+	@@unique([video_id, user_id])
 }

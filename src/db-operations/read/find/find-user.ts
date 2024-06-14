@@ -5,10 +5,13 @@ import { validateExtendedCredentials } from "../../../utils/types/type-guards"
 export async function findUserById(userId: number): Promise<ExtendedCredentials | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const user = await prismaClient.credentials.findUnique({
 			where: { user_id: userId }
 		})
+
 		if (_.isNull(user) || validateExtendedCredentials(user) === false) return null
+
 		return user
 	} catch (error) {
 		console.error("Error finding user by Id:", error)
@@ -24,10 +27,13 @@ export async function findUserByWhereCondition(
 ): Promise<ExtendedCredentials | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const user = await prismaClient.credentials.findFirst({
 			where: whereCondition
 		})
+
 		if (_.isNull(user) || validateExtendedCredentials(user) === false) return null
+
 		return user
 	} catch (error) {
 		console.error("Error finding user:", error)

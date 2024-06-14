@@ -8,6 +8,7 @@ export default async function retrieveExclusiveVideoDataByUUID(
 ): Promise<ExclusiveVideoData | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const exclusiveVideoData = await prismaClient.video.findFirst({
 			where: {
 				uuid: videoUUID,

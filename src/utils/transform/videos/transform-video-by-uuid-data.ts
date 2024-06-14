@@ -1,9 +1,19 @@
 import _ from "lodash"
 
-export default function transformVideoAndImageData(
-	videoData: RetrievedHomePageVideosFromDB
+// eslint-disable-next-line max-lines-per-function
+export default function transformVideoByUUIDData(
+	videoData: RetrievedHomePageVideosFromDB,
+	userId: number | undefined
 ): VideoDataSendingToFrontendWithVideoUrl {
 	try {
+		let numberOfLikes = 0
+		let numberOfDislikes = 0
+		let userLikeStatus: null | boolean = null
+		videoData.video_like_status.map(videoLikeStatus => {
+			if (videoLikeStatus.like_status === true) numberOfLikes ++
+			else numberOfDislikes ++
+			if (videoLikeStatus.user_id === userId) userLikeStatus = videoLikeStatus.like_status
+		})
 		const videoDataSendingToFrontEnd: VideoDataSendingToFrontendWithVideoUrl = {
 			videoName: videoData.video_name,
 			videoListingStatus: videoData.video_listing_status,
@@ -22,7 +32,10 @@ export default function transformVideoAndImageData(
 				tierDiscount: tier.percent_discount_at_this_tier,
 				tierAccessPriceUsd: tier.tier_access_price_usd,
 				isTierSoldOut: tier.is_sold_out
-			}))
+			})),
+			numberOfLikes,
+			numberOfDislikes,
+			userLikeStatus
 		}
 
 		if (!_.isUndefined(videoData.videoUrl)) {

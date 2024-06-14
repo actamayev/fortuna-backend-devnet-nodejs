@@ -4,6 +4,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 export default async function retrieveHomePageVideos(): Promise<RetrievedHomePageVideosFromDB[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const mediaDetails = await prismaClient.video.findMany({
 			where: {
 			},
@@ -42,6 +43,15 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 								}
 							}
 						}
+					}
+				},
+				video_like_status: {
+					select: {
+						like_status: true,
+						user_id: true
+					},
+					where: {
+						is_active: true
 					}
 				},
 				_count: {

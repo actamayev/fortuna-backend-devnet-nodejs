@@ -4,10 +4,10 @@ import transformHomePageVideoData from "../../utils/transform/videos/transform-h
 
 export default async function getHomePageVideos (req: Request, res: Response): Promise<Response> {
 	try {
-		const solanaWallet = req.solanaWallet as ExtendedSolanaWallet | undefined
+		const { optionallyAttachedSolanaWallet } = req
 		const videoData = await retrieveHomePageVideos()
 
-		const homePageVideos = await transformHomePageVideoData(videoData, solanaWallet?.solana_wallet_id)
+		const homePageVideos = await transformHomePageVideoData(videoData, optionallyAttachedSolanaWallet)
 
 		return res.status(200).json({ homePageVideos })
 	} catch (error) {

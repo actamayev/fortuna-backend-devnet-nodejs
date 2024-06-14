@@ -4,9 +4,13 @@ declare global {
 	namespace Express {
 		interface Request {
 			user: ExtendedCredentials
+
 			solanaWallet: ExtendedSolanaWallet
+			optionallyAttachedSolanaWallet: ExtendedSolanaWallet | undefined
+
 			recipientPublicKey: PublicKey
 
+			minimalDataNeededToCheckForExclusiveContentAccess: VideoDataNeededToCheckForExclusiveContentAccess
 			exclusiveVideoData: ExclusiveVideoData
 
 			isRecipientFortunaWallet: boolean

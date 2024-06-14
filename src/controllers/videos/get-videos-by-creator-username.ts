@@ -5,13 +5,13 @@ import retrieveVideosByCreatorUsername from "../../db-operations/read/credential
 
 export default async function getVideosByCreatorUsername (req: Request, res: Response): Promise<Response> {
 	try {
-		const solanaWallet = req.solanaWallet as ExtendedSolanaWallet | undefined
+		const { optionallyAttachedSolanaWallet } = req
 		const creatorUsername = req.params.creatorUsername as string
 
 		const retrievedVideoData = await retrieveVideosByCreatorUsername(creatorUsername)
 		if (_.isNull(retrievedVideoData)) return res.status(400).json({ message: "Unable to find creator associated with this username" })
 
-		const transformedVideoData = await transformVideosByCreatorUsername(retrievedVideoData, solanaWallet?.solana_wallet_id)
+		const transformedVideoData = await transformVideosByCreatorUsername(retrievedVideoData, optionallyAttachedSolanaWallet)
 		if (_.isNull(transformedVideoData)) return res.status(400).json({ message: "Unable to find creator associated with this username"})
 
 		return res.status(200).json({
