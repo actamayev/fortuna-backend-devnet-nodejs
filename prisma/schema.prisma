@@ -46,6 +46,7 @@ model credentials {
 	solana_wallet                                               solana_wallet?
 	video_like_status											video_like_status[]
 	video				                                        video[]
+	exclusive_video_access_purchase                             exclusive_video_access_purchase[]
 
 	profile_picture                                             profile_picture? @relation(fields: [profile_picture_id], references: [profile_picture_id])
 	youtube_access_tokens                                       youtube_access_tokens? @relation(fields: [youtube_access_tokens_id], references: [youtube_access_tokens_id])
@@ -74,8 +75,6 @@ model solana_wallet {
 	updated_at                                                  DateTime     @default(now()) @updatedAt
 
 	user                                                        credentials @relation(fields: [user_id], references: [user_id])
-
-	exclusive_video_access_purchase                             exclusive_video_access_purchase[]
 
 	sol_transfer_sender_solana_wallet                           sol_transfer[] @relation("sender_solana_wallet")
 	sol_transfer_recipient_solana_wallet                        sol_transfer[] @relation("recipient_solana_wallet")
@@ -148,7 +147,7 @@ model video_access_tier {
 model exclusive_video_access_purchase {
 	exclusive_video_access_purchase_id                          Int  @id @default(autoincrement())
 	video_id                                                    Int
-	solana_wallet_id                                            Int
+	user_id			                                            Int
 	video_access_tier_number									Int
 	exclusive_video_access_purchase_sol_transfer_id             Int @unique(map: "unique_sol_transfer_id")
 	exclusive_video_access_purchase_fortuna_take_id             Int @unique(map: "unique_fortuna_take_id")
@@ -157,15 +156,15 @@ model exclusive_video_access_purchase {
 	updated_at                                                  DateTime  @default(now()) @updatedAt
 
 	video                                                       video @relation(fields: [video_id], references: [video_id])
-	solana_wallet                                               solana_wallet @relation(fields: [solana_wallet_id], references: [solana_wallet_id])
+	user                                               			credentials @relation(fields: [user_id], references: [user_id])
 	exclusive_video_access_purchase_sol_transfer                exclusive_video_access_purchase_sol_transfer @relation(fields: [exclusive_video_access_purchase_sol_transfer_id], references: [exclusive_video_access_purchase_sol_transfer_id], map: "exclusive_video_access_purchase_sol_transfer_fkey")
 	exclusive_video_access_purchase_fortuna_take                exclusive_video_access_purchase_fortuna_take @relation(fields: [exclusive_video_access_purchase_fortuna_take_id], references: [exclusive_video_access_purchase_fortuna_take_id], map: "exclusive_video_access_purchase_fortuna_take_fkey")
 
 	@@index([video_id], name: "exclusive_video_access_purchase__video_id_idx")
-	@@index([solana_wallet_id], name: "exclusive_video_access_purchase__solana_wallet_id_idx")
+	@@index([user_id], name: "exclusive_video_access_purchase__user_id_idx")
 	@@index([exclusive_video_access_purchase_sol_transfer_id], name: "exclusive_video_access__sol_transfer_id_idx")
 	@@index([exclusive_video_access_purchase_fortuna_take_id], name: "exclusive_video_access__take_id_idx")
-	@@unique([video_id, solana_wallet_id])
+	@@unique([video_id, user_id])
 }
 
 model uploaded_image {
