@@ -1,5 +1,4 @@
 import _ from "lodash"
-import { PublicKey } from "@solana/web3.js"
 import { Request, Response, NextFunction } from "express"
 import findPublicKeyAndSolWalletFromUsername from "../../db-operations/read/find/find-public-key-and-sol-wallet-from-username"
 
@@ -15,11 +14,11 @@ export default async function attachPublicKeyByTransferToUsername (
 		if (_.isNull(recipientUserPublicKeyAndWalletId)) {
 			return res.status(500).json({ error: "Unable to public key and wallet id" })
 		}
-		req.isRecipientFortunaWallet = true
-		req.recipientSolanaWalletId = recipientUserPublicKeyAndWalletId.solana_wallet_id
-		const recipientPublicKey = new PublicKey(recipientUserPublicKeyAndWalletId.public_key)
 
-		req.recipientPublicKey = recipientPublicKey
+		req.isRecipientFortunaWallet = true
+		req.recipientPublicKey = recipientUserPublicKeyAndWalletId.public_key
+		req.recipientSolanaWalletId = recipientUserPublicKeyAndWalletId.solana_wallet_id
+
 		next()
 	} catch (error) {
 		console.error(error)

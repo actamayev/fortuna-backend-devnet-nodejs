@@ -2,7 +2,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function addExclusiveVideoAccessPurchase(
 	videoId: number,
-	solanaWalletId: number,
+	userId: number,
 	tierNumber: number,
 	exclusiveVideoAccessPurchaseSolTransferId: number,
 	exclusiveVideoAccessPurchaseFortunaTakeId: number
@@ -13,7 +13,7 @@ export default async function addExclusiveVideoAccessPurchase(
 		await prismaClient.exclusive_video_access_purchase.create({
 			data: {
 				video_id: videoId,
-				solana_wallet_id: solanaWalletId,
+				user_id: userId,
 				video_access_tier_number: tierNumber,
 				exclusive_video_access_purchase_sol_transfer_id: exclusiveVideoAccessPurchaseSolTransferId,
 				exclusive_video_access_purchase_fortuna_take_id: exclusiveVideoAccessPurchaseFortunaTakeId

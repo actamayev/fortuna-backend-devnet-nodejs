@@ -8,12 +8,12 @@ interface ExclusiveVideoAccessRecord {
 
 export default async function checkWhichExclusiveContentUserAllowedToAccess(
 	retirevedVideos: VideoDataNeededToCheckForExclusiveContentAccess[],
-	userSolanaWalletId: number | undefined
+	userId: number | undefined
 ): Promise<ExclusiveVideoAccessRecord> {
 	try {
 		const accessRecord: ExclusiveVideoAccessRecord = {}
 		retirevedVideos = retirevedVideos.filter(retrievedVideo => {
-			if (retrievedVideo.is_video_exclusive === false || retrievedVideo.creator_wallet_id === userSolanaWalletId) {
+			if (retrievedVideo.is_video_exclusive === false || retrievedVideo.creator_user_id === userId) {
 				accessRecord[retrievedVideo.video_id] = true
 				return false
 			}
@@ -22,13 +22,13 @@ export default async function checkWhichExclusiveContentUserAllowedToAccess(
 
 		if (_.isEmpty(retirevedVideos)) return accessRecord
 
-		if (_.isUndefined(userSolanaWalletId)) {
+		if (_.isUndefined(userId)) {
 			retirevedVideos.forEach(video => accessRecord[video.video_id] = false)
 			return accessRecord
 		}
 
 		const videoIds = retirevedVideos.map(video => video.video_id)
-		const exclusiveVideoData = await checkIfUserMadeExclusiveVideoPurchases(videoIds, userSolanaWalletId)
+		const exclusiveVideoData = await checkIfUserMadeExclusiveVideoPurchases(videoIds, userId)
 
 		retirevedVideos.map(retrievedVideo => {
 			const didUserPurchaseVideoAccess = exclusiveVideoData[retrievedVideo.video_id]

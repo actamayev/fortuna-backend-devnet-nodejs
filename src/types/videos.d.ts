@@ -5,7 +5,7 @@ declare global {
 		video_id: number
 		video_name: string
 		description: string
-		creator_wallet_id: number
+		creator_user_id: number
 		is_video_exclusive: boolean
 		uuid: string
 		created_at: Date
@@ -20,13 +20,11 @@ declare global {
 			tier_access_price_usd: number
 			is_sold_out: boolean
 		}[]
-		video_creator_wallet: {
-			user: {
-				username: string
-				profile_picture: {
-					image_url: string
-				} | null
-			}
+		video_creator: {
+			username: string
+			profile_picture: {
+				image_url: string
+			} | null
 		}
 		video_like_status: {
 			like_status: boolean
@@ -37,37 +35,33 @@ declare global {
 	}
 
 	interface RetrievedVideosByCreatorUsername {
-		solana_wallet: {
-			video_creator_wallet: {
-				video_id: number
-				video_name: string
-				video_listing_status: VideoListingStatus
-				description: string
-				creator_wallet_id: number
-				is_video_exclusive: boolean
-				uuid: string
-				created_at: Date
-				uploaded_image: {
-					image_url: string
-				}
-				video_access_tier: {
-					tier_number: number
-					purchases_allowed_for_this_tier: number | null
-					percent_discount_at_this_tier: number
-					tier_access_price_usd: number
-					is_sold_out: boolean
-				}[]
-				video_like_status: {
-					like_status: boolean
-					user_id: number
-				}[]
-				numberOfExclusivePurchasesSoFar: number | null
+		videos: {
+			video_id: number
+			video_name: string
+			video_listing_status: VideoListingStatus
+			description: string
+			creator_user_id: number
+			is_video_exclusive: boolean
+			uuid: string
+			created_at: Date
+			uploaded_image: {
+				image_url: string
+			}
+			video_access_tier: {
+				tier_number: number
+				purchases_allowed_for_this_tier: number | null
+				percent_discount_at_this_tier: number
+				tier_access_price_usd: number
+				is_sold_out: boolean
 			}[]
-		} | null
+			video_like_status: {
+				like_status: boolean
+				user_id: number
+			}[]
+			numberOfExclusivePurchasesSoFar: number | null
+		}[]
 		username: string
-		profile_picture: {
-			image_url: string
-		} | null
+		profile_picture_image_url: string | null
 	}
 
 	interface RetrievedCreatorsByUsername {
@@ -79,7 +73,7 @@ declare global {
 
 	interface VideoDataNeededToCheckForExclusiveContentAccess {
 		video_id: number
-		creator_wallet_id: number
+		creator_user_id: number
 		is_video_exclusive: boolean
 	}
 

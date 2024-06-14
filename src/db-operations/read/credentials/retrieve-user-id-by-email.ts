@@ -6,13 +6,13 @@ export default async function retrieveUserIdByEmail(encryptedEmail: Deterministi
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		const user = await prismaClient.credentials.findFirst({
-			select: {
-				user_id: true
-			},
 			where: {
 				email__encrypted: {
 					equals: encryptedEmail
 				}
+			},
+			select: {
+				user_id: true
 			}
 		})
 

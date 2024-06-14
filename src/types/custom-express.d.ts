@@ -4,9 +4,9 @@ declare global {
 	namespace Express {
 		interface Request {
 			user: ExtendedCredentials
+			optionallyAttachedUser: ExtendedCredentials | undefined
 
 			solanaWallet: ExtendedSolanaWallet
-			optionallyAttachedSolanaWallet: ExtendedSolanaWallet | undefined
 
 			recipientPublicKey: PublicKey
 

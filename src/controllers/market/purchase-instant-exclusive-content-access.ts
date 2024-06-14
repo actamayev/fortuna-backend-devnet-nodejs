@@ -41,7 +41,7 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 
 		await addExclusiveVideoAccessPurchase(
 			exclusiveVideoData.video_id,
-			solanaWallet.solana_wallet_id,
+			solanaWallet.user_id,
 			tierNumber,
 			solTransferId,
 			fortunaTakeId

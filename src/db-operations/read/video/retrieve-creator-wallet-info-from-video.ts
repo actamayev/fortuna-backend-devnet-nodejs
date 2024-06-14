@@ -6,30 +6,31 @@ export default async function retrieveCreatorWalletInfoFromVideo(videoId: number
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		const creatorWalletData = await prismaClient.video.findFirst({
+		const creatorWalletData = await prismaClient.video.findUnique({
 			where: {
 				video_id: videoId
 			},
-			orderBy: {
-				created_at: "desc"
-			},
 			select: {
-				video_creator_wallet: {
+				video_creator: {
 					select: {
-						public_key: true,
-						solana_wallet_id: true,
-						secret_key__encrypted: true
+						solana_wallet: {
+							select: {
+								public_key: true,
+								solana_wallet_id: true,
+								secret_key__encrypted: true
+							}
+						}
 					}
 				}
 			}
 		})
 
-		if (_.isNull(creatorWalletData)) return null
+		if (_.isNull(creatorWalletData) || _.isNull(creatorWalletData.video_creator.solana_wallet)) return null
 
 		return {
-			public_key: new PublicKey(creatorWalletData.video_creator_wallet.public_key),
-			secret_key__encrypted: creatorWalletData.video_creator_wallet.secret_key__encrypted as NonDeterministicEncryptedString,
-			solana_wallet_id: creatorWalletData.video_creator_wallet.solana_wallet_id
+			public_key: new PublicKey(creatorWalletData.video_creator.solana_wallet.public_key),
+			secret_key__encrypted: creatorWalletData.video_creator.solana_wallet.secret_key__encrypted as NonDeterministicEncryptedString,
+			solana_wallet_id: creatorWalletData.video_creator.solana_wallet.solana_wallet_id
 		}
 	} catch (error) {
 		console.error(error)

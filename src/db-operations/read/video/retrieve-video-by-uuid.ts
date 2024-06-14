@@ -15,7 +15,7 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 				video_name: true,
 				video_listing_status: true,
 				description: true,
-				creator_wallet_id: true,
+				creator_user_id: true,
 				is_video_exclusive: true,
 				uuid: true,
 				created_at: true,
@@ -33,16 +33,12 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 						is_sold_out: true
 					}
 				},
-				video_creator_wallet: {
+				video_creator: {
 					select: {
-						user: {
+						username: true,
+						profile_picture: {
 							select: {
-								username: true,
-								profile_picture: {
-									select: {
-										image_url: true
-									}
-								}
+								image_url: true
 							}
 						}
 					}
@@ -64,7 +60,7 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 			}
 		})
 
-		if (_.isNull(retrievedVideo) || _.isNull(retrievedVideo.video_creator_wallet.user.username)) {
+		if (_.isNull(retrievedVideo) || _.isNull(retrievedVideo.video_creator.username)) {
 			return null
 		}
 

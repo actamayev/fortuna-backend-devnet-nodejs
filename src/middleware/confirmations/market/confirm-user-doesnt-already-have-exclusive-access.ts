@@ -9,7 +9,7 @@ export default async function confirmUserDoesntAlreadyHaveExclusiveAccess(
 	try {
 		const { solanaWallet, exclusiveVideoData } = req
 		const doesUserAlreadyHaveExclusiveAccess = await checkIfUserAllowedToAccessContent(
-			exclusiveVideoData, solanaWallet.solana_wallet_id
+			exclusiveVideoData, solanaWallet.user_id
 		)
 
 		if (doesUserAlreadyHaveExclusiveAccess === true) {

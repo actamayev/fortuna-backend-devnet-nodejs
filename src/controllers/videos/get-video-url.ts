@@ -7,7 +7,7 @@ import checkIfUserAllowedToAccessContent from "../../utils/exclusive-content/che
 
 export default async function getVideoUrl(req: Request, res: Response): Promise<Response> {
 	try {
-		const { optionallyAttachedSolanaWallet } = req
+		const { optionallyAttachedUser } = req
 		const { videoUUID } = req.params
 
 		const videoData = await retrieveVideoDataForExclusiveContentCheckByUUID(videoUUID)
@@ -16,9 +16,9 @@ export default async function getVideoUrl(req: Request, res: Response): Promise<
 		let videoUrl
 		if (videoData.is_video_exclusive === false) {
 			videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoUUID)
-		} else if (!_.isUndefined(optionallyAttachedSolanaWallet)) {
+		} else if (!_.isUndefined(optionallyAttachedUser)) {
 			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(
-				videoData, optionallyAttachedSolanaWallet.solana_wallet_id
+				videoData, optionallyAttachedUser.user_id
 			)
 			if (isUserAbleToAccessVideo === true) {
 				videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoUUID)

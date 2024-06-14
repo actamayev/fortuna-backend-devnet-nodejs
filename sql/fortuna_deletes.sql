@@ -1,7 +1,8 @@
 -- To delete a video:
 -- delete from video_access_tier;
--- delete from exclusive_video_access_purchase_fortuna_take;
 -- delete from exclusive_video_access_purchase;
+-- delete from exclusive_video_access_purchase_fortuna_take;
+-- delete from video_like_status;
 -- delete from video;
 
 
