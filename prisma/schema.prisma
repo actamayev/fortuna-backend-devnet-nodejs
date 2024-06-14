@@ -45,6 +45,7 @@ model credentials {
 	login_history                                               login_history[]
 	solana_wallet                                               solana_wallet?
 	video_like_status											video_like_status[]
+	video				                                        video[]
 
 	profile_picture                                             profile_picture? @relation(fields: [profile_picture_id], references: [profile_picture_id])
 	youtube_access_tokens                                       youtube_access_tokens? @relation(fields: [youtube_access_tokens_id], references: [youtube_access_tokens_id])
@@ -74,7 +75,6 @@ model solana_wallet {
 
 	user                                                        credentials @relation(fields: [user_id], references: [user_id])
 
-	video_creator_wallet                                        video[]
 	exclusive_video_access_purchase                             exclusive_video_access_purchase[]
 
 	sol_transfer_sender_solana_wallet                           sol_transfer[] @relation("sender_solana_wallet")
@@ -99,7 +99,7 @@ model video {
 	video_id                                                    Int       @id @default(autoincrement())
 	video_name                                                  String
 
-	creator_wallet_id                                           Int
+	creator_user_id                                           	Int
 	uploaded_image_id                                           Int     @unique
 	uploaded_video_id                                           Int     @unique
 
@@ -114,7 +114,7 @@ model video {
 	created_at                                                  DateTime  @default(now())
 	updated_at                                                  DateTime  @default(now()) @updatedAt
 
-	video_creator_wallet                                        solana_wallet @relation(fields: [creator_wallet_id], references: [solana_wallet_id])
+	video_creator		                                        credentials @relation(fields: [creator_user_id], references: [user_id])
 	uploaded_image                                              uploaded_image @relation(fields: [uploaded_image_id], references: [uploaded_image_id])
 	uploaded_video                                              uploaded_video @relation(fields: [uploaded_video_id], references: [uploaded_video_id])
 
@@ -122,7 +122,7 @@ model video {
 	video_access_tier                                           video_access_tier[]
 	video_like_status											video_like_status[]
 
-	@@index([creator_wallet_id], name: "video__creator_wallet_id_idx")
+	@@index([creator_user_id], name: "video__creator_user_id_idx")
 	@@index([uploaded_image_id], name: "video__uploaded_image_id_idx")
 	@@index([uploaded_video_id], name: "video__uploaded_video_id_idx")
 }
