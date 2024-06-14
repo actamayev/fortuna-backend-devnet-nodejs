@@ -8,7 +8,9 @@ export async function findSolanaWalletByUserId(userId: number): Promise<Extended
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		const solanaWallet = await prismaClient.solana_wallet.findUnique({
-			where: { user_id: userId }
+			where: {
+				user_id: userId
+			}
 		})
 
 		if (_.isNull(solanaWallet) || validateExtendedSolanaWallet(solanaWallet) === false) return null
@@ -25,7 +27,9 @@ export async function findSolanaWalletByPublicKey(publicKey: PublicKey): Promise
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		const solanaWallet = await prismaClient.solana_wallet.findFirst({
-			where: { public_key: publicKey.toString() }
+			where: {
+				public_key: publicKey.toString()
+			}
 		})
 
 		if (_.isNull(solanaWallet) || validateExtendedSolanaWallet(solanaWallet) === false) return null
