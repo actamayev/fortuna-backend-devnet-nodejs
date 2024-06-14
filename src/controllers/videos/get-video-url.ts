@@ -1,9 +1,9 @@
 import _ from "lodash"
 import { Request, Response } from "express"
 import VideoUrlsManager from "../../classes/video-urls-manager"
-import checkIfUserAllowedToAccessContent from "../../utils/exclusive-content/check-if-user-allowed-to-access-content"
 import retrieveVideoDataForExclusiveContentCheckByUUID
 	from "../../db-operations/read/video/retrieve-video-data-for-exclusive-content-check-by-uuid"
+import checkIfUserAllowedToAccessContent from "../../utils/exclusive-content/check-if-user-allowed-to-access-content"
 
 export default async function getVideoUrl(req: Request, res: Response): Promise<Response> {
 	try {
