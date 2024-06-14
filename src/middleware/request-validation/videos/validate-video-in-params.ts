@@ -8,7 +8,7 @@ const videoIdInParamsSchema = Joi.object({
 
 export default function validateVideoIdInParams (req: Request, res: Response, next: NextFunction): Response | void {
 	try {
-		const params = { videoId: Number(req.params.videoId) }
+		const params = { videoId: parseInt(req.params.videoId, 10) }
 
 		const { error } = videoIdInParamsSchema.validate(params)
 
