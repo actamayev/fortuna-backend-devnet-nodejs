@@ -8,7 +8,7 @@ import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import validatePublicKey from "../middleware/request-validation/search/validate-public-key"
 import validateSearchTerm from "../middleware/request-validation/search/validate-search-term"
 import validateSearchUsername from "../middleware/request-validation/search/validate-search-username"
-import optionalJwtVerifyWithWalletAttachment from "../middleware/jwt/optional-jwt-verify-with-wallet-attachment"
+import optionalJwtVerifyWithUserAttachment from "../middleware/jwt/optional-jwt-verify-with-user-attachment"
 
 const searchRoutes = express.Router()
 
@@ -29,7 +29,7 @@ searchRoutes.get(
 searchRoutes.get(
 	"/general-search/:searchTerm",
 	validateSearchTerm,
-	optionalJwtVerifyWithWalletAttachment,
+	optionalJwtVerifyWithUserAttachment,
 	generalSearch
 )
 

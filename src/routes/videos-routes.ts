@@ -7,44 +7,44 @@ import likeOrDislikeVideo from "../controllers/videos/like-or-dislike-video"
 import getVideosByCreatorUsername from "../controllers/videos/get-videos-by-creator-username"
 import removeLikeOrDislikeFromVideo from "../controllers/videos/remove-like-or-dislike-from-video"
 
-import jwtVerifyAttachSolanaWallet from "../middleware/jwt/jwt-verify-attach-solana-wallet"
+import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import validateCreatorUsername from "../middleware/request-validation/videos/validate-creator-username"
 import validateVideoUUIDInBody from "../middleware/request-validation/videos/validate-video-uuid-in-body"
+import optionalJwtVerifyWithUserAttachment from "../middleware/jwt/optional-jwt-verify-with-user-attachment"
 import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
 import validateLikeOrDislikeVideo from "../middleware/request-validation/videos/validate-like-or-dislike-video"
-import optionalJwtVerifyWithWalletAttachment from "../middleware/jwt/optional-jwt-verify-with-wallet-attachment"
 import confirmUserHasExclusiveAccess from "../middleware/confirmations/videos/confirm-user-has-exclusive-access"
 import attachMinimalExclusiveVideoDataByUUID from "../middleware/attach/exclusive-video-data/attach-minimal-exclusive-video-data-by-uuid"
 
 const videosRoutes = express.Router()
 
-videosRoutes.get("/get-home-page-videos", optionalJwtVerifyWithWalletAttachment, getHomePageVideos)
+videosRoutes.get("/get-home-page-videos", optionalJwtVerifyWithUserAttachment, getHomePageVideos)
 
 videosRoutes.get(
 	"/get-video/:videoUUID",
 	validateVideoUUIDInParams,
-	optionalJwtVerifyWithWalletAttachment,
+	optionalJwtVerifyWithUserAttachment,
 	getVideoByUUID
 )
 
 videosRoutes.get(
 	"/get-creator-videos/:creatorUsername",
 	validateCreatorUsername,
-	optionalJwtVerifyWithWalletAttachment,
+	optionalJwtVerifyWithUserAttachment,
 	getVideosByCreatorUsername
 )
 
 videosRoutes.get(
 	"/get-video-url/:videoUUID",
 	validateVideoUUIDInParams,
-	optionalJwtVerifyWithWalletAttachment,
+	optionalJwtVerifyWithUserAttachment,
 	getVideoUrl
 )
 
 videosRoutes.post(
 	"/like-or-dislike-video",
 	validateLikeOrDislikeVideo,
-	jwtVerifyAttachSolanaWallet,
+	jwtVerifyAttachUser,
 	attachMinimalExclusiveVideoDataByUUID,
 	confirmUserHasExclusiveAccess,
 	likeOrDislikeVideo
@@ -53,7 +53,7 @@ videosRoutes.post(
 videosRoutes.post(
 	"/remove-like-or-dislike-from-video",
 	validateVideoUUIDInBody,
-	jwtVerifyAttachSolanaWallet,
+	jwtVerifyAttachUser,
 	attachMinimalExclusiveVideoDataByUUID,
 	confirmUserHasExclusiveAccess,
 	removeLikeOrDislikeFromVideo

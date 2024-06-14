@@ -1,14 +1,14 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function retrieveExclusiveAccessByWalletId(
-	solanaWalletId: number
+	userId: number
 ): Promise<RetrievedMyExclusiveContentData[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		return await prismaClient.exclusive_video_access_purchase.findMany({
 			where: {
-				solana_wallet_id: solanaWalletId,
+				user_id: userId
 			},
 			select: {
 				video: {

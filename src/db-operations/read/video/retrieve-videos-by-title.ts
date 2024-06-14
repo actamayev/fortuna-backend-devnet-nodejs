@@ -17,7 +17,7 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 				video_name: true,
 				video_listing_status: true,
 				description: true,
-				creator_wallet_id: true,
+				creator_user_id: true,
 				is_video_exclusive: true,
 				uuid: true,
 				created_at: true,
@@ -35,16 +35,12 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 						is_sold_out: true
 					}
 				},
-				video_creator_wallet: {
+				video_creator: {
 					select: {
-						user: {
+						username: true,
+						profile_picture: {
 							select: {
-								username: true,
-								profile_picture: {
-									select: {
-										image_url: true
-									}
-								}
+								image_url: true
 							}
 						}
 					}
@@ -67,7 +63,7 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 		})
 
 		const filteredVideos = retrievedVideos
-			.filter(video => video.video_creator_wallet.user.username !== null)
+			.filter(video => video.video_creator.username !== null)
 			.map(video => ({
 				...video,
 				numberOfExclusivePurchasesSoFar: video.is_video_exclusive ? video._count.exclusive_video_access_purchase : null

@@ -2,13 +2,13 @@ import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function checkIfUserMadeExclusiveVideoPurchases(
 	videoIds: number[],
-	solanaWalletId: number
+	userId: number
 ): Promise<Record<number, boolean>> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 		const exclusiveVideoPurchase = await prismaClient.exclusive_video_access_purchase.findMany({
 			where: {
-				solana_wallet_id: solanaWalletId,
+				user_id: userId,
 				video_id: { in: videoIds }
 			}
 		})

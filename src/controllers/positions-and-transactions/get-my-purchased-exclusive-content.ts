@@ -5,9 +5,9 @@ import retrieveExclusiveAccessByWalletId
 
 export default async function getMyPurchasedExclusiveContent(req: Request, res: Response): Promise<Response> {
 	try {
-		const { solanaWallet } = req
+		const { user } = req
 
-		const myExclusiveContent = await retrieveExclusiveAccessByWalletId(solanaWallet.solana_wallet_id)
+		const myExclusiveContent = await retrieveExclusiveAccessByWalletId(user.user_id)
 		const myPurchasedExclusiveContent = transformExclusiveContentList(myExclusiveContent)
 
 		return res.status(200).json({ myPurchasedExclusiveContent })

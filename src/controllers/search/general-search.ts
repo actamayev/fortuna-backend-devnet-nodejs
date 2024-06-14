@@ -6,14 +6,14 @@ import retrieveCreatorsByUsername from "../../db-operations/read/credentials/ret
 
 export default async function generalSearch(req: Request, res: Response): Promise<Response> {
 	try {
-		const { optionallyAttachedSolanaWallet } = req
+		const { optionallyAttachedUser } = req
 
 		const searchTerm = req.params.searchTerm as string
 
 		const videos = await retrieveVideosByTitle(searchTerm)
 		const creators = await retrieveCreatorsByUsername(searchTerm)
 		const transformedCreatorData = transformCreatorSearchData(creators)
-		const transformedVideoSearchData = await transformHomePageVideoData(videos, optionallyAttachedSolanaWallet)
+		const transformedVideoSearchData = await transformHomePageVideoData(videos, optionallyAttachedUser)
 		const searchResults: SearchData[] = [
 			...transformedCreatorData,
 			...transformedVideoSearchData

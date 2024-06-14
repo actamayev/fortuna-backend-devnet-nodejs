@@ -12,7 +12,7 @@ export default async function retrieveVideoDataForExclusiveContentCheckByUUID(
 			},
 			select: {
 				video_id: true,
-				creator_wallet_id: true,
+				creator_user_id: true,
 				is_video_exclusive: true
 			}
 		})

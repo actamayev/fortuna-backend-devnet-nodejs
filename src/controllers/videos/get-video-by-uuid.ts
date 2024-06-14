@@ -7,28 +7,28 @@ import checkIfUserAllowedToAccessContent from "../../utils/exclusive-content/che
 
 export default async function getVideoByUUID (req: Request, res: Response): Promise<Response> {
 	try {
-		const { optionallyAttachedSolanaWallet } = req
+		const { optionallyAttachedUser } = req
 		const { videoUUID } = req.params
 
-		const videoData = await retrieveVideoByUUID(videoUUID)
-		if (_.isNull(videoData)) return res.status(500).json({ error: "Unable to find video for the provided UUID" })
+		const retrievedVideoData = await retrieveVideoByUUID(videoUUID)
+		if (_.isNull(retrievedVideoData)) return res.status(500).json({ error: "Unable to find video for the provided UUID" })
 
-		if (videoData.is_video_exclusive === false) {
-			const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoData.uuid)
-			videoData.videoUrl = videoUrl
-		} else if (!_.isUndefined(optionallyAttachedSolanaWallet)) {
+		if (retrievedVideoData.is_video_exclusive === false) {
+			const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(retrievedVideoData.uuid)
+			retrievedVideoData.videoUrl = videoUrl
+		} else if (!_.isUndefined(optionallyAttachedUser)) {
 			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(
-				videoData, optionallyAttachedSolanaWallet.solana_wallet_id
+				retrievedVideoData, optionallyAttachedUser.user_id
 			)
 			if (isUserAbleToAccessVideo === true) {
-				const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoData.uuid)
-				videoData.videoUrl = videoUrl
+				const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(retrievedVideoData.uuid)
+				retrievedVideoData.videoUrl = videoUrl
 			}
 		}
 
-		const transformedVideoData = transformVideoByUUIDData(videoData, optionallyAttachedSolanaWallet?.user_id)
+		const videoData = transformVideoByUUIDData(retrievedVideoData, optionallyAttachedUser?.user_id)
 
-		return res.status(200).json({ videoData: transformedVideoData })
+		return res.status(200).json({ videoData })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to get video by UUID" })
