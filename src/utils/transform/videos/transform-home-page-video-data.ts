@@ -17,8 +17,8 @@ export default async function transformHomePageVideoData(
 			let numberOfDislikes = 0
 			let userLikeStatus: null | boolean = null
 			item.video_like_status.map(videoLikeStatus => {
-				if (videoLikeStatus.like_status === true) numberOfLikes += 1
-				else numberOfDislikes += 1
+				if (videoLikeStatus.like_status === true) numberOfLikes ++
+				else numberOfDislikes ++
 				if (videoLikeStatus.user_id === optionallyAttachedSolanaWallet?.user_id) {
 					userLikeStatus = videoLikeStatus.like_status
 				}

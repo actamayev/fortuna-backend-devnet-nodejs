@@ -10,8 +10,8 @@ export default function transformVideoByUUIDData(
 		let numberOfDislikes = 0
 		let userLikeStatus: null | boolean = null
 		videoData.video_like_status.map(videoLikeStatus => {
-			if (videoLikeStatus.like_status === true) numberOfLikes += 1
-			else numberOfDislikes += 1
+			if (videoLikeStatus.like_status === true) numberOfLikes ++
+			else numberOfDislikes ++
 			if (videoLikeStatus.user_id === userId) userLikeStatus = videoLikeStatus.like_status
 		})
 		const videoDataSendingToFrontEnd: VideoDataSendingToFrontendWithVideoUrl = {
