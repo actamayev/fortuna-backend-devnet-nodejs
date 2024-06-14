@@ -4,7 +4,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 // eslint-disable-next-line max-lines-per-function
 export default async function addVideoRecord (
 	newVideoData: IncomingNewVideoData,
-	creatorWalletId: number
+	creatorUserId: number
 ): Promise<number> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
@@ -14,7 +14,7 @@ export default async function addVideoRecord (
 				data: {
 					video_name: newVideoData.videoName,
 
-					creator_wallet_id: creatorWalletId,
+					creator_user_id: creatorUserId,
 					uploaded_image_id: newVideoData.uploadedImageId,
 					uploaded_video_id: newVideoData.uploadedVideoId,
 

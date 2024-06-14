@@ -1,13 +1,13 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
-export default async function retrieveCreatorContentList(solanaWalletId: number): Promise<RetrievedCreatorDBVideoData[]> {
+export default async function retrieveCreatorContentList(userId: number): Promise<RetrievedCreatorDBVideoData[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		const creatorVideoData = await prismaClient.video.findMany({
 			where: {
-				creator_wallet_id: solanaWalletId
+				creator_user_id: userId
 			},
 			orderBy: {
 				created_at: "desc"

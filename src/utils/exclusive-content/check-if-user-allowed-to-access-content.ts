@@ -3,15 +3,15 @@ import checkIfUserMadeExclusiveVideoPurchase
 
 export default async function checkIfUserAllowedToAccessContent(
 	retrievedVideo: VideoDataNeededToCheckForExclusiveContentAccess,
-	userSolanaWalletId: number
+	userId: number
 ): Promise<boolean> {
 	try {
 		if (
 			retrievedVideo.is_video_exclusive === false ||
-			userSolanaWalletId === retrievedVideo.creator_wallet_id
+			userId === retrievedVideo.creator_user_id
 		) return true
 
-		return await checkIfUserMadeExclusiveVideoPurchase(retrievedVideo.video_id, userSolanaWalletId)
+		return await checkIfUserMadeExclusiveVideoPurchase(retrievedVideo.video_id, userId)
 	} catch (error) {
 		console.error(error)
 		throw error

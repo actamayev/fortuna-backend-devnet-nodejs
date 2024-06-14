@@ -1,4 +1,3 @@
-import _ from "lodash"
 import checkWhichExclusiveContentUserAllowedToAccess from "../../exclusive-content/check-which-exclusive-content-user-allowed-to-access"
 
 interface VideosAndCreatorData {
@@ -9,20 +8,16 @@ interface VideosAndCreatorData {
 // eslint-disable-next-line max-lines-per-function
 export default async function transformVideosByCreatorUsername(
 	retrievedVideoData: RetrievedVideosByCreatorUsername,
-	optionallyAttachedSolanaWallet: ExtendedSolanaWallet | undefined
+	optionallyAttachedUser: ExtendedCredentials | undefined
 ): Promise<VideosAndCreatorData | null> {
 	try {
-		if (_.isNull(retrievedVideoData.solana_wallet)) return null
-
-		const validEntries = retrievedVideoData.solana_wallet.video_creator_wallet
-
 		// Fetch remaining tokens for these public keys
 		const userAllowedToAccessContent = await checkWhichExclusiveContentUserAllowedToAccess(
-			retrievedVideoData.solana_wallet.video_creator_wallet,
-			optionallyAttachedSolanaWallet?.solana_wallet_id
+			retrievedVideoData.videos,
+			optionallyAttachedUser?.user_id
 		)
 		// Transform data using validated and filtered entries
-		const videoData = validEntries.map(item => {
+		const videoData = retrievedVideoData.videos.map(item => {
 			const isUserAbleToAccessVideo = userAllowedToAccessContent[item.video_id]
 			let numberOfLikes = 0
 			let numberOfDislikes = 0
@@ -30,7 +25,7 @@ export default async function transformVideosByCreatorUsername(
 			item.video_like_status.map(videoLikeStatus => {
 				if (videoLikeStatus.like_status === true) numberOfLikes ++
 				else numberOfDislikes ++
-				if (videoLikeStatus.user_id === optionallyAttachedSolanaWallet?.user_id) {
+				if (videoLikeStatus.user_id === optionallyAttachedUser?.user_id) {
 					userLikeStatus = videoLikeStatus.like_status
 				}
 			})
@@ -41,7 +36,7 @@ export default async function transformVideosByCreatorUsername(
 				imageUrl: item.uploaded_image.image_url,
 				uuid: item.uuid,
 				creatorUsername: retrievedVideoData.username,
-				creatorProfilePictureUrl: retrievedVideoData.profile_picture?.image_url || null,
+				creatorProfilePictureUrl: retrievedVideoData.profile_picture_image_url,
 				isVideoExclusive: item.is_video_exclusive,
 				isUserAbleToAccessVideo,
 				createdAt: item.created_at,
@@ -62,7 +57,7 @@ export default async function transformVideosByCreatorUsername(
 		// Prepare creator data
 		const creatorData: CreatorSearchDataSendingToFrontend = {
 			creatorUsername: retrievedVideoData.username,
-			creatorProfilePictureUrl: retrievedVideoData.profile_picture?.image_url || null
+			creatorProfilePictureUrl: retrievedVideoData.profile_picture_image_url
 		}
 
 		return { videoData, creatorData }

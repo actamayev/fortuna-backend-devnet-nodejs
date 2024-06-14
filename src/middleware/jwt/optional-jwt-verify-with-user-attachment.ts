@@ -1,9 +1,9 @@
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 import getDecodedId from "../../utils/auth-helpers/get-decoded-id"
-import { findSolanaWalletByUserId } from "../../db-operations/read/find/find-solana-wallet"
+import { findUserById } from "../../db-operations/read/find/find-user"
 
-export default async function optionalJwtVerifyWithWalletAttachment(
+export default async function optionalJwtVerifyWithUserAttachment(
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -18,10 +18,11 @@ export default async function optionalJwtVerifyWithWalletAttachment(
 
 		const userId = await getDecodedId(accessToken)
 
-		const solanaWallet = await findSolanaWalletByUserId(userId)
-		if (_.isNull(solanaWallet)) return res.status(400).json({ message: "Cannot find Solana Wallet" })
+		const user = await findUserById(userId)
 
-		req.optionallyAttachedSolanaWallet = solanaWallet
+		if (_.isNull(user)) return res.status(401).json({ error: "Unauthorized User" })
+
+		req.optionallyAttachedUser = user
 		next()
 	} catch (error) {
 		console.error(error)

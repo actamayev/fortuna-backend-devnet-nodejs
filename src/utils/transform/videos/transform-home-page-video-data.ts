@@ -3,12 +3,12 @@ import checkWhichExclusiveContentUserAllowedToAccess from "../../exclusive-conte
 // eslint-disable-next-line max-lines-per-function
 export default async function transformHomePageVideoData(
 	retrievedHomePageVideos: RetrievedHomePageVideosFromDB[],
-	optionallyAttachedSolanaWallet: ExtendedSolanaWallet | undefined
+	optionallyAttachedUser: ExtendedCredentials | undefined
 ): Promise<VideoDataSendingToFrontendLessVideoUrl[]> {
 	try {
 		const userAllowedToAccessContent = await checkWhichExclusiveContentUserAllowedToAccess(
 			retrievedHomePageVideos,
-			optionallyAttachedSolanaWallet?.solana_wallet_id
+			optionallyAttachedUser?.user_id
 		)
 
 		const results = retrievedHomePageVideos.map(item => {
@@ -19,7 +19,7 @@ export default async function transformHomePageVideoData(
 			item.video_like_status.map(videoLikeStatus => {
 				if (videoLikeStatus.like_status === true) numberOfLikes ++
 				else numberOfDislikes ++
-				if (videoLikeStatus.user_id === optionallyAttachedSolanaWallet?.user_id) {
+				if (videoLikeStatus.user_id === optionallyAttachedUser?.user_id) {
 					userLikeStatus = videoLikeStatus.like_status
 				}
 			})
@@ -29,8 +29,8 @@ export default async function transformHomePageVideoData(
 				description: item.description,
 				imageUrl: item.uploaded_image.image_url,
 				uuid: item.uuid,
-				creatorUsername: item.video_creator_wallet.user.username,
-				creatorProfilePictureUrl: item.video_creator_wallet.user.profile_picture?.image_url || null,
+				creatorUsername: item.video_creator.username,
+				creatorProfilePictureUrl: item.video_creator.profile_picture?.image_url || null,
 				isVideoExclusive: item.is_video_exclusive,
 				isUserAbleToAccessVideo,
 				createdAt: item.created_at,

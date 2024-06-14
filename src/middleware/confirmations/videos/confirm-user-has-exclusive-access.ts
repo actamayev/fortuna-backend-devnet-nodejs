@@ -3,9 +3,9 @@ import checkIfUserAllowedToAccessContent from "../../../utils/exclusive-content/
 
 export default async function confirmUserHasExclusiveAccess(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {
-		const { solanaWallet, minimalDataNeededToCheckForExclusiveContentAccess } = req
+		const { user, minimalDataNeededToCheckForExclusiveContentAccess } = req
 		const doesUserHaveExclusiveAccess = await checkIfUserAllowedToAccessContent(
-			minimalDataNeededToCheckForExclusiveContentAccess, solanaWallet.solana_wallet_id
+			minimalDataNeededToCheckForExclusiveContentAccess, user.user_id
 		)
 
 		if (doesUserHaveExclusiveAccess === false) {

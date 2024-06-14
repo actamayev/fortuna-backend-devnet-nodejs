@@ -7,7 +7,7 @@ export async function findSolanaWalletByUserId(userId: number): Promise<Extended
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		const solanaWallet = await prismaClient.solana_wallet.findFirst({
+		const solanaWallet = await prismaClient.solana_wallet.findUnique({
 			where: { user_id: userId }
 		})
 

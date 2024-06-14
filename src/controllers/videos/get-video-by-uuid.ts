@@ -7,7 +7,7 @@ import checkIfUserAllowedToAccessContent from "../../utils/exclusive-content/che
 
 export default async function getVideoByUUID (req: Request, res: Response): Promise<Response> {
 	try {
-		const { optionallyAttachedSolanaWallet } = req
+		const { optionallyAttachedUser } = req
 		const { videoUUID } = req.params
 
 		const videoData = await retrieveVideoByUUID(videoUUID)
@@ -16,9 +16,9 @@ export default async function getVideoByUUID (req: Request, res: Response): Prom
 		if (videoData.is_video_exclusive === false) {
 			const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoData.uuid)
 			videoData.videoUrl = videoUrl
-		} else if (!_.isUndefined(optionallyAttachedSolanaWallet)) {
+		} else if (!_.isUndefined(optionallyAttachedUser)) {
 			const isUserAbleToAccessVideo = await checkIfUserAllowedToAccessContent(
-				videoData, optionallyAttachedSolanaWallet.solana_wallet_id
+				videoData, optionallyAttachedUser.user_id
 			)
 			if (isUserAbleToAccessVideo === true) {
 				const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(videoData.uuid)
@@ -26,7 +26,7 @@ export default async function getVideoByUUID (req: Request, res: Response): Prom
 			}
 		}
 
-		const transformedVideoData = transformVideoByUUIDData(videoData, optionallyAttachedSolanaWallet?.user_id)
+		const transformedVideoData = transformVideoByUUIDData(videoData, optionallyAttachedUser?.user_id)
 
 		return res.status(200).json({ videoData: transformedVideoData })
 	} catch (error) {

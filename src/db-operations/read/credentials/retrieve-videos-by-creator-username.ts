@@ -17,46 +17,42 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 						image_url: true
 					}
 				},
-				solana_wallet: {
+				video: {
 					select: {
-						video_creator_wallet: {
+						video_id: true,
+						video_name: true,
+						video_listing_status: true,
+						description: true,
+						creator_user_id: true,
+						is_video_exclusive: true,
+						uuid: true,
+						created_at: true,
+						uploaded_image: {
 							select: {
-								video_id: true,
-								video_name: true,
-								video_listing_status: true,
-								description: true,
-								creator_wallet_id: true,
-								is_video_exclusive: true,
-								uuid: true,
-								created_at: true,
-								uploaded_image: {
-									select: {
-										image_url: true
-									}
-								},
-								video_access_tier: {
-									select: {
-										tier_number: true,
-										purchases_allowed_for_this_tier: true,
-										percent_discount_at_this_tier: true,
-										tier_access_price_usd: true,
-										is_sold_out: true
-									}
-								},
-								video_like_status: {
-									select: {
-										like_status: true,
-										user_id: true
-									},
-									where: {
-										is_active: true
-									}
-								},
-								_count: {
-									select: {
-										exclusive_video_access_purchase: true
-									}
-								}
+								image_url: true
+							}
+						},
+						video_access_tier: {
+							select: {
+								tier_number: true,
+								purchases_allowed_for_this_tier: true,
+								percent_discount_at_this_tier: true,
+								tier_access_price_usd: true,
+								is_sold_out: true
+							}
+						},
+						video_like_status: {
+							select: {
+								like_status: true,
+								user_id: true
+							},
+							where: {
+								is_active: true
+							}
+						},
+						_count: {
+							select: {
+								exclusive_video_access_purchase: true
 							}
 						}
 					}
@@ -66,19 +62,17 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 
 		if (_.isNull(retrievedVideos) || _.isNull(retrievedVideos.username)) return null
 
-		const videosWithPurchaseCount = retrievedVideos.solana_wallet?.video_creator_wallet.map(video => ({
+		const videosWithPurchaseCount = retrievedVideos.video.map(video => ({
 			...video,
 			numberOfExclusivePurchasesSoFar: video.is_video_exclusive ? video._count.exclusive_video_access_purchase : null
 		// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
 		})).map(({ _count, ...rest }) => rest) || []
 
 		return {
-			...retrievedVideos,
-			solana_wallet: {
-				...retrievedVideos.solana_wallet,
-				video_creator_wallet: videosWithPurchaseCount
-			}
-		} as RetrievedVideosByCreatorUsername
+			videos: videosWithPurchaseCount,
+			username: retrievedVideos.username,
+			profile_picture_image_url: retrievedVideos.profile_picture?.image_url || null
+		}
 	} catch (error) {
 		console.error(error)
 		throw error

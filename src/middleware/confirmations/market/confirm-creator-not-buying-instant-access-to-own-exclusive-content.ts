@@ -9,7 +9,7 @@ export default function confirmCreatorNotBuyingInstantAccessToOwnExclusiveConten
 	try {
 		const { solanaWallet, exclusiveVideoData } = req
 
-		if (_.isEqual(solanaWallet.solana_wallet_id, exclusiveVideoData.creator_wallet_id)) {
+		if (_.isEqual(solanaWallet.user_id, exclusiveVideoData.creator_user_id)) {
 			return res.status(400).json({ message: "Attempting to purchase instant access to own exclusive content." })
 		}
 		next()
