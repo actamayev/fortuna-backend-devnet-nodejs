@@ -6,10 +6,13 @@ import { validateExtendedSolanaWallet } from "../../../utils/types/type-guards"
 export async function findSolanaWalletByUserId(userId: number): Promise<ExtendedSolanaWallet | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const solanaWallet = await prismaClient.solana_wallet.findFirst({
 			where: { user_id: userId }
 		})
+
 		if (_.isNull(solanaWallet) || validateExtendedSolanaWallet(solanaWallet) === false) return null
+
 		return solanaWallet
 	} catch (error) {
 		console.error(`Error finding ${userId}'s Solana wallet:`, error)
@@ -20,9 +23,11 @@ export async function findSolanaWalletByUserId(userId: number): Promise<Extended
 export async function findSolanaWalletByPublicKey(publicKey: PublicKey): Promise<ExtendedSolanaWallet | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const solanaWallet = await prismaClient.solana_wallet.findFirst({
 			where: { public_key: publicKey.toString() }
 		})
+
 		if (_.isNull(solanaWallet) || validateExtendedSolanaWallet(solanaWallet) === false) return null
 
 		return solanaWallet

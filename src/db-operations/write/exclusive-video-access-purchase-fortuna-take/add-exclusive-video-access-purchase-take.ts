@@ -9,6 +9,7 @@ export default async function addExclusiveVideoAccessPurchaseTake(
 ): Promise<number> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const fortunaTake = await prismaClient.exclusive_video_access_purchase_fortuna_take.create({
 			data: {
 				sender_solana_wallet_id: senderSolanaWalletId,

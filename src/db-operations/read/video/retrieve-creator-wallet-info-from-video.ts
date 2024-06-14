@@ -5,6 +5,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 export default async function retrieveCreatorWalletInfoFromVideo(videoId: number): Promise<CreatorWalletData | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const creatorWalletData = await prismaClient.video.findFirst({
 			where: {
 				video_id: videoId

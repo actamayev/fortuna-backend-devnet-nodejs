@@ -5,7 +5,8 @@ export default async function retrieveVideoDataForExclusiveContentCheckByUUID(
 ): Promise<VideoDataNeededToCheckForExclusiveContentAccess | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
-		const retrievedVideoWithExclusiveInfo = await prismaClient.video.findFirst({
+
+		return await prismaClient.video.findFirst({
 			where: {
 				uuid: videoUUID
 			},
@@ -15,8 +16,6 @@ export default async function retrieveVideoDataForExclusiveContentCheckByUUID(
 				is_video_exclusive: true
 			}
 		})
-
-		return retrievedVideoWithExclusiveInfo
 	} catch (error) {
 		console.error(error)
 		throw error

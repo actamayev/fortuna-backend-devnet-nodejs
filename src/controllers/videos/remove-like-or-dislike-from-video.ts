@@ -8,9 +8,9 @@ export default async function removeLikeOrDislikeFromVideo(req: Request, res: Re
 
 		await removeLikeStatus(parseInt(videoId, 10), user.user_id)
 
-		return res.status(200).json({ success: "Removed like/dislike on video" })
+		return res.status(200).json({ success: "Removed like/dislike from video" })
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to remove like/dislike" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to remove like/dislike from video" })
 	}
 }

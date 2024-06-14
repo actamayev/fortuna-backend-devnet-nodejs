@@ -7,6 +7,7 @@ export default async function getUsernames(
 ): Promise<{ username: string }[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const usernames = await prismaClient.credentials.findMany({
 			where: {
 				username: {

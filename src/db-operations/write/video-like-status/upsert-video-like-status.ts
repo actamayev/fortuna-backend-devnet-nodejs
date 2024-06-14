@@ -7,6 +7,7 @@ export default async function upsertVideoLikeStatus(
 ): Promise<void> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		await prismaClient.video_like_status.upsert({
 			where: {
 				video_id_user_id: {

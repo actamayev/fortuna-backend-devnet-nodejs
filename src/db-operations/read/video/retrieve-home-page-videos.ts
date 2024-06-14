@@ -4,6 +4,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 export default async function retrieveHomePageVideos(): Promise<RetrievedHomePageVideosFromDB[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const mediaDetails = await prismaClient.video.findMany({
 			where: {
 			},

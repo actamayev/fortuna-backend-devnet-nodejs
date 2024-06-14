@@ -5,6 +5,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 export default async function retrieveVideoByUUID(videoUUID: string): Promise<RetrievedHomePageVideosFromDB | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const retrievedVideo = await prismaClient.video.findFirst({
 			where: {
 				uuid: videoUUID

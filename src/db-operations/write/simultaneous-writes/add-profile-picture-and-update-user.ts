@@ -8,6 +8,7 @@ export default async function addProfilePictureRecord (
 ): Promise<void> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		await prismaClient.$transaction(async (prisma) => {
 			const profilePicture = await prisma.profile_picture.create({
 				data: {

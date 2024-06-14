@@ -3,6 +3,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 export default async function retrieveCreatorsByUsername(username: string): Promise<RetrievedCreatorsByUsername[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const creatorData = await prismaClient.credentials.findMany({
 			where: {
 				username: {

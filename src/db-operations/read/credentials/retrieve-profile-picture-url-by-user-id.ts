@@ -4,6 +4,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 export default async function retrieveProfilePictureUrlByUserId(userId: number): Promise<string | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const profilePictureUrl = await prismaClient.credentials.findFirst({
 			where: {
 				user_id: userId

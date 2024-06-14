@@ -4,6 +4,7 @@ import PrismaClientClass from "../../../classes/prisma-client"
 export default async function retrieveOutgoingTransactionsList(solanaWalletId: number): Promise<RetrievedDBTransactionListData[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
+
 		const outgoingTransactionsList = await prismaClient.sol_transfer.findMany({
 			where: {
 				sender_solana_wallet_id: solanaWalletId
