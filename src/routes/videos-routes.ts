@@ -3,7 +3,7 @@ import express from "express"
 import getVideoUrl from "../controllers/videos/get-video-url"
 import getVideoByUUID from "../controllers/videos/get-video-by-uuid"
 import getHomePageVideos from "../controllers/videos/get-home-page-videos"
-import likeOrDislikeVideo from "../controllers/videos/like-or-dislike-to-video"
+import likeOrDislikeVideo from "../controllers/videos/like-or-dislike-video"
 import getVideosByCreatorUsername from "../controllers/videos/get-videos-by-creator-username"
 import removeLikeOrDislikeFromVideo from "../controllers/videos/remove-like-or-dislike-from-video"
 
