@@ -4,18 +4,13 @@ export default async function checkIfPublicKeyRegisteredWithFortuna(publicKey: s
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		const wallet = await prismaClient.solana_wallet.findFirst({
+		const walletExists = await prismaClient.solana_wallet.count({
 			where: {
-				public_key: {
-					equals: publicKey
-				}
-			},
-			select: {
-				public_key: true
+				public_key: publicKey
 			}
 		})
 
-		return !!wallet
+		return walletExists > 0
 	} catch (error) {
 		console.error("Error checking if public key registered with fortuna:", error)
 		throw error

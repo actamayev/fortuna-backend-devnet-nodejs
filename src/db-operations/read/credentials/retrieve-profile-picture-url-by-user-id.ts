@@ -5,7 +5,7 @@ export default async function retrieveProfilePictureUrlByUserId(userId: number):
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		const profilePictureUrl = await prismaClient.credentials.findFirst({
+		const profilePictureUrl = await prismaClient.credentials.findUnique({
 			where: {
 				user_id: userId
 			},

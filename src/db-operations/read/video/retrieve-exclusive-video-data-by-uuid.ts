@@ -42,7 +42,7 @@ export default async function retrieveExclusiveVideoDataByUUID(
 
 		if (_.isUndefined(tierData?.tier_access_price_usd)) return null
 
-		const result: ExclusiveVideoData = {
+		return {
 			uuid: exclusiveVideoData.uuid,
 			video_id: exclusiveVideoData.video_id,
 			is_video_exclusive: exclusiveVideoData.is_video_exclusive,
@@ -53,8 +53,6 @@ export default async function retrieveExclusiveVideoDataByUUID(
 			video_access_tier_id: tierData.video_access_tier_id,
 			total_number_video_tiers: exclusiveVideoData.video_access_tier.length
 		}
-
-		return result
 	} catch (error) {
 		console.error(error)
 		throw error
