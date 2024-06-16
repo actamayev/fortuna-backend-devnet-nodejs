@@ -55,7 +55,7 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 		}
 		const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(exclusiveVideoData.uuid)
 
-		return res.status(200).json({ videoUrl, isVideoSoldOut })
+		return res.status(200).json({ videoUrl, isTierSoldOut, isVideoSoldOut })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to purchase exclusive content" })
