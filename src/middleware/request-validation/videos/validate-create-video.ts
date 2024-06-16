@@ -8,8 +8,8 @@ const createVideoSchema = Joi.object({
 		uuid: uuidValidator.required(),
 		uploadedImageId: Joi.number().strict().required(),
 		uploadedVideoId: Joi.number().strict().required(),
-		videoName: Joi.string().required(),
-		description: Joi.string().required(),
+		videoName: Joi.string().max(100).required(),
+		description: Joi.string().max(5000).required(),
 		isContentExclusive: Joi.boolean().required(),
 		tierData: Joi.array().items(
 			Joi.object({
