@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from "express"
 import usernameValidator from "../../joi/username-validator"
 
 const registerUsernameSchema = Joi.object({
-	username: usernameValidator.required().trim()
+	username: usernameValidator.required().trim().min(3).max(100)
 }).required()
 
 export default function validateRegisterUsername (req: Request, res: Response, next: NextFunction): Response | void {
