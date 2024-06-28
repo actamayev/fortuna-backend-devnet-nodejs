@@ -36,7 +36,7 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 							select: {
 								tier_number: true,
 								purchases_allowed_for_this_tier: true,
-								percent_discount_at_this_tier: true,
+								is_tier_free: true,
 								tier_access_price_usd: true,
 								is_sold_out: true
 							}
@@ -66,7 +66,7 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 			...video,
 			numberOfExclusivePurchasesSoFar: video.is_video_exclusive ? video._count.exclusive_video_access_purchase : null
 		// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
-		})).map(({ _count, ...rest }) => rest) || []
+		})).map(({ _count, ...rest }) => rest)
 
 		return {
 			videos: videosWithPurchaseCount,

@@ -14,7 +14,7 @@ declare global {
 	interface IncomingNewVideoTierData {
 		tierNumber: number
 		purchasesInThisTier: number | null
-		tierDiscount: number
+		isTierFree: boolean
 		tierAccessPriceUsd: number
 	}
 
@@ -35,7 +35,7 @@ declare global {
 		video_access_tier: {
 			tier_number: number
 			purchases_allowed_for_this_tier: number | null
-			percent_discount_at_this_tier: number
+			is_tier_free: boolean
 			tier_access_price_usd: number
 			is_sold_out: boolean
 		}[]

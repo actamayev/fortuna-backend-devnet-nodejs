@@ -31,7 +31,7 @@ export default async function addVideoRecord (
 				const tierDataToInsert = newVideoData.tierData.map(singleTierData => ({
 					video_id: video.video_id,
 					tier_number: singleTierData.tierNumber,
-					percent_discount_at_this_tier: singleTierData.tierDiscount,
+					is_tier_free: singleTierData.isTierFree,
 					tier_access_price_usd: singleTierData.tierAccessPriceUsd,
 					...(singleTierData.purchasesInThisTier !== null && {
 						purchases_allowed_for_this_tier: singleTierData.purchasesInThisTier
