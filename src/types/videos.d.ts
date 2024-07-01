@@ -16,7 +16,6 @@ declare global {
 		video_access_tier: {
 			tier_number: number
 			purchases_allowed_for_this_tier: number | null
-			percent_discount_at_this_tier: number
 			tier_access_price_usd: number
 			is_sold_out: boolean
 		}[]
@@ -50,7 +49,6 @@ declare global {
 			video_access_tier: {
 				tier_number: number
 				purchases_allowed_for_this_tier: number | null
-				percent_discount_at_this_tier: number
 				tier_access_price_usd: number
 				is_sold_out: boolean
 			}[]

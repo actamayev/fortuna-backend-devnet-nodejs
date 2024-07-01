@@ -30,7 +30,6 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 					select: {
 						tier_number: true,
 						purchases_allowed_for_this_tier: true,
-						percent_discount_at_this_tier: true,
 						tier_access_price_usd: true,
 						is_sold_out: true
 					}
