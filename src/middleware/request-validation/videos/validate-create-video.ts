@@ -15,7 +15,6 @@ const createVideoSchema = Joi.object({
 			Joi.object({
 				tierNumber: Joi.number().integer().min(1).max(3).required(),
 				purchasesInThisTier: Joi.number().integer().min(1).allow(null).required(),
-				isTierFree: Joi.boolean().required(),
 				tierAccessPriceUsd: Joi.number().required()
 			})
 		).max(3).required()

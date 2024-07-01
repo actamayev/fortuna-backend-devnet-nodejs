@@ -28,7 +28,6 @@ export default async function retrieveCreatorContentList(userId: number): Promis
 					select: {
 						tier_number: true,
 						purchases_allowed_for_this_tier: true,
-						is_tier_free: true,
 						tier_access_price_usd: true,
 						is_sold_out: true
 					}

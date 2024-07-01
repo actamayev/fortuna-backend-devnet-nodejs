@@ -29,7 +29,6 @@ export default function transformVideoByUUIDData(
 			tierData: videoData.video_access_tier.map(tier => ({
 				tierNumber: tier.tier_number,
 				purchasesInThisTier: tier.purchases_allowed_for_this_tier,
-				isTierFree: tier.is_tier_free,
 				tierAccessPriceUsd: tier.tier_access_price_usd,
 				isTierSoldOut: tier.is_sold_out
 			})),

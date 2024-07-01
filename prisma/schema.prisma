@@ -132,7 +132,6 @@ model video_access_tier {
 	tier_number                                                 Int // ie. 1, 2, 3.
 	tier_access_price_usd										Float
 	purchases_allowed_for_this_tier                             Int?
-	is_tier_free				                               	Boolean @default(false)
 	is_sold_out													Boolean @default(false)
 
 	video                                                       video @relation(fields: [video_id], references: [video_id])
