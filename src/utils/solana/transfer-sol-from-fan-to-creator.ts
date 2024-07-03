@@ -1,6 +1,6 @@
 import _ from "lodash"
-import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram,
-	Transaction, clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
+import { Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js"
+import SolanaManager from "../../classes/solana-manager"
 import calculateTransactionFee from "./calculate-transaction-fee"
 import GetKeypairFromSecretKey from "./get-keypair-from-secret-key"
 import addExclusiveVideoAccessPurchaseSolTransfer
@@ -13,15 +13,6 @@ export default async function transferSolFromFanToCreator(
 	transferDetails: TransferDetailsLessDefaultCurrency
 ): Promise<number> {
 	try {
-		const transaction = new Transaction()
-
-		transaction.add(
-			SystemProgram.transfer({
-				fromPubkey: new PublicKey(fanSolanaWallet.public_key),
-				toPubkey: contentCreatorPublicKeyAndWalletId.public_key,
-				lamports: _.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL)
-			})
-		)
 		// FUTURE TODO: Fix the double-charge problem (when having 2 signers, the fee is doubled)
 		// May be possible to fix by making Fortuna a co-signer, if all Fortuna wallets are made to be multi-signature accounts.
 		// Would have to think about wheather or not we want this.
@@ -30,22 +21,23 @@ export default async function transferSolFromFanToCreator(
 		const fortunaFeePayerWalletKeypair = await GetKeypairFromSecretKey.getFortunaFeePayerWalletKeypair()
 		const keypairs: Keypair[] = [fortunaFeePayerWalletKeypair, fanKeypair]
 
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-
-		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
+		const transactionSignature = await SolanaManager.getInstance().transferFunds(
+			new PublicKey(fanSolanaWallet.public_key),
+			contentCreatorPublicKeyAndWalletId.public_key,
+			_.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL),
+			keypairs
+		)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
 		const paidBlockchainFeeId = await addBlockchainFeesPaidByFortuna(transactionFeeInSol)
 
-		const exclusiveVideoAccessPurchaseSolTransferId = await addExclusiveVideoAccessPurchaseSolTransfer(
+		return await addExclusiveVideoAccessPurchaseSolTransfer(
 			fanSolanaWallet.solana_wallet_id,
 			contentCreatorPublicKeyAndWalletId.solana_wallet_id,
 			transactionSignature,
 			transferDetails,
 			paidBlockchainFeeId,
 		)
-
-		return exclusiveVideoAccessPurchaseSolTransferId
 	} catch (error) {
 		console.error(error)
 		throw error

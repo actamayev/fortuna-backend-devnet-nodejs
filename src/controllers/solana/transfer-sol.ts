@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { Request, Response } from "express"
-import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction,
-	clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
+import { Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js"
+import SolanaManager from "../../classes/solana-manager"
 import SolPriceManager from "../../classes/sol-price-manager"
 import calculateTransactionFee from "../../utils/solana/calculate-transaction-fee"
 import GetKeypairFromSecretKey from "../../utils/solana/get-keypair-from-secret-key"
@@ -14,8 +14,6 @@ export default async function transferSol(req: Request, res: Response): Promise<
 	try {
 		const { user, solanaWallet, recipientPublicKey, isRecipientFortunaWallet, recipientSolanaWalletId } = req
 		const transferData = req.body.transferFundsData as TransferFundsData
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const transaction = new Transaction()
 		const transferDetails: TransferDetails = {
 			solToTransfer: 0,
 			usdToTransfer: 0,
@@ -30,13 +28,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			transferDetails.solToTransfer = transferData.transferAmount / solPrice
 			transferDetails.usdToTransfer = transferData.transferAmount
 		}
-		transaction.add(
-			SystemProgram.transfer({
-				fromPubkey: new PublicKey(solanaWallet.public_key),
-				toPubkey: recipientPublicKey,
-				lamports: _.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL)
-			})
-		)
+
 		// FUTURE TODO: Fix the double-charge problem (when having 2 signers, the fee is doubled)
 		// May be possible to fix by making Fortuna a co-signer, if all Fortuna wallets are made to be multi-signature accounts.
 		// Would have to think about wheather or not we want this.
@@ -48,7 +40,13 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			const fortunaFeePayerWalletKeypair = await GetKeypairFromSecretKey.getFortunaFeePayerWalletKeypair()
 			keypairs.unshift(fortunaFeePayerWalletKeypair)
 		}
-		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
+
+		const transactionSignature = await SolanaManager.getInstance().transferFunds(
+			new PublicKey(solanaWallet.public_key),
+			recipientPublicKey,
+			_.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL),
+			keypairs
+		)
 		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
 		let feePayerSolanaWalletId: undefined | number
