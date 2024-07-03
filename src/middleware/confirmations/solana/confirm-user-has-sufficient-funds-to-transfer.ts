@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express"
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js"
-import SolPriceManager from "../../../classes/sol-price-manager"
+import SolPriceManager from "../../../classes/solana/sol-price-manager"
 import { getWalletBalanceSol } from "../../../utils/solana/get-wallet-balance"
 
 export default async function confirmUserHasSufficientFundsToTransfer(

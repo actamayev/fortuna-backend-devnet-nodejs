@@ -1,21 +1,20 @@
 import _ from "lodash"
 import { Request, Response } from "express"
-import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction,
-	clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
-import SolPriceManager from "../../classes/sol-price-manager"
-import calculateTransactionFee from "../../utils/solana/calculate-transaction-fee"
+import { Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js"
+import SolanaManager from "../../classes/solana/solana-manager"
+import SolPriceManager from "../../classes/solana/sol-price-manager"
 import GetKeypairFromSecretKey from "../../utils/solana/get-keypair-from-secret-key"
 import { transformTransaction } from "../../utils/transform/transform-transactions-list"
 import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
-import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blockchain-fees-paid-by-fortuna"
+import addBlankRecordBlockchainFeesPaidByFortuna
+	from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blank-record-blockchain-fees-paid-by-fortuna"
+import calculateTransactionFeeUpdateBlockchainFeesTable from "../../utils/solana/calculate-transaction-fee-update-blockchain-fees-table"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
 	try {
 		const { user, solanaWallet, recipientPublicKey, isRecipientFortunaWallet, recipientSolanaWalletId } = req
 		const transferData = req.body.transferFundsData as TransferFundsData
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		const transaction = new Transaction()
 		const transferDetails: TransferDetails = {
 			solToTransfer: 0,
 			usdToTransfer: 0,
@@ -30,13 +29,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			transferDetails.solToTransfer = transferData.transferAmount / solPrice
 			transferDetails.usdToTransfer = transferData.transferAmount
 		}
-		transaction.add(
-			SystemProgram.transfer({
-				fromPubkey: new PublicKey(solanaWallet.public_key),
-				toPubkey: recipientPublicKey,
-				lamports: _.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL)
-			})
-		)
+
 		// FUTURE TODO: Fix the double-charge problem (when having 2 signers, the fee is doubled)
 		// May be possible to fix by making Fortuna a co-signer, if all Fortuna wallets are made to be multi-signature accounts.
 		// Would have to think about wheather or not we want this.
@@ -48,13 +41,18 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			const fortunaFeePayerWalletKeypair = await GetKeypairFromSecretKey.getFortunaFeePayerWalletKeypair()
 			keypairs.unshift(fortunaFeePayerWalletKeypair)
 		}
-		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
-		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
+
+		const transactionSignature = await SolanaManager.getInstance().transferFunds(
+			new PublicKey(solanaWallet.public_key),
+			recipientPublicKey,
+			_.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL),
+			keypairs
+		)
 
 		let feePayerSolanaWalletId: undefined | number
 		if (isRecipientFortunaWallet === false) feePayerSolanaWalletId = solanaWallet.solana_wallet_id
 
-		const paidBlockchainFeeId = await addBlockchainFeesPaidByFortuna(transactionFeeInSol, feePayerSolanaWalletId)
+		const paidBlockchainFeeId = await addBlankRecordBlockchainFeesPaidByFortuna(feePayerSolanaWalletId)
 
 		const solTransferRecord = await addSolTransferRecord(
 			recipientPublicKey,
@@ -73,6 +71,9 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		}
 
 		const solTransferData = transformTransaction(transactionToTransform, solanaWallet.public_key)
+
+		void calculateTransactionFeeUpdateBlockchainFeesTable(transactionSignature, paidBlockchainFeeId)
+
 		return res.status(200).json({ solTransferData })
 	} catch (error) {
 		console.error(error)
