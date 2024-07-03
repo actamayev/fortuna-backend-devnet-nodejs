@@ -15,7 +15,7 @@ export default async function updateBlockchainFeesPaidByFortuna (
 			},
 			data: {
 				fee_in_sol: transferFeeSol,
-				fee_in_usd: transferFeeSol * solPriceDetails.price,
+				fee_in_usd: transferFeeSol * solPriceDetails.price
 			}
 		})
 	} catch (error) {
