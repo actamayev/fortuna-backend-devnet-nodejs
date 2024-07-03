@@ -265,8 +265,8 @@ model exclusive_video_access_purchase_fortuna_take {
 model blockchain_fees_paid_by_fortuna {
 	blockchain_fees_paid_by_fortuna_id							Int @id @default(autoincrement())
 
-	fee_in_sol                                            		Float
-	fee_in_usd                                            		Float
+	fee_in_sol                                            		Float?
+	fee_in_usd                                            		Float?
 
 	fee_payer_solana_wallet_id                                  Int
 
