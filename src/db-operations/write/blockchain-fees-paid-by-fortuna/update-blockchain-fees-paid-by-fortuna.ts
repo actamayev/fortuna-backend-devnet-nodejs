@@ -1,5 +1,5 @@
 import PrismaClientClass from "../../../classes/prisma-client"
-import SolPriceManager from "../../../classes/sol-price-manager"
+import SolPriceManager from "../../../classes/solana/sol-price-manager"
 
 export default async function updateBlockchainFeesPaidByFortuna (
 	blockchainFeesPaidByFortunaId: number,

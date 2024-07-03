@@ -1,4 +1,4 @@
-import calculateTransactionFee from "./calculate-transaction-fee"
+import TransactionFeeCalculator from "../../classes/solana/transaction-fee-calculator"
 import updateBlockchainFeesPaidByFortuna
 	from "../../db-operations/write/blockchain-fees-paid-by-fortuna/update-blockchain-fees-paid-by-fortuna"
 
@@ -7,7 +7,7 @@ export default async function calculateTransactionFeeUpdateBlockchainFeesTable(
 	fortunaFeesTableId: number
 ): Promise<void> {
 	try {
-		const feeInSol = await calculateTransactionFee(signature)
+		const feeInSol = await TransactionFeeCalculator.getInstance().calculateTransactionFee(signature)
 
 		await updateBlockchainFeesPaidByFortuna(fortunaFeesTableId, feeInSol)
 	} catch (error) {

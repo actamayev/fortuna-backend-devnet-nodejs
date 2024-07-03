@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import SolPriceManager from "../../classes/sol-price-manager"
+import SolPriceManager from "../../classes/solana/sol-price-manager"
 
 export default async function getSolPrice(req: Request, res: Response): Promise<Response> {
 	try {

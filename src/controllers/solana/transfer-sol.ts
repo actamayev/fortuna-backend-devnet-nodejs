@@ -1,8 +1,8 @@
 import _ from "lodash"
 import { Request, Response } from "express"
 import { Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js"
-import SolanaManager from "../../classes/solana-manager"
-import SolPriceManager from "../../classes/sol-price-manager"
+import SolPriceManager from "../../classes/solana/sol-price-manager"
+import TransferSolManager from "../../classes/solana/transfer-sol-manager"
 import GetKeypairFromSecretKey from "../../utils/solana/get-keypair-from-secret-key"
 import { transformTransaction } from "../../utils/transform/transform-transactions-list"
 import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
@@ -42,7 +42,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			keypairs.unshift(fortunaFeePayerWalletKeypair)
 		}
 
-		const transactionSignature = await SolanaManager.getInstance().transferFunds(
+		const transactionSignature = await TransferSolManager.getInstance().transferFunds(
 			new PublicKey(solanaWallet.public_key),
 			recipientPublicKey,
 			_.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL),
