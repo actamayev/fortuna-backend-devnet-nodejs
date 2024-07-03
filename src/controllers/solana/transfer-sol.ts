@@ -3,11 +3,12 @@ import { Request, Response } from "express"
 import { Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js"
 import SolanaManager from "../../classes/solana-manager"
 import SolPriceManager from "../../classes/sol-price-manager"
-import calculateTransactionFee from "../../utils/solana/calculate-transaction-fee"
 import GetKeypairFromSecretKey from "../../utils/solana/get-keypair-from-secret-key"
 import { transformTransaction } from "../../utils/transform/transform-transactions-list"
 import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
-import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blockchain-fees-paid-by-fortuna"
+import addBlankRecordBlockchainFeesPaidByFortuna
+	from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blank-record-blockchain-fees-paid-by-fortuna"
+import calculateTransactionFeeUpdateBlockchainFeesTable from "../../utils/solana/calculate-transaction-fee-update-blockchain-fees-table"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
@@ -47,12 +48,11 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			_.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL),
 			keypairs
 		)
-		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
 
 		let feePayerSolanaWalletId: undefined | number
 		if (isRecipientFortunaWallet === false) feePayerSolanaWalletId = solanaWallet.solana_wallet_id
 
-		const paidBlockchainFeeId = await addBlockchainFeesPaidByFortuna(transactionFeeInSol, feePayerSolanaWalletId)
+		const paidBlockchainFeeId = await addBlankRecordBlockchainFeesPaidByFortuna(feePayerSolanaWalletId)
 
 		const solTransferRecord = await addSolTransferRecord(
 			recipientPublicKey,
@@ -71,6 +71,9 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		}
 
 		const solTransferData = transformTransaction(transactionToTransform, solanaWallet.public_key)
+
+		void calculateTransactionFeeUpdateBlockchainFeesTable(transactionSignature, paidBlockchainFeeId)
+
 		return res.status(200).json({ solTransferData })
 	} catch (error) {
 		console.error(error)
