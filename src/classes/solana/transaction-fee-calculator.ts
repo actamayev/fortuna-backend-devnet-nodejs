@@ -34,18 +34,23 @@ export default class TransactionFeeCalculator {
 	}
 
 	private async getTransactionFee(signature: string): Promise<number | null> {
-		const transactionDetails = await this.connection.getTransaction(signature, {
-			commitment: this.commitment,
-			maxSupportedTransactionVersion: 0
-		})
+		try {
+			const transactionDetails = await this.connection.getTransaction(signature, {
+				commitment: this.commitment,
+				maxSupportedTransactionVersion: 0
+			})
 
-		if (_.isNull(transactionDetails) || _.isNull(transactionDetails.meta)) {
-			console.error("Unable to retrieve transaction details")
-			return null
+			if (_.isNull(transactionDetails) || _.isNull(transactionDetails.meta)) {
+				console.error("Unable to retrieve transaction details")
+				return null
+			}
+
+			const fee = transactionDetails.meta.fee
+			return fee / LAMPORTS_PER_SOL
+		} catch (error) {
+			console.error("Error getting transaction fee", error)
+			throw error
 		}
-
-		const fee = transactionDetails.meta.fee
-		return fee / LAMPORTS_PER_SOL
 	}
 
 	private delay(ms: number): Promise<void> {
