@@ -1,12 +1,13 @@
 import _ from "lodash"
-import { Connection, Keypair, LAMPORTS_PER_SOL, SystemProgram,
-	Transaction, clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
+import { Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js"
 import SecretsManager from "../../classes/secrets-manager"
-import calculateTransactionFee from "./calculate-transaction-fee"
+import SolanaManager from "../../classes/solana/solana-manager"
 import GetKeypairFromSecretKey from "./get-keypair-from-secret-key"
+import addBlankRecordBlockchainFeesPaidByFortuna
+	from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blank-record-blockchain-fees-paid-by-fortuna"
+import calculateTransactionFeeUpdateBlockchainFeesTable from "./calculate-transaction-fee-update-blockchain-fees-table"
 import addExclusiveVideoAccessPurchaseTake
 	from "../../db-operations/write/exclusive-video-access-purchase-fortuna-take/add-exclusive-video-access-purchase-take"
-import addBlockchainFeesPaidByFortuna from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blockchain-fees-paid-by-fortuna"
 
 export default async function transferSolFromCreatorToFortuna(
 	contentCreatorPublicKeyAndWalletId: CreatorWalletData,
@@ -14,26 +15,20 @@ export default async function transferSolFromCreatorToFortuna(
 ): Promise<number> {
 	try {
 		const fortunaFeePayerWalletKeypair = await GetKeypairFromSecretKey.getFortunaFeePayerWalletKeypair()
-		const transaction = new Transaction()
 
-		transaction.add(
-			SystemProgram.transfer({
-				fromPubkey: contentCreatorPublicKeyAndWalletId.public_key,
-				toPubkey: fortunaFeePayerWalletKeypair.publicKey,
-				lamports: _.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL)
-			})
-		)
 		const creatorKeypair = await GetKeypairFromSecretKey.getKeypairFromEncryptedSecretKey(
 			contentCreatorPublicKeyAndWalletId.secret_key__encrypted
 		)
 		const keypairs: Keypair[] = [fortunaFeePayerWalletKeypair, creatorKeypair]
 
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
+		const transactionSignature = await SolanaManager.getInstance().transferFunds(
+			contentCreatorPublicKeyAndWalletId.public_key,
+			fortunaFeePayerWalletKeypair.publicKey,
+			_.round(transferDetails.solToTransfer * LAMPORTS_PER_SOL),
+			keypairs
+		)
 
-		const transactionSignature = await sendAndConfirmTransaction(connection, transaction, keypairs)
-		const transactionFeeInSol = await calculateTransactionFee(transactionSignature)
-
-		const paidBlockchainFeeId = await addBlockchainFeesPaidByFortuna(transactionFeeInSol)
+		const paidBlockchainFeeId = await addBlankRecordBlockchainFeesPaidByFortuna()
 
 		const fortunaFeePayerSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_FEE_PAYER_WALLET_ID_DB")
 		const feePayerSolanaWalletId = parseInt(fortunaFeePayerSolanaWalletIdDb, 10)
@@ -45,6 +40,8 @@ export default async function transferSolFromCreatorToFortuna(
 			transferDetails,
 			paidBlockchainFeeId
 		)
+
+		void calculateTransactionFeeUpdateBlockchainFeesTable(transactionSignature, paidBlockchainFeeId)
 
 		return fortunaTakeId
 	} catch (error) {

@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { Request, Response } from "express"
-import SolPriceManager from "../../classes/sol-price-manager"
 import VideoUrlsManager from "../../classes/video-urls-manager"
+import SolPriceManager from "../../classes/solana/sol-price-manager"
 import markVideoSoldOut from "../../db-operations/write/video/mark-video-sold-out"
 import transferSolFromFanToCreator from "../../utils/solana/transfer-sol-from-fan-to-creator"
 import transferSolFromCreatorToFortuna from "../../utils/solana/transfer-sol-from-creator-to-fortuna"

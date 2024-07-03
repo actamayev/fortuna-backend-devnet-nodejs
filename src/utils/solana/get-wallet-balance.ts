@@ -1,5 +1,5 @@
 import { Connection, LAMPORTS_PER_SOL, PublicKey, clusterApiUrl } from "@solana/web3.js"
-import SolPriceManager from "../../classes/sol-price-manager"
+import SolPriceManager from "../../classes/solana/sol-price-manager"
 
 interface WalletBalanceDetails {
 	balanceInSol: number

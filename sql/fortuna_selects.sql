@@ -17,9 +17,9 @@
 
 -- select * from uploaded_image;
 -- select * from uploaded_video;
--- select * from sol_transfer;
+select * from sol_transfer;
 -- select * from youtube_access_tokens;
 -- SELECT * FROM "_prisma_migrations" ORDER BY "finished_at" ASC;
 -- SELECT * FROM blockchain_fees_paid_by_fortuna;
 -- select * from exclusive_video_access_purchase_fortuna_take;
-select * from exclusive_video_access_purchase_sol_transfer;
+-- select * from exclusive_video_access_purchase_sol_transfer;
