@@ -33,7 +33,7 @@ export default async function transferSolFromCreatorToFortuna(
 		const fortunaFeePayerSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_FEE_PAYER_WALLET_ID_DB")
 		const feePayerSolanaWalletId = parseInt(fortunaFeePayerSolanaWalletIdDb, 10)
 
-		const fortunaTakeId =  await addExclusiveVideoAccessPurchaseTake(
+		const fortunaTakeId = await addExclusiveVideoAccessPurchaseTake(
 			contentCreatorPublicKeyAndWalletId.solana_wallet_id,
 			feePayerSolanaWalletId,
 			transactionSignature,
