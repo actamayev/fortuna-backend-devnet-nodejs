@@ -9,7 +9,7 @@ interface VideosAndCreatorData {
 export default async function transformVideosByCreatorUsername(
 	retrievedVideoData: RetrievedVideosByCreatorUsername,
 	optionallyAttachedUser: ExtendedCredentials | undefined,
-	channelName: string | null
+	creatorDetails: CreatorDetails | null
 ): Promise<VideosAndCreatorData | null> {
 	try {
 		// Fetch remaining tokens for these public keys
@@ -56,7 +56,8 @@ export default async function transformVideosByCreatorUsername(
 
 		// Prepare creator data
 		const creatorData: CreatorSearchDataSendingToFrontend = {
-			channelName: channelName || retrievedVideoData.username,
+			channelName: creatorDetails?.channel_name?.channel_name || retrievedVideoData.username,
+			channelDescription: creatorDetails?.channel_description?.channel_description || "",
 			creatorUsername: retrievedVideoData.username,
 			creatorProfilePictureUrl: retrievedVideoData.profile_picture_image_url
 		}

@@ -4,10 +4,12 @@ import createVideo from "../controllers/creator/create-video"
 import retrieveCreatorInfo from "../controllers/creator/retrieve-creator-info"
 import addOrEditChannelName from "../controllers/creator/add-or-edit-channel-name"
 import getCreatorContentList from "../controllers/creator/get-creator-content-list"
+import addOrEditChannelDescription from "../controllers/creator/add-or-edit-channel-description"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import validateCreateVideo from "../middleware/request-validation/creator/validate-create-video"
 import validateAddOrEditChannelName from "../middleware/request-validation/creator/validate-add-or-edit-channel-name"
+import validateAddOrEditChannelDescription from "../middleware/request-validation/creator/validate-add-or-edit-channel-description"
 
 const creatorRoutes = express.Router()
 
@@ -25,6 +27,13 @@ creatorRoutes.post(
 	validateAddOrEditChannelName,
 	jwtVerifyAttachUser,
 	addOrEditChannelName
+)
+
+creatorRoutes.post(
+	"/add-or-edit-channel-description",
+	validateAddOrEditChannelDescription,
+	jwtVerifyAttachUser,
+	addOrEditChannelDescription
 )
 
 creatorRoutes.get("/retrieve-creator-info", jwtVerifyAttachUser, retrieveCreatorInfo)

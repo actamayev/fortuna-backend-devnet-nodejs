@@ -2,7 +2,7 @@ import _ from "lodash"
 import { Response, Request } from "express"
 import transformVideosByCreatorUsername from "../../utils/transform/videos/transform-videos-by-creator-username"
 import retrieveVideosByCreatorUsername from "../../db-operations/read/credentials/retrieve-videos-by-creator-username"
-import retrieveChannelNameByCreatorUsername from "../../db-operations/read/credentials/retrieve-channel-name-by-creator-username"
+import retrieveCreatorDetailsByUsername from "../../db-operations/read/credentials/retrieve-creator-details-by-username"
 
 export default async function getVideosByCreatorUsername (req: Request, res: Response): Promise<Response> {
 	try {
@@ -12,9 +12,9 @@ export default async function getVideosByCreatorUsername (req: Request, res: Res
 		const retrievedVideoData = await retrieveVideosByCreatorUsername(creatorUsername)
 		if (_.isNull(retrievedVideoData)) return res.status(400).json({ message: "Unable to find creator associated with this username" })
 
-		const channelName = await retrieveChannelNameByCreatorUsername(creatorUsername)
+		const creatorDetails = await retrieveCreatorDetailsByUsername(creatorUsername)
 
-		const transformedVideoData = await transformVideosByCreatorUsername(retrievedVideoData, optionallyAttachedUser, channelName)
+		const transformedVideoData = await transformVideosByCreatorUsername(retrievedVideoData, optionallyAttachedUser, creatorDetails)
 		if (_.isNull(transformedVideoData)) return res.status(400).json({ message: "Unable to find creator associated with this username"})
 
 		return res.status(200).json({ ... transformedVideoData })
