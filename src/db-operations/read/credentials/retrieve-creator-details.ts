@@ -1,4 +1,3 @@
-import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function retrieveCreatorDetails(userId: number): Promise<CreatorDetails | null> {
@@ -22,8 +21,6 @@ export default async function retrieveCreatorDetails(userId: number): Promise<Cr
 				}
 			}
 		})
-
-		if (_.isNull(creatorDetails)) return null
 
 		return creatorDetails
 	} catch (error) {
