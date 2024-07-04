@@ -4,7 +4,7 @@ export default async function retrieveCreatorDetails(userId: number): Promise<Cr
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		return await prismaClient.credentials.findFirst({
+		return await prismaClient.credentials.findUnique({
 			where: {
 				user_id: userId
 			},
