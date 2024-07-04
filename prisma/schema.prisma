@@ -49,6 +49,7 @@ model credentials {
 	exclusive_video_access_purchase                             exclusive_video_access_purchase[]
 	channel_name												channel_name?
 	channel_description											channel_description?
+	social_platform_link										social_platform_link[]
 
 	profile_picture                                             profile_picture? @relation(fields: [profile_picture_id], references: [profile_picture_id])
 	youtube_access_tokens                                       youtube_access_tokens? @relation(fields: [youtube_access_tokens_id], references: [youtube_access_tokens_id])
@@ -350,4 +351,29 @@ model channel_description {
 	user                                                        credentials @relation(fields: [user_id], references: [user_id])
 
 	@@index([user_id], name: "channel_description__user_id_idx")
+}
+
+enum SocialPlatforms {
+	youtube
+	instagram
+	facebook
+	twitter
+	spotify
+}
+
+model social_platform_link {
+	social_platform_link_id										Int @id @default(autoincrement())
+	user_id														Int
+	social_link													String
+	social_platform												SocialPlatforms
+
+	is_active                                                   Boolean  @default(true)
+
+	created_at                                                  DateTime  @default(now())
+	updated_at                                                  DateTime  @default(now()) @updatedAt
+
+	user                                                        credentials @relation(fields: [user_id], references: [user_id])
+
+	@@index([user_id], name: "social_platform_link__user_id_idx")
+	@@unique([user_id, social_platform])
 }
