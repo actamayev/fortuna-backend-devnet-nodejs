@@ -4,6 +4,10 @@ export default function transformCreatorSearchData(input: RetrievedCreatorsByUse
 			channelName: item.channel_name?.channel_name || item.username,
 			channelDescription: item.channel_description?.channel_description || "",
 			creatorUsername: item.username,
+			socialPlatformLinks: item.social_platform_link.map(singleData => ({
+				socialPlatform: singleData.social_platform,
+				socialLink: singleData.social_link
+			})),
 			creatorProfilePictureUrl: item.profile_picture?.image_url || null
 		}))
 	} catch (error) {

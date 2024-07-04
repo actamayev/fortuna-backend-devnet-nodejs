@@ -18,6 +18,12 @@ export default async function retrieveCreatorDetailsByUsername(creatorUsername: 
 					select: {
 						channel_description: true
 					}
+				},
+				social_platform_link: {
+					select: {
+						social_platform: true,
+						social_link: true
+					}
 				}
 			}
 		})
