@@ -4,7 +4,7 @@ export default async function retrieveCreatorDetails(userId: number): Promise<Cr
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		const creatorDetails = await prismaClient.credentials.findFirst({
+		return await prismaClient.credentials.findFirst({
 			where: {
 				user_id: userId
 			},
@@ -21,8 +21,6 @@ export default async function retrieveCreatorDetails(userId: number): Promise<Cr
 				}
 			}
 		})
-
-		return creatorDetails
 	} catch (error) {
 		console.error(error)
 		throw error

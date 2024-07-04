@@ -4,7 +4,7 @@ export default async function retrieveCreatorDetailsByUsername(creatorUsername: 
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		const creatorDetails = await prismaClient.credentials.findFirst({
+		return await prismaClient.credentials.findFirst({
 			where: {
 				username: creatorUsername
 			},
@@ -21,8 +21,6 @@ export default async function retrieveCreatorDetailsByUsername(creatorUsername: 
 				}
 			}
 		})
-
-		return creatorDetails
 	} catch (error) {
 		console.error(error)
 		throw error
