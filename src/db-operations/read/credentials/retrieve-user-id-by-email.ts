@@ -17,6 +17,7 @@ export default async function retrieveUserIdByEmail(encryptedEmail: Deterministi
 		})
 
 		if (_.isNull(user)) return null
+
 		return user.user_id
 	} catch (error) {
 		console.error(error)

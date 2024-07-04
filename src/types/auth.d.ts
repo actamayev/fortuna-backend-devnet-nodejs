@@ -20,8 +20,8 @@ declare global {
 		phone_number__encrypted?: DeterministicEncryptedString
 	}
 
-	type DeterministicEncryptedString = string & { __type: "DeterministicEncryptedString" };
-	type NonDeterministicEncryptedString = string & { __type: "NonDeterministicEncryptedString" };
+	type DeterministicEncryptedString = string & { __type: "DeterministicEncryptedString" }
+	type NonDeterministicEncryptedString = string & { __type: "NonDeterministicEncryptedString" }
 
 	type HashedString = string & { __hashed: true }
 }

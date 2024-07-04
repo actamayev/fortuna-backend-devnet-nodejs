@@ -19,7 +19,16 @@ export default async function retrieveCreatorsByUsername(username: string): Prom
 						image_url: true
 					}
 				},
-				channel_name: true
+				channel_name: {
+					select: {
+						channel_name: true
+					}
+				},
+				channel_description: {
+					select: {
+						channel_description: true
+					}
+				}
 			}
 		})
 
