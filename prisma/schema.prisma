@@ -47,6 +47,7 @@ model credentials {
 	video_like_status											video_like_status[]
 	video				                                        video[]
 	exclusive_video_access_purchase                             exclusive_video_access_purchase[]
+	channel_name												channel_name?
 
 	profile_picture                                             profile_picture? @relation(fields: [profile_picture_id], references: [profile_picture_id])
 	youtube_access_tokens                                       youtube_access_tokens? @relation(fields: [youtube_access_tokens_id], references: [youtube_access_tokens_id])
@@ -322,4 +323,17 @@ model video_like_status {
 	@@index([video_id], name: "video_like_status__video_id_idx")
 	@@index([user_id], name: "video_like_status__user_id_idx")
 	@@unique([video_id, user_id])
+}
+
+model channel_name {
+	channel_name_id												Int @id @default(autoincrement())
+	user_id														Int @unique()
+	channel_name												String
+
+	created_at                                                  DateTime  @default(now())
+	updated_at                                                  DateTime  @default(now()) @updatedAt
+
+	user                                                        credentials @relation(fields: [user_id], references: [user_id])
+
+	@@index([user_id], name: "channel_name__user_id_idx")
 }

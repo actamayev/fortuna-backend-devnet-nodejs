@@ -8,7 +8,8 @@ interface VideosAndCreatorData {
 // eslint-disable-next-line max-lines-per-function
 export default async function transformVideosByCreatorUsername(
 	retrievedVideoData: RetrievedVideosByCreatorUsername,
-	optionallyAttachedUser: ExtendedCredentials | undefined
+	optionallyAttachedUser: ExtendedCredentials | undefined,
+	channelName: string | null
 ): Promise<VideosAndCreatorData | null> {
 	try {
 		// Fetch remaining tokens for these public keys
@@ -55,6 +56,7 @@ export default async function transformVideosByCreatorUsername(
 
 		// Prepare creator data
 		const creatorData: CreatorSearchDataSendingToFrontend = {
+			channelName: channelName || retrievedVideoData.username,
 			creatorUsername: retrievedVideoData.username,
 			creatorProfilePictureUrl: retrievedVideoData.profile_picture_image_url
 		}
