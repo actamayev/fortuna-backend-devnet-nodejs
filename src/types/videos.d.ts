@@ -68,10 +68,10 @@ declare global {
 			image_url: string
 		} | null
 		channel_description: {
-			channel_description: string;
+			channel_description: string
 		} | null
 		channel_name: {
-			channel_name: string;
+			channel_name: string
 		} | null
 	}
 
