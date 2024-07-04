@@ -51,6 +51,15 @@ declare global {
 		createdAt: Date
 		tierData: VideoTierData[]
 	}
+
+	interface CreatorDetails {
+		channel_name: {
+			channel_name: string;
+		} | null
+		channel_description: {
+			channel_description: string;
+		} | null
+	}
 }
 
 export {}

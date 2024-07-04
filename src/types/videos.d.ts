@@ -67,7 +67,12 @@ declare global {
 		profile_picture: {
 			image_url: string
 		} | null
-		channel_name: string | null
+		channel_description: {
+			channel_description: string;
+		} | null
+		channel_name: {
+			channel_name: string;
+		} | null
 	}
 
 	interface VideoDataNeededToCheckForExclusiveContentAccess {
@@ -126,6 +131,7 @@ declare global {
 	interface CreatorSearchDataSendingToFrontend {
 		creatorUsername: string
 		channelName: string
+		channelDescription: string
 		creatorProfilePictureUrl: string | null
 	}
 
