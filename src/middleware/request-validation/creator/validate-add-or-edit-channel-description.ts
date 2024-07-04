@@ -3,7 +3,7 @@ import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 
 const addOrEditChannelDescriptionSchema = Joi.object({
-	channelDescription: Joi.string().max(60).required()
+	channelDescription: Joi.string().max(1000).required()
 }).required()
 
 export default function validateAddOrEditChannelDescription (req: Request, res: Response, next: NextFunction): Response | void {
