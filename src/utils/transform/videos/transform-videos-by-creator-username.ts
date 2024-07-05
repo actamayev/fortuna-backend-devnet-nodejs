@@ -1,10 +1,5 @@
 import checkWhichExclusiveContentUserAllowedToAccess from "../../exclusive-content/check-which-exclusive-content-user-allowed-to-access"
 
-interface VideosAndCreatorData {
-	videoData: VideoDataSendingToFrontendLessVideoUrl[]
-	creatorData: CreatorSearchDataSendingToFrontend
-}
-
 // eslint-disable-next-line max-lines-per-function
 export default async function transformVideosByCreatorUsername(
 	retrievedVideoData: RetrievedVideosByCreatorUsername,
@@ -62,7 +57,7 @@ export default async function transformVideosByCreatorUsername(
 			socialPlatformLinks: creatorDetails?.social_platform_link.map(singleData => ({
 				socialPlatform: singleData.social_platform,
 				socialLink: singleData.social_link
-			})) ?? [],
+			})) || [],
 			creatorProfilePictureUrl: retrievedVideoData.profile_picture_image_url
 		}
 

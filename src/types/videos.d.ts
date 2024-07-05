@@ -143,6 +143,11 @@ declare global {
 		creatorProfilePictureUrl: string | null
 	}
 
+	interface VideosAndCreatorData {
+		videoData: VideoDataSendingToFrontendLessVideoUrl[]
+		creatorData: CreatorSearchDataSendingToFrontend
+	}
+
 	type SearchData = VideoDataSendingToFrontendLessVideoUrl | CreatorSearchDataSendingToFrontend
 }
 

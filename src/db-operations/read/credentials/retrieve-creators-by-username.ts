@@ -43,7 +43,6 @@ export default async function retrieveCreatorsByUsername(username: string): Prom
 		})
 
 		const filteredCreatorData: RetrievedCreatorsByUsername[] = creatorData.filter(user =>
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			user.username !== null
 		) as RetrievedCreatorsByUsername[]
 
