@@ -23,6 +23,9 @@ export default async function retrieveCreatorDetails(userId: number): Promise<Cr
 					select: {
 						social_platform: true,
 						social_link: true
+					},
+					where: {
+						is_active: true
 					}
 				}
 			}

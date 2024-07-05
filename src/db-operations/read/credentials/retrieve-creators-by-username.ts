@@ -34,6 +34,9 @@ export default async function retrieveCreatorsByUsername(username: string): Prom
 					select: {
 						social_platform: true,
 						social_link: true
+					},
+					where: {
+						is_active: true
 					}
 				}
 			}
