@@ -1,5 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
+// eslint-disable-next-line max-lines-per-function
 export default async function retrieveCreatorsByUsername(username: string): Promise<RetrievedCreatorsByUsername[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
@@ -28,12 +29,20 @@ export default async function retrieveCreatorsByUsername(username: string): Prom
 					select: {
 						channel_description: true
 					}
+				},
+				social_platform_link: {
+					select: {
+						social_platform: true,
+						social_link: true
+					},
+					where: {
+						is_active: true
+					}
 				}
 			}
 		})
 
 		const filteredCreatorData: RetrievedCreatorsByUsername[] = creatorData.filter(user =>
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			user.username !== null
 		) as RetrievedCreatorsByUsername[]
 
