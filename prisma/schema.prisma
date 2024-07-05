@@ -355,10 +355,14 @@ model channel_description {
 
 enum SocialPlatforms {
 	youtube
+	twitter
+	twitch
+	spotify
+	soundcloud
+	applemusic
 	instagram
 	facebook
-	twitter
-	spotify
+	tiktok
 }
 
 model social_platform_link {
