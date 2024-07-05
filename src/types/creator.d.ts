@@ -1,4 +1,4 @@
-import { VideoListingStatus } from "@prisma/client"
+import { SocialPlatforms, VideoListingStatus } from "@prisma/client"
 
 declare global {
 	interface IncomingNewVideoData {
@@ -59,6 +59,10 @@ declare global {
 		channel_description: {
 			channel_description: string
 		} | null
+		social_platform_link: {
+			social_platform: SocialPlatforms
+			social_link: string
+		}[]
 	}
 }
 

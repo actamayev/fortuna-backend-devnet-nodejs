@@ -18,6 +18,15 @@ export default async function retrieveCreatorDetails(userId: number): Promise<Cr
 					select: {
 						channel_description: true
 					}
+				},
+				social_platform_link: {
+					select: {
+						social_platform: true,
+						social_link: true
+					},
+					where: {
+						is_active: true
+					}
 				}
 			}
 		})

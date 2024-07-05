@@ -1,4 +1,4 @@
-import { VideoListingStatus } from "@prisma/client"
+import { SocialPlatforms, VideoListingStatus } from "@prisma/client"
 
 declare global {
 	interface RetrievedHomePageVideosFromDB {
@@ -73,6 +73,10 @@ declare global {
 		channel_name: {
 			channel_name: string
 		} | null
+		social_platform_link: {
+			social_platform: SocialPlatforms
+			social_link: string
+		}[]
 	}
 
 	interface VideoDataNeededToCheckForExclusiveContentAccess {
@@ -132,7 +136,16 @@ declare global {
 		creatorUsername: string
 		channelName: string
 		channelDescription: string
+		socialPlatformLinks: {
+			socialPlatform: SocialPlatforms
+			socialLink: string
+		}[]
 		creatorProfilePictureUrl: string | null
+	}
+
+	interface VideosAndCreatorData {
+		videoData: VideoDataSendingToFrontendLessVideoUrl[]
+		creatorData: CreatorSearchDataSendingToFrontend
 	}
 
 	type SearchData = VideoDataSendingToFrontendLessVideoUrl | CreatorSearchDataSendingToFrontend
