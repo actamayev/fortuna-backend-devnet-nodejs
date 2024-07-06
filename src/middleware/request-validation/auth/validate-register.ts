@@ -1,12 +1,13 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import emailValidator from "../../joi/email-validator"
 import usernameValidator from "../../joi/username-validator"
 import passwordValidatorSchema from "../../joi/password-validator"
 
 const registerInformationSchema = Joi.object({
 	registerInformation: Joi.object({
-		contact: Joi.string().required().min(3).max(100),
+		email: emailValidator.required(),
 		username: usernameValidator.required().trim().min(3).max(100),
 		password: passwordValidatorSchema.required(),
 		siteTheme: Joi.string().required().trim().valid("light", "dark")

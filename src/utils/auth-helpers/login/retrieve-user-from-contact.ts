@@ -3,7 +3,7 @@ import { findUserByWhereCondition } from "../../../db-operations/read/find/find-
 
 export default async function retrieveUserFromContact(
 	contact: string,
-	contactType: EmailOrPhoneOrUsername
+	contactType: EmailOrUsername
 ): Promise<ExtendedCredentials | null> {
 	try {
 		const whereCondition: { [key: string]: { equals: DeterministicEncryptedString | string, mode?: "insensitive"  } } = { }
@@ -12,13 +12,8 @@ export default async function retrieveUserFromContact(
 			whereCondition.username = { equals: contact, mode: "insensitive" }
 		} else {
 			const encryptor = new Encryptor()
-			if (contactType === "Email") {
-				const encryptedEmail = await encryptor.deterministicEncrypt(contact, "EMAIL_ENCRYPTION_KEY")
-				whereCondition.email__encrypted = { equals: encryptedEmail }
-			} else {
-				const encryptedPhoneNumber = await encryptor.deterministicEncrypt(contact, "PHONE_NUMBER_ENCRYPTION_KEY")
-				whereCondition.phone_number__encrypted = { equals: encryptedPhoneNumber }
-			}
+			const encryptedEmail = await encryptor.deterministicEncrypt(contact, "EMAIL_ENCRYPTION_KEY")
+			whereCondition.email__encrypted = { equals: encryptedEmail }
 		}
 
 		return await findUserByWhereCondition(whereCondition)

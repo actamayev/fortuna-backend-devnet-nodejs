@@ -33,8 +33,7 @@ model credentials {
 
 	auth_method                                                 AuthMethods
 
-	email__encrypted                                            String?
-	phone_number__encrypted                                     String?
+	email__encrypted                                            String
 
 	profile_picture_id                                          Int?    @unique
 	youtube_access_tokens_id                                    Int?    @unique

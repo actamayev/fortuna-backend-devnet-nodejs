@@ -1,7 +1,5 @@
 declare global {
-	type EmailOrPhone = "Email" | "Phone"
-
-	type EmailOrPhoneOrUsername = EmailOrPhone | "Username"
+	type EmailOrUsername = "Email" | "Username"
 
 	interface JwtPayload {
 		userId: number
@@ -14,8 +12,7 @@ declare global {
 		"profile-pictures"
 
 	type DeterministicEncryptionKeys =
-		"EMAIL_ENCRYPTION_KEY" |
-		"PHONE_NUMBER_ENCRYPTION_KEY"
+		"EMAIL_ENCRYPTION_KEY"
 
 	type NonDeterministicEncryptionKeys =
 		"SECRET_KEY_ENCRYPTION_KEY" |
