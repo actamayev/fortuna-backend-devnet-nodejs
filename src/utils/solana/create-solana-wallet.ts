@@ -1,15 +1,8 @@
-import { Keypair, Connection, clusterApiUrl } from "@solana/web3.js"
+import { Keypair } from "@solana/web3.js"
 
-export default async function createSolanaWallet(): Promise<Keypair> {
+export default function createSolanaWallet(): Keypair {
 	try {
-		const wallet = Keypair.generate()
-
-		// This is here to "access" the wallet after creating it.
-		// Without doing this, sometimes accessing the wallet in the future doesn't work
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-		await connection.getBalance(wallet.publicKey)
-
-		return wallet
+		return Keypair.generate()
 	} catch (error) {
 		console.error(error)
 		throw error

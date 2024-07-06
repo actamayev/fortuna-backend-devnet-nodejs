@@ -25,7 +25,7 @@ export default async function register (req: Request, res: Response): Promise<Re
 		const hashedPassword = await Hash.hashCredentials(registerInformation.password)
 
 		const userData = await constructLocalUserFields(registerInformation, hashedPassword)
-		const walletKeypair = await createSolanaWallet()
+		const walletKeypair = createSolanaWallet()
 
 		const encryptedSecretKey = await encryptor.nonDeterministicEncrypt(bs58.encode(
 			Buffer.from(walletKeypair.secretKey)
