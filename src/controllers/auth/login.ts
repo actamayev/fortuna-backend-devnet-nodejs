@@ -2,7 +2,7 @@ import _ from "lodash"
 import { Response, Request } from "express"
 import Hash from "../../classes/hash"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
-import determineContactType from "../../utils/auth-helpers/determine-contact-type"
+import determineLoginContactType from "../../utils/auth-helpers/determine-contact-type"
 import { findSolanaWalletByUserId } from "../../db-operations/read/find/find-solana-wallet"
 import retrieveUserFromContact from "../../utils/auth-helpers/login/retrieve-user-from-contact"
 import addLoginHistoryRecord from "../../db-operations/write/login-history/add-login-history-record"
@@ -10,10 +10,10 @@ import addLoginHistoryRecord from "../../db-operations/write/login-history/add-l
 export default async function login (req: Request, res: Response): Promise<Response> {
 	try {
 		const { contact, password } = req.body.loginInformation as LoginInformation
-		const contactType = determineContactType(contact)
+		const loginContactType = determineLoginContactType(contact)
 
-		const credentialsResult = await retrieveUserFromContact(contact, contactType)
-		if (_.isNull(credentialsResult)) return res.status(400).json({ message: `${contactType} not found!` })
+		const credentialsResult = await retrieveUserFromContact(contact, loginContactType)
+		if (_.isNull(credentialsResult)) return res.status(400).json({ message: `${loginContactType} not found!` })
 		if (credentialsResult.auth_method === "google") {
 			return res.status(400).json({ message: "Please log in via Google" })
 		}

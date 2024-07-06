@@ -1,12 +1,13 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import emailValidator from "../../joi/email-validator"
 import usernameValidator from "../../joi/username-validator"
 import passwordValidatorSchema from "../../joi/password-validator"
 
 const registerInformationSchema = Joi.object({
 	registerInformation: Joi.object({
-		contact: Joi.string().required().min(3).max(100),
+		email: emailValidator.required(),
 		username: usernameValidator.required().trim().min(3).max(100),
 		password: passwordValidatorSchema.required(),
 		siteTheme: Joi.string().required().trim().valid("light", "dark")
@@ -19,8 +20,8 @@ export default function validateRegister (req: Request, res: Response, next: Nex
 
 		if (!_.isUndefined(error)) return res.status(400).json({ validationError: error.details[0].message })
 
-		const trimmedContact = req.body.registerInformation.contact.trimEnd()
-		req.body.registerInformation.contact = trimmedContact
+		const trimmedEmail = req.body.registerInformation.email.trimEnd()
+		req.body.registerInformation.email = trimmedEmail
 		next()
 	} catch (error) {
 		console.error(error)
