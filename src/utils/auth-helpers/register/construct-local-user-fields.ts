@@ -1,6 +1,6 @@
 import Encryptor from "../../../classes/encryptor"
 
-export default async function addLocalUser(
+export default async function constructLocalUserFields(
 	registerInformation: RegisterInformation,
 	hashedPassword: HashedString
 ): Promise<NewLocalUserFields> {

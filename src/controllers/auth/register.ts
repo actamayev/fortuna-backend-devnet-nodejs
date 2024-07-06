@@ -4,11 +4,11 @@ import Hash from "../../classes/hash"
 import Encryptor from "../../classes/encryptor"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
 import createSolanaWallet from "../../utils/solana/create-solana-wallet"
-import addLocalUser from "../../utils/auth-helpers/register/add-local-user"
 import doesEmailExist from "../../db-operations/read/does-x-exist/does-email-exist"
 import doesUsernameExist from "../../db-operations/read/does-x-exist/does-username-exist"
 import addUserWithWallet from "../../db-operations/write/simultaneous-writes/add-user-with-wallet"
 import addLoginHistoryRecord from "../../db-operations/write/login-history/add-login-history-record"
+import constructLocalUserFields from "../../utils/auth-helpers/register/construct-local-user-fields"
 
 export default async function register (req: Request, res: Response): Promise<Response> {
 	try {
@@ -24,7 +24,7 @@ export default async function register (req: Request, res: Response): Promise<Re
 
 		const hashedPassword = await Hash.hashCredentials(registerInformation.password)
 
-		const userData = await addLocalUser(registerInformation, hashedPassword)
+		const userData = await constructLocalUserFields(registerInformation, hashedPassword)
 		const walletKeypair = await createSolanaWallet()
 
 		const encryptedSecretKey = await encryptor.nonDeterministicEncrypt(bs58.encode(
