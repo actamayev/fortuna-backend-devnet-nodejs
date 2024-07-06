@@ -12,11 +12,7 @@ export function validateYouTubeTokenData(data: RetrievedYouTubeAccessTokensData)
 
 export function validateExtendedCredentials(data: credentials): data is ExtendedCredentials {
 	try {
-		const isValidEmailEncrypted = data.email__encrypted === null || Encryptor.isDeterministicEncryptedString(data.email__encrypted)
-		const isValidPhoneNumberEncrypted = data.phone_number__encrypted === null ||
-			Encryptor.isDeterministicEncryptedString(data.phone_number__encrypted)
-
-		return isValidEmailEncrypted && isValidPhoneNumberEncrypted
+		return Encryptor.isDeterministicEncryptedString(data.email__encrypted)
 	} catch (error) {
 		console.error(error)
 		throw error

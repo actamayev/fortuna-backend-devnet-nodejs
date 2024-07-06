@@ -4,8 +4,6 @@ declare global {
 	type ExtendedCredentials = credentials & {
 		email__encrypted: DeterministicEncryptedString | null
 
-		phone_number__encrypted: DeterministicEncryptedString | null
-
 		password: HashedString | null
 	}
 

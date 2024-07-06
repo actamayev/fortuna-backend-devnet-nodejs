@@ -19,7 +19,6 @@ declare namespace NodeJS {
 		// Encryption:
 		SECRET_KEY_ENCRYPTION_KEY: NonDeterministicEncryptionKeys
 		EMAIL_ENCRYPTION_KEY: DeterministicEncryptionKeys
-		PHONE_NUMBER_ENCRYPTION_KEY: DeterministicEncryptionKeys
 		YT_REFRESH_TOKEN_ENCRYPTION_KEY: NonDeterministicEncryptionKeys
 
 		// Production only:

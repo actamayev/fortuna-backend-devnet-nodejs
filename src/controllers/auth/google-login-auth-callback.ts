@@ -38,7 +38,7 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 			if (_.isNull(solanaWallet)) return res.status(400).json({ message: "Unable to find user's Solana wallet" })
 			publicKey = solanaWallet.public_key
 		} else {
-			const walletKeypair = await createSolanaWallet()
+			const walletKeypair = createSolanaWallet()
 			const encryptedSecretKey = await encryptor.nonDeterministicEncrypt(bs58.encode(
 				Buffer.from(walletKeypair.secretKey)
 			), "SECRET_KEY_ENCRYPTION_KEY")
