@@ -1,6 +1,6 @@
 import validator from "validator"
 
-export default function determineContactType(input: string): EmailOrUsername {
+export default function determineLoginContactType(input: string): EmailOrUsername {
 	try {
 		if (validator.isEmail(input)) return "Email"
 

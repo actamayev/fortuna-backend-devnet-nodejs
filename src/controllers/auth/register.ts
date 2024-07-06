@@ -5,7 +5,7 @@ import Encryptor from "../../classes/encryptor"
 import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
 import createSolanaWallet from "../../utils/solana/create-solana-wallet"
 import addLocalUser from "../../utils/auth-helpers/register/add-local-user"
-import doesContactExist from "../../db-operations/read/does-x-exist/does-email-exist"
+import doesEmailExist from "../../db-operations/read/does-x-exist/does-email-exist"
 import doesUsernameExist from "../../db-operations/read/does-x-exist/does-username-exist"
 import addUserWithWallet from "../../db-operations/write/simultaneous-writes/add-user-with-wallet"
 import addLoginHistoryRecord from "../../db-operations/write/login-history/add-login-history-record"
@@ -15,9 +15,9 @@ export default async function register (req: Request, res: Response): Promise<Re
 		const registerInformation = req.body.registerInformation as RegisterInformation
 
 		const encryptor = new Encryptor()
-		const encryptedContact = await encryptor.deterministicEncrypt(registerInformation.email, "EMAIL_ENCRYPTION_KEY")
-		const contactExists = await doesContactExist(encryptedContact)
-		if (contactExists === true) return res.status(400).json({ message: "Email already exists" })
+		const encryptedEmail = await encryptor.deterministicEncrypt(registerInformation.email, "EMAIL_ENCRYPTION_KEY")
+		const emailExists = await doesEmailExist(encryptedEmail)
+		if (emailExists === true) return res.status(400).json({ message: "Email already exists" })
 
 		const usernameExists = await doesUsernameExist(registerInformation.username)
 		if (usernameExists === true) return res.status(400).json({ message: "Username taken" })

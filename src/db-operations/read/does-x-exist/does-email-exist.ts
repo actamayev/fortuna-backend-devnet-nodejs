@@ -1,6 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function doesContactExist(encryptedEmail: DeterministicEncryptedString): Promise<boolean> {
+export default async function doesEmailExist(encryptedEmail: DeterministicEncryptedString): Promise<boolean> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
