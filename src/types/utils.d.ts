@@ -9,7 +9,8 @@ declare global {
 	type S3FolderNames =
 		"uploaded-images" |
 		"uploaded-videos" |
-		"profile-pictures"
+		"profile-pictures" |
+		"channel-banner-pictures"
 
 	type DeterministicEncryptionKeys =
 		"EMAIL_ENCRYPTION_KEY"
