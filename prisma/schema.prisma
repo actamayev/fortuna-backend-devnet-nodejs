@@ -37,6 +37,7 @@ model credentials {
 
 	profile_picture_id                                          Int?    @unique
 	youtube_access_tokens_id                                    Int?    @unique
+	channel_banner_id                                          	Int?    @unique
 
 	created_at                                                  DateTime @default(now())
 	updated_at                                                  DateTime @default(now()) @updatedAt
@@ -51,9 +52,11 @@ model credentials {
 	social_platform_link										social_platform_link[]
 
 	profile_picture                                             profile_picture? @relation(fields: [profile_picture_id], references: [profile_picture_id])
+	channel_banner	                                            channel_banner? @relation(fields: [channel_banner_id], references: [channel_banner_id])
 	youtube_access_tokens                                       youtube_access_tokens? @relation(fields: [youtube_access_tokens_id], references: [youtube_access_tokens_id])
 
 	@@index([profile_picture_id], name:"credentials__profile_picture_id_idx")
+	@@index([channel_banner_id], name:"credentials__channel_banner_id_idx")
 	@@index([youtube_access_tokens_id], name:"credentials__youtube_access_tokens_id_idx")
 }
 
@@ -379,4 +382,16 @@ model social_platform_link {
 
 	@@index([user_id], name: "social_platform_link__user_id_idx")
 	@@unique([user_id, social_platform])
+}
+
+model channel_banner {
+	channel_banner_id                                          Int @id @default(autoincrement())
+	image_url                                                   String
+	file_name                                                   String
+	uuid                                                        String
+
+	created_at                                                  DateTime  @default(now())
+	updated_at                                                  DateTime  @default(now()) @updatedAt
+
+	user                                                        credentials?
 }
