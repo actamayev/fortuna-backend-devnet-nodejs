@@ -19,6 +19,11 @@ export default async function retrieveCreatorDetailsByUsername(creatorUsername: 
 						channel_description: true
 					}
 				},
+				channel_banner: {
+					select: {
+						image_url:  true
+					}
+				},
 				social_platform_link: {
 					select: {
 						social_platform: true,

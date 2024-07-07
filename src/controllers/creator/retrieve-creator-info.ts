@@ -9,6 +9,7 @@ export default async function retrieveCreatorInfo(req: Request, res: Response): 
 		return res.status(200).json({
 			channelName: creatorDetails?.channel_name?.channel_name || null,
 			channelDescription: creatorDetails?.channel_description?.channel_description || null,
+			channelBannerUrl: creatorDetails?.channel_banner?.image_url || null,
 			socialPlatformLinks: creatorDetails?.social_platform_link.map(singleData => ({
 				socialPlatform: singleData.social_platform,
 				socialLink: singleData.social_link

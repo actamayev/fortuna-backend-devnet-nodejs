@@ -59,6 +59,9 @@ declare global {
 		channel_description: {
 			channel_description: string
 		} | null
+		channel_banner: {
+			image_url: string
+		} | null
 		social_platform_link: {
 			social_platform: SocialPlatforms
 			social_link: string
