@@ -1,6 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function markProfilePictureLinkInactive(userId: number): Promise<void> {
+export default async function markProfilePictureInactive(userId: number): Promise<void> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
