@@ -3,6 +3,7 @@ export default function transformCreatorInfo(creatorDetails: CreatorDetails | nu
 		return {
 			channelName: creatorDetails?.channel_name?.channel_name || null,
 			channelDescription: creatorDetails?.channel_description?.channel_description || null,
+			profilePictureUrl: creatorDetails?.profile_picture?.image_url || null,
 			channelBannerUrl: creatorDetails?.channel_banner?.image_url || null,
 			socialPlatformLinks: creatorDetails?.social_platform_link.map(singleData => ({
 				socialPlatform: singleData.social_platform,

@@ -38,11 +38,17 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 						profile_picture: {
 							select: {
 								image_url: true
+							},
+							where: {
+								is_active: true
 							}
 						},
 						channel_banner: {
 							select: {
 								image_url: true
+							},
+							where: {
+								is_active: true
 							}
 						},
 						channel_name: {

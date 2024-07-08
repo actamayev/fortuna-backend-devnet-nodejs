@@ -291,6 +291,9 @@ model profile_picture {
 	image_url                                                   String
 	file_name                                                   String
 	uuid                                                        String
+  	user_id             										Int    @unique
+
+	is_active                                                   Boolean  @default(true)
 
 	created_at                                                  DateTime  @default(now())
 	updated_at                                                  DateTime  @default(now()) @updatedAt
@@ -298,7 +301,7 @@ model profile_picture {
 	user                                                        credentials?
 }
 
-model youtube_access_tokens {           
+model youtube_access_tokens {
 	youtube_access_tokens_id                                    Int @id @default(autoincrement())
 	access_token                                                String
 	refresh_token__encrypted                                    String
@@ -389,6 +392,9 @@ model channel_banner {
 	image_url                                                   String
 	file_name                                                   String
 	uuid                                                        String
+  	user_id             										Int    @unique
+
+	is_active                                                   Boolean  @default(true)
 
 	created_at                                                  DateTime  @default(now())
 	updated_at                                                  DateTime  @default(now()) @updatedAt
