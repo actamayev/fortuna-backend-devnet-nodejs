@@ -50,11 +50,7 @@ creatorRoutes.post(
 	addOrEditSocialPlatformLink
 )
 
-creatorRoutes.post(
-	"/remove-social-platform-link/:socialPlatform",
-	jwtVerifyAttachUser,
-	removeSocialPlatformLink
-)
+creatorRoutes.post("/remove-social-platform-link/:socialPlatform", jwtVerifyAttachUser, removeSocialPlatformLink)
 
 creatorRoutes.post("/remove-current-profile-picture", jwtVerifyAttachUser, removeCurrentProfilePicture)
 

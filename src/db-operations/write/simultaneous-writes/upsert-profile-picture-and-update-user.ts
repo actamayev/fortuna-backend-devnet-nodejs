@@ -1,6 +1,5 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-// eslint-disable-next-line max-lines-per-function
 export default async function upsertProfilePictureRecordAndUpdateUser (
 	imageUploadUrl: string,
 	fileName: string,
