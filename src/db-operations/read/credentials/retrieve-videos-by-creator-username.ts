@@ -82,7 +82,7 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 			username: retrievedVideos.username,
 			profile_picture_image_url: retrievedVideos.profile_picture?.image_url || null,
 			channel_banner_image_url: retrievedVideos.channel_banner?.image_url || null,
-			channel_name: retrievedVideos.channel_name?.channel_name || null
+			channel_name: retrievedVideos.channel_name?.channel_name || retrievedVideos.username
 		}
 	} catch (error) {
 		console.error(error)

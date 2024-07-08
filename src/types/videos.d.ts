@@ -64,7 +64,7 @@ declare global {
 			}[]
 			numberOfExclusivePurchasesSoFar: number | null
 		}[]
-		channel_name: string | null
+		channel_name: string
 		username: string
 		profile_picture_image_url: string | null
 		channel_banner_image_url: string | null
