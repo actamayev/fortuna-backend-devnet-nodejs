@@ -37,6 +37,11 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 							select: {
 								image_url: true
 							}
+						},
+						channel_banner: {
+							select: {
+								image_url: true
+							}
 						}
 					}
 				},

@@ -24,6 +24,9 @@ declare global {
 			profile_picture: {
 				image_url: string
 			} | null
+			channel_banner: {
+				image_url: string
+			} | null
 		}
 		video_like_status: {
 			like_status: boolean
@@ -60,11 +63,15 @@ declare global {
 		}[]
 		username: string
 		profile_picture_image_url: string | null
+		channel_banner_image_url: string | null
 	}
 
 	interface RetrievedCreatorsByUsername {
 		username: string
 		profile_picture: {
+			image_url: string
+		} | null
+		channel_banner: {
 			image_url: string
 		} | null
 		channel_description: {
@@ -118,6 +125,7 @@ declare global {
 		uuid: string
 		creatorUsername: string
 		creatorProfilePictureUrl: string | null
+		channelBannerPictureUrl: string | null
 		isVideoExclusive: boolean
 		isUserAbleToAccessVideo: boolean
 		createdAt: Date
@@ -141,6 +149,7 @@ declare global {
 			socialLink: string
 		}[]
 		creatorProfilePictureUrl: string | null
+		channelBannerPictureUrl: string | null
 	}
 
 	interface VideosAndCreatorData {

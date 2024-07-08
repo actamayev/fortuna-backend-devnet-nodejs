@@ -22,6 +22,7 @@ export default function transformVideoByUUIDData(
 			uuid: videoData.uuid,
 			creatorUsername: videoData.video_creator.username,
 			creatorProfilePictureUrl: videoData.video_creator.profile_picture?.image_url || null,
+			channelBannerPictureUrl: videoData.video_creator.channel_banner?.image_url || null,
 			isVideoExclusive: videoData.is_video_exclusive,
 			createdAt: videoData.created_at,
 			isUserAbleToAccessVideo: !_.isUndefined(videoData.videoUrl),
