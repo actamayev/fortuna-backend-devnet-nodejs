@@ -1,21 +1,17 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function upsertChannelName(
+export default async function updateChannelName(
 	userId: number,
 	channelName: string
 ): Promise<void> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		await prismaClient.channel_name.upsert({
+		await prismaClient.channel_name.update({
 			where: {
 				user_id: userId
 			},
-			update: {
-				channel_name: channelName
-			},
-			create: {
-				user_id: userId,
+			data: {
 				channel_name: channelName
 			}
 		})

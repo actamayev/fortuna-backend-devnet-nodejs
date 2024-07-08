@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { Response, Request } from "express"
-import setUsername from "../../db-operations/write/credentials/set-username"
 import doesUsernameExist from "../../db-operations/read/does-x-exist/does-username-exist"
+import setUsernameAndChannelName from "../../db-operations/write/simultaneous-writes/set-username-and-channel-name"
 
 export default async function registerUsername (req: Request, res: Response): Promise<Response> {
 	try {
@@ -11,7 +11,7 @@ export default async function registerUsername (req: Request, res: Response): Pr
 		const usernameExists = await doesUsernameExist(username)
 		if (usernameExists === true) return res.status(400).json({ message: "Username taken" })
 
-		await setUsername(user.user_id, username)
+		await setUsernameAndChannelName(user.user_id, username)
 
 		return res.status(200).json({ success: "Username registered" })
 	} catch (error) {
