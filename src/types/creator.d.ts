@@ -67,6 +67,13 @@ declare global {
 			social_link: string
 		}[]
 	}
+
+	interface CreatorInfoData {
+		channelName: string | null
+		channelDescription: string | null
+		channelBannerUrl: string | null
+		socialPlatformLinks: SocialPlatformLinks[]
+	}
 }
 
 export {}

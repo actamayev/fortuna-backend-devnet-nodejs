@@ -385,7 +385,7 @@ model social_platform_link {
 }
 
 model channel_banner {
-	channel_banner_id                                          Int @id @default(autoincrement())
+	channel_banner_id                                          	Int @id @default(autoincrement())
 	image_url                                                   String
 	file_name                                                   String
 	uuid                                                        String
