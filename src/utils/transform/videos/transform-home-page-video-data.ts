@@ -45,6 +45,7 @@ export default async function transformHomePageVideoData(
 				numberOfDislikes,
 				userLikeStatus,
 				numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar,
+				channelName: item.video_creator.channel_name?.channel_name || item.video_creator.username
 			}
 		})
 

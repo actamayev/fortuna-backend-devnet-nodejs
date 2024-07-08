@@ -47,12 +47,13 @@ export default async function transformVideosByCreatorUsername(
 				numberOfLikes,
 				numberOfDislikes,
 				userLikeStatus,
+				channelName: retrievedVideoData.channel_name
 			}
 		})
 
 		// Prepare creator data
 		const creatorData: CreatorSearchDataSendingToFrontend = {
-			channelName: creatorDetails?.channel_name?.channel_name || retrievedVideoData.username,
+			channelName: retrievedVideoData.channel_name,
 			channelDescription: creatorDetails?.channel_description?.channel_description || "",
 			creatorUsername: retrievedVideoData.username,
 			socialPlatformLinks: creatorDetails?.social_platform_link.map(singleData => ({
