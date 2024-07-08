@@ -6,9 +6,9 @@ import signJWT from "../../utils/auth-helpers/jwt/sign-jwt"
 import createSolanaWallet from "../../utils/solana/create-solana-wallet"
 import doesEmailExist from "../../db-operations/read/does-x-exist/does-email-exist"
 import doesUsernameExist from "../../db-operations/read/does-x-exist/does-username-exist"
-import addUserWithWallet from "../../db-operations/write/simultaneous-writes/add-user-with-wallet"
 import addLoginHistoryRecord from "../../db-operations/write/login-history/add-login-history-record"
 import constructLocalUserFields from "../../utils/auth-helpers/register/construct-local-user-fields"
+import addUserWithWalletWithChannelName from "../../db-operations/write/simultaneous-writes/add-user-with-wallet-with-channel-name"
 
 export default async function register (req: Request, res: Response): Promise<Response> {
 	try {
@@ -31,7 +31,7 @@ export default async function register (req: Request, res: Response): Promise<Re
 			Buffer.from(walletKeypair.secretKey)
 		), "SECRET_KEY_ENCRYPTION_KEY")
 
-		const userId = await addUserWithWallet(userData, walletKeypair.publicKey, encryptedSecretKey)
+		const userId = await addUserWithWalletWithChannelName(userData, walletKeypair.publicKey, encryptedSecretKey)
 
 		await addLoginHistoryRecord(userId)
 

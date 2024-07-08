@@ -22,6 +22,11 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 						image_url: true
 					}
 				},
+				channel_name: {
+					select: {
+						channel_name: true
+					}
+				},
 				video: {
 					select: {
 						video_id: true,
@@ -76,7 +81,8 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 			videos: videosWithPurchaseCount,
 			username: retrievedVideos.username,
 			profile_picture_image_url: retrievedVideos.profile_picture?.image_url || null,
-			channel_banner_image_url: retrievedVideos.channel_banner?.image_url || null
+			channel_banner_image_url: retrievedVideos.channel_banner?.image_url || null,
+			channel_name: retrievedVideos.channel_name?.channel_name || retrievedVideos.username
 		}
 	} catch (error) {
 		console.error(error)

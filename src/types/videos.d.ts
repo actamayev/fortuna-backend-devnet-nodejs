@@ -27,6 +27,9 @@ declare global {
 			channel_banner: {
 				image_url: string
 			} | null
+			channel_name: {
+				channel_name: string
+			} | null
 		}
 		video_like_status: {
 			like_status: boolean
@@ -61,29 +64,28 @@ declare global {
 			}[]
 			numberOfExclusivePurchasesSoFar: number | null
 		}[]
+		channel_name: string
 		username: string
 		profile_picture_image_url: string | null
 		channel_banner_image_url: string | null
 	}
 
 	interface RetrievedCreatorsByUsername {
-		username: string
-		profile_picture: {
-			image_url: string
-		} | null
-		channel_banner: {
-			image_url: string
-		} | null
-		channel_description: {
-			channel_description: string
-		} | null
-		channel_name: {
-			channel_name: string
-		} | null
-		social_platform_link: {
-			social_platform: SocialPlatforms
-			social_link: string
-		}[]
+		channel_name: string
+		user: {
+			username: string
+			profile_picture: {
+				image_url: string
+			} | null
+			channel_banner: { image_url: string } | null
+			channel_description: {
+				channel_description: string
+			} | null
+			social_platform_link: {
+				social_platform: SocialPlatforms
+				social_link: string
+			}[]
+		}
 	}
 
 	interface VideoDataNeededToCheckForExclusiveContentAccess {
@@ -134,6 +136,7 @@ declare global {
 		numberOfLikes: number
 		numberOfDislikes: number
 		userLikeStatus: boolean | null
+		channelName: string
 	}
 
 	interface VideoDataSendingToFrontendWithVideoUrl extends VideoDataSendingToFrontendLessVideoUrl {
