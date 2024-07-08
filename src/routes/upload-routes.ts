@@ -4,6 +4,7 @@ import express from "express"
 import uploadImageToS3 from "../controllers/upload/upload-image-to-s3"
 import uploadVideoToS3 from "../controllers/upload/upload-video-to-s3"
 import uploadProfilePictureImage from "../controllers/upload/upload-profile-picture"
+import uploadChannelBannerPicture from "../controllers/upload/upload-channel-banner-picture"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import validateVideoType from "../middleware/request-validation/upload/validate-video-type"
@@ -36,6 +37,14 @@ uploadRoutes.post(
 	validateImageType,
 	jwtVerifyAttachUser,
 	uploadProfilePictureImage
+)
+
+uploadRoutes.post(
+	"/upload-channel-banner-picture",
+	upload.single("file"),
+	validateImageType,
+	jwtVerifyAttachUser,
+	uploadChannelBannerPicture
 )
 
 export default uploadRoutes

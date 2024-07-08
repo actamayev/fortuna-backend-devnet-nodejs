@@ -33,6 +33,7 @@ export default async function transformVideosByCreatorUsername(
 				uuid: item.uuid,
 				creatorUsername: retrievedVideoData.username,
 				creatorProfilePictureUrl: retrievedVideoData.profile_picture_image_url,
+				channelBannerPictureUrl: retrievedVideoData.channel_banner_image_url,
 				isVideoExclusive: item.is_video_exclusive,
 				isUserAbleToAccessVideo,
 				createdAt: item.created_at,
@@ -58,7 +59,8 @@ export default async function transformVideosByCreatorUsername(
 				socialPlatform: singleData.social_platform,
 				socialLink: singleData.social_link
 			})) || [],
-			creatorProfilePictureUrl: retrievedVideoData.profile_picture_image_url
+			creatorProfilePictureUrl: retrievedVideoData.profile_picture_image_url,
+			channelBannerPictureUrl: retrievedVideoData.channel_banner_image_url
 		}
 
 		return { videoData, creatorData }

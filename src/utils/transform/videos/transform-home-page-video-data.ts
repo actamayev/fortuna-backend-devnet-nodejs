@@ -31,6 +31,7 @@ export default async function transformHomePageVideoData(
 				uuid: item.uuid,
 				creatorUsername: item.video_creator.username,
 				creatorProfilePictureUrl: item.video_creator.profile_picture?.image_url || null,
+				channelBannerPictureUrl: item.video_creator.channel_banner?.image_url || null,
 				isVideoExclusive: item.is_video_exclusive,
 				isUserAbleToAccessVideo,
 				createdAt: item.created_at,

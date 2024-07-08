@@ -8,7 +8,8 @@ export default function transformCreatorSearchData(input: RetrievedCreatorsByUse
 				socialPlatform: singleData.social_platform,
 				socialLink: singleData.social_link
 			})),
-			creatorProfilePictureUrl: item.profile_picture?.image_url || null
+			creatorProfilePictureUrl: item.profile_picture?.image_url || null,
+			channelBannerPictureUrl: item.channel_banner?.image_url || null
 		}))
 	} catch (error) {
 		console.error(error)
