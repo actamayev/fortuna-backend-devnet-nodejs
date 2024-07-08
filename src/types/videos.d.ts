@@ -27,6 +27,9 @@ declare global {
 			channel_banner: {
 				image_url: string
 			} | null
+			channel_name: {
+				channel_name: string
+			} | null
 		}
 		video_like_status: {
 			like_status: boolean
@@ -61,6 +64,7 @@ declare global {
 			}[]
 			numberOfExclusivePurchasesSoFar: number | null
 		}[]
+		channel_name: string | null
 		username: string
 		profile_picture_image_url: string | null
 		channel_banner_image_url: string | null
@@ -134,6 +138,7 @@ declare global {
 		numberOfLikes: number
 		numberOfDislikes: number
 		userLikeStatus: boolean | null
+		channelName: string
 	}
 
 	interface VideoDataSendingToFrontendWithVideoUrl extends VideoDataSendingToFrontendLessVideoUrl {

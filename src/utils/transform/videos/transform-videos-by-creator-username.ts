@@ -47,6 +47,7 @@ export default async function transformVideosByCreatorUsername(
 				numberOfLikes,
 				numberOfDislikes,
 				userLikeStatus,
+				channelName: creatorDetails?.channel_name?.channel_name || retrievedVideoData.username
 			}
 		})
 

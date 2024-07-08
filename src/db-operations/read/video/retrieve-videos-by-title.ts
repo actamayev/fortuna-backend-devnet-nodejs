@@ -46,6 +46,11 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 							select: {
 								image_url: true
 							}
+						},
+						channel_name: {
+							select: {
+								channel_name: true
+							}
 						}
 					}
 				},

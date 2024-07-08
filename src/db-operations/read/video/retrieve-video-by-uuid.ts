@@ -44,6 +44,11 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 							select: {
 								image_url: true
 							}
+						},
+						channel_name: {
+							select: {
+								channel_name: true
+							}
 						}
 					}
 				},
