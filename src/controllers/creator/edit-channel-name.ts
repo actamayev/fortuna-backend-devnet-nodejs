@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import updateChannelName from "../../db-operations/write/channel-name/update-channel-name"
+import updateChannelName from "../../db-operations/write/channel-name/upsert-channel-name"
 
 export default async function editChannelName (req: Request, res: Response): Promise<Response> {
 	try {
