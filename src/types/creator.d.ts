@@ -62,6 +62,9 @@ declare global {
 		channel_banner: {
 			image_url: string
 		} | null
+		profile_picture: {
+			image_url: string
+		} | null
 		social_platform_link: {
 			social_platform: SocialPlatforms
 			social_link: string
@@ -71,6 +74,7 @@ declare global {
 	interface CreatorInfoData {
 		channelName: string | null
 		channelDescription: string | null
+		profilePictureUrl: string | null
 		channelBannerUrl: string | null
 		socialPlatformLinks: SocialPlatformLinks[]
 	}

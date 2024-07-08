@@ -1,6 +1,7 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function addProfilePictureRecord (
+// eslint-disable-next-line max-lines-per-function
+export default async function upsertProfilePictureRecordAndUpdateUser (
 	imageUploadUrl: string,
 	fileName: string,
 	uuid: string,
@@ -10,11 +11,21 @@ export default async function addProfilePictureRecord (
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		await prismaClient.$transaction(async (prisma) => {
-			const profilePicture = await prisma.profile_picture.create({
-				data: {
+			const profilePicture = await prisma.profile_picture.upsert({
+				where: {
+					user_id: userId
+				},
+				update: {
 					image_url: imageUploadUrl,
 					file_name: fileName,
-					uuid
+					uuid,
+					is_active: true
+				},
+				create: {
+					image_url: imageUploadUrl,
+					file_name: fileName,
+					uuid,
+					user_id: userId
 				}
 			})
 
