@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import retrieveCreatorDetails from "../../db-operations/read/credentials/retrieve-creator-details"
 import transformCreatorInfo from "../../utils/transform/transform-creator-info"
+import retrieveCreatorDetails from "../../db-operations/read/credentials/retrieve-creator-details"
 
 export default async function retrieveCreatorInfo(req: Request, res: Response): Promise<Response> {
 	try {
