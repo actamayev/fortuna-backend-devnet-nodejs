@@ -1,5 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
+// eslint-disable-next-line max-lines-per-function
 export default async function retrieveCreatorDetails(userId: number): Promise<CreatorDetails | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
@@ -22,6 +23,17 @@ export default async function retrieveCreatorDetails(userId: number): Promise<Cr
 				channel_banner: {
 					select: {
 						image_url:  true
+					},
+					where: {
+						is_active: true
+					}
+				},
+				profile_picture: {
+					select: {
+						image_url: true
+					},
+					where: {
+						is_active: true
 					}
 				},
 				social_platform_link: {

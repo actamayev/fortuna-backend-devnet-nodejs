@@ -1,6 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function addChannelBannerPicture (
+export default async function upsertProfilePictureRecordAndUpdateUser (
 	imageUploadUrl: string,
 	fileName: string,
 	uuid: string,
@@ -10,11 +10,21 @@ export default async function addChannelBannerPicture (
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		await prismaClient.$transaction(async (prisma) => {
-			const channelBanner = await prisma.channel_banner.create({
-				data: {
+			const profilePicture = await prisma.profile_picture.upsert({
+				where: {
+					user_id: userId
+				},
+				update: {
 					image_url: imageUploadUrl,
 					file_name: fileName,
-					uuid
+					uuid,
+					is_active: true
+				},
+				create: {
+					image_url: imageUploadUrl,
+					file_name: fileName,
+					uuid,
+					user_id: userId
 				}
 			})
 
@@ -23,7 +33,7 @@ export default async function addChannelBannerPicture (
 					user_id: userId
 				},
 				data: {
-					channel_banner_id: channelBanner.channel_banner_id
+					profile_picture_id: profilePicture.profile_picture_id
 				}
 			})
 		})
