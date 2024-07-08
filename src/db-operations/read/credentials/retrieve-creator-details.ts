@@ -23,11 +23,17 @@ export default async function retrieveCreatorDetails(userId: number): Promise<Cr
 				channel_banner: {
 					select: {
 						image_url:  true
+					},
+					where: {
+						is_active: true
 					}
 				},
 				profile_picture: {
 					select: {
 						image_url: true
+					},
+					where: {
+						is_active: true
 					}
 				},
 				social_platform_link: {

@@ -5,16 +5,12 @@ export default async function markProfilePictureLinkInactive(userId: number): Pr
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		await prismaClient.credentials.update({
+		await prismaClient.profile_picture.update({
 			where: {
 				user_id: userId
 			},
 			data: {
-				profile_picture: {
-					update: {
-						is_active: false
-					}
-				}
+				is_active: false
 			}
 		})
 	} catch (error) {

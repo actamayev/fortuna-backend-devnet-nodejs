@@ -4,16 +4,12 @@ export default async function markChannelBannerLinkInactive(userId: number): Pro
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		await prismaClient.credentials.update({
+		await prismaClient.channel_banner.update({
 			where: {
 				user_id: userId
 			},
 			data: {
-				channel_banner: {
-					update: {
-						is_active: false
-					}
-				}
+				is_active: false
 			}
 		})
 	} catch (error) {

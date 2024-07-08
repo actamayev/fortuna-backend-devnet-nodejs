@@ -40,11 +40,17 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 						profile_picture: {
 							select: {
 								image_url: true
+							},
+							where: {
+								is_active: true
 							}
 						},
 						channel_banner: {
 							select: {
 								image_url: true
+							},
+							where: {
+								is_active: true
 							}
 						},
 						channel_name: {
