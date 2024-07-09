@@ -8,7 +8,10 @@ export default async function retrieveVideoDataForExclusiveContentCheckByUUID(
 
 		return await prismaClient.video.findFirst({
 			where: {
-				uuid: videoUUID
+				uuid: videoUUID,
+				video_listing_status: {
+					not: "UNLISTED"
+				}
 			},
 			select: {
 				video_id: true,

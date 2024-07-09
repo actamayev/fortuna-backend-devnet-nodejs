@@ -7,6 +7,9 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 
 		const mediaDetails = await prismaClient.video.findMany({
 			where: {
+				video_listing_status: {
+					not: "UNLISTED"
+				}
 			},
 			select: {
 				video_id: true,

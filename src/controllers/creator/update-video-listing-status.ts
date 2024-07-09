@@ -4,7 +4,7 @@ import setNewVideoListingStatus from "../../db-operations/write/video/set-new-vi
 
 export default async function updateVideoListingStatus(req: Request, res: Response): Promise<Response> {
 	try {
-		const { user, nonExclusiveVideoData } = req
+		const { nonExclusiveVideoData } = req
 
 		if (nonExclusiveVideoData.videoListingStatus === "SOLDOUT") {
 			return res.status(500).json({ error: "Unable to update status of a soldout video"  })
@@ -17,7 +17,7 @@ export default async function updateVideoListingStatus(req: Request, res: Respon
 			newVideoListingStatus = "LISTED"
 		}
 
-		await setNewVideoListingStatus(user.user_id, newVideoListingStatus)
+		await setNewVideoListingStatus(nonExclusiveVideoData.videoId, newVideoListingStatus)
 
 		return res.status(200).json({ success: "Updated video listing status" })
 	} catch (error) {
