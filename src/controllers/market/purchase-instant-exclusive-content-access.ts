@@ -2,8 +2,8 @@ import _ from "lodash"
 import { Request, Response } from "express"
 import VideoUrlsManager from "../../classes/video-urls-manager"
 import SolPriceManager from "../../classes/solana/sol-price-manager"
-import markVideoSoldOut from "../../db-operations/write/video/mark-video-sold-out"
 import transferSolFromFanToCreator from "../../utils/solana/transfer-sol-from-fan-to-creator"
+import setNewVideoListingStatus from "../../db-operations/write/video/set-new-video-listing-status"
 import transferSolFromCreatorToFortuna from "../../utils/solana/transfer-sol-from-creator-to-fortuna"
 import retrieveCreatorWalletInfoFromVideo from "../../db-operations/read/video/retrieve-creator-wallet-info-from-video"
 import updateCheckIfVideoAccessTierSoldOut from "../../db-operations/write/video-access-tier/update-check-if-video-access-tier-sold-out"
@@ -50,7 +50,7 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 		const isTierSoldOut = await updateCheckIfVideoAccessTierSoldOut(exclusiveVideoData, tierNumber)
 		let isVideoSoldOut = false
 		if (isTierSoldOut === true && tierNumber === exclusiveVideoData.total_number_video_tiers) {
-			await markVideoSoldOut(exclusiveVideoData.video_id)
+			await setNewVideoListingStatus(exclusiveVideoData.video_id, "SOLDOUT")
 			isVideoSoldOut = true
 		}
 		const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(exclusiveVideoData.uuid)

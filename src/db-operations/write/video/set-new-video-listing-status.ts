@@ -1,6 +1,10 @@
+import { VideoListingStatus } from "@prisma/client"
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function markVideoSoldOut(videoId: number): Promise<void> {
+export default async function setNewVideoListingStatus(
+	videoId: number,
+	newVideoListingStatus: VideoListingStatus
+): Promise<void> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
@@ -9,7 +13,7 @@ export default async function markVideoSoldOut(videoId: number): Promise<void> {
 				video_id: videoId
 			},
 			data: {
-				video_listing_status: "SOLDOUT"
+				video_listing_status: newVideoListingStatus
 			}
 		})
 	} catch (error) {

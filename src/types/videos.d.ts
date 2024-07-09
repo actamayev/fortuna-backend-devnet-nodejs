@@ -109,6 +109,13 @@ declare global {
 		uuid: string
 	}
 
+	interface NonExclusiveVideoData {
+		videoId: number
+		videoListingStatus: VideoListingStatus
+		isVideoExclusive: boolean
+		userId: number
+	}
+
 	interface RetrievedMyExclusiveContentData {
 		video: {
 			video_name: string

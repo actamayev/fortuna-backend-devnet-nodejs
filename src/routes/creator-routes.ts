@@ -9,12 +9,16 @@ import removeCurrentProfilePicture from "../controllers/creator/remove-current-p
 import addOrEditChannelDescription from "../controllers/creator/add-or-edit-channel-description"
 import addOrEditSocialPlatformLink from "../controllers/creator/add-or-edit-social-platform-link"
 import removeCurrentChannelBannerPicture from "../controllers/creator/remove-current-channel-banner-picture"
+import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import validateCreateVideo from "../middleware/request-validation/creator/validate-create-video"
 import validateAddOrEditChannelName from "../middleware/request-validation/creator/validate-edit-channel-name"
 import validateAddOrEditChannelDescription from "../middleware/request-validation/creator/validate-add-or-edit-channel-description"
 import validateAddOrEditSocialPlatformLink from "../middleware/request-validation/creator/validate-add-or-edit-social-platform-link"
+import attachNonExclusiveVideoDataByUUID from "../middleware/attach/attach-non-exclusive-video-by-uuid"
+import confirmUserCreatedNonExclusiveVideo from "../middleware/confirmations/videos/confirm-user-created-non-exclusive-video"
+import updateVideoListingStatus from "../controllers/creator/update-video-listing-status"
 
 const creatorRoutes = express.Router()
 
@@ -55,5 +59,14 @@ creatorRoutes.post("/remove-social-platform-link/:socialPlatform", jwtVerifyAtta
 creatorRoutes.post("/remove-current-profile-picture", jwtVerifyAttachUser, removeCurrentProfilePicture)
 
 creatorRoutes.post("/remove-current-channel-banner-picture", jwtVerifyAttachUser, removeCurrentChannelBannerPicture)
+
+creatorRoutes.post(
+	"/update-video-listing-status/:videoUUID",
+	validateVideoUUIDInParams,
+	jwtVerifyAttachUser,
+	attachNonExclusiveVideoDataByUUID,
+	confirmUserCreatedNonExclusiveVideo,
+	updateVideoListingStatus
+)
 
 export default creatorRoutes
