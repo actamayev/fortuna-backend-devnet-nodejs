@@ -1,24 +1,30 @@
 import express from "express"
 
 import createVideo from "../controllers/creator/create-video"
+import editVideoName from "../controllers/creator/edit-video-name"
 import editChannelName from "../controllers/creator/edit-channel-name"
 import retrieveCreatorInfo from "../controllers/creator/retrieve-creator-info"
+import editVideoDescription from "../controllers/creator/edit-video-description"
 import getCreatorContentList from "../controllers/creator/get-creator-content-list"
+import updateVideoListingStatus from "../controllers/creator/update-video-listing-status"
 import removeSocialPlatformLink from "../controllers/creator/remove-social-platform-link"
 import removeCurrentProfilePicture from "../controllers/creator/remove-current-profile-picture"
 import addOrEditChannelDescription from "../controllers/creator/add-or-edit-channel-description"
 import addOrEditSocialPlatformLink from "../controllers/creator/add-or-edit-social-platform-link"
 import removeCurrentChannelBannerPicture from "../controllers/creator/remove-current-channel-banner-picture"
-import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
 
+import attachVideoByUUID from "../middleware/attach/attach-video-by-uuid"
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import validateCreateVideo from "../middleware/request-validation/creator/validate-create-video"
-import validateAddOrEditChannelName from "../middleware/request-validation/creator/validate-edit-channel-name"
+import confirmUserCreatedVideo from "../middleware/confirmations/creator/confirm-user-created-video"
+import validateEditVideoName from "../middleware/request-validation/creator/validate-edit-video-name"
+import attachNonExclusiveVideoDataByUUID from "../middleware/attach/attach-non-exclusive-video-by-uuid"
+import validateEditChannelName from "../middleware/request-validation/creator/validate-edit-channel-name"
+import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
+import validateEditVideoDescription from "../middleware/request-validation/creator/validate-edit-video-description"
+import confirmUserCreatedNonExclusiveVideo from "../middleware/confirmations/creator/confirm-user-created-non-exclusive-video"
 import validateAddOrEditChannelDescription from "../middleware/request-validation/creator/validate-add-or-edit-channel-description"
 import validateAddOrEditSocialPlatformLink from "../middleware/request-validation/creator/validate-add-or-edit-social-platform-link"
-import attachNonExclusiveVideoDataByUUID from "../middleware/attach/attach-non-exclusive-video-by-uuid"
-import confirmUserCreatedNonExclusiveVideo from "../middleware/confirmations/videos/confirm-user-created-non-exclusive-video"
-import updateVideoListingStatus from "../controllers/creator/update-video-listing-status"
 
 const creatorRoutes = express.Router()
 
@@ -33,7 +39,7 @@ creatorRoutes.get("/get-creator-content-list", jwtVerifyAttachUser, getCreatorCo
 
 creatorRoutes.post(
 	"/edit-channel-name",
-	validateAddOrEditChannelName,
+	validateEditChannelName,
 	jwtVerifyAttachUser,
 	editChannelName
 )
@@ -67,6 +73,24 @@ creatorRoutes.post(
 	attachNonExclusiveVideoDataByUUID,
 	confirmUserCreatedNonExclusiveVideo,
 	updateVideoListingStatus
+)
+
+creatorRoutes.post(
+	"/edit-video-name",
+	validateEditVideoName,
+	jwtVerifyAttachUser,
+	attachVideoByUUID,
+	confirmUserCreatedVideo,
+	editVideoName
+)
+
+creatorRoutes.post(
+	"/edit-video-description",
+	validateEditVideoDescription,
+	jwtVerifyAttachUser,
+	attachVideoByUUID,
+	confirmUserCreatedVideo,
+	editVideoDescription
 )
 
 export default creatorRoutes

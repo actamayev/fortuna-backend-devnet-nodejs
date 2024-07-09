@@ -94,6 +94,11 @@ declare global {
 		is_video_exclusive: boolean
 	}
 
+	interface VideoDataNeededToEditVideoDetails {
+		video_id: number
+		creator_user_id: number
+	}
+
 	interface ExclusiveVideoData extends VideoDataNeededToCheckForExclusiveContentAccess {
 		uuid: string
 		purchases_allowed_for_this_tier: number | null

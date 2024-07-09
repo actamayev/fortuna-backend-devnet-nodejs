@@ -1,3 +1,4 @@
+import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 
 export default function confirmUserCreatedNonExclusiveVideo(req: Request, res: Response, next: NextFunction): Response | void {
@@ -6,7 +7,7 @@ export default function confirmUserCreatedNonExclusiveVideo(req: Request, res: R
 
 		if (nonExclusiveVideoData.isVideoExclusive === true) {
 			return res.status(400).json({ message: "This video is exclusive and it's listing status cannot be changed" })
-		} else if (nonExclusiveVideoData.userId !== user.user_id) {
+		} else if (!_.isEqual(nonExclusiveVideoData.userId, user.user_id)) {
 			return res.status(400).json({ message: "This user did not create this video" })
 		}
 
