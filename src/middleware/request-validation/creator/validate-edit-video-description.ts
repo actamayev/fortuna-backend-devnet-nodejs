@@ -5,7 +5,7 @@ import uuidValidator from "../../joi/uuid-validator"
 
 const editVideoDescriptionSchema = Joi.object({
 	videoDescription: Joi.string().max(5000).required(),
-	uuid: uuidValidator.required()
+	videoUUID: uuidValidator.required()
 }).required()
 
 export default function validateEditVideoDescription (req: Request, res: Response, next: NextFunction): Response | void {

@@ -5,7 +5,7 @@ import uuidValidator from "../../joi/uuid-validator"
 
 const editVideolNameSchema = Joi.object({
 	videoName: Joi.string().max(100).required(),
-	uuid: uuidValidator.required()
+	videoUUID: uuidValidator.required()
 }).required()
 
 export default function validateEditVideoName (req: Request, res: Response, next: NextFunction): Response | void {
