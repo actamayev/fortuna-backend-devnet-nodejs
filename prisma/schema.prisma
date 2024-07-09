@@ -96,6 +96,7 @@ model solana_wallet {
 
 enum VideoListingStatus {
 	LISTED
+	UNLISTED
 	SOLDOUT
 }
 
