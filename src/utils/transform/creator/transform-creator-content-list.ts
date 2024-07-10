@@ -1,6 +1,7 @@
 export default function transformCreatorContentList(input: RetrievedCreatorDBVideoData[]): OutputCreatorVideoData[] {
 	try {
 		return input.map(item => ({
+			videoId: item.video_id,
 			videoName: item.video_name,
 			videoListingStatus: item.video_listing_status,
 			description: item.description,

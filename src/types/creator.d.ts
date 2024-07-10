@@ -22,6 +22,7 @@ declare global {
 	}
 
 	interface RetrievedCreatorDBVideoData {
+		video_id: number
 		video_name: string
 		description: string
 		is_video_exclusive: boolean
@@ -41,6 +42,7 @@ declare global {
 	}
 
 	interface OutputCreatorVideoData {
+		videoId: number
 		videoName: string
 		videoListingStatus: VideoListingStatus
 		description: string

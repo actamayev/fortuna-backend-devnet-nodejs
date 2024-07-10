@@ -4,19 +4,19 @@ import AwsS3 from "../../classes/aws-s3"
 import { createS3KeyGenerateUUID } from "../../utils/s3/create-s3-key"
 import addUploadVideoRecord from "../../db-operations/write/uploaded-video/add-upload-video-record"
 
-export default async function uploadVideoToS3 (req: Request, res: Response): Promise<Response> {
+export default async function uploadVideo (req: Request, res: Response): Promise<Response> {
 	try {
 		if (_.isUndefined(req.file)) return res.status(400).json({ message: "No video uploaded" })
 
 		const { buffer, originalname } = req.file
 
-		const uploadVideoToS3KeyAndUUID = createS3KeyGenerateUUID("uploaded-videos")
-		await AwsS3.getInstance().uploadVideo(buffer, uploadVideoToS3KeyAndUUID.key)
+		const uploadVideoKeyAndUUID = createS3KeyGenerateUUID("uploaded-videos")
+		await AwsS3.getInstance().uploadVideo(buffer, uploadVideoKeyAndUUID.key)
 
 		const uploadedVideoId = await addUploadVideoRecord(originalname)
 
 		return res.status(200).json({
-			uuid: uploadVideoToS3KeyAndUUID.uuid,
+			uuid: uploadVideoKeyAndUUID.uuid,
 			uploadedVideoId
 		})
 	} catch (error) {
