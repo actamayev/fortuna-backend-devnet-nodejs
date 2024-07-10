@@ -38,6 +38,9 @@ declare global {
 			tier_access_price_usd: number
 			is_sold_out: boolean
 		}[]
+		video_like_status: {
+			like_status: boolean
+		}[]
 		numberOfExclusivePurchasesSoFar: number | null
 	}
 
@@ -50,6 +53,8 @@ declare global {
 		uuid: string
 		isContentExclusive: boolean
 		numberOfExclusivePurchasesSoFar: number | null
+		numberOfLikes: number
+		numberOfDislikes: number
 		createdAt: Date
 		tierData: VideoTierData[]
 	}

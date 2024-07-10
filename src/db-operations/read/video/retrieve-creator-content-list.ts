@@ -33,6 +33,14 @@ export default async function retrieveCreatorContentList(userId: number): Promis
 						is_sold_out: true
 					}
 				},
+				video_like_status: {
+					select: {
+						like_status: true
+					},
+					where: {
+						is_active: true
+					}
+				},
 				_count: {
 					select: {
 						exclusive_video_access_purchase: true
