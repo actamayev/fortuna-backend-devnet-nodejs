@@ -10,14 +10,14 @@ export default async function uploadNewThumbnailPicture (req: Request, res: Resp
 		if (_.isUndefined(req.file)) return res.status(400).json({ message: "No image uploaded" })
 
 		const { buffer, originalname } = req.file
-		const { videoId } = req.body
+		const { videoId } = req.body as { videoId: string }
 
 		const uploadThumbnailToS3Key = createS3KeyGenerateUUID("uploaded-images")
 		const imageUploadUrl = await AwsS3.getInstance().uploadImage(buffer, uploadThumbnailToS3Key.key)
 
-		const uploadedImageId = await addUploadImageRecord(imageUploadUrl, originalname)
+		const uploadedImageId = await addUploadImageRecord(imageUploadUrl, originalname, Number(videoId))
 
-		await updateVideoThumbnail(videoId, uploadedImageId)
+		await updateVideoThumbnail(Number(videoId), uploadedImageId)
 
 		return res.status(200).json({ imageUploadUrl })
 	} catch (error) {

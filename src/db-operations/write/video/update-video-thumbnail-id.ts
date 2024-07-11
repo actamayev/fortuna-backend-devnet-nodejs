@@ -6,7 +6,7 @@ export default async function updateVideoThumbnail(videoId: number, uploadedImag
 
 		await prismaClient.video.update({
 			where: {
-				video_id: Number(videoId)
+				video_id: videoId
 			},
 			data: {
 				uploaded_image_id: uploadedImageId
