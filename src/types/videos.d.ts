@@ -98,7 +98,6 @@ declare global {
 	}
 
 	interface NonExclusiveVideoData extends RetrievedVideoId {
-		creator_user_id: number
 		video_listing_status: VideoListingStatus
 	}
 

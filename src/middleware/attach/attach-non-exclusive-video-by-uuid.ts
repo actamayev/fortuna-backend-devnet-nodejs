@@ -5,7 +5,8 @@ import retrieveNonExclusiveVideoByUUID from "../../db-operations/read/video/retr
 export default async function attachNonExclusiveVideoDataByUUID(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {
 		const { videoUUID } = req.params
-		const nonExclusiveVideoData = await retrieveNonExclusiveVideoByUUID(videoUUID)
+		const { user } = req
+		const nonExclusiveVideoData = await retrieveNonExclusiveVideoByUUID(videoUUID, user.user_id)
 		if (_.isNull(nonExclusiveVideoData)) return res.status(400).json({ message: "Cannot find Video" })
 
 		req.nonExclusiveVideoData = nonExclusiveVideoData

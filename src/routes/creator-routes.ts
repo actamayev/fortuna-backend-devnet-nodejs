@@ -21,7 +21,6 @@ import attachNonExclusiveVideoDataByUUID from "../middleware/attach/attach-non-e
 import validateEditChannelName from "../middleware/request-validation/creator/validate-edit-channel-name"
 import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
 import validateEditVideoDescription from "../middleware/request-validation/creator/validate-edit-video-description"
-import confirmUserCreatedNonExclusiveVideo from "../middleware/confirmations/creator/confirm-user-created-non-exclusive-video"
 import validateAddOrEditChannelDescription from "../middleware/request-validation/creator/validate-add-or-edit-channel-description"
 import validateAddOrEditSocialPlatformLink from "../middleware/request-validation/creator/validate-add-or-edit-social-platform-link"
 
@@ -70,7 +69,6 @@ creatorRoutes.post(
 	validateVideoUUIDInParams,
 	jwtVerifyAttachUser,
 	attachNonExclusiveVideoDataByUUID,
-	confirmUserCreatedNonExclusiveVideo,
 	updateVideoListingStatus
 )
 
