@@ -2,7 +2,7 @@ import _ from "lodash"
 import { Request, Response } from "express"
 import AwsS3 from "../../classes/aws-s3"
 import { createS3KeyGenerateUUID } from "../../utils/s3/create-s3-key"
-import updateVideoThumbnail from "../../db-operations/write/video/update-video-thumbnail-id"
+import updateVideoThumbnailId from "../../db-operations/write/video/update-video-thumbnail-id"
 import addUploadImageRecord from "../../db-operations/write/uploaded-image/add-upload-image-record"
 
 export default async function uploadNewThumbnailPicture (req: Request, res: Response): Promise<Response> {
@@ -17,7 +17,7 @@ export default async function uploadNewThumbnailPicture (req: Request, res: Resp
 
 		const uploadedImageId = await addUploadImageRecord(imageUploadUrl, originalname, Number(videoId))
 
-		await updateVideoThumbnail(Number(videoId), uploadedImageId)
+		await updateVideoThumbnailId(Number(videoId), uploadedImageId)
 
 		return res.status(200).json({ imageUploadUrl })
 	} catch (error) {

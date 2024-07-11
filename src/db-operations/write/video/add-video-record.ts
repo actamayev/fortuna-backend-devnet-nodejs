@@ -1,7 +1,7 @@
+/* eslint-disable max-lines-per-function */
 import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
 
-// eslint-disable-next-line max-lines-per-function
 export default async function addVideoRecord (
 	newVideoData: IncomingNewVideoData,
 	creatorUserId: number
@@ -9,7 +9,6 @@ export default async function addVideoRecord (
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		// eslint-disable-next-line max-lines-per-function
 		const addVideoResponse = await prismaClient.$transaction(async (prisma) => {
 			const video = await prisma.video.create({
 				data: {

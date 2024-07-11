@@ -1,6 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function updateVideoThumbnail(videoId: number, uploadedImageId: number): Promise<void> {
+export default async function updateVideoThumbnailId(videoId: number, uploadedImageId: number): Promise<void> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
