@@ -13,7 +13,7 @@ declare global {
 			minimalDataNeededToCheckForExclusiveContentAccess: VideoDataNeededToCheckForExclusiveContentAccess
 			exclusiveVideoData: ExclusiveVideoData
 			nonExclusiveVideoData: NonExclusiveVideoData
-			basicVideoDetails: VideoDataNeededToEditVideoDetails
+			basicVideoDetails: RetrievedVideoId
 
 			isRecipientFortunaWallet: boolean
 			recipientSolanaWalletId: number | undefined

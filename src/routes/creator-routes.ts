@@ -16,7 +16,6 @@ import removeCurrentChannelBannerPicture from "../controllers/creator/remove-cur
 import attachVideoByUUID from "../middleware/attach/attach-video-by-uuid"
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import validateCreateVideo from "../middleware/request-validation/creator/validate-create-video"
-import confirmUserCreatedVideo from "../middleware/confirmations/creator/confirm-user-created-video"
 import validateEditVideoName from "../middleware/request-validation/creator/validate-edit-video-name"
 import attachNonExclusiveVideoDataByUUID from "../middleware/attach/attach-non-exclusive-video-by-uuid"
 import validateEditChannelName from "../middleware/request-validation/creator/validate-edit-channel-name"
@@ -80,7 +79,6 @@ creatorRoutes.post(
 	validateEditVideoName,
 	jwtVerifyAttachUser,
 	attachVideoByUUID,
-	confirmUserCreatedVideo,
 	editVideoName
 )
 
@@ -89,7 +87,6 @@ creatorRoutes.post(
 	validateEditVideoDescription,
 	jwtVerifyAttachUser,
 	attachVideoByUUID,
-	confirmUserCreatedVideo,
 	editVideoDescription
 )
 

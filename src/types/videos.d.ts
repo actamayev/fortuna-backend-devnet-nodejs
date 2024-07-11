@@ -88,16 +88,17 @@ declare global {
 		}
 	}
 
-	interface VideoDataNeededToEditVideoDetails {
+	interface RetrievedVideoId {
 		video_id: number
-		creator_user_id: number
 	}
 
-	interface VideoDataNeededToCheckForExclusiveContentAccess extends VideoDataNeededToEditVideoDetails {
+	interface VideoDataNeededToCheckForExclusiveContentAccess extends RetrievedVideoId {
+		creator_user_id: number
 		is_video_exclusive: boolean
 	}
 
-	interface NonExclusiveVideoData extends VideoDataNeededToEditVideoDetails {
+	interface NonExclusiveVideoData extends RetrievedVideoId {
+		creator_user_id: number
 		video_listing_status: VideoListingStatus
 	}
 
