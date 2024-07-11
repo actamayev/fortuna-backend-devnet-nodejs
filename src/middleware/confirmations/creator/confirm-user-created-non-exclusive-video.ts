@@ -5,9 +5,7 @@ export default function confirmUserCreatedNonExclusiveVideo(req: Request, res: R
 	try {
 		const { user, nonExclusiveVideoData } = req
 
-		if (nonExclusiveVideoData.isVideoExclusive === true) {
-			return res.status(400).json({ message: "This video is exclusive and it's listing status cannot be changed" })
-		} else if (!_.isEqual(nonExclusiveVideoData.userId, user.user_id)) {
+		if (!_.isEqual(nonExclusiveVideoData.creator_user_id, user.user_id)) {
 			return res.status(400).json({ message: "This user did not create this video" })
 		}
 

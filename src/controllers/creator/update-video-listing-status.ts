@@ -6,18 +6,19 @@ export default async function updateVideoListingStatus(req: Request, res: Respon
 	try {
 		const { nonExclusiveVideoData } = req
 
-		if (nonExclusiveVideoData.videoListingStatus === "SOLDOUT") {
+		// Can only update non-exclusive videos, therefore it can never be soldout
+		if (nonExclusiveVideoData.video_listing_status === "SOLDOUT") {
 			return res.status(500).json({ error: "Unable to update status of a soldout video"  })
 		}
+
 		let newVideoListingStatus: VideoListingStatus
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-		if (nonExclusiveVideoData.videoListingStatus === "LISTED") {
+		if (nonExclusiveVideoData.video_listing_status === "LISTED") {
 			newVideoListingStatus = "UNLISTED"
 		} else {
 			newVideoListingStatus = "LISTED"
 		}
 
-		await setNewVideoListingStatus(nonExclusiveVideoData.videoId, newVideoListingStatus)
+		await setNewVideoListingStatus(nonExclusiveVideoData.video_id, newVideoListingStatus)
 
 		return res.status(200).json({ success: "Updated video listing status" })
 	} catch (error) {

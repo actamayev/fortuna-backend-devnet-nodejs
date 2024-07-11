@@ -88,15 +88,17 @@ declare global {
 		}
 	}
 
-	interface VideoDataNeededToCheckForExclusiveContentAccess {
-		video_id: number
-		creator_user_id: number
-		is_video_exclusive: boolean
-	}
-
 	interface VideoDataNeededToEditVideoDetails {
 		video_id: number
 		creator_user_id: number
+	}
+
+	interface VideoDataNeededToCheckForExclusiveContentAccess extends VideoDataNeededToEditVideoDetails {
+		is_video_exclusive: boolean
+	}
+
+	interface NonExclusiveVideoData extends VideoDataNeededToEditVideoDetails {
+		video_listing_status: VideoListingStatus
 	}
 
 	interface ExclusiveVideoData extends VideoDataNeededToCheckForExclusiveContentAccess {
@@ -112,13 +114,6 @@ declare global {
 		videoName: string
 		imageUrl: string
 		uuid: string
-	}
-
-	interface NonExclusiveVideoData {
-		videoId: number
-		videoListingStatus: VideoListingStatus
-		isVideoExclusive: boolean
-		userId: number
 	}
 
 	interface RetrievedMyExclusiveContentData {

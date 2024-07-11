@@ -1,6 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function retrieveExclusiveAccessByWalletId(
+export default async function retrieveExclusiveAccessByUserId(
 	userId: number
 ): Promise<RetrievedMyExclusiveContentData[]> {
 	try {
