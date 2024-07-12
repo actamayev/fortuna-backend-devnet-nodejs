@@ -2,8 +2,8 @@ import _ from "lodash"
 import { Request, Response } from "express"
 import VideoUrlsManager from "../../classes/video-urls-manager"
 import SolPriceManager from "../../classes/solana/sol-price-manager"
-import markVideoSoldOut from "../../db-operations/write/video/mark-video-sold-out"
 import transferSolFromFanToCreator from "../../utils/solana/transfer-sol-from-fan-to-creator"
+import setNewVideoListingStatus from "../../db-operations/write/video/set-new-video-listing-status"
 import transferSolFromCreatorToFortuna from "../../utils/solana/transfer-sol-from-creator-to-fortuna"
 import retrieveCreatorWalletInfoFromVideo from "../../db-operations/read/video/retrieve-creator-wallet-info-from-video"
 import updateCheckIfVideoAccessTierSoldOut from "../../db-operations/write/video-access-tier/update-check-if-video-access-tier-sold-out"
@@ -13,7 +13,7 @@ import addExclusiveVideoAccessPurchase from "../../db-operations/write/exclusive
 export default async function purchaseInstantExclusiveContentAccess(req: Request, res: Response): Promise<Response> {
 	try {
 		const { solanaWallet, exclusiveVideoData } = req
-		const { tierNumber } = req.body
+		const { tierNumber } = req.body as { tierNumber: string }
 
 		const creatorWalletInfo = await retrieveCreatorWalletInfoFromVideo(exclusiveVideoData.video_id)
 		if (_.isNull(creatorWalletInfo)) return res.status(500).json({ error: "Unable to find creator's public key" })
@@ -42,15 +42,15 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 		await addExclusiveVideoAccessPurchase(
 			exclusiveVideoData.video_id,
 			solanaWallet.user_id,
-			tierNumber,
+			Number(tierNumber),
 			solTransferId,
 			fortunaTakeId
 		)
 
-		const isTierSoldOut = await updateCheckIfVideoAccessTierSoldOut(exclusiveVideoData, tierNumber)
+		const isTierSoldOut = await updateCheckIfVideoAccessTierSoldOut(exclusiveVideoData, Number(tierNumber))
 		let isVideoSoldOut = false
-		if (isTierSoldOut === true && tierNumber === exclusiveVideoData.total_number_video_tiers) {
-			await markVideoSoldOut(exclusiveVideoData.video_id)
+		if (isTierSoldOut === true && Number(tierNumber) === exclusiveVideoData.total_number_video_tiers) {
+			await setNewVideoListingStatus(exclusiveVideoData.video_id, "SOLDOUT")
 			isVideoSoldOut = true
 		}
 		const videoUrl = await VideoUrlsManager.getInstance().getVideoUrl(exclusiveVideoData.uuid)

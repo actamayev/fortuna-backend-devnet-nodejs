@@ -22,6 +22,7 @@ declare global {
 	}
 
 	interface RetrievedCreatorDBVideoData {
+		video_id: number
 		video_name: string
 		description: string
 		is_video_exclusive: boolean
@@ -37,10 +38,14 @@ declare global {
 			tier_access_price_usd: number
 			is_sold_out: boolean
 		}[]
+		video_like_status: {
+			like_status: boolean
+		}[]
 		numberOfExclusivePurchasesSoFar: number | null
 	}
 
 	interface OutputCreatorVideoData {
+		videoId: number
 		videoName: string
 		videoListingStatus: VideoListingStatus
 		description: string
@@ -48,6 +53,8 @@ declare global {
 		uuid: string
 		isContentExclusive: boolean
 		numberOfExclusivePurchasesSoFar: number | null
+		numberOfLikes: number
+		numberOfDislikes: number
 		createdAt: Date
 		tierData: VideoTierData[]
 	}

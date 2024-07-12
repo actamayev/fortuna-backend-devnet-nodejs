@@ -34,6 +34,11 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 					}
 				},
 				video: {
+					where: {
+						video_listing_status: {
+							not: "UNLISTED"
+						}
+					},
 					select: {
 						video_id: true,
 						video_name: true,

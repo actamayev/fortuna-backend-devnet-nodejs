@@ -96,6 +96,7 @@ model solana_wallet {
 
 enum VideoListingStatus {
 	LISTED
+	UNLISTED
 	SOLDOUT
 }
 
@@ -175,6 +176,7 @@ model uploaded_image {
 	uploaded_image_id                                           Int @id @default(autoincrement())
 	image_url                                                   String
 	file_name                                                   String
+	video_id													Int?
 
 	created_at                                                  DateTime  @default(now())
 	updated_at                                                  DateTime  @default(now()) @updatedAt
@@ -185,6 +187,7 @@ model uploaded_image {
 model uploaded_video {
 	uploaded_video_id                                           Int @id @default(autoincrement())
 	file_name                                                   String
+	video_id													Int?
 
 	created_at                                                  DateTime  @default(now())
 	updated_at                                                  DateTime  @default(now()) @updatedAt
