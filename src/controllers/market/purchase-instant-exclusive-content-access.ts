@@ -28,7 +28,10 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 		const solTransferId = await transferSolFromFanToCreator(
 			solanaWallet,
 			creatorWalletInfo,
-			transferDetails
+			{
+				solToTransfer: transferDetails.solToTransfer * 0.975,
+				usdToTransfer: transferDetails.usdToTransfer * 0.975
+			}
 		)
 
 		const fortunaTakeId = await transferSolFromCreatorToFortuna(
