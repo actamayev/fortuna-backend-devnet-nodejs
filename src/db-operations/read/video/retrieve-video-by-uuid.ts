@@ -8,7 +8,10 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 
 		const retrievedVideo = await prismaClient.video.findFirst({
 			where: {
-				uuid: videoUUID
+				uuid: videoUUID,
+				video_listing_status: {
+					not: "UNLISTED"
+				}
 			},
 			select: {
 				video_id: true,

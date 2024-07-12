@@ -1,7 +1,7 @@
+/* eslint-disable max-lines-per-function */
 import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
 
-// eslint-disable-next-line max-lines-per-function
 export default async function addVideoRecord (
 	newVideoData: IncomingNewVideoData,
 	creatorUserId: number
@@ -41,6 +41,24 @@ export default async function addVideoRecord (
 					data: tierDataToInsert
 				})
 			}
+
+			await prisma.uploaded_image.update({
+				where: {
+					uploaded_image_id: newVideoData.uploadedImageId
+				},
+				data: {
+					video_id: video.video_id
+				}
+			})
+
+			await prisma.uploaded_video.update({
+				where: {
+					uploaded_video_id: newVideoData.uploadedVideoId
+				},
+				data: {
+					video_id: video.video_id
+				}
+			})
 
 			return video
 		})

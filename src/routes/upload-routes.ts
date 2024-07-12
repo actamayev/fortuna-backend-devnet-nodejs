@@ -1,34 +1,45 @@
 import multer from "multer"
 import express from "express"
 
-import uploadImageToS3 from "../controllers/upload/upload-image-to-s3"
-import uploadVideoToS3 from "../controllers/upload/upload-video-to-s3"
+import uploadVideo from "../controllers/upload/upload-video"
+import uploadThumbnailPicture from "../controllers/upload/upload-thumbnail-picture"
 import uploadProfilePictureImage from "../controllers/upload/upload-profile-picture"
+import uploadNewThumbnailPicture from "../controllers/upload/upload-new-thumbnail-picture"
 import uploadChannelBannerPicture from "../controllers/upload/upload-channel-banner-picture"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import validateVideoType from "../middleware/request-validation/upload/validate-video-type"
 import validateImageType from "../middleware/request-validation/upload/validate-image-type"
-import validateUploadImageToS3 from "../middleware/request-validation/upload/validate-upload-image-to-s3"
+import validateUUIDInBody from "../middleware/request-validation/upload/validate-uuid-in-body"
+import validateVideoIdInBody from "../middleware/request-validation/upload/validate-video-id-in-body"
 
 const uploadRoutes = express.Router()
 const upload = multer()
 
 uploadRoutes.post(
-	"/upload-video-to-s3",
+	"/upload-video",
 	upload.single("file"),
 	validateVideoType,
 	jwtVerifyAttachUser,
-	uploadVideoToS3
+	uploadVideo
 )
 
 uploadRoutes.post(
-	"/upload-image-to-s3",
+	"/upload-thumbnail-picture",
 	upload.single("file"),
-	validateUploadImageToS3,
+	validateUUIDInBody,
 	validateImageType,
 	jwtVerifyAttachUser,
-	uploadImageToS3
+	uploadThumbnailPicture
+)
+
+uploadRoutes.post(
+	"/upload-new-thumbnail-picture",
+	upload.single("file"),
+	validateVideoIdInBody,
+	validateImageType,
+	jwtVerifyAttachUser,
+	uploadNewThumbnailPicture
 )
 
 uploadRoutes.post(

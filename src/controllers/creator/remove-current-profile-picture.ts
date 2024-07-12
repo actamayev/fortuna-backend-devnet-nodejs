@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import markProfilePictureInactive from "../../db-operations/write/credentials/mark-profile-picture-inactive"
+import markProfilePictureInactive from "../../db-operations/write/profile-picture/mark-profile-picture-inactive"
 
 export default async function removeCurrentProfilePicture (req: Request, res: Response): Promise<Response> {
 	try {
