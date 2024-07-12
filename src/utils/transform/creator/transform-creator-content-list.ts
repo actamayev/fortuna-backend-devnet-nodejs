@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-lines-per-function
 export default function transformCreatorContentList(input: RetrievedCreatorDBVideoData[]): OutputCreatorVideoData[] {
 	try {
 		return input.map(item => {
@@ -7,6 +8,12 @@ export default function transformCreatorContentList(input: RetrievedCreatorDBVid
 				if (videoLikeStatus.like_status === true) numberOfLikes ++
 				else numberOfDislikes ++
 			})
+			let totalCreatorProfitInSol = 0
+			let totalCreatorProfitInUsd = 0
+			item.exclusive_video_access_purchase.map(exclusiveVideoAccessPurchase => {
+				totalCreatorProfitInSol += exclusiveVideoAccessPurchase.exclusive_video_access_purchase_sol_transfer.sol_amount_transferred
+				totalCreatorProfitInUsd += exclusiveVideoAccessPurchase.exclusive_video_access_purchase_sol_transfer.usd_amount_transferred
+			})
 			return {
 				videoId: item.video_id,
 				videoName: item.video_name,
@@ -15,7 +22,6 @@ export default function transformCreatorContentList(input: RetrievedCreatorDBVid
 				imageUrl: item.uploaded_image.image_url,
 				uuid: item.uuid,
 				isContentExclusive: item.is_video_exclusive,
-				numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar,
 				createdAt: item.created_at,
 				tierData: item.video_access_tier.map(tier => ({
 					tierNumber: tier.tier_number,
@@ -24,7 +30,10 @@ export default function transformCreatorContentList(input: RetrievedCreatorDBVid
 					isTierSoldOut: tier.is_sold_out
 				})),
 				numberOfLikes,
-				numberOfDislikes
+				numberOfDislikes,
+				totalCreatorProfitInSol,
+				totalCreatorProfitInUsd,
+				numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar,
 			}
 		})
 

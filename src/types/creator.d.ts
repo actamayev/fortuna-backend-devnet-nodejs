@@ -41,6 +41,12 @@ declare global {
 		video_like_status: {
 			like_status: boolean
 		}[]
+		exclusive_video_access_purchase: {
+			exclusive_video_access_purchase_sol_transfer: {
+				sol_amount_transferred: number
+				usd_amount_transferred: number
+			}
+		}[]
 		numberOfExclusivePurchasesSoFar: number | null
 	}
 
@@ -52,11 +58,13 @@ declare global {
 		imageUrl: string
 		uuid: string
 		isContentExclusive: boolean
-		numberOfExclusivePurchasesSoFar: number | null
 		numberOfLikes: number
 		numberOfDislikes: number
 		createdAt: Date
 		tierData: VideoTierData[]
+		totalCreatorProfitInSol: number
+		totalCreatorProfitInUsd: number
+		numberOfExclusivePurchasesSoFar: number | null
 	}
 
 	interface CreatorDetails {

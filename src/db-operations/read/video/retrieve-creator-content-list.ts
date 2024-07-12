@@ -41,6 +41,16 @@ export default async function retrieveCreatorContentList(userId: number): Promis
 						is_active: true
 					}
 				},
+				exclusive_video_access_purchase: {
+					select: {
+						exclusive_video_access_purchase_sol_transfer: {
+							select: {
+								sol_amount_transferred: true,
+								usd_amount_transferred: true
+							}
+						}
+					}
+				},
 				_count: {
 					select: {
 						exclusive_video_access_purchase: true
