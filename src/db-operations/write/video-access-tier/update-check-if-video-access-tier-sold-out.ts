@@ -12,10 +12,10 @@ export default async function updateCheckIfVideoAccessTierSoldOut(
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		return await prismaClient.$transaction(async (prisma) => {
-			const numberPurchases = await prisma.video_access_tier.count({
+			const numberPurchases = await prisma.exclusive_video_access_purchase.count({
 				where: {
 					video_id: exclusiveVideoData.video_id,
-					tier_number: tierNumber
+					video_access_tier_number: tierNumber
 				}
 			})
 

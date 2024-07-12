@@ -52,7 +52,7 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 
 		const isTierSoldOut = await updateCheckIfVideoAccessTierSoldOut(exclusiveVideoData, Number(tierNumber))
 		let isVideoSoldOut = false
-		if (isTierSoldOut === true && Number(tierNumber) === exclusiveVideoData.total_number_video_tiers) {
+		if (isTierSoldOut === true && _.isEqual(Number(tierNumber), exclusiveVideoData.total_number_video_tiers)) {
 			await setNewVideoListingStatus(exclusiveVideoData.video_id, "SOLDOUT")
 			isVideoSoldOut = true
 		}
