@@ -55,7 +55,7 @@ export default class SolanaManager {
 	}
 
 	private delay(ms: number): Promise<void> {
-		console.log("Delaying", ms, "miliseconds")
+		console.info("Delaying", ms, "miliseconds")
 		return new Promise((resolve) => setTimeout(resolve, ms))
 	}
 
