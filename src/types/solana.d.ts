@@ -46,7 +46,6 @@ declare global {
 		transferToUsername?: string
 		transferToPublicKey?: string
 		transferFromUsername: string
-		createdAt: Date
 	}
 
 	interface TransferDetailsLessDefaultCurrency {
