@@ -22,8 +22,8 @@ dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" 
 const app = express()
 
 const allowedOrigins = [
-	"https://www.mintfortuna.com", "https://mintfortuna.com",
-	"https://devnet.mintfortuna.com",
+	"https://www.createfortuna.com", "https://createfortuna.com",
+	"https://devnet.createfortuna.com",
 	"http://localhost:3000"
 ]
 
