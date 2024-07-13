@@ -23,3 +23,4 @@
 -- SELECT * FROM blockchain_fees_paid_by_fortuna;
 -- select * from exclusive_video_access_purchase_fortuna_take;
 -- select * from exclusive_video_access_purchase_sol_transfer;
+-- select * from channel_name;

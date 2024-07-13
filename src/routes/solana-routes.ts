@@ -22,7 +22,7 @@ import confirmUserHasSufficientFundsToTransfer from "../middleware/confirmations
 const solanaRoutes = express.Router()
 
 solanaRoutes.post(
-	"/transfer-funds-to-username",
+	"/money-transfer-to-username",
 	validateTransferSolToUsername,
 	jwtVerifyAttachUser,
 	attachPublicKeyByTransferToUsername,
@@ -34,7 +34,7 @@ solanaRoutes.post(
 )
 
 solanaRoutes.post(
-	"/transfer-funds-to-public-key",
+	"/money-transfer-to-public-key",
 	validateTransferSolToPublicKey,
 	confirmPublicKeyExists,
 	jwtVerifyAttachUser,

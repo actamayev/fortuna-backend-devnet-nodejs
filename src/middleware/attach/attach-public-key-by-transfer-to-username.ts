@@ -8,9 +8,9 @@ export default async function attachPublicKeyByTransferToUsername (
 	next: NextFunction
 ): Promise<Response | void> {
 	try {
-		const transferFundsData = req.body.transferFundsData as TransferFundsData
+		const moneyTransferData = req.body.moneyTransferData as MoneyTransferData
 
-		const recipientUserPublicKeyAndWalletId = await findPublicKeyAndSolWalletFromUsername(transferFundsData.sendingTo)
+		const recipientUserPublicKeyAndWalletId = await findPublicKeyAndSolWalletFromUsername(moneyTransferData.sendingTo)
 		if (_.isNull(recipientUserPublicKeyAndWalletId)) {
 			return res.status(500).json({ error: "Unable to public key and wallet id" })
 		}

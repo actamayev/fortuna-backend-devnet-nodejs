@@ -5,8 +5,8 @@ export default function transformTransactionsList(
 	try {
 		const transformedTransactions = input.map(transaction => transformTransaction(transaction, solanaWalletPublicKey))
 		const sortedTransactions = transformedTransactions.sort((a, b) => {
-			const dateA = new Date(a.createdAt)
-			const dateB = new Date(b.createdAt)
+			const dateA = new Date(a.transferDateTime)
+			const dateB = new Date(b.transferDateTime)
 			return dateA.getTime() - dateB.getTime()
 		})
 		return sortedTransactions
@@ -30,8 +30,7 @@ export function transformTransaction(
 			transferToUsername: transaction.recipient_username,
 			transferToPublicKey: transaction.recipient_public_key,
 			transferFromUsername: transaction.sender_username,
-			outgoingOrIncoming: transaction.recipient_public_key === solanaWalletPublicKey ? "incoming" : "outgoing",
-			createdAt: transaction.created_at
+			outgoingOrIncoming: transaction.recipient_public_key === solanaWalletPublicKey ? "incoming" : "outgoing"
 		}
 	} catch (error) {
 		console.error(error)
