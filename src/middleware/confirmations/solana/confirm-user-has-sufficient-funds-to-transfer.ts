@@ -10,7 +10,7 @@ export default async function confirmUserHasSufficientFundsToTransfer(
 ): Promise<Response | void> {
 	try {
 		const { solanaWallet, isRecipientFortunaWallet } = req
-		const transferData = req.body.transferFundsData as TransferFundsData
+		const transferData = req.body.moneyTransferData as MoneyTransferData
 		const publicKey = new PublicKey(solanaWallet.public_key)
 		const balanceInSol = await getWalletBalanceSol(publicKey)
 

@@ -14,7 +14,7 @@ import calculateTransactionFeeUpdateBlockchainFeesTable from "../../utils/solana
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
 	try {
 		const { user, solanaWallet, recipientPublicKey, isRecipientFortunaWallet, recipientSolanaWalletId } = req
-		const transferData = req.body.transferFundsData as TransferFundsData
+		const transferData = req.body.moneyTransferData as MoneyTransferData
 		const transferDetails: TransferDetails = {
 			solToTransfer: 0,
 			usdToTransfer: 0,
