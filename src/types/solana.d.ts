@@ -2,7 +2,7 @@ import { Currencies } from "@prisma/client"
 import { PublicKey } from "@solana/web3.js"
 
 declare global {
-	interface TransferFundsData {
+	interface MoneyTransferData {
 		sendingTo: string
 		transferAmount: number
 		transferCurrency: Currencies
@@ -46,7 +46,6 @@ declare global {
 		transferToUsername?: string
 		transferToPublicKey?: string
 		transferFromUsername: string
-		createdAt: Date
 	}
 
 	interface TransferDetailsLessDefaultCurrency {

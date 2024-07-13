@@ -14,20 +14,20 @@ import calculateTransactionFeeUpdateBlockchainFeesTable from "../../utils/solana
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
 	try {
 		const { user, solanaWallet, recipientPublicKey, isRecipientFortunaWallet, recipientSolanaWalletId } = req
-		const transferData = req.body.transferFundsData as TransferFundsData
+		const moneyTransferData = req.body.moneyTransferData as MoneyTransferData
 		const transferDetails: TransferDetails = {
 			solToTransfer: 0,
 			usdToTransfer: 0,
-			defaultCurrency: transferData.transferCurrency
+			defaultCurrency: moneyTransferData.transferCurrency
 		}
 
 		const solPrice = (await SolPriceManager.getInstance().getPrice()).price
-		if (transferData.transferCurrency === "sol") {
-			transferDetails.solToTransfer = transferData.transferAmount
-			transferDetails.usdToTransfer = transferData.transferAmount * solPrice
+		if (moneyTransferData.transferCurrency === "sol") {
+			transferDetails.solToTransfer = moneyTransferData.transferAmount
+			transferDetails.usdToTransfer = moneyTransferData.transferAmount * solPrice
 		} else {
-			transferDetails.solToTransfer = transferData.transferAmount / solPrice
-			transferDetails.usdToTransfer = transferData.transferAmount
+			transferDetails.solToTransfer = moneyTransferData.transferAmount / solPrice
+			transferDetails.usdToTransfer = moneyTransferData.transferAmount
 		}
 
 		// FUTURE TODO: Fix the double-charge problem (when having 2 signers, the fee is doubled)
@@ -67,7 +67,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 		const transactionToTransform: RetrievedDBTransactionListData = {
 			...solTransferRecord,
 			sender_username: user.username as string,
-			...(isRecipientFortunaWallet ? { recipient_username: transferData.sendingTo } : null)
+			...(isRecipientFortunaWallet ? { recipient_username: moneyTransferData.sendingTo } : null)
 		}
 
 		const solTransferData = transformTransaction(transactionToTransform, solanaWallet.public_key)
