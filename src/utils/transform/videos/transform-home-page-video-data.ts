@@ -26,6 +26,7 @@ export default async function transformHomePageVideoData(
 				videoListingStatus: item.video_listing_status,
 				description: item.description,
 				imageUrl: item.uploaded_image.image_url,
+				videoDurationSeconds: item.uploaded_video.video_duration_seconds,
 				uuid: item.uuid,
 				creatorUsername: item.video_creator.username,
 				creatorProfilePictureUrl: item.video_creator.profile_picture?.image_url || null,

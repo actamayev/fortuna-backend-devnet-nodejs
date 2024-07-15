@@ -27,6 +27,11 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 						image_url: true
 					}
 				},
+				uploaded_video: {
+					select: {
+						video_duration_seconds: true
+					}
+				},
 				video_access_tier: {
 					select: {
 						tier_number: true,

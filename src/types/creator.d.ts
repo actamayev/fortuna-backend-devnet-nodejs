@@ -32,6 +32,9 @@ declare global {
 		uploaded_image: {
 			image_url: string
 		}
+		uploaded_video: {
+			video_duration_seconds: number
+		}
 		video_access_tier: {
 			tier_number: number
 			purchases_allowed_for_this_tier: number | null
@@ -54,6 +57,7 @@ declare global {
 		videoListingStatus: VideoListingStatus
 		description: string
 		imageUrl: string
+		videoDurationSeconds: number
 		uuid: string
 		isContentExclusive: boolean
 		numberOfLikes: number

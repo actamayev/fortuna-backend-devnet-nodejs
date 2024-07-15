@@ -13,6 +13,7 @@ export default function transformCreatorContentList(input: RetrievedCreatorDBVid
 				videoListingStatus: item.video_listing_status,
 				description: item.description,
 				imageUrl: item.uploaded_image.image_url,
+				videoDurationSeconds: item.uploaded_video.video_duration_seconds,
 				uuid: item.uuid,
 				isContentExclusive: item.is_video_exclusive,
 				createdAt: item.created_at,
