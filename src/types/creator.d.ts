@@ -38,9 +38,6 @@ declare global {
 			tier_access_price_usd: number
 			is_sold_out: boolean
 		}[]
-		video_like_status: {
-			like_status: boolean
-		}[]
 		exclusive_video_access_purchase: {
 			exclusive_video_access_purchase_sol_transfer: {
 				sol_amount_transferred: number
@@ -48,6 +45,7 @@ declare global {
 			}
 		}[]
 		numberOfExclusivePurchasesSoFar: number | null
+		numberOfLikes: number
 	}
 
 	interface OutputCreatorVideoData {
@@ -59,7 +57,6 @@ declare global {
 		uuid: string
 		isContentExclusive: boolean
 		numberOfLikes: number
-		numberOfDislikes: number
 		createdAt: Date
 		tierData: VideoTierData[]
 		totalCreatorProfitInSol: number

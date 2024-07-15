@@ -318,7 +318,6 @@ model youtube_access_tokens {
 
 model video_like_status {
 	video_like_status_id										Int @id @default(autoincrement())
-	like_status													Boolean // true means like, false dislike
 	video_id													Int
 	user_id														Int
 
