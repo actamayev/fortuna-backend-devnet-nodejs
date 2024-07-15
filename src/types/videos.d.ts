@@ -32,7 +32,6 @@ declare global {
 			} | null
 		}
 		video_like_status: {
-			like_status: boolean
 			user_id: number
 		}[]
 		numberOfExclusivePurchasesSoFar: number | null
