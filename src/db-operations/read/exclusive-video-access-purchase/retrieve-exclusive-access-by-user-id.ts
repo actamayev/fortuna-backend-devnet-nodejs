@@ -19,6 +19,11 @@ export default async function retrieveExclusiveAccessByUserId(
 							select: {
 								image_url: true
 							}
+						},
+						uploaded_video: {
+							select: {
+								video_duration_seconds: true
+							}
 						}
 					}
 				}
