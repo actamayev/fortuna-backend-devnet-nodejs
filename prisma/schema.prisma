@@ -187,6 +187,7 @@ model uploaded_image {
 model uploaded_video {
 	uploaded_video_id                                           Int @id @default(autoincrement())
 	file_name                                                   String
+	video_duration_seconds										Float?
 	video_id													Int?
 
 	created_at                                                  DateTime  @default(now())
