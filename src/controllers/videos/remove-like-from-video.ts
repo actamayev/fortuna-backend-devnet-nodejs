@@ -1,11 +1,11 @@
 import { Request, Response } from "express"
-import removeLike from "../../db-operations/write/video-like-status/remove-like-status"
+import updateLikeToInactive from "../../db-operations/write/video-like-status/update-like-to-inactive"
 
 export default async function removeLikeFromVideo(req: Request, res: Response): Promise<Response> {
 	try {
 		const { user, minimalDataNeededToCheckForExclusiveContentAccess } = req
 
-		await removeLike(minimalDataNeededToCheckForExclusiveContentAccess.video_id, user.user_id)
+		await updateLikeToInactive(minimalDataNeededToCheckForExclusiveContentAccess.video_id, user.user_id)
 
 		return res.status(200).json({ success: "Removed like from video" })
 	} catch (error) {
