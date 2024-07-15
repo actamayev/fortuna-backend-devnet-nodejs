@@ -21,11 +21,15 @@ dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" 
 
 const app = express()
 
-const allowedOrigins = [
-	"https://www.createfortuna.com", "https://createfortuna.com",
-	"https://devnet.createfortuna.com",
-	"http://localhost:3000"
-]
+let allowedOrigins
+if (process.env.NODE_ENV === "production") {
+	allowedOrigins = [
+		"https://www.createfortuna.com",
+		"https://devnet.createfortuna.com"
+	]
+} else {
+	allowedOrigins = [ "http://localhost:3000" ]
+}
 
 app.use(cors({
 	origin: function (origin, callback) {
