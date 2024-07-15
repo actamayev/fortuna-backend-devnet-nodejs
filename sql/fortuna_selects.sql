@@ -15,8 +15,9 @@
 -- 	listing_price_per_share_usd
 -- 	from video join uploaded_video on uploaded_video.uploaded_video_id = video.uploaded_video_id;
 
+-- select * from video;
 -- select * from uploaded_image;
--- select * from uploaded_video;
+select * from uploaded_video;
 -- select * from sol_transfer;
 -- select * from youtube_access_tokens;
 -- SELECT * FROM "_prisma_migrations" ORDER BY "finished_at" ASC;
@@ -24,3 +25,7 @@
 -- select * from exclusive_video_access_purchase_fortuna_take;
 -- select * from exclusive_video_access_purchase_sol_transfer;
 -- select * from channel_name;
+
+-- UPDATE uploaded_video
+-- SET video_duration_seconds = 30.52667
+-- WHERE file_name = 'file_example_MP4_480_1_5MG.mp4';
