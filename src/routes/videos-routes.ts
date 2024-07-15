@@ -3,16 +3,16 @@ import express from "express"
 import getVideoUrl from "../controllers/videos/get-video-url"
 import getVideoByUUID from "../controllers/videos/get-video-by-uuid"
 import getHomePageVideos from "../controllers/videos/get-home-page-videos"
-import likeOrDislikeVideo from "../controllers/videos/like-or-dislike-video"
+import likeVideo from "../controllers/videos/like-video"
 import getVideosByCreatorUsername from "../controllers/videos/get-videos-by-creator-username"
-import removeLikeOrDislikeFromVideo from "../controllers/videos/remove-like-or-dislike-from-video"
+import removeLikeOrDislikeFromVideo from "../controllers/videos/remove-like-from-video"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import validateCreatorUsername from "../middleware/request-validation/videos/validate-creator-username"
 import validateVideoUUIDInBody from "../middleware/request-validation/videos/validate-video-uuid-in-body"
 import optionalJwtVerifyWithUserAttachment from "../middleware/jwt/optional-jwt-verify-with-user-attachment"
 import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
-import validateLikeOrDislikeVideo from "../middleware/request-validation/videos/validate-like-or-dislike-video"
+import validateLikeVideo from "../middleware/request-validation/videos/validate-like-video"
 import confirmUserHasExclusiveAccess from "../middleware/confirmations/videos/confirm-user-has-exclusive-access"
 import attachMinimalExclusiveVideoDataByUUID from "../middleware/attach/exclusive-video-data/attach-minimal-exclusive-video-data-by-uuid"
 
@@ -42,16 +42,16 @@ videosRoutes.get(
 )
 
 videosRoutes.post(
-	"/like-or-dislike-video",
-	validateLikeOrDislikeVideo,
+	"/like-video",
+	validateLikeVideo,
 	jwtVerifyAttachUser,
 	attachMinimalExclusiveVideoDataByUUID,
 	confirmUserHasExclusiveAccess,
-	likeOrDislikeVideo
+	likeVideo
 )
 
 videosRoutes.post(
-	"/remove-like-or-dislike-from-video",
+	"/remove-like-from-video",
 	validateVideoUUIDInBody,
 	jwtVerifyAttachUser,
 	attachMinimalExclusiveVideoDataByUUID,

@@ -1,13 +1,6 @@
-// eslint-disable-next-line max-lines-per-function
 export default function transformCreatorContentList(input: RetrievedCreatorDBVideoData[]): OutputCreatorVideoData[] {
 	try {
 		return input.map(item => {
-			let numberOfLikes = 0
-			let numberOfDislikes = 0
-			item.video_like_status.map(videoLikeStatus => {
-				if (videoLikeStatus.like_status === true) numberOfLikes ++
-				else numberOfDislikes ++
-			})
 			let totalCreatorProfitInSol = 0
 			let totalCreatorProfitInUsd = 0
 			item.exclusive_video_access_purchase.map(exclusiveVideoAccessPurchase => {
@@ -29,8 +22,7 @@ export default function transformCreatorContentList(input: RetrievedCreatorDBVid
 					tierAccessPriceUsd: tier.tier_access_price_usd,
 					isTierSoldOut: tier.is_sold_out
 				})),
-				numberOfLikes,
-				numberOfDislikes,
+				numberOfLikes: item.numberOfLikes,
 				totalCreatorProfitInSol,
 				totalCreatorProfitInUsd,
 				numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar,

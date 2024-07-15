@@ -63,7 +63,6 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 						},
 						video_like_status: {
 							select: {
-								like_status: true,
 								user_id: true
 							},
 							where: {

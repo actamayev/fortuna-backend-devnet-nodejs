@@ -1,6 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function removeLikeStatus(videoId: number, userId: number): Promise<void> {
+export default async function removeLike(videoId: number, userId: number): Promise<void> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 

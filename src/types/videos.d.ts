@@ -59,7 +59,6 @@ declare global {
 				is_sold_out: boolean
 			}[]
 			video_like_status: {
-				like_status: boolean
 				user_id: number
 			}[]
 			numberOfExclusivePurchasesSoFar: number | null
@@ -141,8 +140,7 @@ declare global {
 		tierData: VideoTierData[]
 		numberOfExclusivePurchasesSoFar: number | null
 		numberOfLikes: number
-		numberOfDislikes: number
-		userLikeStatus: boolean | null
+		userLikeStatus: boolean
 		channelName: string
 	}
 

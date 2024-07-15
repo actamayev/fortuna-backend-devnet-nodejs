@@ -65,7 +65,6 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 				},
 				video_like_status: {
 					select: {
-						like_status: true,
 						user_id: true
 					},
 					where: {

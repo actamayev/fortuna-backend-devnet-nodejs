@@ -1,10 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function upsertVideoLikeStatus(
-	videoId: number,
-	userId: number,
-	likeStatus: boolean
-): Promise<void> {
+export default async function upsertVideoLike(videoId: number, userId: number): Promise<void> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
@@ -16,13 +12,11 @@ export default async function upsertVideoLikeStatus(
 				}
 			},
 			update: {
-				like_status: likeStatus,
 				is_active: true
 			},
 			create: {
 				video_id: videoId,
-				user_id: userId,
-				like_status: likeStatus
+				user_id: userId
 			}
 		})
 	} catch (error) {
