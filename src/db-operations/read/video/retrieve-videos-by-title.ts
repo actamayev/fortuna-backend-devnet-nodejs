@@ -29,6 +29,11 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 						image_url: true
 					}
 				},
+				uploaded_video: {
+					select: {
+						video_duration_seconds: true
+					}
+				},
 				video_access_tier: {
 					select: {
 						tier_number: true,

@@ -13,6 +13,9 @@ declare global {
 		uploaded_image: {
 			image_url: string
 		}
+		uploaded_video: {
+			video_duration_seconds: number
+		}
 		video_access_tier: {
 			tier_number: number
 			purchases_allowed_for_this_tier: number | null
@@ -51,6 +54,9 @@ declare global {
 			uploaded_image: {
 				image_url: string
 			}
+			uploaded_video: {
+				video_duration_seconds: number
+			}
 			video_access_tier: {
 				tier_number: number
 				purchases_allowed_for_this_tier: number | null
@@ -75,7 +81,9 @@ declare global {
 			profile_picture: {
 				image_url: string
 			} | null
-			channel_banner: { image_url: string } | null
+			channel_banner: {
+				image_url: string
+			} | null
 			channel_description: {
 				channel_description: string
 			} | null
@@ -112,6 +120,7 @@ declare global {
 		videoName: string
 		imageUrl: string
 		uuid: string
+		videoDurationSeconds: number
 	}
 
 	interface RetrievedMyExclusiveContentData {
@@ -121,6 +130,9 @@ declare global {
 			uploaded_image: {
 				image_url: string
 			}
+			uploaded_video: {
+				video_duration_seconds: number
+			}
 		}
 	}
 
@@ -129,6 +141,7 @@ declare global {
 		videoListingStatus: VideoListingStatus
 		description: string
 		imageUrl: string
+		videoDurationSeconds: number
 		uuid: string
 		creatorUsername: string
 		creatorProfilePictureUrl: string | null
