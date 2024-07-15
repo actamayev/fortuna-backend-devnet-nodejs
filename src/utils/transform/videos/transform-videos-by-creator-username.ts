@@ -16,13 +16,11 @@ export default async function transformVideosByCreatorUsername(
 		const videoData = retrievedVideoData.videos.map(item => {
 			const isUserAbleToAccessVideo = userAllowedToAccessContent[item.video_id]
 			let numberOfLikes = 0
-			let numberOfDislikes = 0
-			let userLikeStatus: null | boolean = null
+			let userLikeStatus: boolean = false
 			item.video_like_status.map(videoLikeStatus => {
-				if (videoLikeStatus.like_status === true) numberOfLikes ++
-				else numberOfDislikes ++
+				numberOfLikes ++
 				if (videoLikeStatus.user_id === optionallyAttachedUser?.user_id) {
-					userLikeStatus = videoLikeStatus.like_status
+					userLikeStatus = true
 				}
 			})
 			return {
@@ -45,7 +43,6 @@ export default async function transformVideosByCreatorUsername(
 					isTierSoldOut: tier.is_sold_out
 				})),
 				numberOfLikes,
-				numberOfDislikes,
 				userLikeStatus,
 				channelName: retrievedVideoData.channel_name
 			}

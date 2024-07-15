@@ -61,7 +61,6 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 				},
 				video_like_status: {
 					select: {
-						like_status: true,
 						user_id: true
 					},
 					where: {

@@ -63,7 +63,6 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 				},
 				video_like_status: {
 					select: {
-						like_status: true,
 						user_id: true
 					},
 					where: {

@@ -7,12 +7,10 @@ export default function transformVideoByUUIDData(
 ): VideoDataSendingToFrontendWithVideoUrl {
 	try {
 		let numberOfLikes = 0
-		let numberOfDislikes = 0
-		let userLikeStatus: null | boolean = null
+		let userLikeStatus: boolean = false
 		videoData.video_like_status.map(videoLikeStatus => {
-			if (videoLikeStatus.like_status === true) numberOfLikes ++
-			else numberOfDislikes ++
-			if (videoLikeStatus.user_id === userId) userLikeStatus = videoLikeStatus.like_status
+			numberOfLikes ++
+			if (videoLikeStatus.user_id === userId) userLikeStatus = true
 		})
 		const videoDataSendingToFrontEnd: VideoDataSendingToFrontendWithVideoUrl = {
 			videoName: videoData.video_name,
@@ -34,7 +32,6 @@ export default function transformVideoByUUIDData(
 				isTierSoldOut: tier.is_sold_out
 			})),
 			numberOfLikes,
-			numberOfDislikes,
 			userLikeStatus,
 			channelName: videoData.video_creator.channel_name?.channel_name || videoData.video_creator.username
 		}
