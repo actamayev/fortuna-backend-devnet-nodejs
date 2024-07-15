@@ -1,16 +1,14 @@
 import express from "express"
 
-import likeVideo from "../controllers/videos/like-video"
 import getVideoUrl from "../controllers/videos/get-video-url"
 import getVideoByUUID from "../controllers/videos/get-video-by-uuid"
 import getHomePageVideos from "../controllers/videos/get-home-page-videos"
-import removeLikeFromVideo from "../controllers/videos/remove-like-from-video"
+import likeOrUnlikeVideo from "../controllers/videos/like-or-unlike-video"
 import getVideosByCreatorUsername from "../controllers/videos/get-videos-by-creator-username"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
-import validateLikeVideo from "../middleware/request-validation/videos/validate-like-video"
 import validateCreatorUsername from "../middleware/request-validation/videos/validate-creator-username"
-import validateVideoUUIDInBody from "../middleware/request-validation/videos/validate-video-uuid-in-body"
+import validateLikeOrUnlike from "../middleware/request-validation/videos/validate-like-or-unlike"
 import optionalJwtVerifyWithUserAttachment from "../middleware/jwt/optional-jwt-verify-with-user-attachment"
 import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
 import confirmUserHasExclusiveAccess from "../middleware/confirmations/videos/confirm-user-has-exclusive-access"
@@ -42,21 +40,12 @@ videosRoutes.get(
 )
 
 videosRoutes.post(
-	"/like-video",
-	validateLikeVideo,
+	"/like-or-unlike-video",
+	validateLikeOrUnlike,
 	jwtVerifyAttachUser,
 	attachMinimalExclusiveVideoDataByUUID,
 	confirmUserHasExclusiveAccess,
-	likeVideo
-)
-
-videosRoutes.post(
-	"/remove-like-from-video",
-	validateVideoUUIDInBody,
-	jwtVerifyAttachUser,
-	attachMinimalExclusiveVideoDataByUUID,
-	confirmUserHasExclusiveAccess,
-	removeLikeFromVideo
+	likeOrUnlikeVideo
 )
 
 export default videosRoutes
