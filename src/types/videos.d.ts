@@ -91,6 +91,9 @@ declare global {
 				social_platform: SocialPlatforms
 				social_link: string
 			}[]
+			_count: {
+				video: number
+			}
 		}
 	}
 
@@ -164,6 +167,7 @@ declare global {
 		creatorUsername: string
 		channelName: string
 		channelDescription: string
+		numberOfVideos: number
 		socialPlatformLinks: {
 			socialPlatform: SocialPlatforms
 			socialLink: string

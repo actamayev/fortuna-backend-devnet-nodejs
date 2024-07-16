@@ -46,6 +46,17 @@ export default async function retrieveCreatorsByChannelName(channelName: string)
 							where: {
 								is_active: true
 							}
+						},
+						_count: {
+							select: {
+								video: {
+									where: {
+										video_listing_status: {
+											not: "UNLISTED"
+										}
+									}
+								}
+							}
 						}
 					}
 				}
