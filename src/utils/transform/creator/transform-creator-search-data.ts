@@ -9,7 +9,8 @@ export default function transformCreatorSearchData(input: RetrievedCreatorsByUse
 				socialLink: singleData.social_link
 			})),
 			creatorProfilePictureUrl: item.user.profile_picture?.image_url || null,
-			channelBannerPictureUrl: item.user.channel_banner?.image_url || null
+			channelBannerPictureUrl: item.user.channel_banner?.image_url || null,
+			numberOfVideos: item.user._count.video
 		}))
 	} catch (error) {
 		console.error(error)
