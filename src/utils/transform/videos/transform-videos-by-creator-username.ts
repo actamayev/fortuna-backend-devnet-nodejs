@@ -59,7 +59,8 @@ export default async function transformVideosByCreatorUsername(
 				socialLink: singleData.social_link
 			})) || [],
 			creatorProfilePictureUrl: retrievedVideoData.profile_picture_image_url,
-			channelBannerPictureUrl: retrievedVideoData.channel_banner_image_url
+			channelBannerPictureUrl: retrievedVideoData.channel_banner_image_url,
+			numberOfVideos: retrievedVideoData.videos.length
 		}
 
 		return { videoData, creatorData }
