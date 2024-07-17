@@ -27,6 +27,7 @@ export default async function transformVideosByCreatorUsername(
 				videoName: item.video_name,
 				videoListingStatus: item.video_listing_status,
 				description: item.description,
+				isVideoFeatured: item.is_video_featured,
 				imageUrl: item.uploaded_image.image_url,
 				videoDurationSeconds: item.uploaded_video.video_duration_seconds,
 				uuid: item.uuid,

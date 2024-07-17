@@ -16,7 +16,7 @@ export default async function retrieveVideoIdByUUIDAndUserId(
 				}
 			},
 			select: {
-				video_id: true,
+				video_id: true
 			}
 		})
 	} catch (error) {
