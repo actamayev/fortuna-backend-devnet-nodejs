@@ -1,6 +1,6 @@
 -- select * from credentials;
 -- select * from login_history;
--- select * from solana_wallet;
+select * from solana_wallet;
 -- select * from video;
 -- select * from exclusive_video_access_purchase;
 -- select * from video_access_tier;
@@ -17,7 +17,7 @@
 
 -- select * from video;
 -- select * from uploaded_image;
-select * from uploaded_video;
+-- select * from uploaded_video;
 -- select * from sol_transfer;
 -- select * from youtube_access_tokens;
 -- SELECT * FROM "_prisma_migrations" ORDER BY "finished_at" ASC;

@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import retrieveVideosByTitle from "../../db-operations/read/video/retrieve-videos-by-title"
 import transformCreatorSearchData from "../../utils/transform/creator/transform-creator-search-data"
 import transformHomePageVideoData from "../../utils/transform/videos/transform-home-page-video-data"
-import retrieveCreatorsByChannelName from "../../db-operations/read/credentials/retrieve-creators-by-channel-name"
+import retrieveCreatorsByChannelName from "../../db-operations/read/channel-name/retrieve-creators-by-channel-name"
 
 export default async function generalSearch(req: Request, res: Response): Promise<Response> {
 	try {

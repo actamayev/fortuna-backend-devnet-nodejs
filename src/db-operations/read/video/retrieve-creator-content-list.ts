@@ -7,7 +7,10 @@ export default async function retrieveCreatorContentList(userId: number): Promis
 
 		const creatorVideoData = await prismaClient.video.findMany({
 			where: {
-				creator_user_id: userId
+				creator_user_id: userId,
+				video_creator: {
+					is_active: true
+				}
 			},
 			orderBy: {
 				created_at: "desc"

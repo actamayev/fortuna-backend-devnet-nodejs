@@ -11,6 +11,9 @@ export default async function retrieveVideoDataForExclusiveContentCheckByUUID(
 				uuid: videoUUID,
 				video_listing_status: {
 					not: "UNLISTED"
+				},
+				video_creator: {
+					is_active: true
 				}
 			},
 			select: {

@@ -7,7 +7,8 @@ export default async function retrieveCreatorDetails(userId: number): Promise<Cr
 
 		return await prismaClient.credentials.findUnique({
 			where: {
-				user_id: userId
+				user_id: userId,
+				is_active: true
 			},
 			select: {
 				channel_name: {

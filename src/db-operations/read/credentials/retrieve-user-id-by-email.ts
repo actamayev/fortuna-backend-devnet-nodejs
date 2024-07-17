@@ -1,7 +1,7 @@
 import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function retrieveUserIdByEmail(encryptedEmail: DeterministicEncryptedString): Promise<number | null> {
+export default async function retrieveUserIdByEmail(encryptedEmail: DeterministicEncryptedString): Promise<number | null | undefined> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
@@ -12,11 +12,14 @@ export default async function retrieveUserIdByEmail(encryptedEmail: Deterministi
 				}
 			},
 			select: {
-				user_id: true
+				user_id: true,
+				is_active: true
 			}
 		})
 
 		if (_.isNull(user)) return null
+
+		if (user.is_active === false) return undefined
 
 		return user.user_id
 	} catch (error) {

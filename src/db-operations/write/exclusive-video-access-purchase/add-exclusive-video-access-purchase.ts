@@ -1,3 +1,4 @@
+import { exclusive_video_access_purchase } from "@prisma/client"
 import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function addExclusiveVideoAccessPurchase(
@@ -6,11 +7,11 @@ export default async function addExclusiveVideoAccessPurchase(
 	tierNumber: number,
 	exclusiveVideoAccessPurchaseSolTransferId: number,
 	exclusiveVideoAccessPurchaseFortunaTakeId: number
-): Promise<void> {
+): Promise<exclusive_video_access_purchase> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		await prismaClient.exclusive_video_access_purchase.create({
+		return await prismaClient.exclusive_video_access_purchase.create({
 			data: {
 				video_id: videoId,
 				user_id: userId,

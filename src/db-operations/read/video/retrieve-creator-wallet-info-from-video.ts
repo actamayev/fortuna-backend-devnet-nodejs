@@ -8,7 +8,10 @@ export default async function retrieveCreatorWalletInfoFromVideo(videoId: number
 
 		const creatorWalletData = await prismaClient.video.findUnique({
 			where: {
-				video_id: videoId
+				video_id: videoId,
+				video_creator: {
+					is_active: true
+				}
 			},
 			select: {
 				video_creator: {

@@ -8,7 +8,8 @@ export default async function retrieveYouTubeAccessTokens(userId: number): Promi
 
 		const accessTokenData = await prismaClient.credentials.findUnique({
 			where: {
-				user_id: userId
+				user_id: userId,
+				is_active: true
 			},
 			select: {
 				youtube_access_tokens: {

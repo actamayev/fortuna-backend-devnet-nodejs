@@ -30,7 +30,7 @@ export function transformTransaction(
 			transferToUsername: transaction.recipient_username,
 			transferToPublicKey: transaction.recipient_public_key,
 			transferFromUsername: transaction.sender_username,
-			outgoingOrIncoming: transaction.recipient_public_key === solanaWalletPublicKey ? "incoming" : "outgoing"
+			depositOrWithdrawal: transaction.recipient_public_key === solanaWalletPublicKey ? "deposit" : "withdrawal"
 		}
 	} catch (error) {
 		console.error(error)

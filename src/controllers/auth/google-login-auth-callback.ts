@@ -12,6 +12,7 @@ import retrieveUserByEmail from "../../db-operations/read/credentials/retrieve-u
 import addLoginHistoryRecord from "../../db-operations/write/login-history/add-login-history-record"
 import addGoogleUserWithWallet from "../../db-operations/write/simultaneous-writes/add-google-user-with-wallet"
 
+// eslint-disable-next-line max-lines-per-function
 export default async function googleLoginAuthCallback (req: Request, res: Response): Promise<Response> {
 	try {
 		const { idToken, siteTheme } = req.body
@@ -32,7 +33,9 @@ export default async function googleLoginAuthCallback (req: Request, res: Respon
 		let isNewUser = false
 		let publicKey
 
-		if (!_.isNull(userId)) {
+		if (_.isUndefined(userId)) {
+			return res.status(500).json({ error: "Unable to login with this email. Account inactive." })
+		} else if (!_.isNull(userId)) {
 			accessToken = await signJWT({ userId, newUser: false })
 			const solanaWallet = await findSolanaWalletByUserId(userId)
 			if (_.isNull(solanaWallet)) return res.status(400).json({ message: "Unable to find user's Solana wallet" })
