@@ -3,7 +3,7 @@ import transformTransactionsList from "../../utils/transform/transform-transacti
 import retrieveOutgoingTransactionsList from "../../db-operations/read/sol-transfer/retrieve-outgoing-transactions-list"
 import retrieveIncomingTransactionsList from "../../db-operations/read/sol-transfer/retrieve-incoming-transactions-list"
 
-export default async function getTransactions(req: Request, res: Response): Promise<Response> {
+export default async function getSolanaTransactions(req: Request, res: Response): Promise<Response> {
 	try {
 		const { solanaWallet } = req
 
