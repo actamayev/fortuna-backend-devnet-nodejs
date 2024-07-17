@@ -11,6 +11,9 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 				uuid: videoUUID,
 				video_listing_status: {
 					not: "UNLISTED"
+				},
+				video_creator: {
+					is_active: true
 				}
 			},
 			select: {

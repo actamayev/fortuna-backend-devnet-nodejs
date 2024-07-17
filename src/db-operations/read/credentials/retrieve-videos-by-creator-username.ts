@@ -8,7 +8,8 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 
 		const retrievedVideos = await prismaClient.credentials.findUnique({
 			where: {
-				username: creatorUsername
+				username: creatorUsername,
+				is_active: true
 			},
 			select: {
 				username: true,

@@ -8,7 +8,8 @@ export async function findUserById(userId: number): Promise<ExtendedCredentials 
 
 		const user = await prismaClient.credentials.findUnique({
 			where: {
-				user_id: userId
+				user_id: userId,
+				is_active: true
 			}
 		})
 
@@ -30,7 +31,7 @@ export async function findUserByWhereCondition(
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		const user = await prismaClient.credentials.findFirst({
-			where: whereCondition
+			where: { ...whereCondition, is_active: true }
 		})
 
 		if (_.isNull(user) || validateExtendedCredentials(user) === false) return null

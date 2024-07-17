@@ -13,6 +13,9 @@ export default async function retrieveNonExclusiveVideoByUUID(
 				creator_user_id: userId,
 				is_video_exclusive: {
 					not: true
+				},
+				video_creator: {
+					is_active: true
 				}
 			},
 			select: {

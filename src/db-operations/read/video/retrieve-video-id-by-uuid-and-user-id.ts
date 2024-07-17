@@ -10,7 +10,10 @@ export default async function retrieveVideoIdByUUIDAndUserId(
 		return await prismaClient.video.findFirst({
 			where: {
 				uuid: videoUUID,
-				creator_user_id: userId
+				creator_user_id: userId,
+				video_creator: {
+					is_active: true
+				}
 			},
 			select: {
 				video_id: true,

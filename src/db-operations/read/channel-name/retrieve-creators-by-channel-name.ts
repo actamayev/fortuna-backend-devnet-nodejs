@@ -10,6 +10,9 @@ export default async function retrieveCreatorsByChannelName(channelName: string)
 				channel_name: {
 					contains: channelName,
 					mode: "insensitive"
+				},
+				user: {
+					is_active: true
 				}
 			},
 			select: {

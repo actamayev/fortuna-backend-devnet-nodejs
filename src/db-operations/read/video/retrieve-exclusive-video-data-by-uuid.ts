@@ -17,6 +17,9 @@ export default async function retrieveExclusiveVideoDataByUUID(
 					some: {
 						tier_number: tierNumber
 					}
+				},
+				video_creator: {
+					is_active: true
 				}
 			},
 			select: {
