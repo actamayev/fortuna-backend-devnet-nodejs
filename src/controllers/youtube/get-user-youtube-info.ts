@@ -1,7 +1,7 @@
 import { Response, Request } from "express"
 import retrieveYouTubeSubscriberCount from "../../utils/google/retrieve-youtube-subscriber-count"
 
-export default async function retrieveUserYouTubeInfo (req: Request, res: Response): Promise<Response> {
+export default async function getUserYouTubeInfo (req: Request, res: Response): Promise<Response> {
 	try {
 		const { youtubeAccessToken } = req
 		const subscriberCount = await retrieveYouTubeSubscriberCount(youtubeAccessToken)

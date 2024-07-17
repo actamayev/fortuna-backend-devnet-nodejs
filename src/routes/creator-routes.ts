@@ -2,8 +2,8 @@ import express from "express"
 
 import createVideo from "../controllers/creator/create-video"
 import editVideoName from "../controllers/creator/edit-video-name"
+import getCreatorInfo from "../controllers/creator/get-creator-info"
 import editChannelName from "../controllers/creator/edit-channel-name"
-import retrieveCreatorInfo from "../controllers/creator/retrieve-creator-info"
 import editVideoDescription from "../controllers/creator/edit-video-description"
 import getCreatorContentList from "../controllers/creator/get-creator-content-list"
 import updateVideoListingStatus from "../controllers/creator/update-video-listing-status"
@@ -49,7 +49,7 @@ creatorRoutes.post(
 	addOrEditChannelDescription
 )
 
-creatorRoutes.get("/retrieve-creator-info", jwtVerifyAttachUser, retrieveCreatorInfo)
+creatorRoutes.get("/get-creator-info", jwtVerifyAttachUser, getCreatorInfo)
 
 creatorRoutes.post(
 	"/add-or-edit-social-platform-link",

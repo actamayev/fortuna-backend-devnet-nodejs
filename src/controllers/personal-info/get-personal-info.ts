@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import Encryptor from "../../classes/encryptor"
 
-export default async function retrievePersonalInfo(req: Request, res: Response): Promise<Response> {
+export default async function getPersonalInfo(req: Request, res: Response): Promise<Response> {
 	try {
 		const { user, solanaWallet } = req
 

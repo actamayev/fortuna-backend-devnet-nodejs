@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-non-literal-fs-filename */
 import path from "path"
 import crypto from "crypto"
 import ffmpeg from "fluent-ffmpeg"
@@ -20,7 +21,7 @@ export default async function getVideoDuration(buffer: Buffer): Promise<number> 
 		const duration = await new Promise<number>((resolve, reject) => {
 			ffmpeg.ffprobe(tempFilePath, (err, metadata) => {
 				if (err) return reject(err)
-				if (!metadata?.format?.duration) return reject(new Error("Duration not found"))
+				if (!metadata.format.duration) return reject(new Error("Duration not found"))
 				resolve(metadata.format.duration) // duration in seconds
 			})
 		})
