@@ -124,9 +124,13 @@ declare global {
 		imageUrl: string
 		uuid: string
 		videoDurationSeconds: number
+		purchaseDate: Date
+		priceInSol: number
+		priceInUsd: number
 	}
 
 	interface RetrievedMyExclusiveContentData {
+		created_at: Date
 		video: {
 			video_name: string
 			uuid: string
@@ -136,6 +140,14 @@ declare global {
 			uploaded_video: {
 				video_duration_seconds: number
 			}
+		}
+		exclusive_video_access_purchase_sol_transfer: {
+			sol_amount_transferred: number
+			usd_amount_transferred: number
+		}
+		exclusive_video_access_purchase_fortuna_take: {
+			sol_amount_transferred: number
+			usd_amount_transferred: number
 		}
 	}
 

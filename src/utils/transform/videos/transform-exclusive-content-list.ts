@@ -4,7 +4,14 @@ export default function transformExclusiveContentList(myExclusiveContentList: Re
 			videoName: exclusiveContent.video.video_name,
 			imageUrl: exclusiveContent.video.uploaded_image.image_url,
 			uuid: exclusiveContent.video.uuid,
-			videoDurationSeconds: exclusiveContent.video.uploaded_video.video_duration_seconds
+			videoDurationSeconds: exclusiveContent.video.uploaded_video.video_duration_seconds,
+			purchaseDate: exclusiveContent.created_at,
+			priceInSol:
+				exclusiveContent.exclusive_video_access_purchase_fortuna_take.sol_amount_transferred +
+				exclusiveContent.exclusive_video_access_purchase_sol_transfer.sol_amount_transferred,
+			priceInUsd:
+				exclusiveContent.exclusive_video_access_purchase_fortuna_take.usd_amount_transferred +
+				exclusiveContent.exclusive_video_access_purchase_sol_transfer.usd_amount_transferred
 		}))
 	} catch (error) {
 		console.error(error)
