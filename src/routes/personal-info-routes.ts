@@ -1,8 +1,8 @@
 import express from "express"
 
+import getPersonalInfo from "../controllers/personal-info/get-personal-info"
 import setDefaultCurrency from "../controllers/personal-info/set-default-currency"
 import setDefaultSiteTheme from "../controllers/personal-info/set-default-site-theme"
-import retrievePersonalInfo from "../controllers/personal-info/retrieve-personal-info"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
@@ -12,10 +12,10 @@ import validateSetDefaultSiteTheme from "../middleware/request-validation/person
 const personalInfoRoutes = express.Router()
 
 personalInfoRoutes.get(
-	"/retrieve-personal-info",
+	"/get-personal-info",
 	jwtVerifyAttachUser,
 	attachSolanaWalletByUserId,
-	retrievePersonalInfo
+	getPersonalInfo
 )
 
 personalInfoRoutes.post(

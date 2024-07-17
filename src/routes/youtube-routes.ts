@@ -1,6 +1,6 @@
 import express from "express"
 
-import retrieveUserYouTubeInfo from "../controllers/youtube/retrieve-user-youtube-info"
+import getUserYouTubeInfo from "../controllers/youtube/get-user-youtube-info"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import attachYouTubeAccessToken from "../middleware/attach/attach-youtube-access-token"
@@ -10,10 +10,10 @@ import attachYouTubeAccessToken from "../middleware/attach/attach-youtube-access
 const youtubeRoutes = express.Router()
 
 youtubeRoutes.get(
-	"/retrieve-user-youtube-info",
+	"/get-user-youtube-info",
 	jwtVerifyAttachUser,
 	attachYouTubeAccessToken,
-	retrieveUserYouTubeInfo
+	getUserYouTubeInfo
 )
 
 export default youtubeRoutes

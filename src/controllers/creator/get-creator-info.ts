@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import transformCreatorInfo from "../../utils/transform/transform-creator-info"
 import retrieveCreatorDetails from "../../db-operations/read/credentials/retrieve-creator-details"
 
-export default async function retrieveCreatorInfo(req: Request, res: Response): Promise<Response> {
+export default async function getCreatorInfo(req: Request, res: Response): Promise<Response> {
 	try {
 		const { user } = req
 		const creatorDetails = await retrieveCreatorDetails(user.user_id)
