@@ -13,6 +13,9 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 				},
 				video_listing_status: {
 					not: "UNLISTED"
+				},
+				video_creator: {
+					is_active: true
 				}
 			},
 			select: {

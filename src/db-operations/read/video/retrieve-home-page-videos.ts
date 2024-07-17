@@ -9,6 +9,9 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 			where: {
 				video_listing_status: {
 					not: "UNLISTED"
+				},
+				video_creator: {
+					is_active: true
 				}
 			},
 			select: {

@@ -40,7 +40,7 @@ declare global {
 		solAmountTransferred: number
 		usdAmountTransferred: number
 		transferByCurrency: Currencies
-		outgoingOrIncoming: "outgoing" | "incoming"
+		depositOrWithdrawl: "deposit" | "withdrawl"
 
 		transferDateTime: Date
 		transferToUsername?: string

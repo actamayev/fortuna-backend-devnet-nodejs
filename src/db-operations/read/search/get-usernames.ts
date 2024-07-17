@@ -16,7 +16,8 @@ export default async function getUsernames(
 					not: excludeUsername ? {
 						equals: excludeUsername
 					} : undefined
-				}
+				},
+				is_active: true
 			},
 			select: {
 				username: true
