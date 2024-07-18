@@ -11,7 +11,7 @@ export default async function transformHomePageVideoData(
 			optionallyAttachedUser?.user_id
 		)
 
-		const results = retrievedHomePageVideos.map(item => {
+		return retrievedHomePageVideos.map(item => {
 			const isUserAbleToAccessVideo = userAllowedToAccessContent[item.video_id]
 			let numberOfLikes = 0
 			let userLikeStatus: boolean = false
@@ -47,8 +47,6 @@ export default async function transformHomePageVideoData(
 				channelName: item.video_creator.channel_name?.channel_name || item.video_creator.username
 			}
 		})
-
-		return results
 	} catch (error) {
 		console.error(error)
 		throw error
