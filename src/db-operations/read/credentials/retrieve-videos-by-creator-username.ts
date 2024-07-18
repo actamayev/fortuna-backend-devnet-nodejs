@@ -45,6 +45,7 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 						video_name: true,
 						video_listing_status: true,
 						description: true,
+						is_video_featured: true,
 						creator_user_id: true,
 						is_video_exclusive: true,
 						uuid: true,

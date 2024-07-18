@@ -21,6 +21,7 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 				video_name: true,
 				video_listing_status: true,
 				description: true,
+				is_video_featured: true,
 				creator_user_id: true,
 				is_video_exclusive: true,
 				uuid: true,

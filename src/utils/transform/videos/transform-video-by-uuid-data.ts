@@ -16,6 +16,7 @@ export default function transformVideoByUUIDData(
 			videoName: videoData.video_name,
 			videoListingStatus: videoData.video_listing_status,
 			description: videoData.description,
+			isVideoFeatured: videoData.is_video_featured,
 			imageUrl: videoData.uploaded_image.image_url,
 			videoDurationSeconds: videoData.uploaded_video.video_duration_seconds,
 			uuid: videoData.uuid,
