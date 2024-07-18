@@ -26,6 +26,24 @@ export default async function retrieveExclusiveAccessByUserId(
 							select: {
 								video_duration_seconds: true
 							}
+						},
+						video_creator: {
+							select: {
+								username: true,
+								profile_picture: {
+									select: {
+										image_url: true
+									},
+									where: {
+										is_active: true
+									}
+								},
+								channel_name: {
+									select: {
+										channel_name: true
+									}
+								}
+							}
 						}
 					}
 				},

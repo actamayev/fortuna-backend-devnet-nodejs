@@ -121,28 +121,6 @@ declare global {
 		total_number_video_tiers: number
 	}
 
-	interface RetrievedMyExclusiveContentData {
-		created_at: Date
-		video: {
-			video_name: string
-			uuid: string
-			uploaded_image: {
-				image_url: string
-			}
-			uploaded_video: {
-				video_duration_seconds: number
-			}
-		}
-		exclusive_video_access_purchase_sol_transfer: {
-			sol_amount_transferred: number
-			usd_amount_transferred: number
-		}
-		exclusive_video_access_purchase_fortuna_take: {
-			sol_amount_transferred: number
-			usd_amount_transferred: number
-		}
-	}
-
 	interface VideoDataSendingToFrontendLessVideoUrl {
 		videoName: string
 		videoListingStatus: VideoListingStatus
