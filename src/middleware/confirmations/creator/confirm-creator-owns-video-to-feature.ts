@@ -13,8 +13,8 @@ export default async function confirmCreatorOwnsVideoToFeature(
 
 		const creatorOwnsFeaturedAndUnfeaturedVideos = await checkIfCreatorOwnsFeaturedAndUnfeaturedVideos(
 			videoIdToFeature,
-			videoIdToUnfeature,
-			user.user_id
+			user.user_id,
+			videoIdToUnfeature
 		)
 
 		if (creatorOwnsFeaturedAndUnfeaturedVideos === false) {
@@ -26,7 +26,7 @@ export default async function confirmCreatorOwnsVideoToFeature(
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({
-			error: "Internal Server Error: Unable to confirm that creator isn't purchasing instant access to own content"
+			error: "Internal Server Error: Unable to confirm that creator owns the video they want to feature"
 		})
 	}
 }

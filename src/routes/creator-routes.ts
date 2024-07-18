@@ -3,6 +3,7 @@ import express from "express"
 import createVideo from "../controllers/creator/create-video"
 import featureVideo from "../controllers/creator/feature-video"
 import editVideoName from "../controllers/creator/edit-video-name"
+import unfeatureVideo from "../controllers/creator/unfeature-video"
 import getCreatorInfo from "../controllers/creator/get-creator-info"
 import editChannelName from "../controllers/creator/edit-channel-name"
 import editVideoDescription from "../controllers/creator/edit-video-description"
@@ -19,11 +20,13 @@ import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
 import validateCreateVideo from "../middleware/request-validation/creator/validate-create-video"
 import validateFeatureVideo from "../middleware/request-validation/creator/validate-feature-video"
 import validateEditVideoName from "../middleware/request-validation/creator/validate-edit-video-name"
+import validateUnfeatureVideo from "../middleware/request-validation/creator/validate-unfeature-video"
 import attachNonExclusiveVideoDataByUUID from "../middleware/attach/attach-non-exclusive-video-by-uuid"
 import validateEditChannelName from "../middleware/request-validation/creator/validate-edit-channel-name"
 import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
 import validateEditVideoDescription from "../middleware/request-validation/creator/validate-edit-video-description"
 import confirmCreatorOwnsVideoToFeature from "../middleware/confirmations/creator/confirm-creator-owns-video-to-feature"
+import confirmCreatorOwnsVideoToUnfeature from "../middleware/confirmations/creator/confirm-creator-owns-video-to-unfeature"
 import validateAddOrEditChannelDescription from "../middleware/request-validation/creator/validate-add-or-edit-channel-description"
 import validateAddOrEditSocialPlatformLink from "../middleware/request-validation/creator/validate-add-or-edit-social-platform-link"
 
@@ -97,6 +100,14 @@ creatorRoutes.post(
 	jwtVerifyAttachUser,
 	confirmCreatorOwnsVideoToFeature,
 	featureVideo
+)
+
+creatorRoutes.post(
+	"/unfeature-video",
+	validateUnfeatureVideo,
+	jwtVerifyAttachUser,
+	confirmCreatorOwnsVideoToUnfeature,
+	unfeatureVideo
 )
 
 export default creatorRoutes

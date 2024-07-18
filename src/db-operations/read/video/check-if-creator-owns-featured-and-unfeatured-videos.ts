@@ -3,8 +3,8 @@ import PrismaClientClass from "../../../classes/prisma-client"
 // eslint-disable-next-line complexity
 export default async function checkIfCreatorOwnsFeaturedAndUnfeaturedVideos(
 	videoIdToFeature: number,
-	videoIdToUnfeature: number | undefined,
-	creatorId: number
+	creatorId: number,
+	videoIdToUnfeature?: number
 ): Promise<boolean> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
