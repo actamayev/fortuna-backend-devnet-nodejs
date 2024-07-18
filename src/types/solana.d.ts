@@ -8,20 +8,6 @@ declare global {
 		transferCurrency: Currencies
 	}
 
-	interface RetrievedDBTransactionListData {
-		sol_transfer_id: number
-		recipient_public_key?: string
-		is_recipient_fortuna_wallet: boolean
-
-		sol_amount_transferred: number
-		usd_amount_transferred: number
-		transfer_by_currency: Currencies
-
-		created_at: Date
-		recipient_username?: string
-		sender_username: string
-	}
-
 	interface AddSolTransferToDB {
 		sol_transfer_id: number
 		recipient_public_key: string

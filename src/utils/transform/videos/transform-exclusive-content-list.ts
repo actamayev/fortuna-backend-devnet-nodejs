@@ -11,7 +11,11 @@ export default function transformExclusiveContentList(myExclusiveContentList: Re
 				exclusiveContent.exclusive_video_access_purchase_sol_transfer.sol_amount_transferred,
 			priceInUsd:
 				exclusiveContent.exclusive_video_access_purchase_fortuna_take.usd_amount_transferred +
-				exclusiveContent.exclusive_video_access_purchase_sol_transfer.usd_amount_transferred
+				exclusiveContent.exclusive_video_access_purchase_sol_transfer.usd_amount_transferred,
+			channelName: exclusiveContent.video.video_creator.channel_name?.channel_name ||
+				exclusiveContent.video.video_creator.username || "",
+			creatorProfilePictureUrl: exclusiveContent.video.video_creator.profile_picture?.image_url || null,
+			creatorUsername: exclusiveContent.video.video_creator.username || ""
 		}))
 	} catch (error) {
 		console.error(error)
