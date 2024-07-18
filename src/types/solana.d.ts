@@ -35,19 +35,6 @@ declare global {
 		username?: string
 	}
 
-	interface OutputTransactionData {
-		solTransferId: number
-		solAmountTransferred: number
-		usdAmountTransferred: number
-		transferByCurrency: Currencies
-		depositOrWithdrawal: "deposit" | "withdrawal"
-
-		transferDateTime: Date
-		transferToUsername?: string
-		transferToPublicKey?: string
-		transferFromUsername: string
-	}
-
 	interface TransferDetailsLessDefaultCurrency {
 		solToTransfer: number
 		usdToTransfer: number

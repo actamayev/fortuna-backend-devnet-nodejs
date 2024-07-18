@@ -121,16 +121,6 @@ declare global {
 		total_number_video_tiers: number
 	}
 
-	interface MyExclusiveContentData {
-		videoName: string
-		imageUrl: string
-		uuid: string
-		videoDurationSeconds: number
-		purchaseDate: Date
-		priceInSol: number
-		priceInUsd: number
-	}
-
 	interface RetrievedMyExclusiveContentData {
 		created_at: Date
 		video: {
