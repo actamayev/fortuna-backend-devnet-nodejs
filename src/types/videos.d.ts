@@ -132,6 +132,15 @@ declare global {
 			uploaded_video: {
 				video_duration_seconds: number
 			}
+			video_creator: {
+				username: string | null
+				profile_picture: {
+					image_url: string
+				} | null
+				channel_name: {
+					channel_name: string
+				} | null
+			}
 		}
 		exclusive_video_access_purchase_sol_transfer: {
 			sol_amount_transferred: number
