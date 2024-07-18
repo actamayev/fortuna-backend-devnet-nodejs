@@ -1,3 +1,4 @@
+import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function updateVideoFeatureStatuses(
@@ -18,7 +19,7 @@ export default async function updateVideoFeatureStatuses(
 			})
 		]
 
-		if (videoIdToUnfeature !== undefined) {
+		if (!_.isUndefined(videoIdToUnfeature)) {
 			updateOperations.push(
 				prismaClient.video.update({
 					where: {
