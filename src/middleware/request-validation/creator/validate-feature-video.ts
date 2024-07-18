@@ -1,0 +1,24 @@
+import Joi from "joi"
+import _ from "lodash"
+import { Request, Response, NextFunction } from "express"
+
+const featureVideoSchema = Joi.object({
+	videoIdToFeature: Joi.number().integer().required(),
+	videoIdToUnfeature: Joi.alternatives().try(
+		Joi.number().integer(),
+		Joi.allow(null)
+	).optional()
+}).required()
+
+export default function validateFeatureVideo (req: Request, res: Response, next: NextFunction): Response | void {
+	try {
+		const { error } = featureVideoSchema.validate(req.body)
+
+		if (!_.isUndefined(error)) return res.status(400).json({ validationError: error.details[0].message })
+
+		next()
+	} catch (error) {
+		console.error(error)
+		return res.status(500).json({ error: "Internal Server Error: Unable to Validate feature video" })
+	}
+}

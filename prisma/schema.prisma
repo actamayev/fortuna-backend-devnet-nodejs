@@ -114,6 +114,8 @@ model video {
 
 	video_listing_status                                        VideoListingStatus
 	description                                                 String
+	is_video_featured											Boolean @default(false)
+
 	is_active                                                   Boolean  @default(true)
 
 	created_at                                                  DateTime  @default(now())

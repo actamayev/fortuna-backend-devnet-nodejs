@@ -29,6 +29,7 @@ declare global {
 		video_listing_status: VideoListingStatus
 		uuid: string
 		created_at: Date
+		is_video_featured: boolean
 		uploaded_image: {
 			image_url: string
 		}
@@ -56,6 +57,7 @@ declare global {
 		videoName: string
 		videoListingStatus: VideoListingStatus
 		description: string
+		isVideoFeatured: boolean
 		imageUrl: string
 		videoDurationSeconds: number
 		uuid: string

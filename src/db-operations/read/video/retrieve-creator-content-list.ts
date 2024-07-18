@@ -23,6 +23,7 @@ export default async function retrieveCreatorContentList(userId: number): Promis
 				uuid: true,
 				is_video_exclusive: true,
 				created_at: true,
+				is_video_featured: true,
 				uploaded_image: {
 					select: {
 						image_url: true

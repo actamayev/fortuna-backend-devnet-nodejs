@@ -5,6 +5,7 @@ declare global {
 		video_id: number
 		video_name: string
 		description: string
+		is_video_featured: boolean
 		creator_user_id: number
 		is_video_exclusive: boolean
 		uuid: string
@@ -46,6 +47,7 @@ declare global {
 			video_id: number
 			video_name: string
 			video_listing_status: VideoListingStatus
+			is_video_featured: boolean
 			description: string
 			creator_user_id: number
 			is_video_exclusive: boolean
@@ -119,16 +121,6 @@ declare global {
 		total_number_video_tiers: number
 	}
 
-	interface MyExclusiveContentData {
-		videoName: string
-		imageUrl: string
-		uuid: string
-		videoDurationSeconds: number
-		purchaseDate: Date
-		priceInSol: number
-		priceInUsd: number
-	}
-
 	interface RetrievedMyExclusiveContentData {
 		created_at: Date
 		video: {
@@ -155,6 +147,7 @@ declare global {
 		videoName: string
 		videoListingStatus: VideoListingStatus
 		description: string
+		isVideoFeatured: boolean
 		imageUrl: string
 		videoDurationSeconds: number
 		uuid: string
