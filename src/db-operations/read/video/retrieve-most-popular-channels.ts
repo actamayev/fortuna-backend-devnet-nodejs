@@ -1,5 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
+// FUTURE TODO: Create a class to keep track of the most popular channels. This function will be super inefficient at scale.
 // eslint-disable-next-line max-lines-per-function
 export default async function retrieveMostPopularChannels(): Promise<number[]> {
 	try {
