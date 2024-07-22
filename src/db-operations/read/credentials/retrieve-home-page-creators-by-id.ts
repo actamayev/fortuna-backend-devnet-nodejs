@@ -11,6 +11,7 @@ export default async function retrieveHomePageCreatorsById(userIds: number[]): P
 				is_active: true
 			},
 			select: {
+				user_id: true,
 				username: true,
 				profile_picture: {
 					select: {
@@ -62,13 +63,11 @@ export default async function retrieveHomePageCreatorsById(userIds: number[]): P
 			take: 4
 		})
 
-		// TODO: Confirm that the order of the creators is by the most-liked creators
+		const orderedCreatorData = userIds.map(userId => {
+			return creatorData.find(user => user.user_id === userId)
+		}).filter(user => user !== undefined) as RetrievedHomePageCreators[]
 
-		const filteredCreatorData: RetrievedHomePageCreators[] = creatorData.filter(user =>
-			user.username !== null
-		) as RetrievedHomePageCreators[]
-
-		return filteredCreatorData
+		return orderedCreatorData
 	} catch (error) {
 		console.error(error)
 		throw error
