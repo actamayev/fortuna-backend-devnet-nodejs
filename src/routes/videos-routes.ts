@@ -2,7 +2,7 @@ import express from "express"
 
 import getVideoUrl from "../controllers/videos/get-video-url"
 import getVideoByUUID from "../controllers/videos/get-video-by-uuid"
-import getHomePageVideos from "../controllers/videos/get-home-page-videos"
+import getHomePageData from "../controllers/videos/get-home-page-data"
 import likeOrUnlikeVideo from "../controllers/videos/like-or-unlike-video"
 import getVideosByCreatorUsername from "../controllers/videos/get-videos-by-creator-username"
 
@@ -16,7 +16,7 @@ import attachMinimalExclusiveVideoDataByUUID from "../middleware/attach/exclusiv
 
 const videosRoutes = express.Router()
 
-videosRoutes.get("/get-home-page-videos", optionalJwtVerifyWithUserAttachment, getHomePageVideos)
+videosRoutes.get("/get-home-page-data", optionalJwtVerifyWithUserAttachment, getHomePageData)
 
 videosRoutes.get(
 	"/get-video/:videoUUID",
