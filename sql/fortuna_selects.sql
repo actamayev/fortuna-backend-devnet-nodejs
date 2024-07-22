@@ -1,6 +1,6 @@
--- select * from credentials;
+-- select * from credentials order by creÍated_at;
 -- select * from login_history;
-select * from solana_wallet;
+-- select * from solana_wallet;
 -- select * from video;
 -- select * from exclusive_video_access_purchase;
 -- select * from video_access_tier;

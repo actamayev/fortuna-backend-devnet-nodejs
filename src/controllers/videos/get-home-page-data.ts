@@ -2,7 +2,7 @@ import { Response, Request } from "express"
 import retrieveHomePageVideos from "../../db-operations/read/video/retrieve-home-page-videos"
 import transformHomePageVideoData from "../../utils/transform/videos/transform-home-page-video-data"
 
-export default async function getHomePageVideos (req: Request, res: Response): Promise<Response> {
+export default async function getHomePageData (req: Request, res: Response): Promise<Response> {
 	try {
 		const { optionallyAttachedUser } = req
 		const videoData = await retrieveHomePageVideos()
