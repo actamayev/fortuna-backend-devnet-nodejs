@@ -8,7 +8,7 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 		const mediaDetails = await prismaClient.video.findMany({
 			where: {
 				video_listing_status: {
-					not: "UNLISTED"
+					notIn: ["UNLISTED", "SOLDOUT"]
 				},
 				video_creator: {
 					is_active: true
@@ -81,7 +81,11 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 						exclusive_video_access_purchase: true
 					}
 				}
-			}
+			},
+			orderBy: {
+				created_at: "desc"
+			},
+			take: 4
 		})
 
 		const filteredVideos = mediaDetails

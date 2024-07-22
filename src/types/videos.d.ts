@@ -76,6 +76,29 @@ declare global {
 		channel_banner_image_url: string | null
 	}
 
+	interface RetrievedHomePageCreators {
+		username: string
+		profile_picture: {
+			image_url: string
+		} | null
+		channel_banner: {
+			image_url: string
+		} | null
+		channel_description: {
+			channel_description: string
+		} | null
+		social_platform_link: {
+			social_platform: SocialPlatforms
+			social_link: string
+		}[]
+		channel_name: {
+			channel_name: string
+		} | null
+		_count: {
+			video: number
+		}
+	}
+
 	interface RetrievedCreatorsByUsername {
 		channel_name: string
 		user: {
