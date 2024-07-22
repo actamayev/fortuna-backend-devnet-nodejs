@@ -3,7 +3,7 @@ import retrieveHomePageVideos from "../../db-operations/read/video/retrieve-home
 import transformHomePageVideoData from "../../utils/transform/videos/transform-home-page-video-data"
 import retrieveMostPopularChannels from "../../db-operations/read/video/retrieve-most-popular-channels"
 import transformHomePageCreatorData from "../../utils/transform/creator/transform-home-page-creator-data"
-import retrieveHomePageCreatorsById from "../../db-operations/read/credentials/retrieve-home-page-creators-by-id"
+import retrieveHomePageCreatorsByIds from "../../db-operations/read/credentials/retrieve-home-page-creators-by-ids"
 
 export default async function getHomePageData (req: Request, res: Response): Promise<Response> {
 	try {
@@ -12,7 +12,7 @@ export default async function getHomePageData (req: Request, res: Response): Pro
 		const homePageVideos = await transformHomePageVideoData(videoData, optionallyAttachedUser)
 
 		const mostPopularChannels = await retrieveMostPopularChannels()
-		const homePageCreatorsById = await retrieveHomePageCreatorsById(mostPopularChannels)
+		const homePageCreatorsById = await retrieveHomePageCreatorsByIds(mostPopularChannels)
 		const homePageCreatorData = transformHomePageCreatorData(homePageCreatorsById)
 
 		return res.status(200).json({ homePageVideos, homePageCreatorData })

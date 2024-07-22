@@ -1,7 +1,7 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
-export default async function retrieveHomePageCreatorsById(userIds: number[]): Promise<RetrievedHomePageCreators[]> {
+export default async function retrieveHomePageCreatorsByIds(userIds: number[]): Promise<RetrievedHomePageCreators[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
