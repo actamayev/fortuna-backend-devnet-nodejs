@@ -6,8 +6,10 @@ import getTransactionFees from "../controllers/solana/get-transaction-fees"
 import requestSolanaAirdrop from "../controllers/solana/request-solana-airdrop"
 import getTransactionDetails from "../controllers/solana/get-transaction-details"
 import getSolanaWalletBalance from "../controllers/solana/get-solana-wallet-balance"
+import getInboundTransferHistory from "../controllers/solana/get-inbound-transfer-history"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
+import validatePublicKey from "../middleware/request-validation/search/validate-public-key"
 import jwtVerifyAttachSolanaWallet from "../middleware/jwt/jwt-verify-attach-solana-wallet"
 import attachSolanaWalletByUserId from "../middleware/attach/attach-solana-wallet-by-user-id"
 import confirmPublicKeyExists from "../middleware/confirmations/solana/confirm-public-key-exists"
@@ -55,5 +57,7 @@ solanaRoutes.post("/get-transaction-details", validateTransactionSignatures, get
 solanaRoutes.get("/get-wallet-balance", jwtVerifyAttachSolanaWallet, getSolanaWalletBalance)
 
 solanaRoutes.post("/request-airdrop", jwtVerifyAttachSolanaWallet, requestSolanaAirdrop)
+
+solanaRoutes.get("/get-inbound-transfer-history/:publicKey", validatePublicKey, getInboundTransferHistory)
 
 export default solanaRoutes
