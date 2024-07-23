@@ -4,7 +4,7 @@ import { Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js"
 import SolanaManager from "../../classes/solana/solana-manager"
 import SolPriceManager from "../../classes/solana/sol-price-manager"
 import GetKeypairFromSecretKey from "../../utils/solana/get-keypair-from-secret-key"
-import { transformTransaction } from "../../utils/transform/transform-transactions-list"
+import { transformOutgoingTransaction } from "../../utils/transform/transform-transactions-list"
 import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
 import addBlankRecordBlockchainFeesPaidByFortuna
 	from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blank-record-blockchain-fees-paid-by-fortuna"
@@ -59,18 +59,18 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			isRecipientFortunaWallet,
 			transactionSignature,
 			transferDetails,
-			solanaWallet.solana_wallet_id,
+			solanaWallet,
 			paidBlockchainFeeId,
 			recipientSolanaWalletId
 		)
 
-		const transactionToTransform: RetrievedDBTransactionListData = {
+		const transactionToTransform: OutgoingTransactionListData = {
 			...solTransferRecord,
 			sender_username: user.username as string,
 			...(isRecipientFortunaWallet ? { recipient_username: moneyTransferData.sendingTo } : null)
 		}
 
-		const solTransferData = transformTransaction(transactionToTransform, solanaWallet.public_key)
+		const solTransferData = transformOutgoingTransaction(transactionToTransform)
 
 		void calculateTransactionFeeUpdateBlockchainFeesTable(transactionSignature, paidBlockchainFeeId)
 

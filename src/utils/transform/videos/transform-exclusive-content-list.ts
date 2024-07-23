@@ -15,7 +15,10 @@ export default function transformExclusiveContentList(myExclusiveContentList: Re
 			channelName: exclusiveContent.video.video_creator.channel_name?.channel_name ||
 				exclusiveContent.video.video_creator.username || "",
 			creatorProfilePictureUrl: exclusiveContent.video.video_creator.profile_picture?.image_url || null,
-			creatorUsername: exclusiveContent.video.video_creator.username || ""
+			creatorUsername: exclusiveContent.video.video_creator.username || "",
+
+			newWalletBalanceSol: exclusiveContent.exclusive_video_access_purchase_sol_transfer.sender_new_wallet_balance_sol,
+			newWalletBalanceUsd: exclusiveContent.exclusive_video_access_purchase_sol_transfer.sender_new_wallet_balance_usd
 		}))
 	} catch (error) {
 		console.error(error)

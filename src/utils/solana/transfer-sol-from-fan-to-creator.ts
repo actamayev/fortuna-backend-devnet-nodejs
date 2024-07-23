@@ -1,5 +1,6 @@
 import _ from "lodash"
 import { Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js"
+import { exclusive_video_access_purchase_sol_transfer } from "@prisma/client"
 import SolanaManager from "../../classes/solana/solana-manager"
 import GetKeypairFromSecretKey from "./get-keypair-from-secret-key"
 import addBlankRecordBlockchainFeesPaidByFortuna
@@ -12,7 +13,7 @@ export default async function transferSolFromFanToCreator(
 	fanSolanaWallet: ExtendedSolanaWallet,
 	contentCreatorPublicKeyAndWalletId: CreatorWalletDataLessSecretKey,
 	transferDetails: TransferDetailsLessDefaultCurrency
-): Promise<number> {
+): Promise<exclusive_video_access_purchase_sol_transfer> {
 	try {
 		// FUTURE TODO: Fix the double-charge problem (when having 2 signers, the fee is doubled)
 		// May be possible to fix by making Fortuna a co-signer, if all Fortuna wallets are made to be multi-signature accounts.
@@ -31,9 +32,9 @@ export default async function transferSolFromFanToCreator(
 
 		const paidBlockchainFeeId = await addBlankRecordBlockchainFeesPaidByFortuna()
 
-		const exclusiveVideoAccessPurchaseSolTransferId = await addExclusiveVideoAccessPurchaseSolTransfer(
-			fanSolanaWallet.solana_wallet_id,
-			contentCreatorPublicKeyAndWalletId.solana_wallet_id,
+		const exclusiveVideoAccessPurchaseSolTransfer = await addExclusiveVideoAccessPurchaseSolTransfer(
+			fanSolanaWallet,
+			contentCreatorPublicKeyAndWalletId,
 			transactionSignature,
 			transferDetails,
 			paidBlockchainFeeId,
@@ -41,7 +42,7 @@ export default async function transferSolFromFanToCreator(
 
 		void calculateTransactionFeeUpdateBlockchainFeesTable(transactionSignature, paidBlockchainFeeId)
 
-		return exclusiveVideoAccessPurchaseSolTransferId
+		return exclusiveVideoAccessPurchaseSolTransfer
 	} catch (error) {
 		console.error(error)
 		throw error
