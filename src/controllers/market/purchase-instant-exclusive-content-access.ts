@@ -25,7 +25,7 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 			solToTransfer: exclusiveVideoData.tier_access_price_usd / solPrice
 		}
 
-		const solTransferId = await transferSolFromFanToCreator(
+		const exclusiveVideoAccessPurchaseSolTransfer = await transferSolFromFanToCreator(
 			solanaWallet,
 			creatorWalletInfo,
 			{
@@ -46,7 +46,7 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 			exclusiveVideoData.video_id,
 			solanaWallet.user_id,
 			Number(tierNumber),
-			solTransferId,
+			exclusiveVideoAccessPurchaseSolTransfer.exclusive_video_access_purchase_sol_transfer_id,
 			fortunaTakeId
 		)
 
@@ -64,7 +64,9 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 			isVideoSoldOut,
 			purchaseDate: exclusiveVideoAccessPurchase.created_at,
 			priceInSol: transferDetails.solToTransfer,
-			priceInUsd: transferDetails.usdToTransfer
+			priceInUsd: transferDetails.usdToTransfer,
+			newWalletBalanceSol: exclusiveVideoAccessPurchaseSolTransfer.sender_new_wallet_balance_sol,
+			newWalletBalanceUsd: exclusiveVideoAccessPurchaseSolTransfer.sender_new_wallet_balance_usd
 		})
 	} catch (error) {
 		console.error(error)

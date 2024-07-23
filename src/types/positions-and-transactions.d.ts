@@ -23,6 +23,8 @@ declare global {
 		exclusive_video_access_purchase_sol_transfer: {
 			sol_amount_transferred: number
 			usd_amount_transferred: number
+			sender_new_wallet_balance_sol: number | null
+			sender_new_wallet_balance_usd: number | null
 		}
 		exclusive_video_access_purchase_fortuna_take: {
 			sol_amount_transferred: number
@@ -30,7 +32,7 @@ declare global {
 		}
 	}
 
-	interface RetrievedDBTransactionListData {
+	interface BasicRetrievedDBTransationListData {
 		sol_transfer_id: number
 		recipient_public_key?: string
 		is_recipient_fortuna_wallet: boolean
@@ -44,6 +46,16 @@ declare global {
 		sender_username: string
 	}
 
+	interface OutgoingTransactionListData extends BasicRetrievedDBTransationListData {
+		sender_new_wallet_balance_sol: number | null
+		sender_new_wallet_balance_usd: number | null
+	}
+
+	interface IncomingTransactionListData extends BasicRetrievedDBTransationListData {
+		recipient_new_wallet_balance_sol: number | null
+		recipient_new_wallet_balance_usd: number | null
+	}
+
 	interface MyExclusiveContentData {
 		videoName: string
 		imageUrl: string
@@ -55,6 +67,9 @@ declare global {
 		channelName: string
 		creatorProfilePictureUrl: string | null
 		creatorUsername: string
+
+		newWalletBalanceSol: number | null
+		newWalletBalanceUsd: number | null
 	}
 
 	interface OutputTransactionData {
@@ -68,6 +83,9 @@ declare global {
 		transferToUsername?: string
 		transferToPublicKey?: string
 		transferFromUsername: string
+
+		newWalletBalanceSol: number | null
+		newWalletBalanceUsd: number | null
 	}
 }
 

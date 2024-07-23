@@ -10,8 +10,7 @@ export default async function getSolanaTransactions(req: Request, res: Response)
 		const outgoingTransactionsList = await retrieveOutgoingTransactionsList(solanaWallet.solana_wallet_id)
 		const incomingTransactionsList = await retrieveIncomingTransactionsList(solanaWallet.public_key)
 
-		const combinedTransactionsList = outgoingTransactionsList.concat(incomingTransactionsList)
-		const transactions = transformTransactionsList(combinedTransactionsList, solanaWallet.public_key)
+		const transactions = transformTransactionsList(outgoingTransactionsList, incomingTransactionsList)
 
 		return res.status(200).json({ transactions })
 	} catch (error) {

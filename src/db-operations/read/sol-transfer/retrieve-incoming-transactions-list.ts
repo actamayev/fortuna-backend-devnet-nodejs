@@ -1,7 +1,7 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
-export default async function retrieveIncomingTransactionsList(publicKey: string): Promise<RetrievedDBTransactionListData[]> {
+export default async function retrieveIncomingTransactionsList(publicKey: string): Promise<IncomingTransactionListData[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
@@ -20,6 +20,8 @@ export default async function retrieveIncomingTransactionsList(publicKey: string
 				usd_amount_transferred: true,
 				transfer_by_currency: true,
 				created_at: true,
+				recipient_new_wallet_balance_sol: true,
+				recipient_new_wallet_balance_usd: true,
 				recipient_solana_wallet: {
 					select: {
 						user: {
@@ -51,7 +53,7 @@ export default async function retrieveIncomingTransactionsList(publicKey: string
 			recipient_username: transaction.is_recipient_fortuna_wallet ?
 				transaction.recipient_solana_wallet?.user.username || undefined : undefined,
 			sender_username: transaction.sender_solana_wallet.user.username
-		})) as RetrievedDBTransactionListData[]
+		})) as IncomingTransactionListData[]
 	} catch (error) {
 		console.error(error)
 		throw error

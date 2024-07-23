@@ -50,7 +50,9 @@ export default async function retrieveExclusiveAccessByUserId(
 				exclusive_video_access_purchase_sol_transfer: {
 					select: {
 						sol_amount_transferred: true,
-						usd_amount_transferred: true
+						usd_amount_transferred: true,
+						sender_new_wallet_balance_sol: true,
+						sender_new_wallet_balance_usd: true
 					}
 				},
 				exclusive_video_access_purchase_fortuna_take: {
