@@ -16,7 +16,7 @@ export default async function addExclusiveVideoAccessPurchaseSolTransfer (
 		const senderWalletBalanceAfterTransfer = await getWalletBalanceWithUSD(new PublicKey(fanSolanaWallet.public_key))
 		const recipientWalletBalanceAfterTransfer = await getWalletBalanceWithUSD(contentCreatorSolanaWalletId.public_key)
 
-		const exclusiveVideoAccessPurchaseSolTransfer = await prismaClient.exclusive_video_access_purchase_sol_transfer.create({
+		return await prismaClient.exclusive_video_access_purchase_sol_transfer.create({
 			data: {
 				fan_solana_wallet_id: fanSolanaWallet.solana_wallet_id,
 				content_creator_solana_wallet_id: contentCreatorSolanaWalletId.solana_wallet_id,
@@ -31,8 +31,6 @@ export default async function addExclusiveVideoAccessPurchaseSolTransfer (
 				recipient_new_wallet_balance_usd: recipientWalletBalanceAfterTransfer.balanceInUsd
 			}
 		})
-
-		return exclusiveVideoAccessPurchaseSolTransfer
 	} catch (error) {
 		console.error(error)
 		throw error

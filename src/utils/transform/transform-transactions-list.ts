@@ -44,7 +44,7 @@ export function transformOutgoingTransaction(transaction: OutgoingTransactionLis
 	}
 }
 
-export function transformIncomingTransaction(transaction: IncomingTransactionListData): OutputTransactionData {
+function transformIncomingTransaction(transaction: IncomingTransactionListData): OutputTransactionData {
 	try {
 		return {
 			solTransferId: transaction.sol_transfer_id,

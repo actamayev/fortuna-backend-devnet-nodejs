@@ -18,7 +18,7 @@ export default async function addSolTransferRecord (
 		const senderWalletBalanceAfterTransfer = await getWalletBalanceWithUSD(new PublicKey(senderSolanaWallet.public_key))
 		const recipientWalletBalanceAfterTransfer = await getWalletBalanceWithUSD(recipientPublicKey)
 
-		const addSolTransferToDB =  await prismaClient.sol_transfer.create({
+		return await prismaClient.sol_transfer.create({
 			data: {
 				recipient_public_key: recipientPublicKey.toString(),
 				is_recipient_fortuna_wallet: isRecipientFortunaWallet,
@@ -36,8 +36,6 @@ export default async function addSolTransferRecord (
 				recipient_new_wallet_balance_usd: recipientWalletBalanceAfterTransfer.balanceInUsd
 			}
 		}) as AddSolTransferToDB // This is done to assert that the new wallet balance fields are not
-
-		return addSolTransferToDB
 	} catch (error) {
 		console.error(error)
 		throw error
