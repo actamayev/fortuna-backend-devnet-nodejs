@@ -22,6 +22,7 @@ export default async function retrieveOutgoingTransactionsList(solanaWalletId: n
 				created_at: true,
 				sender_new_wallet_balance_sol: true,
 				sender_new_wallet_balance_usd: true,
+				transaction_signature: true,
 				recipient_solana_wallet: {
 					select: {
 						user: {

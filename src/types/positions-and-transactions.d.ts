@@ -44,6 +44,7 @@ declare global {
 		created_at: Date
 		recipient_username?: string
 		sender_username: string
+		transaction_signature: string
 	}
 
 	interface OutgoingTransactionListData extends BasicRetrievedDBTransationListData {
@@ -78,6 +79,8 @@ declare global {
 		usdAmountTransferred: number
 		transferByCurrency: Currencies
 		depositOrWithdrawal: "deposit" | "withdrawal"
+
+		transactionSignature: string
 
 		transferDateTime: Date
 		transferToUsername?: string
