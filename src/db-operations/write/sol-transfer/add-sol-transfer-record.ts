@@ -38,7 +38,7 @@ export default async function addSolTransferRecord (
 				recipient_new_wallet_balance_sol: recipientWalletBalanceAfterTransfer.balanceInSol,
 				recipient_new_wallet_balance_usd: recipientWalletBalanceAfterTransfer.balanceInUsd
 			}
-		}) as AddSolTransferToDB // This is done to assert that the new wallet balance fields are not
+		}) as AddSolTransferToDB // This is done to assert that the new wallet balance fields are defined
 	} catch (error) {
 		console.error(error)
 		throw error

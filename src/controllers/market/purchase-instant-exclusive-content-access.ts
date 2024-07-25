@@ -29,8 +29,8 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 			solanaWallet,
 			creatorWalletInfo,
 			{
-				solToTransfer: transferDetails.solToTransfer * 0.975,
-				usdToTransfer: transferDetails.usdToTransfer * 0.975
+				solToTransfer: transferDetails.solToTransfer,
+				usdToTransfer: transferDetails.usdToTransfer
 			}
 		)
 
