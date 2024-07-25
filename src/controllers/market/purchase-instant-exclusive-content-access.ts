@@ -66,7 +66,9 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 			priceInSol: transferDetails.solToTransfer,
 			priceInUsd: transferDetails.usdToTransfer,
 			newWalletBalanceSol: exclusiveVideoAccessPurchaseSolTransfer.sender_new_wallet_balance_sol,
-			newWalletBalanceUsd: exclusiveVideoAccessPurchaseSolTransfer.sender_new_wallet_balance_usd
+			newWalletBalanceUsd: exclusiveVideoAccessPurchaseSolTransfer.sender_new_wallet_balance_usd,
+
+			videoAccessPurchaseTransactionSignature: exclusiveVideoAccessPurchaseSolTransfer.transaction_signature,
 		})
 	} catch (error) {
 		console.error(error)

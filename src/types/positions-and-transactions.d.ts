@@ -25,10 +25,7 @@ declare global {
 			usd_amount_transferred: number
 			sender_new_wallet_balance_sol: number | null
 			sender_new_wallet_balance_usd: number | null
-		}
-		exclusive_video_access_purchase_fortuna_take: {
-			sol_amount_transferred: number
-			usd_amount_transferred: number
+			transaction_signature: string
 		}
 	}
 
@@ -71,6 +68,8 @@ declare global {
 
 		newWalletBalanceSol: number | null
 		newWalletBalanceUsd: number | null
+
+		videoAccessPurchaseTransactionSignature: string
 	}
 
 	interface OutputTransactionData {
