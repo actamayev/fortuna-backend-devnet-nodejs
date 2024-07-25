@@ -9,6 +9,7 @@ import retrieveMostRecentVideosForHomePage from "../../db-operations/read/video/
 export default async function getHomePageData (req: Request, res: Response): Promise<Response> {
 	try {
 		const { optionallyAttachedUser } = req
+
 		const retrievedMostRecentVideosForHomePage = await retrieveMostRecentVideosForHomePage()
 		const recentlyPostedVideos = await transformHomePageVideoData(retrievedMostRecentVideosForHomePage, optionallyAttachedUser)
 
