@@ -47,6 +47,10 @@ declare global {
 				sol_amount_transferred: number
 				usd_amount_transferred: number
 			}
+			exclusive_video_access_purchase_fortuna_take: {
+				sol_amount_transferred: number
+				usd_amount_transferred: number
+			}
 		}[]
 		numberOfExclusivePurchasesSoFar: number | null
 		numberOfLikes: number
