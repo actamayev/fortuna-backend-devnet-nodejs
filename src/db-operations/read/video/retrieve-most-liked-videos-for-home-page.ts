@@ -1,12 +1,33 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
-export default async function retrieveHomePageVideos(): Promise<RetrievedHomePageVideosFromDB[]> {
+export default async function retrieveMostLikedVideosForHomePage(): Promise<RetrievedHomePageVideosFromDB[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
+		// Step 1: Aggregate to count likes for each video
+		const likeCounts = await prismaClient.video_like_status.groupBy({
+			by: ["video_id"],
+			_count: {
+				video_id: true
+			},
+			where: {
+				is_active: true
+			}
+		})
+
+		// Create a map of video IDs to their like counts
+		const likeCountMap: { [key: number]: number } = {}
+		likeCounts.forEach(item => {
+			likeCountMap[item.video_id] = item._count.video_id
+		})
+
+		// Step 2: Query videos with filtering and ordering by likes
 		const mediaDetails = await prismaClient.video.findMany({
 			where: {
+				video_id: {
+					in: likeCounts.map(item => item.video_id)
+				},
 				video_listing_status: {
 					notIn: ["UNLISTED", "SOLDOUT"]
 				},
@@ -78,24 +99,23 @@ export default async function retrieveHomePageVideos(): Promise<RetrievedHomePag
 				},
 				_count: {
 					select: {
-						exclusive_video_access_purchase: true
+						exclusive_video_access_purchase: true,
+						video_like_status: true // Count likes
 					}
 				}
-			},
-			orderBy: {
-				created_at: "desc"
-			},
-			take: 4
+			}
 		})
 
+		// Filter, map, and sort videos by like counts, then take the top 4
 		const filteredVideos = mediaDetails
 			.filter(video => video.video_creator.username !== null)
 			.map(video => ({
 				...video,
-				numberOfExclusivePurchasesSoFar: video.is_video_exclusive ? video._count.exclusive_video_access_purchase : null
+				numberOfExclusivePurchasesSoFar: video.is_video_exclusive ? video._count.exclusive_video_access_purchase : null,
+				numberOfLikes: likeCountMap[video.video_id] || 0 // Add the number of likes
 			}))
-			// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
-			.map(({ _count, ...rest }) => rest) // Remove _count property
+			.sort((a, b) => b.numberOfLikes - a.numberOfLikes) // Sort by like counts
+			.slice(0, 4) // Take the top 4
 
 		return filteredVideos as RetrievedHomePageVideosFromDB[]
 	} catch (error) {
