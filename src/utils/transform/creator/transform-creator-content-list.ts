@@ -9,7 +9,7 @@ export default function transformCreatorContentList(input: RetrievedCreatorDBVid
 					(exclusiveVideoAccessPurchase.exclusive_video_access_purchase_sol_transfer.sol_amount_transferred -
 					exclusiveVideoAccessPurchase.exclusive_video_access_purchase_fortuna_take.sol_amount_transferred)
 				totalCreatorProfitInUsd +=
-				(exclusiveVideoAccessPurchase.exclusive_video_access_purchase_sol_transfer.usd_amount_transferred -
+					(exclusiveVideoAccessPurchase.exclusive_video_access_purchase_sol_transfer.usd_amount_transferred -
 					exclusiveVideoAccessPurchase.exclusive_video_access_purchase_fortuna_take.usd_amount_transferred)
 			})
 			return {
@@ -30,8 +30,8 @@ export default function transformCreatorContentList(input: RetrievedCreatorDBVid
 					isTierSoldOut: tier.is_sold_out
 				})),
 				numberOfLikes: item.numberOfLikes,
-				totalCreatorProfitInSol: totalCreatorProfitInSol,
-				totalCreatorProfitInUsd: totalCreatorProfitInUsd,
+				totalCreatorProfitInSol,
+				totalCreatorProfitInUsd,
 				numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar
 			}
 		})
