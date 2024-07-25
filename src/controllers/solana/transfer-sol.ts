@@ -15,7 +15,7 @@ import addBlankBlockchainFeesPaidByFortuna
 import addBlankRecordBlockchainFeesPaidByUser
 	from "../../db-operations/write/blockchain-fees-paid-by-user/add-blank-record-blockchain-fees-paid-by-user"
 
-// eslint-disable-next-line max-lines-per-function
+// eslint-disable-next-line max-lines-per-function, complexity
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
 	try {
 		const { user, solanaWallet, recipientPublicKey, isRecipientFortunaWallet, recipientSolanaWalletId } = req
@@ -76,7 +76,7 @@ export default async function transferSol(req: Request, res: Response): Promise<
 
 		const transactionToTransform: OutgoingTransactionListData = {
 			...solTransferRecord,
-			sender_username: user.username as string,
+			sender_username: user.username || "",
 			...(isRecipientFortunaWallet ? {
 				recipient_username: moneyTransferData.sendingTo,
 				blockchain_fees_paid_by_user: {
