@@ -94,6 +94,7 @@ export default async function retrieveRecentlyUploadedVideos(): Promise<Retrieve
 			}))
 			// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
 			.map(({ _count, ...rest }) => rest) // Remove _count property
+
 		return filteredVideos as RetrievedHomePageVideosFromDB[]
 	} catch (error) {
 		console.error(error)
