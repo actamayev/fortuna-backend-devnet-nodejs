@@ -7,7 +7,7 @@ export default async function retrieveRecentlyUploadedVideos(): Promise<Retrieve
 		const mediaDetails = await prismaClient.video.findMany({
 			where: {
 				video_listing_status: {
-					notIn: ["UNLISTED", "SOLDOUT"]
+					not: "UNLISTED"
 				},
 				video_creator: {
 					is_active: true
