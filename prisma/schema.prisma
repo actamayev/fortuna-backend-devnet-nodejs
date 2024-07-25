@@ -83,7 +83,8 @@ model solana_wallet {
 
 	sol_transfer_sender_solana_wallet                           sol_transfer[] @relation("sender_solana_wallet")
 	sol_transfer_recipient_solana_wallet                        sol_transfer[] @relation("recipient_solana_wallet")
-	sol_transfer_fee_payer_solana_wallet                        blockchain_fees_paid_by_fortuna[]
+	sol_transfer_fortuna_wallet_fee_payer			            blockchain_fees_paid_by_fortuna[]
+	sol_transfer_user_payer_solana_wallet                       blockchain_fees_paid_by_user[]
 
 	fortuna_take_sender_solana_wallet                        	exclusive_video_access_purchase_fortuna_take[] @relation("fortuna_take_sender_solana_wallet")
 	fortuna_take_recipient_solana_wallet                        exclusive_video_access_purchase_fortuna_take[] @relation("fortuna_take_recipient_solana_wallet")
@@ -210,7 +211,8 @@ model sol_transfer {
 	transfer_by_currency                                        Currencies
 
 	sender_solana_wallet_id                                     Int
-	blockchain_fees_paid_by_fortuna_id							Int @unique
+	blockchain_fees_paid_by_fortuna_id							Int? @unique
+	blockchain_fees_paid_by_user_id								Int? @unique
 
 	sender_new_wallet_balance_sol								Float?
 	sender_new_wallet_balance_usd								Float?
@@ -222,11 +224,13 @@ model sol_transfer {
 
 	sender_solana_wallet                                        solana_wallet @relation(name: "sender_solana_wallet", fields: [sender_solana_wallet_id], references: [solana_wallet_id])
 	recipient_solana_wallet                                     solana_wallet? @relation(name: "recipient_solana_wallet", fields: [recipient_solana_wallet_id], references: [solana_wallet_id])
-	blockchain_fee_paid_by_fortuna								blockchain_fees_paid_by_fortuna @relation(fields: [blockchain_fees_paid_by_fortuna_id], references: [blockchain_fees_paid_by_fortuna_id])
+	blockchain_fee_paid_by_fortuna								blockchain_fees_paid_by_fortuna? @relation(fields: [blockchain_fees_paid_by_fortuna_id], references: [blockchain_fees_paid_by_fortuna_id])
+	blockchain_fees_paid_by_user								blockchain_fees_paid_by_user? @relation(fields: [blockchain_fees_paid_by_user_id], references: [blockchain_fees_paid_by_user_id])
 
 	@@index([sender_solana_wallet_id], name: "sol_transfer__sender_solana_wallet_id_idx")
 	@@index([recipient_solana_wallet_id], name: "sol_transfer__recipient_solana_wallet_id_idx")
 	@@index([blockchain_fees_paid_by_fortuna_id], name: "sol_transfer__blockchain_fees_paid_by_fortuna_id_idx")
+	@@index([blockchain_fees_paid_by_user_id], name: "sol_transfer__blockchain_fees_paid_by_user_id_idx")
 }
 
 model exclusive_video_access_purchase_sol_transfer {
@@ -300,6 +304,23 @@ model blockchain_fees_paid_by_fortuna {
 	exclusive_video_access_purchase_sol_transfer				exclusive_video_access_purchase_sol_transfer?
 
 	@@index([fee_payer_solana_wallet_id], name: "blockchain_fees_paid_by_fortuna__fee_payer_solana_wallet_idx")
+}
+
+model blockchain_fees_paid_by_user {
+	blockchain_fees_paid_by_user_id								Int @id @default(autoincrement())
+
+	fee_in_sol                                            		Float?
+	fee_in_usd                                            		Float?
+
+	fee_payer_solana_wallet_id                                  Int
+
+	created_at                                                  DateTime  @default(now())
+	updated_at                                                  DateTime  @default(now()) @updatedAt
+
+	fee_payer_solana_wallet                                     solana_wallet @relation(fields: [fee_payer_solana_wallet_id], references: [solana_wallet_id])
+	sol_transfer												sol_transfer?
+
+	@@index([fee_payer_solana_wallet_id], name: "blockchain_fees_paid_by_user__fee_payer_solana_wallet_idx")
 }
 
 model profile_picture {
