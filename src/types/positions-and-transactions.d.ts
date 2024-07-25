@@ -25,10 +25,7 @@ declare global {
 			usd_amount_transferred: number
 			sender_new_wallet_balance_sol: number | null
 			sender_new_wallet_balance_usd: number | null
-		}
-		exclusive_video_access_purchase_fortuna_take: {
-			sol_amount_transferred: number
-			usd_amount_transferred: number
+			transaction_signature: string
 		}
 	}
 
@@ -44,11 +41,16 @@ declare global {
 		created_at: Date
 		recipient_username?: string
 		sender_username: string
+		transaction_signature: string
 	}
 
 	interface OutgoingTransactionListData extends BasicRetrievedDBTransationListData {
 		sender_new_wallet_balance_sol: number | null
 		sender_new_wallet_balance_usd: number | null
+		blockchain_fees_paid_by_user: {
+			fee_in_sol: number | null
+			fee_in_usd: number | null
+		} | null
 	}
 
 	interface IncomingTransactionListData extends BasicRetrievedDBTransationListData {
@@ -70,6 +72,8 @@ declare global {
 
 		newWalletBalanceSol: number | null
 		newWalletBalanceUsd: number | null
+
+		videoAccessPurchaseTransactionSignature: string
 	}
 
 	interface OutputTransactionData {
@@ -79,6 +83,8 @@ declare global {
 		transferByCurrency: Currencies
 		depositOrWithdrawal: "deposit" | "withdrawal"
 
+		transactionSignature: string
+
 		transferDateTime: Date
 		transferToUsername?: string
 		transferToPublicKey?: string
@@ -86,6 +92,9 @@ declare global {
 
 		newWalletBalanceSol: number | null
 		newWalletBalanceUsd: number | null
+
+		withdrawalFeeUsd?: number
+		withdrawalFeeSol?: number
 	}
 }
 

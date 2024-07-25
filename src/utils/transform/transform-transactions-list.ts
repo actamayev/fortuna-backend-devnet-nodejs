@@ -35,8 +35,11 @@ export function transformOutgoingTransaction(transaction: OutgoingTransactionLis
 			transferToPublicKey: transaction.recipient_public_key,
 			transferFromUsername: transaction.sender_username,
 			depositOrWithdrawal: "withdrawal",
+			transactionSignature: transaction.transaction_signature,
 			newWalletBalanceSol: transaction.sender_new_wallet_balance_sol,
 			newWalletBalanceUsd: transaction.sender_new_wallet_balance_usd,
+			withdrawalFeeSol: transaction.blockchain_fees_paid_by_user?.fee_in_sol || undefined,
+			withdrawalFeeUsd: transaction.blockchain_fees_paid_by_user?.fee_in_usd || undefined
 		}
 	} catch (error) {
 		console.error(error)
@@ -56,6 +59,7 @@ function transformIncomingTransaction(transaction: IncomingTransactionListData):
 			transferToPublicKey: transaction.recipient_public_key,
 			transferFromUsername: transaction.sender_username,
 			depositOrWithdrawal: "deposit",
+			transactionSignature: transaction.transaction_signature,
 			newWalletBalanceSol: transaction.recipient_new_wallet_balance_sol,
 			newWalletBalanceUsd: transaction.recipient_new_wallet_balance_usd
 		}

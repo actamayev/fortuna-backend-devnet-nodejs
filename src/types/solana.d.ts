@@ -20,6 +20,8 @@ declare global {
 		created_at: Date
 		username?: string
 
+		transaction_signature: string
+
 		sender_new_wallet_balance_sol: number
 		sender_new_wallet_balance_usd: number
 		recipient_new_wallet_balance_sol: number

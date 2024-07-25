@@ -29,8 +29,8 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 			solanaWallet,
 			creatorWalletInfo,
 			{
-				solToTransfer: transferDetails.solToTransfer * 0.975,
-				usdToTransfer: transferDetails.usdToTransfer * 0.975
+				solToTransfer: transferDetails.solToTransfer,
+				usdToTransfer: transferDetails.usdToTransfer
 			}
 		)
 
@@ -66,7 +66,8 @@ export default async function purchaseInstantExclusiveContentAccess(req: Request
 			priceInSol: transferDetails.solToTransfer,
 			priceInUsd: transferDetails.usdToTransfer,
 			newWalletBalanceSol: exclusiveVideoAccessPurchaseSolTransfer.sender_new_wallet_balance_sol,
-			newWalletBalanceUsd: exclusiveVideoAccessPurchaseSolTransfer.sender_new_wallet_balance_usd
+			newWalletBalanceUsd: exclusiveVideoAccessPurchaseSolTransfer.sender_new_wallet_balance_usd,
+			videoAccessPurchaseTransactionSignature: exclusiveVideoAccessPurchaseSolTransfer.transaction_signature
 		})
 	} catch (error) {
 		console.error(error)

@@ -22,6 +22,7 @@ export default async function retrieveIncomingTransactionsList(publicKey: string
 				created_at: true,
 				recipient_new_wallet_balance_sol: true,
 				recipient_new_wallet_balance_usd: true,
+				transaction_signature: true,
 				recipient_solana_wallet: {
 					select: {
 						user: {
