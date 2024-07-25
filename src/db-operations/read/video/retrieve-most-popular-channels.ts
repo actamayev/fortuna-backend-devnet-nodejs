@@ -9,7 +9,7 @@ export default async function retrieveMostPopularChannels(): Promise<number[]> {
 		const videoLikes = await prismaClient.video_like_status.groupBy({
 			by: ["video_id"],
 			_count: {
-				_all: true
+				video_id: true
 			},
 			where: {
 				is_active: true
