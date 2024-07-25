@@ -3,9 +3,10 @@ import { Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js"
 import SecretsManager from "../../classes/secrets-manager"
 import SolanaManager from "../../classes/solana/solana-manager"
 import GetKeypairFromSecretKey from "./get-keypair-from-secret-key"
-import addBlankRecordBlockchainFeesPaidByFortuna
-	from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blank-record-blockchain-fees-paid-by-fortuna"
-import calculateTransactionFeeUpdateBlockchainFeesTable from "./calculate-transaction-fee-update-blockchain-fees-table"
+import calculateTransactionFeeUpdateBlockchainFeesPaidByFortunaTable
+	from "./calculate-transaction-fee-update-blockchain-fees-paid-by-fortuna-table"
+import addBlankBlockchainFeesPaidByFortuna
+	from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blank-blockchain-fees-paid-by-fortuna"
 import addExclusiveVideoAccessPurchaseTake
 	from "../../db-operations/write/exclusive-video-access-purchase-fortuna-take/add-exclusive-video-access-purchase-take"
 
@@ -28,7 +29,7 @@ export default async function transferSolFromCreatorToFortuna(
 			keypairs
 		)
 
-		const paidBlockchainFeeId = await addBlankRecordBlockchainFeesPaidByFortuna()
+		const paidBlockchainFeeId = await addBlankBlockchainFeesPaidByFortuna()
 
 		const fortunaFeePayerSolanaWalletIdDb = await SecretsManager.getInstance().getSecret("FORTUNA_FEE_PAYER_WALLET_ID_DB")
 		const feePayerSolanaWalletId = parseInt(fortunaFeePayerSolanaWalletIdDb, 10)
@@ -41,7 +42,7 @@ export default async function transferSolFromCreatorToFortuna(
 			paidBlockchainFeeId
 		)
 
-		void calculateTransactionFeeUpdateBlockchainFeesTable(transactionSignature, paidBlockchainFeeId)
+		void calculateTransactionFeeUpdateBlockchainFeesPaidByFortunaTable(transactionSignature, paidBlockchainFeeId)
 
 		return fortunaTakeId
 	} catch (error) {

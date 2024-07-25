@@ -1,11 +1,16 @@
+// eslint-disable-next-line max-lines-per-function
 export default function transformCreatorContentList(input: RetrievedCreatorDBVideoData[]): OutputCreatorVideoData[] {
 	try {
 		return input.map(item => {
 			let totalCreatorProfitInSol = 0
 			let totalCreatorProfitInUsd = 0
 			item.exclusive_video_access_purchase.map(exclusiveVideoAccessPurchase => {
-				totalCreatorProfitInSol += exclusiveVideoAccessPurchase.exclusive_video_access_purchase_sol_transfer.sol_amount_transferred
-				totalCreatorProfitInUsd += exclusiveVideoAccessPurchase.exclusive_video_access_purchase_sol_transfer.usd_amount_transferred
+				totalCreatorProfitInSol +=
+					(exclusiveVideoAccessPurchase.exclusive_video_access_purchase_sol_transfer.sol_amount_transferred -
+					exclusiveVideoAccessPurchase.exclusive_video_access_purchase_fortuna_take.sol_amount_transferred)
+				totalCreatorProfitInUsd +=
+					(exclusiveVideoAccessPurchase.exclusive_video_access_purchase_sol_transfer.usd_amount_transferred -
+					exclusiveVideoAccessPurchase.exclusive_video_access_purchase_fortuna_take.usd_amount_transferred)
 			})
 			return {
 				videoId: item.video_id,

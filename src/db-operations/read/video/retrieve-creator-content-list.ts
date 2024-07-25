@@ -49,6 +49,12 @@ export default async function retrieveCreatorContentList(userId: number): Promis
 								sol_amount_transferred: true,
 								usd_amount_transferred: true
 							}
+						},
+						exclusive_video_access_purchase_fortuna_take: {
+							select: {
+								sol_amount_transferred: true,
+								usd_amount_transferred: true
+							}
 						}
 					}
 				},
