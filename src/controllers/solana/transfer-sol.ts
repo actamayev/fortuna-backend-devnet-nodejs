@@ -70,8 +70,8 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			transferDetails,
 			solanaWallet,
 			recipientSolanaWalletId,
-			blockchainFeesPaidByUserId,
-			blockchainFeesPaidByFortunaId
+			blockchainFeesPaidByFortunaId,
+			blockchainFeesPaidByUserId
 		)
 
 		const transactionToTransform: OutgoingTransactionListData = {
