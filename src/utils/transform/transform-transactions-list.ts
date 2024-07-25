@@ -38,6 +38,8 @@ export function transformOutgoingTransaction(transaction: OutgoingTransactionLis
 			transactionSignature: transaction.transaction_signature,
 			newWalletBalanceSol: transaction.sender_new_wallet_balance_sol,
 			newWalletBalanceUsd: transaction.sender_new_wallet_balance_usd,
+			withdrawalFeeSol: transaction.blockchain_fees_paid_by_user?.fee_in_sol || undefined,
+			withdrawalFeeUsd: transaction.blockchain_fees_paid_by_user?.fee_in_usd || undefined
 		}
 	} catch (error) {
 		console.error(error)

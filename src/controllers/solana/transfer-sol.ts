@@ -6,9 +6,14 @@ import SolPriceManager from "../../classes/solana/sol-price-manager"
 import GetKeypairFromSecretKey from "../../utils/solana/get-keypair-from-secret-key"
 import { transformOutgoingTransaction } from "../../utils/transform/transform-transactions-list"
 import addSolTransferRecord from "../../db-operations/write/sol-transfer/add-sol-transfer-record"
-import addBlankRecordBlockchainFeesPaidByFortuna
-	from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blank-record-blockchain-fees-paid-by-fortuna"
-import calculateTransactionFeeUpdateBlockchainFeesTable from "../../utils/solana/calculate-transaction-fee-update-blockchain-fees-table"
+import calculateTransactionFeeUpdateBlockchainFeesPaidByUserTable
+	from "../../utils/solana/calculate-transaction-fee-update-blockchain-fees-paid-by-user-table"
+import calculateTransactionFeeUpdateBlockchainFeesPaidByFortunaTable
+	from "../../utils/solana/calculate-transaction-fee-update-blockchain-fees-paid-by-fortuna-table"
+import addBlankBlockchainFeesPaidByFortuna
+	from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blank-blockchain-fees-paid-by-fortuna"
+import addBlankRecordBlockchainFeesPaidByUser
+	from "../../db-operations/write/blockchain-fees-paid-by-user/add-blank-record-blockchain-fees-paid-by-user"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function transferSol(req: Request, res: Response): Promise<Response> {
@@ -49,10 +54,14 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			keypairs
 		)
 
-		let feePayerSolanaWalletId: undefined | number
-		if (isRecipientFortunaWallet === false) feePayerSolanaWalletId = solanaWallet.solana_wallet_id
+		let blockchainFeesPaidByUserId: number | undefined
+		let blockchainFeesPaidByFortunaId: number | undefined
 
-		const paidBlockchainFeeId = await addBlankRecordBlockchainFeesPaidByFortuna(feePayerSolanaWalletId)
+		if (isRecipientFortunaWallet === true) {
+			blockchainFeesPaidByFortunaId = await addBlankBlockchainFeesPaidByFortuna()
+		} else {
+			blockchainFeesPaidByUserId = await addBlankRecordBlockchainFeesPaidByUser(solanaWallet.solana_wallet_id)
+		}
 
 		const solTransferRecord = await addSolTransferRecord(
 			recipientPublicKey,
@@ -60,19 +69,38 @@ export default async function transferSol(req: Request, res: Response): Promise<
 			transactionSignature,
 			transferDetails,
 			solanaWallet,
-			paidBlockchainFeeId,
-			recipientSolanaWalletId
+			recipientSolanaWalletId,
+			blockchainFeesPaidByUserId,
+			blockchainFeesPaidByFortunaId
 		)
 
 		const transactionToTransform: OutgoingTransactionListData = {
 			...solTransferRecord,
 			sender_username: user.username as string,
-			...(isRecipientFortunaWallet ? { recipient_username: moneyTransferData.sendingTo } : null)
+			...(isRecipientFortunaWallet ? {
+				recipient_username: moneyTransferData.sendingTo,
+				blockchain_fees_paid_by_user: {
+					fee_in_sol: 0,
+					fee_in_usd: 0
+				}
+			} : { blockchain_fees_paid_by_user: null })
 		}
 
 		const solTransferData = transformOutgoingTransaction(transactionToTransform)
 
-		void calculateTransactionFeeUpdateBlockchainFeesTable(transactionSignature, paidBlockchainFeeId)
+		if (isRecipientFortunaWallet === true) {
+			void calculateTransactionFeeUpdateBlockchainFeesPaidByFortunaTable(
+				transactionSignature,
+				blockchainFeesPaidByFortunaId as number
+			)
+		} else {
+			const blockchainFeesPaidByUser = await calculateTransactionFeeUpdateBlockchainFeesPaidByUserTable(
+				transactionSignature,
+				blockchainFeesPaidByUserId as number
+			)
+			solTransferData.withdrawalFeeUsd = blockchainFeesPaidByUser.fee_in_usd || undefined
+			solTransferData.withdrawalFeeSol = blockchainFeesPaidByUser.fee_in_sol || undefined
+		}
 
 		return res.status(200).json({ solTransferData })
 	} catch (error) {

@@ -3,9 +3,10 @@ import { Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js"
 import { exclusive_video_access_purchase_sol_transfer } from "@prisma/client"
 import SolanaManager from "../../classes/solana/solana-manager"
 import GetKeypairFromSecretKey from "./get-keypair-from-secret-key"
-import addBlankRecordBlockchainFeesPaidByFortuna
-	from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blank-record-blockchain-fees-paid-by-fortuna"
-import calculateTransactionFeeUpdateBlockchainFeesTable from "./calculate-transaction-fee-update-blockchain-fees-table"
+import calculateTransactionFeeUpdateBlockchainFeesPaidByFortunaTable
+	from "./calculate-transaction-fee-update-blockchain-fees-paid-by-fortuna-table"
+import addBlankBlockchainFeesPaidByFortuna
+	from "../../db-operations/write/blockchain-fees-paid-by-fortuna/add-blank-blockchain-fees-paid-by-fortuna"
 import addExclusiveVideoAccessPurchaseSolTransfer
 	from "../../db-operations/write/exclusive-video-access-purchase-sol-transfer/add-exclusive-video-access-purchase-sol-transfer"
 
@@ -30,7 +31,7 @@ export default async function transferSolFromFanToCreator(
 			keypairs
 		)
 
-		const paidBlockchainFeeId = await addBlankRecordBlockchainFeesPaidByFortuna()
+		const paidBlockchainFeeId = await addBlankBlockchainFeesPaidByFortuna()
 
 		const exclusiveVideoAccessPurchaseSolTransfer = await addExclusiveVideoAccessPurchaseSolTransfer(
 			fanSolanaWallet,
@@ -40,7 +41,7 @@ export default async function transferSolFromFanToCreator(
 			paidBlockchainFeeId,
 		)
 
-		void calculateTransactionFeeUpdateBlockchainFeesTable(transactionSignature, paidBlockchainFeeId)
+		void calculateTransactionFeeUpdateBlockchainFeesPaidByFortunaTable(transactionSignature, paidBlockchainFeeId)
 
 		return exclusiveVideoAccessPurchaseSolTransfer
 	} catch (error) {

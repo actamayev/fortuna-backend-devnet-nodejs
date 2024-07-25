@@ -47,6 +47,10 @@ declare global {
 	interface OutgoingTransactionListData extends BasicRetrievedDBTransationListData {
 		sender_new_wallet_balance_sol: number | null
 		sender_new_wallet_balance_usd: number | null
+		blockchain_fees_paid_by_user: {
+			fee_in_sol: number | null
+			fee_in_usd: number | null
+		} | null
 	}
 
 	interface IncomingTransactionListData extends BasicRetrievedDBTransationListData {
@@ -88,6 +92,9 @@ declare global {
 
 		newWalletBalanceSol: number | null
 		newWalletBalanceUsd: number | null
+
+		withdrawalFeeUsd?: number
+		withdrawalFeeSol?: number
 	}
 }
 

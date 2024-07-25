@@ -23,6 +23,12 @@ export default async function retrieveOutgoingTransactionsList(solanaWalletId: n
 				sender_new_wallet_balance_sol: true,
 				sender_new_wallet_balance_usd: true,
 				transaction_signature: true,
+				blockchain_fees_paid_by_user: {
+					select: {
+						fee_in_sol: true,
+						fee_in_usd: true
+					}
+				},
 				recipient_solana_wallet: {
 					select: {
 						user: {
