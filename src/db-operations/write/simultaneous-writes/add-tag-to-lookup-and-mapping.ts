@@ -4,11 +4,11 @@ export default async function addTagToLookupAndMapping(
 	videoId: number,
 	videoTag: string,
 	userId: number
-): Promise<void> {
+): Promise<number> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		await prismaClient.$transaction(async (prisma) => {
+		return await prismaClient.$transaction(async (prisma) => {
 			const videoTagLookup = await prisma.video_tag_lookup.create({
 				data: {
 					video_tag: videoTag,
@@ -22,6 +22,8 @@ export default async function addTagToLookupAndMapping(
 					video_tag_lookup_id: videoTagLookup.video_tag_lookup_id
 				}
 			})
+
+			return videoTagLookup.video_tag_lookup_id
 		})
 	} catch (error) {
 		console.error(error)

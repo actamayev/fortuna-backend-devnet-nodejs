@@ -1,13 +1,18 @@
 /* eslint-disable max-lines-per-function */
 import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
-import retrieveOrCreateNewVideoTags from "../video-tag-lookup/retrieve-or-create-new-video-tags"
 import addVideoTags from "../video-tag-mapping/add-video-tags"
+import retrieveOrCreateNewVideoTags from "../video-tag-lookup/retrieve-or-create-new-video-tags"
+
+interface ReturningVideoRecord {
+	newVideoId: number
+	videoTags: VideoTags[]
+}
 
 export default async function addVideoRecord (
 	newVideoData: IncomingNewVideoData,
 	creatorUserId: number
-): Promise<number> {
+): Promise<ReturningVideoRecord> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
@@ -44,8 +49,11 @@ export default async function addVideoRecord (
 				})
 			}
 
+			let videoTags: VideoTags[] = []
+
 			if (!_.isEmpty(newVideoData.videoTags)) {
-				const videoLookupTagIds = await retrieveOrCreateNewVideoTags(newVideoData.videoTags, creatorUserId)
+				videoTags = await retrieveOrCreateNewVideoTags(newVideoData.videoTags, creatorUserId)
+				const videoLookupTagIds = videoTags.map(videoTag => videoTag.videoTagId)
 				await addVideoTags(videoLookupTagIds, video.video_id)
 			}
 
@@ -67,7 +75,7 @@ export default async function addVideoRecord (
 				}
 			})
 
-			return video.video_id
+			return { newVideoId: video.video_id, videoTags }
 		})
 	} catch (error) {
 		console.error(error)

@@ -1,11 +1,12 @@
 import _ from "lodash"
+import { video_tag_lookup } from "@prisma/client"
 import PrismaClientClass from "../../../classes/prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function retrieveOrCreateNewVideoTags(
 	newVideoTags: string[],
 	userId: number
-): Promise<number[]> {
+): Promise<VideoTags[]> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
@@ -23,16 +24,15 @@ export default async function retrieveOrCreateNewVideoTags(
 		})
 
 		// Map existing tags to their ids
-		const existingTagIds = existingTags.map(tag => tag.video_tag_lookup_id)
 		const existingTagMap = _.keyBy(existingTags, tag => tag.video_tag.toLowerCase())
 
 		// Determine which tags need to be created
 		const newTags = normalizedTags.filter(tag => !existingTagMap[tag])
 
 		// Create new tags in batch and fetch their IDs
-		let newlyCreatedTagIds: number[] = []
+		let createdTags: video_tag_lookup[] = []
 		if (!_.isEmpty(newTags)) {
-			const createdTags = await prismaClient.$transaction(async (prisma) => {
+			createdTags = await prismaClient.$transaction(async (prisma) => {
 				await prisma.video_tag_lookup.createMany({
 					data: newTags.map(tag => ({
 						video_tag: tag,
@@ -50,14 +50,18 @@ export default async function retrieveOrCreateNewVideoTags(
 					}
 				})
 			})
-
-			newlyCreatedTagIds = createdTags.map(tag => tag.video_tag_lookup_id)
 		}
 
-		// Combine existing and newly created tag IDs
-		const allTagIds = existingTagIds.concat(newlyCreatedTagIds)
+		// Combine existing and newly created tags
+		const allTags = existingTags.concat(createdTags)
 
-		return allTagIds
+		// Map to VideoTags interface
+		const videoTags: VideoTags[] = allTags.map(tag => ({
+			videoTag: tag.video_tag,
+			videoTagId: tag.video_tag_lookup_id
+		}))
+
+		return videoTags
 	} catch (error) {
 		console.error(error)
 		throw error

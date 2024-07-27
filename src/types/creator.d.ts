@@ -73,6 +73,12 @@ declare global {
 		totalCreatorProfitInSol: number
 		totalCreatorProfitInUsd: number
 		numberOfExclusivePurchasesSoFar: number | null
+		videoTags: VideoTags[]
+	}
+
+	interface VideoTags {
+		videoTag: string
+		videoTagId: number
 	}
 
 	interface CreatorDetails {

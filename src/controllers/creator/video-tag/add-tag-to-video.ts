@@ -9,16 +9,16 @@ export default async function addTagToVideo (req: Request, res: Response): Promi
 		const { user } = req
 		const { videoId, videoTag } = req.body
 
-		const videoTagId = await retrieveVideoTagIdByTagName(videoTag)
+		let videoTagId = await retrieveVideoTagIdByTagName(videoTag)
 
-		if (_.isNull(videoTagId)) {
+		if (_.isUndefined(videoTagId)) {
 			//If the tag the user is trying to add does not exist:
-			await addTagToLookupAndMapping(videoId, videoTag, user.user_id)
+			videoTagId = await addTagToLookupAndMapping(videoId, videoTag, user.user_id)
 		} else {
-			await upsertVideoTag(videoId, videoTagId.video_tag_lookup_id)
+			await upsertVideoTag(videoId, videoTagId)
 		}
 
-		return res.status(200).json({ success: "Added tag to video" })
+		return res.status(200).json({ videoTagId })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to add tag to video" })
