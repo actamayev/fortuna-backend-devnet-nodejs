@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { SocialPlatforms } from "@prisma/client"
-import upsertSocialPlatformLink from "../../db-operations/write/social-platform-link/upsert-social-platform-link"
+import upsertSocialPlatformLink from "../../../db-operations/write/social-platform-link/upsert-social-platform-link"
 
 export default async function addOrEditSocialPlatformLink (req: Request, res: Response): Promise<Response> {
 	try {

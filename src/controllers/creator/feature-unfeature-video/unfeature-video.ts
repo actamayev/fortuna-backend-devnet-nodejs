@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import updateUnfeatureVideo from "../../db-operations/write/video/update-unfeature-video"
+import updateUnfeatureVideo from "../../../db-operations/write/video/update-unfeature-video"
 
 export default async function unfeatureVideo (req: Request, res: Response): Promise<Response> {
 	try {

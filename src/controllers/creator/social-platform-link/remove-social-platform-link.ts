@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { SocialPlatforms } from "@prisma/client"
-import markSocialPlatformLinkInactive from "../../db-operations/write/social-platform-link/mark-social-platform-link-inactive"
+import markSocialPlatformLinkInactive from "../../../db-operations/write/social-platform-link/mark-social-platform-link-inactive"
 
 export default async function removeSocialPlatformLink (req: Request, res: Response): Promise<Response> {
 	try {

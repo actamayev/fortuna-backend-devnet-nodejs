@@ -9,6 +9,7 @@ declare global {
 		description: string
 		isContentExclusive: boolean
 		tierData: IncomingNewVideoTierData[]
+		videoTags: string[]
 	}
 
 	interface IncomingNewVideoTierData {
