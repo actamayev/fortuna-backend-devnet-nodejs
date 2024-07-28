@@ -45,6 +45,15 @@ export default async function retrieveVideosByTag(videoTag: string): Promise<Ret
 										is_sold_out: true
 									}
 								},
+								video_tag_mapping: {
+									select: {
+										video_tag_lookup: {
+											select: {
+												video_tag: true
+											}
+										}
+									}
+								},
 								video_like_status: {
 									select: {
 										user_id: true

@@ -2,14 +2,12 @@ import express from "express"
 
 import getVideoUrl from "../controllers/videos/get-video-url"
 import getVideoByUUID from "../controllers/videos/get-video-by-uuid"
-import getVideosByTag from "../controllers/videos/get-videos-by-tag"
 import getHomePageData from "../controllers/videos/get-home-page-data"
 import likeOrUnlikeVideo from "../controllers/videos/like-or-unlike-video"
 import getRecentlyUploadedVideos from "../controllers/videos/get-recently-uploaded-videos"
 import getVideosByCreatorUsername from "../controllers/videos/get-videos-by-creator-username"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
-import validateVideoTag from "../middleware/request-validation/videos/validate-video-tag"
 import validateLikeOrUnlike from "../middleware/request-validation/videos/validate-like-or-unlike"
 import validateCreatorUsername from "../middleware/request-validation/videos/validate-creator-username"
 import optionalJwtVerifyWithUserAttachment from "../middleware/jwt/optional-jwt-verify-with-user-attachment"
@@ -51,13 +49,6 @@ videosRoutes.post(
 	attachMinimalExclusiveVideoDataByUUID,
 	confirmUserHasExclusiveAccess,
 	likeOrUnlikeVideo
-)
-
-videosRoutes.get(
-	"/get-videos-by-tag/:videoTag",
-	validateVideoTag,
-	optionalJwtVerifyWithUserAttachment,
-	getVideosByTag
 )
 
 export default videosRoutes

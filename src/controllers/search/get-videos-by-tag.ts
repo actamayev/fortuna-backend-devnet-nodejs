@@ -9,14 +9,14 @@ export default async function getVideosByTag (req: Request, res: Response): Prom
 		const videoTag = req.params.videoTag as string
 
 		const retrievedVideoData = await retrieveVideosByTag(videoTag)
-		if (_.isNull(retrievedVideoData)) return res.status(400).json({ message: "Unable to find videos associated with this tag" })
+		if (_.isNull(retrievedVideoData)) return res.status(200).json([])
 
 		const transformedVideoTagData = await transformHomePageVideoData(retrievedVideoData, optionallyAttachedUser)
 		if (_.isNull(transformedVideoTagData)) {
-			return res.status(400).json({ message: "Unable to find videos associated with this tag"})
+			return res.status(400).json({ message: "Unable to find transformed videos associated with this tag"})
 		}
 
-		return res.status(200).json({ ...transformedVideoTagData })
+		return res.status(200).json({ transformedVideoTagData })
 	} catch (error) {
 		console.error(error)
 		return res.status(500).json({ error: "Internal Server Error: Unable to get videos by tag" })

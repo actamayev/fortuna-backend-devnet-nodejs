@@ -44,6 +44,15 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 						is_sold_out: true
 					}
 				},
+				video_tag_mapping: {
+					select: {
+						video_tag_lookup: {
+							select: {
+								video_tag: true
+							}
+						}
+					}
+				},
 				video_creator: {
 					select: {
 						username: true,

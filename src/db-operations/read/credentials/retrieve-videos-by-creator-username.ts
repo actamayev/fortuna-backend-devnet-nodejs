@@ -68,6 +68,15 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 								is_sold_out: true
 							}
 						},
+						video_tag_mapping: {
+							select: {
+								video_tag_lookup: {
+									select: {
+										video_tag: true
+									}
+								}
+							}
+						},
 						video_like_status: {
 							select: {
 								user_id: true

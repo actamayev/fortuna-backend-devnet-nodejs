@@ -23,6 +23,11 @@ declare global {
 			tier_access_price_usd: number
 			is_sold_out: boolean
 		}[]
+		video_tag_mapping: {
+			video_tag_lookup: {
+				video_tag: string
+			}
+		}[]
 		video_creator: {
 			username: string
 			profile_picture: {
@@ -64,6 +69,11 @@ declare global {
 				purchases_allowed_for_this_tier: number | null
 				tier_access_price_usd: number
 				is_sold_out: boolean
+			}[]
+			video_tag_mapping: {
+				video_tag_lookup: {
+					video_tag: string
+				}
 			}[]
 			video_like_status: {
 				user_id: number
@@ -163,6 +173,7 @@ declare global {
 		numberOfLikes: number
 		userLikeStatus: boolean
 		channelName: string
+		videoTags: string[]
 	}
 
 	interface VideoDataSendingToFrontendWithVideoUrl extends VideoDataSendingToFrontendLessVideoUrl {
