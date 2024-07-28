@@ -52,9 +52,9 @@ export default async function addVideoRecord (
 			let videoTags: VideoTags[] = []
 
 			if (!_.isEmpty(newVideoData.videoTags)) {
-				videoTags = await retrieveOrCreateNewVideoTags(newVideoData.videoTags, creatorUserId)
+				videoTags = await retrieveOrCreateNewVideoTags(prisma, newVideoData.videoTags, creatorUserId)
 				const videoLookupTagIds = videoTags.map(videoTag => videoTag.videoTagId)
-				await addVideoTags(videoLookupTagIds, video.video_id)
+				await addVideoTags(prisma, videoLookupTagIds, video.video_id)
 			}
 
 			await prisma.uploaded_image.update({
