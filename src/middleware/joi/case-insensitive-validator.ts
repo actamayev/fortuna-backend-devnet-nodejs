@@ -25,6 +25,28 @@ const caseInsensitiveUniqueExtension: Extension = {
 	}
 }
 
-const customJoi = Joi.extend(caseInsensitiveUniqueExtension)
+const invalidCharacterExtension: Extension = {
+	type: "string",
+	base: Joi.string(),
+	messages: {
+		"string.invalidCharacter": "{{#label}} must not contain any of the following characters: #?&/@"
+	},
+	rules: {
+		noInvalidCharacters: {
+			method() {
+				return this.$_addRule({ name: "noInvalidCharacters" })
+			},
+			validate(value: string, helpers) {
+				if (/[#?&/@]/.test(value)) {
+					return helpers.error("string.invalidCharacter", { value })
+				}
+
+				return value
+			}
+		}
+	}
+}
+
+const customJoi = Joi.extend(caseInsensitiveUniqueExtension, invalidCharacterExtension)
 
 export default customJoi

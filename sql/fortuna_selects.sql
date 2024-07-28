@@ -15,7 +15,7 @@
 -- 	listing_price_per_share_usd
 -- 	from video join uploaded_video on uploaded_video.uploaded_video_id = video.uploaded_video_id;
 
--- select * from video;
+-- select * from video order by created_at;
 -- select * from uploaded_image;
 -- select * from uploaded_video;
 -- select * from sol_transfer;
@@ -26,6 +26,11 @@
 -- select * from exclusive_video_access_purchase_fortuna_take;
 -- select * from exclusive_video_access_purchase_sol_transfer;
 -- select * from channel_name;
+
+-- select * from video_tag_lookup;
+select * from video_tag_mapping;
+
+-- select * from video_access_tier order by created_at;
 
 -- UPDATE uploaded_video
 -- SET video_duration_seconds = 30.52667

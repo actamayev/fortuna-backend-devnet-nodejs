@@ -19,7 +19,9 @@ const createVideoSchema = Joi.object({
 				tierAccessPriceUsd: Joi.number().min(0).max(100).required()
 			})
 		).max(3).required(),
-		videoTags: customJoi.array().items(customJoi.string()).max(12).required().uniqueCaseInsensitive()
+		videoTags: customJoi.array().items(
+			customJoi.string().noInvalidCharacters().max(50)
+		).uniqueCaseInsensitive()
 	}).required()
 }).required()
 
