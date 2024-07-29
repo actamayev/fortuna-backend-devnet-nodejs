@@ -1,9 +1,10 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import caseInsensitiveTagValidator from "../../joi/case-insensitive-validator"
 
 const addVideoTagSchema = Joi.object({
-	videoTag: Joi.string().required().max(50),
+	videoTag: caseInsensitiveTagValidator.string().noInvalidCharacters().max(50).trim().required(),
 	videoId: Joi.number().integer().required()
 }).required()
 

@@ -2,7 +2,7 @@ import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 import uuidValidator from "../../joi/uuid-validator"
-import customJoi from "../../joi/case-insensitive-validator"
+import caseInsensitiveTagValidator from "../../joi/case-insensitive-validator"
 
 const createVideoSchema = Joi.object({
 	newVideoData: Joi.object({
@@ -19,8 +19,8 @@ const createVideoSchema = Joi.object({
 				tierAccessPriceUsd: Joi.number().min(0).max(100).required()
 			})
 		).max(3).required(),
-		videoTags: customJoi.array().items(
-			customJoi.string().noInvalidCharacters().max(50)
+		videoTags: caseInsensitiveTagValidator.array().items(
+			caseInsensitiveTagValidator.string().noInvalidCharacters().max(50)
 		).uniqueCaseInsensitive()
 	}).required()
 }).required()

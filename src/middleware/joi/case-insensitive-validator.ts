@@ -47,6 +47,6 @@ const invalidCharacterExtension: Extension = {
 	}
 }
 
-const customJoi = Joi.extend(caseInsensitiveUniqueExtension, invalidCharacterExtension)
+const caseInsensitiveTagValidator = Joi.extend(caseInsensitiveUniqueExtension, invalidCharacterExtension)
 
-export default customJoi
+export default caseInsensitiveTagValidator

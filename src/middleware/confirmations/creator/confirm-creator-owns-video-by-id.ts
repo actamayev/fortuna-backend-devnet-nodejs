@@ -13,7 +13,7 @@ export default async function confirmCreatorOwnsVideoById(
 		const creatorOwnsVideo = await checkIfCreatorOwnsVideo(videoId, user.user_id)
 
 		if (creatorOwnsVideo === false) {
-			return res.status(500).json({ error: "Creator does not own the video they are trying to add a tag to"})
+			return res.status(500).json({ error: "Creator does not own the video they are trying to add/delete a tag to/from "})
 		}
 		next()
 	} catch (error) {
