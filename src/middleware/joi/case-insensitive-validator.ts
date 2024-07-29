@@ -29,7 +29,7 @@ const invalidCharacterExtension: Extension = {
 	type: "string",
 	base: Joi.string(),
 	messages: {
-		"string.invalidCharacter": "{{#label}} must not contain any of the following characters: #?&/@"
+		"string.invalidCharacter": "{{#label}} must only contain alphanumeric characters and underscores"
 	},
 	rules: {
 		noInvalidCharacters: {
@@ -37,7 +37,7 @@ const invalidCharacterExtension: Extension = {
 				return this.$_addRule({ name: "noInvalidCharacters" })
 			},
 			validate(value: string, helpers) {
-				if (/[#?&/@]/.test(value)) {
+				if (!/^[a-zA-Z0-9_]+$/.test(value)) {
 					return helpers.error("string.invalidCharacter", { value })
 				}
 

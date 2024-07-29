@@ -28,7 +28,7 @@
 -- select * from channel_name;
 
 -- select * from video_tag_lookup;
-select * from video_tag_mapping;
+-- select * from video_tag_mapping;
 
 -- select * from video_access_tier order by created_at;
 
