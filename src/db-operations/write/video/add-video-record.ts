@@ -1,15 +1,22 @@
 /* eslint-disable max-lines-per-function */
 import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
+import addVideoTags from "../video-tag-mapping/add-video-tags"
+import retrieveOrCreateNewVideoTags from "../video-tag-lookup/retrieve-or-create-new-video-tags"
+
+interface ReturningVideoRecord {
+	videoId: number
+	videoTags: VideoTags[]
+}
 
 export default async function addVideoRecord (
 	newVideoData: IncomingNewVideoData,
 	creatorUserId: number
-): Promise<number> {
+): Promise<ReturningVideoRecord> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		const addVideoResponse = await prismaClient.$transaction(async (prisma) => {
+		return await prismaClient.$transaction(async (prisma) => {
 			const video = await prisma.video.create({
 				data: {
 					video_name: newVideoData.videoName,
@@ -42,6 +49,14 @@ export default async function addVideoRecord (
 				})
 			}
 
+			let videoTags: VideoTags[] = []
+
+			if (!_.isEmpty(newVideoData.videoTags)) {
+				videoTags = await retrieveOrCreateNewVideoTags(prisma, newVideoData.videoTags, creatorUserId)
+				const videoLookupTagIds = videoTags.map(videoTag => videoTag.videoTagId)
+				await addVideoTags(prisma, videoLookupTagIds, video.video_id)
+			}
+
 			await prisma.uploaded_image.update({
 				where: {
 					uploaded_image_id: newVideoData.uploadedImageId
@@ -60,10 +75,8 @@ export default async function addVideoRecord (
 				}
 			})
 
-			return video
+			return { videoId: video.video_id, videoTags }
 		})
-
-		return addVideoResponse.video_id
 	} catch (error) {
 		console.error(error)
 		throw error

@@ -3,8 +3,8 @@ import transformHomePageVideoData from "../../utils/transform/videos/transform-h
 import retrieveMostPopularChannels from "../../db-operations/read/video/retrieve-most-popular-channels"
 import transformHomePageCreatorData from "../../utils/transform/creator/transform-home-page-creator-data"
 import retrieveHomePageCreatorsByIds from "../../db-operations/read/credentials/retrieve-home-page-creators-by-ids"
-import retrieveMostLikedVideosForHomePage from "../../db-operations/read/video/retrieve-most-liked-videos-for-home-page"
-import retrieveMostRecentVideosForHomePage from "../../db-operations/read/video/retrieve-most-recent-videos-for-home-page"
+import retrieveMostLikedVideosForHomePage from "../../db-operations/read/video/home-page/retrieve-most-liked-videos-for-home-page"
+import retrieveMostRecentVideosForHomePage from "../../db-operations/read/video/home-page/retrieve-most-recent-videos-for-home-page"
 
 export default async function getHomePageData (req: Request, res: Response): Promise<Response> {
 	try {

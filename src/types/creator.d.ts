@@ -9,6 +9,7 @@ declare global {
 		description: string
 		isContentExclusive: boolean
 		tierData: IncomingNewVideoTierData[]
+		videoTags: string[]
 	}
 
 	interface IncomingNewVideoTierData {
@@ -42,6 +43,12 @@ declare global {
 			tier_access_price_usd: number
 			is_sold_out: boolean
 		}[]
+		video_tag_mapping: {
+			video_tag_lookup_id: number
+			video_tag_lookup: {
+				video_tag: string
+			}
+		}[]
 		exclusive_video_access_purchase: {
 			exclusive_video_access_purchase_sol_transfer: {
 				sol_amount_transferred: number
@@ -72,6 +79,12 @@ declare global {
 		totalCreatorProfitInSol: number
 		totalCreatorProfitInUsd: number
 		numberOfExclusivePurchasesSoFar: number | null
+		videoTags: VideoTags[]
+	}
+
+	interface VideoTags {
+		videoTag: string
+		videoTagId: number
 	}
 
 	interface CreatorDetails {

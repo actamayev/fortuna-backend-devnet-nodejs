@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import upsertChannelDescription from "../../db-operations/write/channel-description/upsert-channel-description"
+import upsertChannelDescription from "../../../db-operations/write/channel-description/upsert-channel-description"
 
 export default async function addOrEditChannelDescription (req: Request, res: Response): Promise<Response> {
 	try {

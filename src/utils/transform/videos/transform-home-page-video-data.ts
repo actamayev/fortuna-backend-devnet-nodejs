@@ -44,7 +44,8 @@ export default async function transformHomePageVideoData(
 				numberOfLikes,
 				userLikeStatus,
 				numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar,
-				channelName: item.video_creator.channel_name?.channel_name || item.video_creator.username
+				channelName: item.video_creator.channel_name?.channel_name || item.video_creator.username,
+				videoTags: item.video_tag_mapping.map(videoTagMap => videoTagMap.video_tag_lookup.video_tag)
 			}
 		})
 	} catch (error) {

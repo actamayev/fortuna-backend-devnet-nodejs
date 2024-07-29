@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import checkIfCreatorOwnsVideoToUnfeature from "../../../db-operations/read/video/check-if-creator-owns-video-to-unfeature"
+import checkIfCreatorOwnsVideo from "../../../db-operations/read/video/check-if-creator-owns-video"
 
 export default async function confirmCreatorOwnsVideoToUnfeature(
 	req: Request,
@@ -10,7 +10,7 @@ export default async function confirmCreatorOwnsVideoToUnfeature(
 		const { user } = req
 		const { videoIdToUnfeature } = req.body as { videoIdToUnfeature: number }
 
-		const creatorOwnsVideoToUnfeature = await checkIfCreatorOwnsVideoToUnfeature(
+		const creatorOwnsVideoToUnfeature = await checkIfCreatorOwnsVideo(
 			videoIdToUnfeature,
 			user.user_id
 		)

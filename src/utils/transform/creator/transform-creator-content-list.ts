@@ -32,7 +32,11 @@ export default function transformCreatorContentList(input: RetrievedCreatorDBVid
 				numberOfLikes: item.numberOfLikes,
 				totalCreatorProfitInSol,
 				totalCreatorProfitInUsd,
-				numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar
+				numberOfExclusivePurchasesSoFar: item.numberOfExclusivePurchasesSoFar,
+				videoTags: item.video_tag_mapping.map(videoTagMapping => ({
+					videoTag: videoTagMapping.video_tag_lookup.video_tag,
+					videoTagId: videoTagMapping.video_tag_lookup_id
+				}))
 			}
 		})
 

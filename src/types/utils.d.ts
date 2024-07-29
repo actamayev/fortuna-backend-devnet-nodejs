@@ -1,3 +1,7 @@
+import { Prisma, PrismaClient } from "@prisma/client"
+import { DefaultArgs } from "@prisma/client/runtime/library"
+
+/* eslint-disable max-len */
 declare global {
 	type EmailOrUsername = "Email" | "Username"
 
@@ -36,6 +40,8 @@ declare global {
 
 	type SecretsObject = { [K in SecretKeys]: string }
 	type PublicOrPrivate = "Public" | "Private"
+
+	type PrismaType = Omit<PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends">
 }
 
 export {}

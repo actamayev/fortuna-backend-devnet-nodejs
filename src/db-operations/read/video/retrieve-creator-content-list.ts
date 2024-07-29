@@ -42,6 +42,19 @@ export default async function retrieveCreatorContentList(userId: number): Promis
 						is_sold_out: true
 					}
 				},
+				video_tag_mapping: {
+					select: {
+						video_tag_lookup_id: true,
+						video_tag_lookup: {
+							select: {
+								video_tag: true
+							}
+						}
+					},
+					where: {
+						is_active: true
+					}
+				},
 				exclusive_video_access_purchase: {
 					select: {
 						exclusive_video_access_purchase_sol_transfer: {
@@ -71,16 +84,12 @@ export default async function retrieveCreatorContentList(userId: number): Promis
 			}
 		})
 
-		const filteredVideo = creatorVideoData
-			.map(video => ({
-				...video,
-				numberOfExclusivePurchasesSoFar: video.is_video_exclusive ? video._count.exclusive_video_access_purchase : null,
-				numberOfLikes: video._count.video_like_status
-			}))
+		return creatorVideoData.map(video => ({
+			...video,
+			numberOfExclusivePurchasesSoFar: video.is_video_exclusive ? video._count.exclusive_video_access_purchase : null,
+			numberOfLikes: video._count.video_like_status
 			// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
-			.map(({ _count, ...rest }) => rest) // Remove _count property
-
-		return filteredVideo
+		})).map(({ _count, ...rest }) => rest) // Remove _count property
 	} catch (error) {
 		console.error(error)
 		throw error

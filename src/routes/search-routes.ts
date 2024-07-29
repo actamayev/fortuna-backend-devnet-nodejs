@@ -1,10 +1,12 @@
 import express from "express"
 
 import generalSearch from "../controllers/search/general-search"
+import getVideosByTag from "../controllers/search/get-videos-by-tag"
 import searchForUsername from "../controllers/search/search-for-username"
 import checkIfPublicKeyExistsWithFortuna from "../controllers/search/check-if-public-key-exists-with-fortuna"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
+import validateVideoTag from "../middleware/request-validation/search/validate-video-tag"
 import validatePublicKey from "../middleware/request-validation/search/validate-public-key"
 import validateSearchTerm from "../middleware/request-validation/search/validate-search-term"
 import validateSearchUsername from "../middleware/request-validation/search/validate-search-username"
@@ -31,6 +33,13 @@ searchRoutes.get(
 	validateSearchTerm,
 	optionalJwtVerifyWithUserAttachment,
 	generalSearch
+)
+
+searchRoutes.get(
+	"/get-videos-by-tag/:videoTag",
+	validateVideoTag,
+	optionalJwtVerifyWithUserAttachment,
+	getVideosByTag
 )
 
 export default searchRoutes

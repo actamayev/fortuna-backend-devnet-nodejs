@@ -1,4 +1,4 @@
-import PrismaClientClass from "../../../classes/prisma-client"
+import PrismaClientClass from "../../../../classes/prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
 export default async function retrieveMostLikedVideosForHomePage(): Promise<RetrievedHomePageVideosFromDB[]> {
@@ -61,6 +61,18 @@ export default async function retrieveMostLikedVideosForHomePage(): Promise<Retr
 						purchases_allowed_for_this_tier: true,
 						tier_access_price_usd: true,
 						is_sold_out: true
+					}
+				},
+				video_tag_mapping: {
+					select: {
+						video_tag_lookup: {
+							select: {
+								video_tag: true
+							}
+						}
+					},
+					where: {
+						is_active: true
 					}
 				},
 				video_creator: {
