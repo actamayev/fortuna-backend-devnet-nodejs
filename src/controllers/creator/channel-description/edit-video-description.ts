@@ -3,10 +3,9 @@ import updateVideoDescription from "../../../db-operations/write/video/update-vi
 
 export default async function editVideoDescription (req: Request, res: Response): Promise<Response> {
 	try {
-		const { basicVideoDetails } = req
-		const { videoDescription } = req.body
+		const { videoDescription, videoId } = req.body
 
-		await updateVideoDescription(basicVideoDetails.video_id, videoDescription)
+		await updateVideoDescription(videoId, videoDescription)
 
 		return res.status(200).json({ success: "Edited Video description" })
 	} catch (error) {

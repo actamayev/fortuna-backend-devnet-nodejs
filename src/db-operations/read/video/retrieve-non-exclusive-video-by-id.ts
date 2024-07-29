@@ -1,22 +1,26 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function retrieveVideoIdByUUIDAndUserId(
-	videoUUID: string,
+export default async function retrieveNonExclusiveVideoById(
+	videoId: number,
 	userId: number
-): Promise<RetrievedVideoId | null> {
+): Promise<NonExclusiveVideoData | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
 		return await prismaClient.video.findFirst({
 			where: {
-				uuid: videoUUID,
+				video_id: videoId,
 				creator_user_id: userId,
+				is_video_exclusive: {
+					not: true
+				},
 				video_creator: {
 					is_active: true
 				}
 			},
 			select: {
-				video_id: true
+				video_id: true,
+				video_listing_status: true
 			}
 		})
 	} catch (error) {

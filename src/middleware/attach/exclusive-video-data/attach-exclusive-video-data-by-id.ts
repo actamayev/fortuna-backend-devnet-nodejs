@@ -1,11 +1,11 @@
 import _ from "lodash"
 import { NextFunction, Request, Response } from "express"
-import retrieveExclusiveVideoDataByUUID from "../../../db-operations/read/video/retrieve-exclusive-video-data-by-uuid"
+import retrieveExclusiveVideoDataById from "../../../db-operations/read/video/retrieve-exclusive-video-data-by-id"
 
-export default async function attachExclusiveVideoDataByUUID(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+export default async function attachExclusiveVideoDataById(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 	try {
-		const { videoUUID, tierNumber } = req.body
-		const exclusiveVideoData = await retrieveExclusiveVideoDataByUUID(videoUUID, tierNumber)
+		const { videoId, tierNumber } = req.body
+		const exclusiveVideoData = await retrieveExclusiveVideoDataById(videoId, tierNumber)
 		if (_.isNull(exclusiveVideoData)) return res.status(400).json({ message: "Cannot find Exclusive Video" })
 
 		req.exclusiveVideoData = exclusiveVideoData

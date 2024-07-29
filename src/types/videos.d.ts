@@ -155,6 +155,7 @@ declare global {
 	}
 
 	interface VideoDataSendingToFrontendLessVideoUrl {
+		videoId: number
 		videoName: string
 		videoListingStatus: VideoListingStatus
 		description: string

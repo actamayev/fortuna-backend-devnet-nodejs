@@ -1,16 +1,16 @@
 import _ from "lodash"
 import { NextFunction, Request, Response } from "express"
-import retrieveVideoDataForExclusiveContentCheckByUUID
-	from "../../../db-operations/read/video/retrieve-video-data-for-exclusive-content-check-by-uuid"
+import {retrieveVideoDataForExclusiveContentCheckById }
+	from "../../../db-operations/read/video/retrieve-video-data-for-exclusive-content-check"
 
-export default async function attachMinimalExclusiveVideoDataByUUID(
+export default async function attachMinimalExclusiveVideoDataById(
 	req: Request,
 	res: Response,
 	next: NextFunction
 ): Promise<Response | void> {
 	try {
-		const { videoUUID } = req.body
-		const minimalDataNeededToCheckForExclusiveContentAccess = await retrieveVideoDataForExclusiveContentCheckByUUID(videoUUID)
+		const { videoId } = req.body
+		const minimalDataNeededToCheckForExclusiveContentAccess = await retrieveVideoDataForExclusiveContentCheckById(videoId)
 		if (_.isNull(minimalDataNeededToCheckForExclusiveContentAccess)) {
 			return res.status(400).json({ message: "Cannot find Exclusive Video" })
 		}

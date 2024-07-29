@@ -1,21 +1,22 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import idValidator from "../../joi/id-validator"
 import uuidValidator from "../../joi/uuid-validator"
 import caseInsensitiveTagValidator from "../../joi/case-insensitive-validator"
 
 const createVideoSchema = Joi.object({
 	newVideoData: Joi.object({
 		uuid: uuidValidator.required(),
-		uploadedImageId: Joi.number().strict().required(),
-		uploadedVideoId: Joi.number().strict().required(),
+		uploadedImageId: idValidator.required(),
+		uploadedVideoId: idValidator.required(),
 		videoName: Joi.string().max(100).required(),
 		description: Joi.string().max(5000).required(),
 		isContentExclusive: Joi.boolean().required(),
 		tierData: Joi.array().items(
 			Joi.object({
-				tierNumber: Joi.number().integer().min(1).max(3).required(),
-				purchasesInThisTier: Joi.number().integer().min(1).allow(null).required(),
+				tierNumber: idValidator.min(1).max(3).required(),
+				purchasesInThisTier: idValidator.min(1).allow(null).required(),
 				tierAccessPriceUsd: Joi.number().min(0).max(100).required()
 			})
 		).max(3).required(),
