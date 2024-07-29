@@ -35,7 +35,8 @@ export default function transformVideoByUUIDData(
 			})),
 			numberOfLikes,
 			userLikeStatus,
-			channelName: videoData.video_creator.channel_name?.channel_name || videoData.video_creator.username
+			channelName: videoData.video_creator.channel_name?.channel_name || videoData.video_creator.username,
+			videoTags: videoData.video_tag_mapping.map(videoTagMap => videoTagMap.video_tag_lookup.video_tag)
 		}
 
 		if (!_.isUndefined(videoData.videoUrl)) {

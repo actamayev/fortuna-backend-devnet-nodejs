@@ -46,7 +46,8 @@ export default async function transformVideosByCreatorUsername(
 				})),
 				numberOfLikes,
 				userLikeStatus,
-				channelName: retrievedVideoData.channel_name
+				channelName: retrievedVideoData.channel_name,
+				videoTags: item.video_tag_mapping.map(videoTagMap => videoTagMap.video_tag_lookup.video_tag)
 			}
 		})
 

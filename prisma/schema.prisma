@@ -46,6 +46,8 @@ model credentials {
 	solana_wallet                                               solana_wallet?
 	video_like_status											video_like_status[]
 	video				                                        video[]
+	video_tag_lookup				                            video_tag_lookup[]
+
 	exclusive_video_access_purchase                             exclusive_video_access_purchase[]
 	channel_name												channel_name?
 	channel_description											channel_description?
@@ -122,17 +124,50 @@ model video {
 	created_at                                                  DateTime  @default(now())
 	updated_at                                                  DateTime  @default(now()) @updatedAt
 
+	exclusive_video_access_purchase                             exclusive_video_access_purchase[]
+	video_access_tier                                           video_access_tier[]
+	video_like_status											video_like_status[]
+	video_tag_mapping											video_tag_mapping[]
+
 	video_creator		                                        credentials @relation(fields: [creator_user_id], references: [user_id])
 	uploaded_image                                              uploaded_image @relation(fields: [uploaded_image_id], references: [uploaded_image_id])
 	uploaded_video                                              uploaded_video @relation(fields: [uploaded_video_id], references: [uploaded_video_id])
 
-	exclusive_video_access_purchase                             exclusive_video_access_purchase[]
-	video_access_tier                                           video_access_tier[]
-	video_like_status											video_like_status[]
-
 	@@index([creator_user_id], name: "video__creator_user_id_idx")
 	@@index([uploaded_image_id], name: "video__uploaded_image_id_idx")
 	@@index([uploaded_video_id], name: "video__uploaded_video_id_idx")
+}
+
+model video_tag_lookup {
+	video_tag_lookup_id                                         Int  @id @default(autoincrement())
+	video_tag													String @unique
+	added_by_user_id											Int
+
+	created_at                                                  DateTime  @default(now())
+	updated_at                                                  DateTime  @default(now()) @updatedAt
+
+	video_tag_mapping											video_tag_mapping[]
+	user                                               			credentials @relation(fields: [added_by_user_id], references: [user_id])
+
+	@@index([added_by_user_id], name: "video_tag_lookup__added_by_user_id_idx")
+}
+
+model video_tag_mapping {
+	video_tag_mapping_id                                        Int  @id @default(autoincrement())
+	video_tag_lookup_id											Int
+	video_id													Int
+
+	is_active                                                   Boolean  @default(true)
+
+	created_at                                                  DateTime  @default(now())
+	updated_at                                                  DateTime  @default(now()) @updatedAt
+
+	video_tag_lookup                                   			video_tag_lookup @relation(fields: [video_tag_lookup_id], references: [video_tag_lookup_id])
+	video                                              			video @relation(fields: [video_id], references: [video_id])
+
+	@@index([video_tag_lookup_id], name: "video_tag_mapping__video_tag_lookup_id_idx")
+	@@index([video_id], name: "video_tag_mapping__video_id_idx")
+	@@unique([video_tag_lookup_id, video_id])
 }
 
 model video_access_tier {
