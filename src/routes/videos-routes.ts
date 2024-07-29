@@ -1,5 +1,6 @@
 import express from "express"
 
+import reportVideo from "../controllers/videos/report-video"
 import getVideoUrl from "../controllers/videos/get-video-url"
 import getVideoByUUID from "../controllers/videos/get-video-by-uuid"
 import getHomePageData from "../controllers/videos/get-home-page-data"
@@ -8,12 +9,14 @@ import getRecentlyUploadedVideos from "../controllers/videos/get-recently-upload
 import getVideosByCreatorUsername from "../controllers/videos/get-videos-by-creator-username"
 
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
+import validateReportVideo from "../middleware/request-validation/videos/validate-report-video"
 import validateLikeOrUnlike from "../middleware/request-validation/videos/validate-like-or-unlike"
 import validateCreatorUsername from "../middleware/request-validation/videos/validate-creator-username"
 import optionalJwtVerifyWithUserAttachment from "../middleware/jwt/optional-jwt-verify-with-user-attachment"
 import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
 import confirmUserHasExclusiveAccess from "../middleware/confirmations/videos/confirm-user-has-exclusive-access"
-import attachMinimalExclusiveVideoDataByUUID from "../middleware/attach/exclusive-video-data/attach-minimal-exclusive-video-data-by-uuid"
+import confirmUserHasntAlreadyReportedVideo from "../middleware/confirmations/videos/confirm-user-hasnt-already-reported-video"
+import attachMinimalExclusiveVideoDataById from "../middleware/attach/exclusive-video-data/attach-minimal-exclusive-video-data-by-id"
 
 const videosRoutes = express.Router()
 
@@ -46,9 +49,19 @@ videosRoutes.post(
 	"/like-or-unlike-video",
 	validateLikeOrUnlike,
 	jwtVerifyAttachUser,
-	attachMinimalExclusiveVideoDataByUUID,
+	attachMinimalExclusiveVideoDataById,
 	confirmUserHasExclusiveAccess,
 	likeOrUnlikeVideo
+)
+
+videosRoutes.post(
+	"/report-video",
+	validateReportVideo,
+	jwtVerifyAttachUser,
+	confirmUserHasntAlreadyReportedVideo,
+	attachMinimalExclusiveVideoDataById,
+	confirmUserHasExclusiveAccess,
+	reportVideo
 )
 
 export default videosRoutes

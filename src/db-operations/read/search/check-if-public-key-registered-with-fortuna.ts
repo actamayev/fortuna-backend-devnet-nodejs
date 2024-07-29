@@ -12,7 +12,7 @@ export default async function checkIfPublicKeyRegisteredWithFortuna(publicKey: s
 
 		return walletExists > 0
 	} catch (error) {
-		console.error("Error checking if public key registered with fortuna:", error)
+		console.error(error)
 		throw error
 	}
 }

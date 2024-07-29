@@ -47,6 +47,7 @@ model credentials {
 	video_like_status											video_like_status[]
 	video				                                        video[]
 	video_tag_lookup				                            video_tag_lookup[]
+	reported_video				                            	reported_video[]
 
 	exclusive_video_access_purchase                             exclusive_video_access_purchase[]
 	channel_name												channel_name?
@@ -128,6 +129,7 @@ model video {
 	video_access_tier                                           video_access_tier[]
 	video_like_status											video_like_status[]
 	video_tag_mapping											video_tag_mapping[]
+	reported_video												reported_video[]
 
 	video_creator		                                        credentials @relation(fields: [creator_user_id], references: [user_id])
 	uploaded_image                                              uploaded_image @relation(fields: [uploaded_image_id], references: [uploaded_image_id])
@@ -471,4 +473,23 @@ model channel_banner {
 	updated_at                                                  DateTime  @default(now()) @updatedAt
 
 	user                                                        credentials?
+}
+
+model reported_video {
+	reported_video_id											Int @id @default(autoincrement())
+	video_id													Int
+	user_id_who_reported_video									Int
+	report_message												String?
+
+	is_active                                                   Boolean  @default(true)
+
+	created_at                                                  DateTime  @default(now())
+	updated_at                                                  DateTime  @default(now()) @updatedAt
+
+	video                                              			video @relation(fields: [video_id], references: [video_id])
+	user                                               			credentials @relation(fields: [user_id_who_reported_video], references: [user_id])
+
+	@@index([video_id], name: "reported_video__video_id_idx")
+	@@index([user_id_who_reported_video], name: "reported_video__user_id_who_reported_video_idx")
+	@@unique([video_id, user_id_who_reported_video])
 }

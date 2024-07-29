@@ -1,10 +1,11 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import idValidator from "../../joi/id-validator"
 
 const deleteVideoTagSchema = Joi.object({
-	videoTagId: Joi.number().integer().required(),
-	videoId: Joi.number().integer().required()
+	videoTagId: idValidator.required(),
+	videoId: idValidator.required()
 }).required()
 
 export default function validateDeleteVideoTag (req: Request, res: Response, next: NextFunction): Response | void {

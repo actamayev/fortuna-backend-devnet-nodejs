@@ -11,7 +11,7 @@ import confirmUserHasSufficientFundsToPurchaseExclusiveAccess
 import confirmCreatorNotBuyingInstantAccessToOwnExclusiveContent
 	from "../middleware/confirmations/market/confirm-creator-not-buying-instant-access-to-own-exclusive-content"
 import validatePurchaseInstantAccess from "../middleware/request-validation/videos/validate-puchase-instant-access"
-import attachExclusiveVideoDataByUUID from "../middleware/attach/exclusive-video-data/attach-exclusive-video-data-by-uuid"
+import attachExclusiveVideoDataById from "../middleware/attach/exclusive-video-data/attach-exclusive-video-data-by-id"
 
 const marketRoutes = express.Router()
 
@@ -19,7 +19,7 @@ marketRoutes.post(
 	"/purchase-instant-exclusive-content-access",
 	validatePurchaseInstantAccess,
 	jwtVerifyAttachSolanaWallet,
-	attachExclusiveVideoDataByUUID,
+	attachExclusiveVideoDataById,
 	confirmTierNotSoldOut,
 	confirmCreatorNotBuyingInstantAccessToOwnExclusiveContent,
 	confirmUserDoesntAlreadyHaveExclusiveAccess,

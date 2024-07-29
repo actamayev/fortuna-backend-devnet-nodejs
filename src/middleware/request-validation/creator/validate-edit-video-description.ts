@@ -1,11 +1,11 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
-import uuidValidator from "../../joi/uuid-validator"
+import idValidator from "../../joi/id-validator"
 
 const editVideoDescriptionSchema = Joi.object({
-	videoDescription: Joi.string().max(5000).required(),
-	videoUUID: uuidValidator.required()
+	videoId: idValidator.required(),
+	videoDescription: Joi.string().max(5000).required()
 }).required()
 
 export default function validateEditVideoDescription (req: Request, res: Response, next: NextFunction): Response | void {

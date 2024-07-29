@@ -1,11 +1,11 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
-import uuidValidator from "../../joi/uuid-validator"
+import idValidator from "../../joi/id-validator"
 
 const purchaseInstantAccessSchema = Joi.object({
-	videoUUID: uuidValidator.required(),
-	tierNumber: Joi.number().strict().required()
+	videoId: idValidator.required(),
+	tierNumber: idValidator.min(1).max(3).required(),
 }).required()
 
 export default function validatePurchaseInstantAccess (req: Request, res: Response, next: NextFunction): Response | void {

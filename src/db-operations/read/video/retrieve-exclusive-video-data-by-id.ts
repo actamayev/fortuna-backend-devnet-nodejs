@@ -2,8 +2,8 @@ import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
 
 // eslint-disable-next-line max-lines-per-function
-export default async function retrieveExclusiveVideoDataByUUID(
-	videoUUID: string,
+export default async function retrieveExclusiveVideoDataById(
+	videoId: number,
 	tierNumber: number
 ): Promise<ExclusiveVideoData | null> {
 	try {
@@ -11,7 +11,7 @@ export default async function retrieveExclusiveVideoDataByUUID(
 
 		const exclusiveVideoData = await prismaClient.video.findFirst({
 			where: {
-				uuid: videoUUID,
+				video_id: videoId,
 				is_video_exclusive: true,
 				video_access_tier: {
 					some: {
@@ -24,7 +24,6 @@ export default async function retrieveExclusiveVideoDataByUUID(
 			},
 			select: {
 				uuid: true,
-				video_id: true,
 				is_video_exclusive: true,
 				creator_user_id: true,
 				video_access_tier: {
@@ -47,7 +46,7 @@ export default async function retrieveExclusiveVideoDataByUUID(
 
 		return {
 			uuid: exclusiveVideoData.uuid,
-			video_id: exclusiveVideoData.video_id,
+			video_id: videoId,
 			is_video_exclusive: exclusiveVideoData.is_video_exclusive,
 			creator_user_id: exclusiveVideoData.creator_user_id,
 			purchases_allowed_for_this_tier: tierData.purchases_allowed_for_this_tier,

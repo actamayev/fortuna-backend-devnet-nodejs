@@ -17,18 +17,18 @@ import removeSocialPlatformLink from "../controllers/creator/social-platform-lin
 import addOrEditChannelDescription from "../controllers/creator/channel-description/add-or-edit-channel-description"
 import addOrEditSocialPlatformLink from "../controllers/creator/social-platform-link/add-or-edit-social-platform-link"
 
-import attachVideoByUUID from "../middleware/attach/attach-video-by-uuid"
 import jwtVerifyAttachUser from "../middleware/jwt/jwt-verify-attach-user"
+import { confirmCreatorOwnsVideoByIdInBody, confirmCreatorOwnsVideoByIdInParams }
+	from "../middleware/confirmations/creator/confirm-creator-owns-video-by-id"
 import validateCreateVideo from "../middleware/request-validation/creator/validate-create-video"
 import validateAddVideoTag from "../middleware/request-validation/creator/validate-add-video-tag"
 import validateFeatureVideo from "../middleware/request-validation/creator/validate-feature-video"
 import validateEditVideoName from "../middleware/request-validation/creator/validate-edit-video-name"
 import validateUnfeatureVideo from "../middleware/request-validation/creator/validate-unfeature-video"
 import validateDeleteVideoTag from "../middleware/request-validation/creator/validate-delete-video-tag"
-import attachNonExclusiveVideoDataByUUID from "../middleware/attach/attach-non-exclusive-video-by-uuid"
+import attachNonExclusiveVideoDataById from "../middleware/attach/attach-non-exclusive-video-data-by-id"
+import validateVideoIdInParams from "../middleware/request-validation/videos/validate-video-id-in-params"
 import validateEditChannelName from "../middleware/request-validation/creator/validate-edit-channel-name"
-import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
-import confirmCreatorOwnsVideoById from "../middleware/confirmations/creator/confirm-creator-owns-video-by-id"
 import validateEditVideoDescription from "../middleware/request-validation/creator/validate-edit-video-description"
 import confirmCreatorOwnsVideoToFeature from "../middleware/confirmations/creator/confirm-creator-owns-video-to-feature"
 import confirmCreatorOwnsVideoToUnfeature from "../middleware/confirmations/creator/confirm-creator-owns-video-to-unfeature"
@@ -76,10 +76,11 @@ creatorRoutes.post("/remove-current-profile-picture", jwtVerifyAttachUser, remov
 creatorRoutes.post("/remove-current-channel-banner-picture", jwtVerifyAttachUser, removeCurrentChannelBannerPicture)
 
 creatorRoutes.post(
-	"/update-video-listing-status/:videoUUID",
-	validateVideoUUIDInParams,
+	"/update-video-listing-status/:videoId",
+	validateVideoIdInParams,
 	jwtVerifyAttachUser,
-	attachNonExclusiveVideoDataByUUID,
+	confirmCreatorOwnsVideoByIdInParams,
+	attachNonExclusiveVideoDataById,
 	updateVideoListingStatus
 )
 
@@ -87,7 +88,7 @@ creatorRoutes.post(
 	"/edit-video-name",
 	validateEditVideoName,
 	jwtVerifyAttachUser,
-	attachVideoByUUID,
+	confirmCreatorOwnsVideoByIdInBody,
 	editVideoName
 )
 
@@ -95,7 +96,7 @@ creatorRoutes.post(
 	"/edit-video-description",
 	validateEditVideoDescription,
 	jwtVerifyAttachUser,
-	attachVideoByUUID,
+	confirmCreatorOwnsVideoByIdInBody,
 	editVideoDescription
 )
 
@@ -119,7 +120,7 @@ creatorRoutes.post(
 	"/add-video-tag",
 	validateAddVideoTag,
 	jwtVerifyAttachUser,
-	confirmCreatorOwnsVideoById,
+	confirmCreatorOwnsVideoByIdInBody,
 	addTagToVideo
 )
 
@@ -127,7 +128,7 @@ creatorRoutes.post(
 	"/delete-video-tag",
 	validateDeleteVideoTag,
 	jwtVerifyAttachUser,
-	confirmCreatorOwnsVideoById,
+	confirmCreatorOwnsVideoByIdInBody,
 	removeTagFromVideo
 )
 
