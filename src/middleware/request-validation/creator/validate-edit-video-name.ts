@@ -4,8 +4,8 @@ import { Request, Response, NextFunction } from "express"
 import idValidator from "../../joi/id-validator"
 
 const editVideoNameSchema = Joi.object({
-	videoName: Joi.string().max(100).required(),
-	videoId: idValidator.required()
+	videoId: idValidator.required(),
+	videoName: Joi.string().max(100).required()
 }).required()
 
 export default function validateEditVideoName (req: Request, res: Response, next: NextFunction): Response | void {

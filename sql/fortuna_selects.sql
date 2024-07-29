@@ -31,6 +31,7 @@
 -- select * from video_tag_mapping;
 
 -- select * from video_access_tier order by created_at;
+-- select * from reported_video;
 
 -- UPDATE uploaded_video
 -- SET video_duration_seconds = 30.52667

@@ -4,10 +4,12 @@ export default async function checkIfUserReportedVideo(userId: number, videoId: 
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
 
-		const walletExists = await prismaClient.reported_video.findFirst({
+		const walletExists = await prismaClient.reported_video.findUnique({
 			where: {
-				user_id_who_reported_video: userId,
-				video_id: videoId
+				video_id_user_id_who_reported_video: {
+					user_id_who_reported_video: userId,
+					video_id: videoId
+				}
 			}
 		})
 
