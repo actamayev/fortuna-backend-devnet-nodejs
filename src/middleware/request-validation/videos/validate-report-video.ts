@@ -5,7 +5,7 @@ import idValidator from "../../joi/id-validator"
 
 const reportVideoSchema = Joi.object({
 	videoId: idValidator.required(),
-	reportMessage: Joi.string().optional()
+	reportMessage: Joi.string().optional().max(300)
 }).required()
 
 export default function validateReportVideo (req: Request, res: Response, next: NextFunction): Response | void {

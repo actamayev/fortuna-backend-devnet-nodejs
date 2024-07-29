@@ -15,6 +15,7 @@ import validateCreatorUsername from "../middleware/request-validation/videos/val
 import optionalJwtVerifyWithUserAttachment from "../middleware/jwt/optional-jwt-verify-with-user-attachment"
 import validateVideoUUIDInParams from "../middleware/request-validation/videos/validate-video-uuid-in-params"
 import confirmUserHasExclusiveAccess from "../middleware/confirmations/videos/confirm-user-has-exclusive-access"
+import confirmUserHasntAlreadyReportedVideo from "../middleware/confirmations/videos/confirm-user-hasnt-already-reported-video"
 import attachMinimalExclusiveVideoDataById from "../middleware/attach/exclusive-video-data/attach-minimal-exclusive-video-data-by-id"
 import attachMinimalExclusiveVideoDataByUUID from "../middleware/attach/exclusive-video-data/attach-minimal-exclusive-video-data-by-uuid"
 
@@ -58,6 +59,7 @@ videosRoutes.post(
 	"/report-video",
 	validateReportVideo,
 	jwtVerifyAttachUser,
+	confirmUserHasntAlreadyReportedVideo,
 	attachMinimalExclusiveVideoDataById,
 	confirmUserHasExclusiveAccess,
 	reportVideo
