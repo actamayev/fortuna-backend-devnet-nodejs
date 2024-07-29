@@ -5,7 +5,7 @@ import addVideoTags from "../video-tag-mapping/add-video-tags"
 import retrieveOrCreateNewVideoTags from "../video-tag-lookup/retrieve-or-create-new-video-tags"
 
 interface ReturningVideoRecord {
-	newVideoId: number
+	videoId: number
 	videoTags: VideoTags[]
 }
 
@@ -75,7 +75,7 @@ export default async function addVideoRecord (
 				}
 			})
 
-			return { newVideoId: video.video_id, videoTags }
+			return { videoId: video.video_id, videoTags }
 		})
 	} catch (error) {
 		console.error(error)
