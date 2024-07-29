@@ -13,12 +13,12 @@ export async function confirmCreatorOwnsVideoByIdInBody(
 		const creatorOwnsVideo = await checkIfCreatorOwnsVideo(videoId, user.user_id)
 
 		if (creatorOwnsVideo === false) {
-			return res.status(500).json({ error: "Creator does not own the video videoID body"})
+			return res.status(500).json({ error: "Creator does not own the video videoId body"})
 		}
 		next()
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to confirm that creator owns the video videoID body" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to confirm that creator owns the video videoId body" })
 	}
 }
 
@@ -34,11 +34,11 @@ export async function confirmCreatorOwnsVideoByIdInParams(
 		const creatorOwnsVideo = await checkIfCreatorOwnsVideo(Number(videoId), user.user_id)
 
 		if (creatorOwnsVideo === false) {
-			return res.status(500).json({ error: "Creator does not own the video videoID params" })
+			return res.status(500).json({ error: "Creator does not own the video videoId params" })
 		}
 		next()
 	} catch (error) {
 		console.error(error)
-		return res.status(500).json({ error: "Internal Server Error: Unable to confirm that creator owns the video videoID params" })
+		return res.status(500).json({ error: "Internal Server Error: Unable to confirm that creator owns the video videoId params" })
 	}
 }

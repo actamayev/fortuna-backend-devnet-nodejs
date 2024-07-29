@@ -5,7 +5,7 @@ import idValidator from "../../joi/id-validator"
 
 const purchaseInstantAccessSchema = Joi.object({
 	videoId: idValidator.required(),
-	tierNumber: Joi.number().strict().required()
+	tierNumber: idValidator.min(1).max(3).required(),
 }).required()
 
 export default function validatePurchaseInstantAccess (req: Request, res: Response, next: NextFunction): Response | void {
