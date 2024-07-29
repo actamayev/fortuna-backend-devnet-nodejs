@@ -1,6 +1,5 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-
 export default async function retrieveVideoTagIdByTagName(videoTag: string): Promise<number | undefined> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()

@@ -11,11 +11,12 @@ export default async function addTagToVideo (req: Request, res: Response): Promi
 
 		let videoTagId = await retrieveVideoTagIdByTagName(videoTag)
 
-		if (_.isUndefined(videoTagId)) {
+		if (!_.isUndefined(videoTagId)) {
+			// If the tag exists in the lookup table, then add/update the tag record in the mapping table
+			await upsertVideoTag(videoId, videoTagId)
+		} else {
 			//If the tag the user is trying to add does not exist:
 			videoTagId = await addTagToLookupAndMapping(videoId, videoTag, user.user_id)
-		} else {
-			await upsertVideoTag(videoId, videoTagId)
 		}
 
 		return res.status(200).json({ videoTagId })
