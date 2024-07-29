@@ -1,11 +1,12 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import idValidator from "../../joi/id-validator"
 
 const featureVideoSchema = Joi.object({
-	videoIdToFeature: Joi.number().integer().required(),
+	videoIdToFeature: idValidator.required(),
 	videoIdToUnfeature: Joi.alternatives().try(
-		Joi.number().integer(),
+		idValidator,
 		Joi.allow(null)
 	).optional()
 }).required()

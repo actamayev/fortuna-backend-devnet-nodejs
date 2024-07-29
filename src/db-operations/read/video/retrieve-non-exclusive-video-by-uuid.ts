@@ -1,7 +1,7 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
 export default async function retrieveNonExclusiveVideoByUUID(
-	videoUUID: string,
+	videoId: number,
 	userId: number
 ): Promise<NonExclusiveVideoData | null> {
 	try {
@@ -9,7 +9,7 @@ export default async function retrieveNonExclusiveVideoByUUID(
 
 		return await prismaClient.video.findFirst({
 			where: {
-				uuid: videoUUID,
+				video_id: videoId,
 				creator_user_id: userId,
 				is_video_exclusive: {
 					not: true

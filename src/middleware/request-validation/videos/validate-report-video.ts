@@ -1,9 +1,10 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import idValidator from "../../joi/id-validator"
 
 const reportVideoSchema = Joi.object({
-	videoId: Joi.number().integer().required(),
+	videoId: idValidator.required(),
 	reportMessage: Joi.string().optional()
 }).required()
 

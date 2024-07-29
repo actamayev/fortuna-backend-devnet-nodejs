@@ -1,9 +1,10 @@
 import Joi from "joi"
 import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
+import idValidator from "../../joi/id-validator"
 
 const videoIdInBodySchema = Joi.object({
-	videoId: Joi.number().integer().required()
+	videoId: idValidator.required()
 }).required()
 
 export default function validateVideoIdInBody (req: Request, res: Response, next: NextFunction): Response | void {
