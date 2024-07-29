@@ -92,12 +92,7 @@ export default async function retrieveVideosByTag(videoTag: string): Promise<Ret
 										exclusive_video_access_purchase: true
 									}
 								}
-							},
-							// ASAP TODO: where: {
-							// 	video_listing_status: {
-							// 		not: "UNLISTED"
-							// 	}
-							// }
+							}
 						}
 					}
 				}
@@ -107,6 +102,7 @@ export default async function retrieveVideosByTag(videoTag: string): Promise<Ret
 		if (_.isNull(retrievedVideos)) return null
 
 		const filteredVideos = retrievedVideos.video_tag_mapping
+			.filter(mapping => mapping.video.video_listing_status !== "UNLISTED")
 			.filter(mapping => mapping.video.video_creator.username !== null)
 			.map(mapping => ({
 				...mapping.video,

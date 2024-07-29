@@ -3,8 +3,7 @@ import _ from "lodash"
 import { Request, Response, NextFunction } from "express"
 
 const addVideoTagSchema = Joi.object({
-	// TODO: Make sure the tag is 50 chars or less.
-	videoTag: Joi.string().required(),
+	videoTag: Joi.string().required().max(50),
 	videoId: Joi.number().integer().required()
 }).required()
 
