@@ -84,16 +84,12 @@ export default async function retrieveCreatorContentList(userId: number): Promis
 			}
 		})
 
-		const filteredVideos = creatorVideoData
-			.map(video => ({
-				...video,
-				numberOfExclusivePurchasesSoFar: video.is_video_exclusive ? video._count.exclusive_video_access_purchase : null,
-				numberOfLikes: video._count.video_like_status
-			}))
+		return creatorVideoData.map(video => ({
+			...video,
+			numberOfExclusivePurchasesSoFar: video.is_video_exclusive ? video._count.exclusive_video_access_purchase : null,
+			numberOfLikes: video._count.video_like_status
 			// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
-			.map(({ _count, ...rest }) => rest) // Remove _count property
-
-		return filteredVideos
+		})).map(({ _count, ...rest }) => rest) // Remove _count property
 	} catch (error) {
 		console.error(error)
 		throw error
