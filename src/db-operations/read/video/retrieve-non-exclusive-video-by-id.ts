@@ -1,6 +1,6 @@
 import PrismaClientClass from "../../../classes/prisma-client"
 
-export default async function retrieveNonExclusiveVideoByUUID(
+export default async function retrieveNonExclusiveVideoById(
 	videoId: number,
 	userId: number
 ): Promise<NonExclusiveVideoData | null> {

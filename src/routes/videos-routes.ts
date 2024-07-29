@@ -17,7 +17,6 @@ import validateVideoUUIDInParams from "../middleware/request-validation/videos/v
 import confirmUserHasExclusiveAccess from "../middleware/confirmations/videos/confirm-user-has-exclusive-access"
 import confirmUserHasntAlreadyReportedVideo from "../middleware/confirmations/videos/confirm-user-hasnt-already-reported-video"
 import attachMinimalExclusiveVideoDataById from "../middleware/attach/exclusive-video-data/attach-minimal-exclusive-video-data-by-id"
-import attachMinimalExclusiveVideoDataByUUID from "../middleware/attach/exclusive-video-data/attach-minimal-exclusive-video-data-by-uuid"
 
 const videosRoutes = express.Router()
 
@@ -50,7 +49,7 @@ videosRoutes.post(
 	"/like-or-unlike-video",
 	validateLikeOrUnlike,
 	jwtVerifyAttachUser,
-	attachMinimalExclusiveVideoDataByUUID,
+	attachMinimalExclusiveVideoDataById,
 	confirmUserHasExclusiveAccess,
 	likeOrUnlikeVideo
 )
