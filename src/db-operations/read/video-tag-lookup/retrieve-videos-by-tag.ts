@@ -52,6 +52,9 @@ export default async function retrieveVideosByTag(videoTag: string): Promise<Ret
 												video_tag: true
 											}
 										}
+									},
+									where: {
+										is_active: true
 									}
 								},
 								video_like_status: {

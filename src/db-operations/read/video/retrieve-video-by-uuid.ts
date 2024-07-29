@@ -51,6 +51,9 @@ export default async function retrieveVideoByUUID(videoUUID: string): Promise<Re
 								video_tag: true
 							}
 						}
+					},
+					where: {
+						is_active: true
 					}
 				},
 				video_creator: {

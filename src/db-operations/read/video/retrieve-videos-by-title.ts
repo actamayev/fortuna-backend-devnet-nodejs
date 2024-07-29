@@ -53,6 +53,9 @@ export default async function retrieveVideosByTitle(videoTitle: string): Promise
 								video_tag: true
 							}
 						}
+					},
+					where: {
+						is_active: true
 					}
 				},
 				video_creator: {

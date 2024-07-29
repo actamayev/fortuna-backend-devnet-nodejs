@@ -70,6 +70,9 @@ export default async function retrieveMostLikedVideosForHomePage(): Promise<Retr
 								video_tag: true
 							}
 						}
+					},
+					where: {
+						is_active: true
 					}
 				},
 				video_creator: {

@@ -49,6 +49,9 @@ export default async function retrieveMostRecentVideosForHomePage(): Promise<Ret
 								video_tag: true
 							}
 						}
+					},
+					where: {
+						is_active: true
 					}
 				},
 				video_creator: {

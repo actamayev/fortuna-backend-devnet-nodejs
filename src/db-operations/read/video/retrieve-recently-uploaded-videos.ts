@@ -48,6 +48,9 @@ export default async function retrieveRecentlyUploadedVideos(): Promise<Retrieve
 								video_tag: true
 							}
 						}
+					},
+					where: {
+						is_active: true
 					}
 				},
 				video_creator: {

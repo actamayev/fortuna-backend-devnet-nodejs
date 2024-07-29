@@ -75,6 +75,9 @@ export default async function retrieveVideosByCreatorUsername(creatorUsername: s
 										video_tag: true
 									}
 								}
+							},
+							where: {
+								is_active: true
 							}
 						},
 						video_like_status: {

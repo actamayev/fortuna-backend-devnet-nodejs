@@ -50,6 +50,9 @@ export default async function retrieveCreatorContentList(userId: number): Promis
 								video_tag: true
 							}
 						}
+					},
+					where: {
+						is_active: true
 					}
 				},
 				exclusive_video_access_purchase: {
