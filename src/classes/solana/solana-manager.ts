@@ -1,14 +1,15 @@
 import _ from "lodash"
 import { Connection, Finality, Keypair, LAMPORTS_PER_SOL, PublicKey,
 	SystemProgram, Transaction, clusterApiUrl, sendAndConfirmTransaction } from "@solana/web3.js"
+import Singleton from "../singleton"
 
-export default class SolanaManager {
-	private static instance: SolanaManager | null = null
+export default class SolanaManager extends Singleton {
 	private connection: Connection
 	private readonly endpoint = clusterApiUrl("devnet")
 	private readonly commitment: Finality = "confirmed"
 
 	private constructor() {
+		super()
 		this.connection = new Connection(this.endpoint, this.commitment)
 	}
 
