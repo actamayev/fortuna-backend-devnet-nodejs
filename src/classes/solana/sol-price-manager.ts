@@ -1,12 +1,13 @@
 import _ from "lodash"
+import Singleton from "../singleton"
 
-export default class SolPriceManager {
-	private static instance: SolPriceManager | null = null
+export default class SolPriceManager extends Singleton {
 	private lastPrice: number | null = null
 	private lastFetchedTime: Date | null = null
 	private readonly fetchInterval: number = 30000 // 30000 miliseconds: 30 seconds
 
 	private constructor() {
+		super()
 	}
 
 	public static getInstance(): SolPriceManager {

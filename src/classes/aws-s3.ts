@@ -1,14 +1,14 @@
 import _ from "lodash"
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
+import Singleton from "./singleton"
 import SecretsManager from "./secrets-manager"
 
-export default class AwsS3 {
-	private static instance: AwsS3 | null = null
+export default class AwsS3 extends Singleton {
 	private s3: S3Client
 	private secretsManagerInstance: SecretsManager
-	private readonly region: string = "us-east-1"
 
 	private constructor() {
+		super()
 		this.secretsManagerInstance = SecretsManager.getInstance()
 		this.s3 = new S3Client({
 			credentials: {

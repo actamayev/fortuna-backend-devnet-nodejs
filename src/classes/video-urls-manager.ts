@@ -1,6 +1,7 @@
 import _ from "lodash"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3"
+import Singleton from "./singleton"
 import SecretsManager from "./secrets-manager"
 
 interface VideoUrlData {
@@ -8,15 +9,14 @@ interface VideoUrlData {
 	expiryTime: Date
 }
 
-export default class VideoUrlsManager {
-	private static instance: VideoUrlsManager | null = null
+export default class VideoUrlsManager extends Singleton {
 	private videoUrlsMap: Map<string, VideoUrlData> = new Map()
 	private secretsManagerInstance: SecretsManager
 	private s3: S3Client
 	private readonly expirySeconds: number = 7200 // 7200 seconds: 2 hours
-	private readonly region: string = "us-east-1"
 
 	private constructor() {
+		super()
 		this.secretsManagerInstance = SecretsManager.getInstance()
 		this.s3 = new S3Client({
 			credentials: {
