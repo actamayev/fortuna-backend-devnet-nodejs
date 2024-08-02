@@ -1,3 +1,4 @@
+// eslint-disable-next-line complexity
 export default function transformCreatorInfo(creatorDetails: CreatorDetails | null): CreatorInfoData {
 	try {
 		return {

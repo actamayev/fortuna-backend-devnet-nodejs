@@ -16,6 +16,7 @@ const publicKeyValidator = Joi.string().custom((value, helpers) => {
 		if (!PublicKey.isOnCurve(decoded)) {
 			return helpers.error("any.invalid")
 		}
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	} catch (e) {
 		return helpers.error("any.invalid")
 	}
