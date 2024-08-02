@@ -4,7 +4,6 @@ import eslint from "@eslint/js"
 import { fileURLToPath } from "node:url"
 import security from "eslint-plugin-security"
 import { FlatCompat } from "@eslint/eslintrc"
-import filenames from "eslint-plugin-filenames"
 import tsParser from "@typescript-eslint/parser"
 import typescriptEslint from "@typescript-eslint/eslint-plugin"
 
@@ -22,7 +21,6 @@ export default [
 		plugins: {
 			security,
 			"@typescript-eslint": typescriptEslint,
-			filenames,
 		},
 		languageOptions: {
 			globals: {
@@ -68,7 +66,6 @@ export default [
 			complexity: ["warn", 9],
 			"no-shadow": "off",
 			"@typescript-eslint/no-shadow": "error",
-			"filenames/match-regex": ["error", "^[a-z\\d-]+$"],
 			"@typescript-eslint/no-non-null-assertion": "error",
 			"max-params": ["warn", 6],
 			"max-lines-per-function": ["warn", {
@@ -115,12 +112,14 @@ export default [
 		languageOptions: {
 			parser: tsParser,
 			parserOptions: {
-				project: ["./tsconfig.json"],  // Add this line
+				project: ["./tsconfig.json"]
 			},
 		},
 		rules: {
 			"@typescript-eslint/no-unnecessary-condition": "warn",
 			"@typescript-eslint/no-floating-promises": "warn",
+			//TODO: Bring this back:
+			// "filename-rules/match": [2, "^[a-z\\d-]+$"],
 		},
 	},
 	{
