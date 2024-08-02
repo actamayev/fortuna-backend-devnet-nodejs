@@ -45,7 +45,6 @@ export default async function retrieveIncomingTransactionsList(publicKey: string
 		})
 
 		const filteredTransactions = incomingTransactionsList.filter(
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			incomingTransaction => incomingTransaction.sender_solana_wallet.user.username !== null
 		)
 

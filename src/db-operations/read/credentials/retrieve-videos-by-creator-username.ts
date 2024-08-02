@@ -1,7 +1,7 @@
 import _ from "lodash"
 import PrismaClientClass from "../../../classes/prisma-client"
 
-// eslint-disable-next-line max-lines-per-function
+// eslint-disable-next-line max-lines-per-function, complexity
 export default async function retrieveVideosByCreatorUsername(creatorUsername: string): Promise<RetrievedVideosByCreatorUsername | null> {
 	try {
 		const prismaClient = await PrismaClientClass.getPrismaClient()
