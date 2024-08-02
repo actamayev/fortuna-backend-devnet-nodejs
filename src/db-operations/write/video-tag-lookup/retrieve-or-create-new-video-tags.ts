@@ -25,6 +25,7 @@ export default async function retrieveOrCreateNewVideoTags(
 		const existingTagMap = _.keyBy(existingTags, tag => tag.video_tag.toLowerCase())
 
 		// Determine which tags need to be created
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		const newTags = normalizedTags.filter(tag => !existingTagMap[tag])
 
 		// Create new tags in batch and fetch their IDs

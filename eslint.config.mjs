@@ -65,14 +65,12 @@ export default [
 			"@typescript-eslint/no-empty-interface": "error",
 			"max-depth": ["warn", 3],
 			"no-nested-ternary": "error",
-			//   "@typescript-eslint/no-unnecessary-condition": "warn",
 			complexity: ["warn", 9],
 			"no-shadow": "off",
 			"@typescript-eslint/no-shadow": "error",
-			// "filenames/match-regex": ["error", "^[a-z\\d-]+$"],
+			"filenames/match-regex": ["error", "^[a-z\\d-]+$"],
 			"@typescript-eslint/no-non-null-assertion": "error",
 			"max-params": ["warn", 6],
-			//   "@typescript-eslint/no-floating-promises": "warn",
 			"max-lines-per-function": ["warn", {
 				max: 40,
 				skipBlankLines: true,
@@ -113,15 +111,16 @@ export default [
 		},
 	},
 	{
-		files: ["**/*.ts", "**/*.tsx"],
+		files: ["**/*.ts"],
 		languageOptions: {
 			parser: tsParser,
 			parserOptions: {
-				project: ["tsconfig.json"],
+				project: ["./tsconfig.json"],  // Add this line
 			},
 		},
 		rules: {
-			// Any TypeScript-specific rules can go here
+			"@typescript-eslint/no-unnecessary-condition": "warn",
+			"@typescript-eslint/no-floating-promises": "warn",
 		},
 	},
 	{
