@@ -1,17 +1,27 @@
 To copy important files to AWS, run the following commands from the fortuna-backend-devnet-nodejs root directory.
 Locally, run `npm run build`
-scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem -r ./dist ubuntu@54.90.242.166:/home/ubuntu/fortuna
-scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem -r ./prisma ubuntu@54.90.242.166:/home/ubuntu/fortuna/dist/src
-scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem ./package.json ubuntu@54.90.242.166:/home/ubuntu/fortuna
-scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem ./package-lock.json ubuntu@54.90.242.166:/home/ubuntu/fortuna
-scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem ./.env.production ubuntu@54.90.242.166:/home/ubuntu/fortuna/dist/src/.env
-scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem ./ecosystem.config.js ubuntu@54.90.242.166:/home/ubuntu/fortuna/dist/src
+
+Devnet:
+	scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem -r ./dist ubuntu@54.90.242.166:/home/ubuntu/fortuna
+	scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem -r ./prisma ubuntu@54.90.242.166:/home/ubuntu/fortuna/dist/src
+	scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem ./package.json ubuntu@54.90.242.166:/home/ubuntu/fortuna
+	scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem ./package-lock.json ubuntu@54.90.242.166:/home/ubuntu/fortuna
+	scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem ./.env.production ubuntu@54.90.242.166:/home/ubuntu/fortuna/dist/src/.env
+	scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem ./ecosystem.config.js ubuntu@54.90.242.166:/home/ubuntu/fortuna/dist/src
+
+Mainnet:
+	scp -i /Users/arieltamayev/Documents/mainnet-ec2-keypair.pem -r ./dist ubuntu@54.221.182.74:/home/ubuntu/fortuna
+	scp -i /Users/arieltamayev/Documents/mainnet-ec2-keypair.pem -r ./prisma ubuntu@54.221.182.74:/home/ubuntu/fortuna/dist/src
+	scp -i /Users/arieltamayev/Documents/mainnet-ec2-keypair.pem ./package.json ubuntu@54.221.182.74:/home/ubuntu/fortuna
+	scp -i /Users/arieltamayev/Documents/mainnet-ec2-keypair.pem ./package-lock.json ubuntu@54.221.182.74:/home/ubuntu/fortuna
+	scp -i /Users/arieltamayev/Documents/mainnet-ec2-keypair.pem ./.env.production ubuntu@54.221.182.74:/home/ubuntu/fortuna/dist/src/.env
+	scp -i /Users/arieltamayev/Documents/mainnet-ec2-keypair.pem ./ecosystem.config.js ubuntu@54.221.182.74:/home/ubuntu/fortuna/dist/src
 
 To SSH into AWS:
 	Devnet:
 		ssh -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem ubuntu@54.90.242.166
 	Mainnet:
-		TBD
+		ssh -i /Users/arieltamayev/Documents/mainnet-ec2-keypair.pem ubuntu@54.221.182.74
 
 In AWS:
 `cd fortuna`
