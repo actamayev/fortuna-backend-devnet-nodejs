@@ -9,7 +9,7 @@ export default class SecretsManager extends Singleton {
 
 	private constructor() {
 		super()
-		if (process.env.NODE_ENV !== "production") {
+		if (process.env.NODE_ENV === "development") {
 			dotenv.config({ path: ".env.local" })
 			return
 		}
@@ -36,7 +36,7 @@ export default class SecretsManager extends Singleton {
 			if (this.secrets.has(key)) {
 				secret = this.secrets.get(key)
 			}
-			else if (process.env.NODE_ENV !== "production") {
+			else if (process.env.NODE_ENV === "development") {
 				secret = process.env[key]
 			}
 			else {
@@ -54,7 +54,7 @@ export default class SecretsManager extends Singleton {
 		try {
 			const secrets: Partial<SecretsObject> = {}
 
-			if (process.env.NODE_ENV !== "production") {
+			if (process.env.NODE_ENV === "development") {
 				for (const key of keys) {
 					const secret = process.env[key]
 					secrets[key] = secret
@@ -95,7 +95,7 @@ export default class SecretsManager extends Singleton {
 	private async fetchAllSecretsFromAWS(): Promise<void> {
 		try {
 			const command = new GetSecretValueCommand({
-				SecretId: "new_devnet_secrets"
+				SecretId: this.getSecretName()
 			})
 
 			if (_.isUndefined(this.secretsManager)) {
@@ -130,6 +130,16 @@ export default class SecretsManager extends Singleton {
 		catch (error) {
 			console.error(error)
 			throw error
+		}
+	}
+
+	private getSecretName(): string {
+		if (process.env.NODE_ENV === "development") {
+			return ""
+		} else if (process.env.NODE_ENV === "production-devnet") {
+			return "new_devnet_secrets"
+		} else {
+			return "new_mainnet_secrets"
 		}
 	}
 }

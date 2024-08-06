@@ -8,8 +8,11 @@ module.exports = {
 		env: {
 			NODE_ENV: "development" // Default environment variables
 		},
-		env_production: {
-			NODE_ENV: "production", // Environment variables for production
+		env_devnet_production: {
+			NODE_ENV: "production-devnet", // Retrieves Secrets for production devnet
+		},
+		env_mainnet_production: {
+			NODE_ENV: "production-mainnet", // Retrieves Secrets for production mainnet
 		}
 	}]
 }

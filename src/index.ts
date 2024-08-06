@@ -3,6 +3,8 @@ import dotenv from "dotenv"
 import express from "express"
 import cookieParser from "cookie-parser"
 
+import allowedOrigins from "./utils/get-allowed-origins"
+
 import checkHealth from "./controllers/health-checks/check-health"
 
 import searchRoutes from "./routes/search-routes"
@@ -16,20 +18,10 @@ import encryptionRoutes from "./routes/encryption-routes"
 import personalInfoRoutes from "./routes/personal-info-routes"
 import positionsAndTransactionsRoutes from "./routes/positions-and-transactions-routes"
 
-dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.local" })
+dotenv.config({ path: process.env.NODE_ENV === "development" ? ".env.local" : ".env.production" })
 // dotenv.config({ path: ".env.production" })
 
 const app = express()
-
-let allowedOrigins
-if (process.env.NODE_ENV === "production") {
-	allowedOrigins = [
-		"https://www.createfortuna.com",
-		"https://devnet.createfortuna.com"
-	]
-} else {
-	allowedOrigins = [ "http://localhost:3000" ]
-}
 
 app.use(cors({
 	origin: function (origin, callback) {
