@@ -8,7 +8,10 @@ scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem ./.env.production ub
 scp -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem ./ecosystem.config.js ubuntu@54.90.242.166:/home/ubuntu/fortuna/dist/src
 
 To SSH into AWS:
-ssh -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem ubuntu@54.90.242.166
+	Devnet:
+		ssh -i /Users/arieltamayev/Documents/devnet-ec2-keypair.pem ubuntu@54.90.242.166
+	Mainnet:
+		TBD
 
 In AWS:
 `cd fortuna`
@@ -26,7 +29,9 @@ Important pm2 commands:
 1. pm2 list (shows pm2 instances)
 2. pm2 stop app_name_or_id (stops a running pm2 process)
 3. pm2 delete app_name_or_id (deletes a stopped pm2 process)
-4. pm2 start ecosystem.config.js --env production (must be done where the index.js file is)
+4.
+	Devnet: pm2 start ecosystem.config.js --env production-devnet (must be done where the index.js file is)
+	Mainnet: pm2 start ecosystem.config.js --env production-mainnet (must be done where the index.js file is)
 5. pm2 logs app_name_or_id (shows logs for a process)
 
 Other:
