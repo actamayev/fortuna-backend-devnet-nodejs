@@ -1,11 +1,12 @@
 import { Request, Response } from "express"
-import { Connection, PublicKey, LAMPORTS_PER_SOL, clusterApiUrl } from "@solana/web3.js"
+import { Connection, PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js"
+import { getClusterUrlByEnv } from "../../utils/solana/get-cluster-url-by-env"
 import { getWalletBalanceWithUSD } from "../../utils/solana/get-wallet-balance"
 
 export default async function requestSolanaAirdrop(req: Request, res: Response): Promise<Response> {
 	try {
 		const { solanaWallet } = req
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
+		const connection = new Connection(getClusterUrlByEnv(), "confirmed")
 
 		const publicKey = new PublicKey(solanaWallet.public_key)
 
