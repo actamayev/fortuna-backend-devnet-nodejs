@@ -1,4 +1,4 @@
--- select * from credentials order by creÍated_at;
+select * from credentials order by created_at;
 -- select * from login_history;
 -- select * from solana_wallet;
 -- select * from video;

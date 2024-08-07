@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import express from "express"
 import cookieParser from "cookie-parser"
 
+import getEnvPath from "./utils/get-env-path"
 import allowedOrigins from "./utils/get-allowed-origins"
 
 import checkHealth from "./controllers/health-checks/check-health"
@@ -18,7 +19,7 @@ import encryptionRoutes from "./routes/encryption-routes"
 import personalInfoRoutes from "./routes/personal-info-routes"
 import positionsAndTransactionsRoutes from "./routes/positions-and-transactions-routes"
 
-dotenv.config({ path: process.env.NODE_ENV === "development" ? ".env.local" : ".env.production" })
+dotenv.config({ path: getEnvPath() })
 // dotenv.config({ path: ".env.production" })
 
 const app = express()
@@ -27,10 +28,10 @@ app.use(cors({
 	origin: function (origin, callback) {
 		// Allow requests with no origin (like mobile apps, curl requests, or Postman)
 		if (!origin) return callback(null, true)
-		// if (allowedOrigins.indexOf(origin) === -1) {
-		// 	const msg = "The CORS policy for this site does not allow access from the specified Origin."
-		// 	return callback(new Error(msg), false)
-		// }
+		if (allowedOrigins().indexOf(origin) === -1) {
+			const msg = "The CORS policy for this site does not allow access from the specified Origin."
+			return callback(new Error(msg), false)
+		}
 		return callback(null, true)
 	},
 	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],

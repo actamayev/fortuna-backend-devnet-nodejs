@@ -1,11 +1,12 @@
 import { Request, Response } from "express"
-import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js"
+import { Connection, PublicKey } from "@solana/web3.js"
+import { getClusterUrlByEnv } from "../../utils/solana/get-cluster-url-by-env"
 
 export default async function getInboundTransferHistory(req: Request, res: Response): Promise<Response> {
 	try {
 		const { publicKey } = req.params
 
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
+		const connection = new Connection(getClusterUrlByEnv(), "confirmed")
 		const confirmedSignatures = await connection.getSignaturesForAddress(new PublicKey(publicKey))
 
 		// Fetch confirmed transactions and filter for transfer instructions
