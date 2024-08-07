@@ -6,12 +6,11 @@ import { getClusterUrlByEnv } from "../../utils/solana/get-cluster-url-by-env"
 
 export default class SolanaManager extends Singleton {
 	private connection: Connection
-	private readonly endpoint = getClusterUrlByEnv()
 	private readonly commitment: Finality = "confirmed"
 
 	private constructor() {
 		super()
-		this.connection = new Connection(this.endpoint, this.commitment)
+		this.connection = new Connection(getClusterUrlByEnv(), this.commitment)
 	}
 
 	public static getInstance(): SolanaManager {

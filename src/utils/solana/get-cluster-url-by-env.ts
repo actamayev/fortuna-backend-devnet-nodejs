@@ -7,5 +7,5 @@ export function getClusterUrlByEnv(): string {
 		return clusterApiUrl("mainnet-beta")
 	}
 
-	return (clusterApiUrl("devnet"))
+	return clusterApiUrl("devnet")
 }
