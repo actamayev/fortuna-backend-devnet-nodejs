@@ -1,4 +1,5 @@
-import { Connection, LAMPORTS_PER_SOL, PublicKey, clusterApiUrl } from "@solana/web3.js"
+import { Connection, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js"
+import { getClusterUrlByEnv } from "./get-cluster-url-by-env"
 import SolPriceManager from "../../classes/solana/sol-price-manager"
 
 interface WalletBalanceDetails {
@@ -28,7 +29,7 @@ export async function getWalletBalanceWithUSD(publicKey: PublicKey): Promise<Wal
 
 export async function getWalletBalanceSol(publicKey: PublicKey): Promise<number> {
 	try {
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
+		const connection = new Connection(getClusterUrlByEnv(), "confirmed")
 
 		const balanceInLamports = await connection.getBalance(publicKey)
 		const balanceInSol = balanceInLamports / LAMPORTS_PER_SOL

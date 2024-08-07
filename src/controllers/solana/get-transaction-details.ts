@@ -1,11 +1,12 @@
 import { Request, Response } from "express"
-import { Connection, clusterApiUrl } from "@solana/web3.js"
+import { Connection } from "@solana/web3.js"
+import { getClusterUrlByEnv } from "../../utils/solana/get-cluster-url-by-env"
 
 export default async function getTransactionDetails(req: Request, res: Response): Promise<Response> {
 	try {
 		const transactionData = req.body as string[]
 
-		const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
+		const connection = new Connection(getClusterUrlByEnv(), "confirmed")
 		const transactionDetails = await connection.getTransaction(
 			transactionData[0],
 			{ commitment: "confirmed", maxSupportedTransactionVersion: 0 }
