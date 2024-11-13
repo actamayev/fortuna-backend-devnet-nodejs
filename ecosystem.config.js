@@ -6,13 +6,13 @@ module.exports = {
 		autorestart: true, // Automatically restart the app if it crashes
 		watch: false, // Watch for file changes and reload the app (useful in development)
 		env: {
-			NODE_ENV: "development" // Default environment variables
+			NODE_ENV: "local" // Default environment variables
 		},
-		env_devnet_production: {
-			NODE_ENV: "production-devnet", // Retrieves Secrets for production devnet
+		env_staging: {
+			NODE_ENV: "staging", // Retrieves Secrets for staging
 		},
-		env_mainnet_production: {
-			NODE_ENV: "production-mainnet", // Retrieves Secrets for production mainnet
+		env_production: {
+			NODE_ENV: "production", // Retrieves Secrets for production
 		}
 	}]
 }

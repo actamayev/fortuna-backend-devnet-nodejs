@@ -25,18 +25,13 @@ dotenv.config({ path: getEnvPath() })
 const app = express()
 
 app.use(cors({
-	origin: function (origin, callback) {
-		// Allow requests with no origin (like mobile apps, curl requests, or Postman)
-		if (!origin) return callback(null, true)
-		if (allowedOrigins().indexOf(origin) === -1) {
-			const msg = "The CORS policy for this site does not allow access from the specified Origin."
-			return callback(new Error(msg), false)
-		}
-		return callback(null, true)
+	origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+		if (!origin || allowedOrigins().includes(origin)) return callback(null, true)
+		return callback(new Error("CORS not allowed for this origin"))
 	},
 	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 	allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-	credentials: true
+	credentials: true,
 }))
 
 app.use(cookieParser())

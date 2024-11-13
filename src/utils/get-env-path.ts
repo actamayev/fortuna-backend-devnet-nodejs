@@ -1,11 +1,11 @@
 export default function getEnvPath (): string {
 	const env = process.env.NODE_ENV
 
-	if (env === "production-devnet") {
+	if (env === "staging") {
 		return ".env.devnet.production"
 	}
 
-	if (env === "production-mainnet") {
+	if (env === "production") {
 		return ".env.mainnet.production"
 	}
 
